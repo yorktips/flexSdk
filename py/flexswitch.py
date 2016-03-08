@@ -9,6 +9,7 @@ class FlexSwitch( object):
         self.ip    = ip
         self.port  = port 
         self.urlBase = 'http://%s:%s/public/v1/'%(ip,str(port))
+        self.KeyDict = {}
 
     def createVlanInterface( self, intfIp, vlanId) :
         obj =  { 'IpAddr'   : intfIp,
@@ -17,7 +18,7 @@ class FlexSwitch( object):
         reqUrl =  self.urlBase+'IPv4Intf'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
         return r.json()
-        
+
     def createPhyInterface( self, intfIp, ifindex) :
         obj =  { 'IpAddr'   : intfIp,
                  'IfIndex' : ifindex,
@@ -33,15 +34,26 @@ class FlexSwitch( object):
                }
         reqUrl =  self.urlBase+'Vlan'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
+        print obj["NameKey"], r.__dict__
+        self.KeyDict.update({obj['VlanId'] : r.__dict__['_content'].lstrip("{Id\":\"").rstrip("\"}")})
         return r.json()
-        
-    def createBgpGlobal(self, asnum, rtrid, usemp=False, ebgpmp=1, ibgpmp=1):
+
+    def deleteVlan(self, vlanId, ports, taggedports):
+        obj =  { 'VlanId': int(vlanId),
+                 'IfIndexList' : ports,
+                 'UntagIfIndexList': taggedports
+               }
+        reqUrl =  self.urlBase+'EthernetConfig'+'/'+self.KeyDict[obj['VlanId']]
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers)
+        del self.KeyDict[obj['VlanId']]
+
+    def createBgpGlobal(self, asnum, rtrid):
         obj =  { 
                 'ASNum'         : asnum,
                 'RouterId'   : rtrid,  
-                'UseMultiplePaths': usemp, 
-		'EBGPMaxPaths': ebgpmp, 
-		'IBGPMaxPaths': ibgpmp  
+                'UseMultiplePaths': usemp,
+                'EBGPMaxPaths': ebgpmp,
+                'IBGPMaxPaths': ibgpmp
                }
  
         reqUrl =  self.urlBase+'BGPGlobalConfig'
@@ -138,7 +150,7 @@ class FlexSwitch( object):
         reqUrl =  self.urlBase+'OspfIfEntryConfig'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
         return r.json()
-		
+
     def createRedistributionPolicy(self):
         obj = {'Name'           :'RedistributeConnectedToBGP', 
           'MatchPrefixSet': {'PrefixSet' :'', 'MatchSetOptions' : 0}, 
@@ -177,10 +189,10 @@ class FlexSwitch( object):
     # period - 0 == SLOW, 1 == FAST
     # sysmac - format 'XX:XX:XX:XX:XX:XX'
 
-    def createLag(self, lagId, lagType, sysmac, sysprio, mode, period, hashmode):
+    def createLag(self, id, type, sysmac, sysprio, mode, period, hashmode):
         obj = {
-            'NameKey' : "aggId-%s" %lagId,
-            'LagType' : lagType,
+            'NameKey' : "aggId-%s" %id,
+            'LagType' : type,
             'Type'    : "ETH",
             'Description' : "Test lag creation",
             'Enabled' : True,
@@ -195,28 +207,128 @@ class FlexSwitch( object):
         reqUrl =  self.urlBase+'AggregationLacpConfig'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
         print obj["NameKey"], r.__dict__
+        self.KeyDict.update({obj['NameKey'] : r.__dict__['_content'].lstrip("{Id\":\"").rstrip("\"}")})
         return r.json()
-        
+
     # id - port number will be conververt to fpPort-<id>
     def addPortToLag(self, id, lagid):
         obj = {
             'NameKey' : 'fpPort-%s' % id,
-	        'Enabled' : True,
+            'Enabled' : True,
             'Description' : "Test lag port",
             'Mtu' : 1518,
-	        'Type' : 'ETH',
-	        'MacAddress' : '00:11:22:33:44:55',
-	        'DuplexMode' : 0,
-	        'Auto'       : True,
-	        'Speed'      : 'SPEED_1Gb',
-	        'EnableFlowControl' : True,
+            'Type' : 'ETH',
+            'MacAddress' : '00:11:22:33:44:55',
+            'DuplexMode' : 0,
+            'Auto'       : True,
+            'Speed'      : 'SPEED_1Gb',
+            'EnableFlowControl' : True,
             'AggregateId' : 'aggId-%s' % lagid
         }
         reqUrl =  self.urlBase+'EthernetConfig'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
         print obj["NameKey"], r.__dict__
+        self.KeyDict.update({obj['NameKey'] : r.__dict__['_content'].lstrip("{Id\":\"").rstrip("\"}")})
         return r.json()
-        
+
+    def delPortFromLag(self, id, lagid):
+        obj = {
+            'NameKey' : 'fpPort-%s' % id,
+            'Enabled' : True,
+            'Description' : "Test lag port",
+            'Mtu' : 1518,
+            'Type' : 'ETH',
+            'MacAddress' : '00:11:22:33:44:55',
+            'DuplexMode' : 0,
+            'Auto'       : True,
+            'Speed'      : 'SPEED_1Gb',
+            'EnableFlowControl' : True,
+            'AggregateId' : 'aggId-%s' % lagid
+        }
+        reqUrl =  self.urlBase+'EthernetConfig'+'/'+self.KeyDict[obj['NameKey']]
+        self.KeyDict.pop(obj['NameKey'])
+        r = requests.delete(reqUrl, headers=headers)
+        return r.json()
+
+    def createStpBridge(self, mac, prio, age, hellotime, forwarddelay, vlan):
+        obj = {
+            "Dot1dBridgeAddress" : mac, #string `SNAPROUTE: KEY`
+            "Dot1dStpPriority": prio,  #int32 `SNAPROUTE: KEY`
+            "Dot1dStpBridgeMaxAge": age, # int32
+            "Dot1dStpBridgeHelloTime": hellotime, # int32
+            "Dot1dStpBridgeForwardDelay": forwarddelay, # int32
+            "Dot1dStpBridgeForceVersion": 2, # int32 0 STP compatibility, 2 default mode
+            "Dot1dStpBridgeTxHoldCount": 6, # int32 valid values 1-10s
+            "Dot1dStpVlan": vlan,
+        }
+        reqUrl =  self.urlBase+'Dot1dStpBridgeConfig'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
+        key = (obj["Dot1dStpVlan"],)
+        print key, r.__dict__
+        self.KeyDict.update({key : r.__dict__['_content'].lstrip("{Id\":\"").rstrip("\"}")})
+        return r.json()
+
+    def deleteStpBridge(self, mac, prio, age, hellotime, forwarddelay, vlan):
+        obj = {
+            "Dot1dBridgeAddress" : mac,
+            "Dot1dStpPriority": prio,
+            "Dot1dStpBridgeMaxAge": age, # int32
+            "Dot1dStpBridgeHelloTime": hellotime, # int32
+            "Dot1dStpBridgeForwardDelay": forwarddelay, # int32
+            "Dot1dStpBridgeForceVersion": 2, # int32 0 STP compatibility, 2 default mode
+            "Dot1dStpBridgeTxHoldCount": 6, # int32 valid values 1-10s
+            "Dot1dStpVlan": vlan, # SNAPROUTE KEY
+        }
+        reqUrl =  self.urlBase+'Dot1dStpBridgeConfig'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers)
+        key = (obj["Dot1dStpVlan"],)
+        print key, r.__dict__
+        del self.KeyDict[key]
+
+    def createStpPortEntry(self, port, brg, prio, ena, pathcost, protomigra, adminp2p, adminedge, adminpathcost, brgassurance):
+
+        obj = {
+            "Dot1dStpPort": port, # int32 `SNAPROUTE: KEY`
+            "Dot1dStpPortPriority": prio, # int32
+            "Dot1dStpPortEnable": ena, # int32
+            "Dot1dStpPortPathCost": pathcost, # int32
+            "Dot1dStpPortPathCost32": pathcost, # int32
+            "Dot1dStpPortProtocolMigration": protomigra, # int32
+            "Dot1dStpPortAdminPointToPoint": adminp2p, # int32
+            "Dot1dStpPortAdminEdgePort": adminedge, # int32
+            "Dot1dStpPortAdminPathCost": adminpathcost, # int32
+            "Dot1dBrgIfIndex": brg, # int32
+            "BridgeAssurance":brgassurance, #int32
+        }
+        reqUrl =  self.urlBase+'Dot1dStpPortEntryConfig'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
+        key = (obj['Dot1dStpPort'], obj['Dot1dBrgIfIndex'])
+        print key, r.__dict__
+        self.KeyDict.update({key : r.__dict__['_content'].lstrip("{Id\":\"").rstrip("\"}")})
+        return r.json()
+
+
+    def deleteStpPortEntry(self, port, brg, prio, ena, pathcost, protomigra, adminp2p, adminedge, adminpathcost, brgassurance):
+
+        obj = {
+            "Dot1dStpPort": port, # int32 `SNAPROUTE: KEY`
+            "Dot1dStpPortPriority": prio, # int32
+            "Dot1dStpPortEnable": ena, # int32
+            "Dot1dStpPortPathCost": pathcost, # int32
+            "Dot1dStpPortPathCost32": pathcost, # int32
+            "Dot1dStpPortProtocolMigration": protomigra, # int32
+            "Dot1dStpPortAdminPointToPoint": adminp2p, # int32
+            "Dot1dStpPortAdminEdgePort": adminedge, # int32
+            "Dot1dStpPortAdminPathCost": adminpathcost, # int32
+            "Dot1dBrgIfIndex": brg, # int32
+            "BridgeAssurance":brgassurance, #int32
+        }
+        reqUrl =  self.urlBase+'Dot1dStpPortEntryConfig'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers)
+        key = (obj['Dot1dStpPort'], obj['Dot1dBrgIfIndex'])
+        print key, r.__dict__
+        del self.KeyDict[key]
+
     def getObjects(self, objName):
         currentMarker = 0
         nextMarker = 0
@@ -232,13 +344,12 @@ class FlexSwitch( object):
             NextMarker    =  data['NextMarker']
             if data['StateObjects'] != None:
                 entries.extend(data['StateObjects'])
-        return entries 
-		
+        return entries
+
     def getVlanInfo (self, vlanId) :
         for vlan in self.getObjects ('Vlans'):
             if vlan['VlanId'] == vlanId:
                 return int(vlan['IfIndex'])
-			
 
 if __name__=='__main__':
     pass

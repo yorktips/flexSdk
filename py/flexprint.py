@@ -4,8 +4,18 @@ import urllib2
 from flexswitch import FlexSwitch
 
 class FlexPrint( object):
-    def  __init__ (self, ip, port):
-        self.swtch = FlexSwitch(ip, port)
+    def  __init__ (self, ip, port, flxswch=None):
+        '''
+
+        :param ip:  ip of flexswitch
+        :param port: port of flexswitch
+        :param flxswch: flexswitch object
+        :return:
+        '''
+        if flxswch is None;
+            self.swtch = FlexSwitch(ip, port)
+        else:
+            self.swtch = flxswch
 
     def printRoutes(self):
         routes = self.swtch.getObjects('IPV4Routes')
@@ -187,6 +197,117 @@ class FlexPrint( object):
                     print '         Attached Router:', attachedRtr
                     
             print ''
+
+    def printStpBridges(self, vlan = None, brgs = None):
+        '''
+
+        :param vlan: vlan of the bridge
+        :param brgs: list of bridge objects to print if list is empty then will get all
+        :return:
+        '''
+        if brgs is None:
+            brgs = self.swtch.getObjects('Dot1dStpBridgeStates')
+
+        if len(brgs):
+            print '\n\n---- STP Bridge DB----'
+
+            count = 0
+            for data in brgs:
+                count = count + 1
+
+                for obj in data["StateObjects"]:
+                    if key is None or obj["Dot1dStpVlan"] == vlan:
+                        print "BrgIfIndex: ", obj["Dot1dBrgIfIndex"]
+                        print "Version: ", obj["Dot1dStpBridgeForceVersion"]
+                        print "Bridge Id: ", obj["Dot1dBridgeAddress"]
+                        print "Bridge Hello time: ", obj["Dot1dStpBridgeHelloTime"]
+                        print "Bridge TxHold: ", obj["Dot1dStpBridgeTxHoldCount"]
+                        print "Bridge Forwarding Delay: ", obj["Dot1dStpBridgeForwardDelay"]
+                        print "Bridge Max Age: ", obj["Dot1dStpBridgeMaxAge"]
+                        print "Bridge Priority: ", obj["Dot1dStpPriority"]
+                        print "Time Since Topology Change: UNSUPPORTED" #nextStpBridgeState.Dot1dStpTimeSinceTopologyChange uint32 //The time (in hundredths of a second) since the last time a topology change was detected by the bridge entity. For RSTP, this reports the time since the tcWhile timer for any port on this Bridge was nonzero.
+                        print "Topology Changes: UNSUPPORTED" #nextStpBridgeState.Dot1dStpTopChanges              uint32 //The total number of topology changes detected by this bridge since the management entity was last reset or initialized.
+                        print "Root Bridge Id: ", obj["Dot1dStpDesignatedRoot"]
+                        print "Root Cost: ", obj["Dot1dStpRootCost"]
+                        print "Root Port: ", obj["Dot1dStpRootPort"]
+                        print "Max Age: ", obj["Dot1dStpMaxAge"]
+                        print "Hello Time: ", obj["Dot1dStpHelloTime"]
+                        print "Hold Time: UNSUPPORTED" #Dot1dStpHoldTime = int32(b.TxHoldCount)
+                        print "Forwarding Delay: ", obj["Dot1dStpForwardDelay"]
+                        print "Bridge Vlan: ", obj["Dot1dStpVlan"] if obj["Dot1dStpVlan"] != 0 else "DEFAULT"
+                        print "=====================================================================================\n\n"
+
+    def printStpPorts(self, pid=None, bid=None, ports=None):
+        '''
+        :param pid: port ifindex
+        :param bid: bridge ifindex
+        :param ports: list of port state objects the user wishes to print, if list is empty then will get all
+        :return:
+        '''
+        stateDict = {
+            1 : "Disabled",
+            2 : "Blocked",
+            3 : "Listening",
+            4 : "Learning",
+            5 : "Forwarding",
+            6 : "Broken",
+        }
+        linkTypeDict = {
+            0 : "LAN",
+            1 : "P2P",
+        }
+
+        if ports is None:
+            ports = self.swtch.getObjects('Dot1dStpPortEntryStateCountersFsmStatesPortTimers')
+
+        if len(brgs):
+            print '\n\n---- STP PORT DB----'
+            for obj in ports:
+                if p is None or (pid,bid) == (obj["Dot1dStpPort"],obj["Dot1dBrgIfIndex"]):
+                    bainconsistant = "(inconsistant)" if obj["BridgeAssuranceInconsistant"] else ""
+                    print "IfIndex %s of BrgIfIndex %s is %s %s" %(obj["Dot1dStpPort"], obj["Dot1dBrgIfIndex"], stateDict[obj["Dot1dStpPortState"]], bainconsistant)
+                    print "Enabled %s, Protocol Migration %s" %(obj["Dot1dStpPortEnable"], obj["Dot1dStpPortProtocolMigration"])
+                    print "Port path cost %s, Port priority %s, Port Identifier %s" %(obj["Dot1dStpPortPathCost32"], obj["Dot1dStpPortPriority"], obj["Dot1dStpPort"])
+                    print "Designated root has bridge id %s" %(obj["Dot1dStpPortDesignatedRoot"])
+                    print "Designated bridge has bridge id %s" %(obj["Dot1dStpPortDesignatedBridge"])
+                    print "Designated port id %s, designated path cost %s admin path cost %s" %(obj["Dot1dStpPortDesignatedPort"], obj["Dot1dStpPortDesignatedCost"], obj["Dot1dStpPortAdminPathCost"])
+                    print "Root Timers: max age %s, forward delay %s, hello %s" %(obj["Dot1dStpBridgePortMaxAge"],obj["Dot1dStpBridgePortForwardDelay"],obj["Dot1dStpBridgePortHelloTime"],)
+                    print "Number of transitions to forwarding state: %s" %(obj["Dot1dStpPortForwardTransitions"],)
+                    print "AdminEdge %s OperEdge %s" %(obj["Dot1dStpPortAdminEdgePort"], obj["Dot1dStpPortOperEdgePort"])
+                    print "Bridge Assurance %s Bpdu Guard %s" %(obj["BridgeAssurance"], obj["BpduGuard"])
+                    print "Link Type %s" %("UNSUPPORTED",)
+                    print "\nPort Timers: (current tick(seconds) count)"
+                    print "EdgeDelayWhile:\t", obj["EdgeDelayWhile"]
+                    print "FdWhile:       \t", obj["FdWhile"]
+                    print "HelloWhen:     \t", obj["HelloWhen"]
+                    print "MdelayWhile:   \t", obj["MdelayWhile"]
+                    print "RbWhile:       \t", obj["RbWhile"]
+                    print "RcvdInfoWhile  \t", obj["RcvdInfoWhile"]
+                    print "RrWhile:       \t", obj["RrWhile"]
+                    print "TcWhile:       \t", obj["TcWhile"]
+                    print "\nCounters:"
+                    print "        %13s%13s" %("RX", "TX")
+                    print "BPDU    %13s%13s" %(obj["BpduInPkts"], obj["BpduOutPkts"])
+                    print "STP     %13s%13s" %(obj["StpInPkts"], obj["StpOutPkts"])
+                    print "TC      %13s%13s" %(obj["TcInPkts"], obj["TcOutPkts"])
+                    print "RSTP    %13s%13s" %(obj["RstpInPkts"], obj["RstpOutPkts"])
+                    print "PVST    %13s%13s" %(obj["PvstInPkts"], obj["PvstOutPkts"])
+                    print "\nFSM States:"
+                    print "PIM - Port Information, PRTM - Port Role Transition, PRXM - Port Receive"
+                    print "PSTM - Port State Transition, PPM - Port Protocol Migration, PTXM - Port Transmit"
+                    print "PTIM - Port Timer, BDM - Bridge Detection, TCM - Topology Change"
+                    print "MACHINE       %20s%20s" %("CURRENT", "PREVIOUS")
+                    print "PIM           %20s%20s" %(obj["PimCurrState"], obj["PimPrevState"])
+                    print "PRTM          %20s%20s" %(obj["PrtmCurrState"], obj["PrtmPrevState"])
+                    print "PRXM          %20s%20s" %(obj["PrxmCurrState"], obj["PrxmPrevState"])
+                    print "PSTM          %20s%20s" %(obj["PstmCurrState"], obj["PstmPrevState"])
+                    print "PPM           %20s%20s" %(obj["PpmCurrState"], obj["PpmPrevState"])
+                    print "PTXM          %20s%20s" %(obj["PtxmCurrState"], obj["PtxmPrevState"])
+                    print "PTIM          %20s%20s" %(obj["PtimCurrState"], obj["PtimPrevState"])
+                    print "BDM           %20s%20s" %(obj["BdmCurrState"], obj["BdmPrevState"])
+                    print "TCM           %20s%20s" %(obj["TcmCurrState"], obj["TcmPrevState"])
+                    print "====================================================================="
+
 
                                 
 if __name__=='__main__':
