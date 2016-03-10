@@ -4,18 +4,8 @@ import urllib2
 from flexswitch import FlexSwitch
 
 class FlexPrint( object):
-    def  __init__ (self, ip, port, flxswch=None):
-        '''
-
-        :param ip:  ip of flexswitch
-        :param port: port of flexswitch
-        :param flxswch: flexswitch object
-        :return:
-        '''
-        if flxswch is None:
-            self.swtch = FlexSwitch(ip, port)
-        else:
-            self.swtch = flxswch
+    def  __init__ (self, ip, port):
+        self.swtch = FlexSwitch(ip, port)
 
     def printRoutes(self):
         routes = self.swtch.getObjects('IPV4Routes')
@@ -291,7 +281,5 @@ class FlexPrint( object):
                 print "TCM           %20s%20s" %(obj["TcmCurrState"], obj["TcmPrevState"])
                 print "====================================================================="
 
-
-                                
 if __name__=='__main__':
     pass
