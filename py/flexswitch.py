@@ -3,6 +3,8 @@ import requests
 import json
 import urllib2
 
+SUCCESS_STATUS_CODE = 201
+
 headers = {'Accept' : 'application/json', 'Content-Type' : 'application/json'}
 class FlexSwitch( object):
     def  __init__ (self, ip, port):
@@ -16,7 +18,7 @@ class FlexSwitch( object):
                }
         reqUrl =  self.urlBase+'IPv4Intf'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
-        return r.json() if r.status_code == 200 else None
+        return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
 
     def createPhyInterface( self, intfIp, ifindex) :
         obj =  { 'IpAddr'   : intfIp,
@@ -24,7 +26,7 @@ class FlexSwitch( object):
                }
         reqUrl =  self.urlBase+'IPv4Intf'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
-        return r.json() if r.status_code == 200 else None
+        return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
         
     def createVlan (self, vlanId, ports, taggedports):
         obj =  { 'VlanId': int(vlanId),
@@ -34,7 +36,7 @@ class FlexSwitch( object):
         reqUrl =  self.urlBase+'Vlan'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
         print obj["VlanId"], r.__dict__
-        return r.json() if r.status_code == 200 else None
+        return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
 
     def deleteVlan(self, vlanId, ports, taggedports):
         obj =  { 'VlanId': int(vlanId),
@@ -59,7 +61,7 @@ class FlexSwitch( object):
  
         reqUrl =  self.urlBase+'BGPGlobalConfig'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
-        return r.json() if r.status_code == 200 else None
+        return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
         
     def createBgpPeerGroup(self, name, desc, CRT, HT, KpAT):
         obj =  { 
@@ -71,7 +73,7 @@ class FlexSwitch( object):
                }
         reqUrl =  self.urlBase+'BGPPeerGroup'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
-        return r.json() if r.status_code == 200 else None
+        return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
         
     def createBgpPeer(self, nbrIp, peeras, localas, peergroup=None, desc=''):
         obj =  { 
@@ -87,7 +89,7 @@ class FlexSwitch( object):
                }
         reqUrl =  self.urlBase+'BGPNeighborConfig'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
-        return r.json() if r.status_code == 200 else None
+        return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
         
     def createOspfGlobal(self, rtrid='10.0.1.1'):
         obj =  { 
@@ -95,32 +97,32 @@ class FlexSwitch( object):
                }
         reqUrl =  self.urlBase+'OspfGlobalConfig'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
-        return r.json() if r.status_code == 200 else None
+        return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
         
     def createPolicyCondition(self, condition ):
         obj = condition 
         reqUrl =  self.urlBase+'PolicyConditionConfig'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
-        return r.json() if r.status_code == 200 else None
+        return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
         
     def createPolicyAction (self, action):
         obj = action
         reqUrl =  self.urlBase+'PolicyActionConfig'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
-        return r.json() if r.status_code == 200 else None
+        return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
         
     def createPolicyStatement (self, stmt):
         obj = stmt 
         reqUrl =  self.urlBase+'PolicyStmtConfig'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
-        return r.json() if r.status_code == 200 else None
+        return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
         
     def createPolicy(self, policy ):
         obj = policy 
         reqUrl =  self.urlBase+'PolicyConfig'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
         print r.__dict__
-        return r.json() if r.status_code == 200 else None
+        return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
 
 
     def createOspfIntf(self, 
@@ -150,7 +152,7 @@ class FlexSwitch( object):
                }
         reqUrl =  self.urlBase+'OspfIfEntryConfig'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
-        return r.json() if r.status_code == 200 else None
+        return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
     
     def createRedistributionPolicy(self):
         obj = {'Name'           :'RedistributeConnectedToBGP', 
@@ -162,7 +164,7 @@ class FlexSwitch( object):
 
         reqUrl =  self.urlBase+'PolicyStmt'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
-        return r.json() if r.status_code == 200 else None
+        return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
         
     def enableGlobalDHCPRelay (self) :
         obj =  { 
@@ -170,7 +172,7 @@ class FlexSwitch( object):
                }
         reqUrl =  self.urlBase+'DhcpRelayGlobalConfig'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
-        return r.json() if r.status_code == 200 else None
+        return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
         
     def enableIntfDHCPRelay (self, ifIndex, svrIp ):
         obj =  {  
@@ -181,7 +183,7 @@ class FlexSwitch( object):
 
         reqUrl =  self.urlBase+'DhcpRelayIntfConfig'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
-        return r.json() if r.status_code == 200 else None
+        return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
 
     # configure lag group
     # id - lag id # will be converted to aggId-<id>
@@ -208,7 +210,7 @@ class FlexSwitch( object):
         reqUrl =  self.urlBase+'AggregationLacpConfig'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
         print obj["NameKey"], r.__dict__
-        return r.json() if r.status_code == 200 else None
+        return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
     
     # id - port number will be conververt to fpPort-<id>
     def addPortToLag(self, id, lagid):
@@ -228,7 +230,7 @@ class FlexSwitch( object):
         reqUrl =  self.urlBase+'EthernetConfig'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
         print obj["NameKey"], r.__dict__
-        return r.json() if r.status_code == 200 else None
+        return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
 
     def delPortFromLag(self, id, lagid):
         obj = {
@@ -263,7 +265,7 @@ class FlexSwitch( object):
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
         key = (obj["Dot1dStpVlan"],)
         print key, r.__dict__
-        return r.json() if r.status_code == 200 else None
+        return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
 
     def deleteStpBridge(self, vlan, mac, prio, age, hellotime, forwarddelay):
         obj = {
@@ -304,7 +306,7 @@ class FlexSwitch( object):
         #key = (obj['Dot1dStpPort'], obj['Dot1dBrgIfIndex'])
         print key, r.__dict__
         #self.KeyDict.update({key : r.__dict__['_content'].lstrip("{Id\":\"").rstrip("\"}")})
-        return r.json() if r.status_code == 200 else None
+        return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
 
 
     def deleteStpPortEntry(self, port, brg, prio, ena, pathcost, protomigra, adminp2p, adminedge, adminpathcost, brgassurance):
@@ -339,7 +341,7 @@ class FlexSwitch( object):
         }
         reqUrl =  self.urlBase+'PortConfig' + '/' + ouid
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers)
-        return r.json() if r.status_code == 200 else None
+        return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
 
     def portSpeedSet(self, ouid, speed):
         obj = {
@@ -347,7 +349,7 @@ class FlexSwitch( object):
         }
         reqUrl =  self.urlBase+'PortConfig' + '/' + ouid
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers)
-        return r.json() if r.status_code == 200 else None
+        return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
     
     def getObjects(self, objName):
         currentMarker = 0
