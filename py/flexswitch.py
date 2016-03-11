@@ -43,8 +43,6 @@ class FlexSwitch( object):
                  'IfIndexList' : ports,
                  'UntagIfIndexList': taggedports
                }
-        #reqUrl =  self.urlBase+'Vlan'+'/'+self.KeyDict[obj['VlanId']]
-        #r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers)
 
     def deleteVlanByUuid(self, uuid):
         reqUrl =  self.urlBase+'Vlan'+'/'+ uuid
@@ -276,9 +274,6 @@ class FlexSwitch( object):
             "Dot1dStpBridgeTxHoldCount": 6, # int32 valid values 1-10s
             "Dot1dStpVlan": vlan, # SNAPROUTE KEY
         }
-        key = (obj["Dot1dStpVlan"],)
-        #reqUrl =  self.urlBase+'Dot1dStpBridgeConfig'+'/'+self.KeyDict[key]
-        #r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers)
 
     def deleteStpBridgeByUuid(self, uuid):
         reqUrl =  self.urlBase+'Dot1dStpBridgeConfig'+'/'+uuid
@@ -301,9 +296,6 @@ class FlexSwitch( object):
         }
         reqUrl =  self.urlBase+'Dot1dStpPortEntryConfig'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
-        #key = (obj['Dot1dStpPort'], obj['Dot1dBrgIfIndex'])
-        print key, r.__dict__
-        #self.KeyDict.update({key : r.__dict__['_content'].lstrip("{Id\":\"").rstrip("\"}")})
         return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
 
 
@@ -322,12 +314,7 @@ class FlexSwitch( object):
             "Dot1dBrgIfIndex": brg, # int32
             "BridgeAssurance":brgassurance, #int32
         }
-        #key = (obj['Dot1dStpPort'], obj['Dot1dBrgIfIndex'])
-        #print self.KeyDict
-        #reqUrl =  self.urlBase+'Dot1dStpPortEntryConfig'+'/'+self.KeyDict[key]
-        #r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers)
-        #print key, r.__dict__
-        #del self.KeyDict[key]
+
 
     def deleteStpPortEntryByUuid(self, uuid):
         reqUrl =  self.urlBase+'Dot1dStpPortEntryConfig'+'/'+uuid
