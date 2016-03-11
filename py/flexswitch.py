@@ -263,8 +263,6 @@ class FlexSwitch( object):
         }
         reqUrl =  self.urlBase+'Dot1dStpBridgeConfig'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
-        key = (obj["Dot1dStpVlan"],)
-        print key, r.__dict__
         return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
 
     def deleteStpBridge(self, vlan, mac, prio, age, hellotime, forwarddelay):
