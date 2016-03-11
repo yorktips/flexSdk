@@ -282,7 +282,7 @@ class FlexSwitch( object):
 
     def deleteStpBridgeByUuid(self, uuid):
         reqUrl =  self.urlBase+'Dot1dStpBridgeConfig'+'/'+uuid
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers)
+        r = requests.delete(reqUrl, headers=headers)
 
     def createStpPortEntry(self, port, brg, prio, ena, pathcost, protomigra, adminp2p, adminedge, adminpathcost, brgassurance):
 
@@ -331,7 +331,7 @@ class FlexSwitch( object):
 
     def deleteStpPortEntryByUuid(self, uuid):
         reqUrl =  self.urlBase+'Dot1dStpPortEntryConfig'+'/'+uuid
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers)
+        r = requests.delete(reqUrl, headers=headers)
 
     def portAdminStateSet(self, uuid, enable):
         obj = {
