@@ -46,7 +46,7 @@ class FlexSwitch( object):
 
     def deleteVlanByUuid(self, uuid):
         reqUrl =  self.urlBase+'Vlan'+'/'+ uuid
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers)
+        r = requests.delete(reqUrl, headers=headers)
 
     def createBgpGlobal(self, asnum, rtrid, usemp=False, ebgpmp=1, ibgpmp=1):
         obj =  { 
@@ -244,9 +244,6 @@ class FlexSwitch( object):
             'EnableFlowControl' : True,
             'AggregateId' : 'aggId-%s' % lagid
         }
-        #reqUrl =  self.urlBase+'EthernetConfig'+'/'+self.KeyDict[obj['NameKey']]
-        #r = requests.delete(reqUrl, headers=headers)
-        #return r.json() if r.status_code == 200 else None
 
     def createStpBridge(self, vlan, mac, prio, age, hellotime, forwarddelay):
         obj = {
