@@ -196,7 +196,8 @@ class FlexPrint( object):
             print '\n\n---- STP Bridge DB----'
 
             count = 0
-            for obj in brgs:
+            for data in brgs:
+                obj = data['Object']
                 print "BrgIfIndex: ", obj["Dot1dBrgIfIndex"]
                 print "Version: ", obj["Dot1dStpBridgeForceVersion"]
                 print "Bridge Id: ", obj["Dot1dBridgeAddress"]
@@ -235,7 +236,8 @@ class FlexPrint( object):
 
         if len(ports):
             print '\n\n---- STP PORT DB----'
-            for obj in ports:
+            for data in ports:
+                obj = data['Object']
                 bainconsistant = "(inconsistant)" if obj["BridgeAssuranceInconsistant"] else ""
                 print "IfIndex %s of BrgIfIndex %s is %s %s" %(obj["Dot1dStpPort"], obj["Dot1dBrgIfIndex"], stateDict[obj["Dot1dStpPortState"]], bainconsistant)
                 print "Enabled %s, Protocol Migration %s" %(obj["Dot1dStpPortEnable"], obj["Dot1dStpPortProtocolMigration"])
