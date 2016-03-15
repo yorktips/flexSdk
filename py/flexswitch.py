@@ -317,6 +317,42 @@ class FlexSwitch( object):
         reqUrl =  self.urlBase+'Dot1dStpPortEntryConfig'+'/'+uuid
         r = requests.delete(reqUrl, headers=headers)
 
+    def createVxlanEntry(self, vni, vlanId, GroupIp, MTU):
+        obj = {
+            "VxlanId" :  vni,
+	        "Group" : "", # UNSUPPORTED
+	        "VlanId" : vlanId,
+            "Mtu" : MTU,
+        }
+        reqUrl =  self.urlBase+'VxlanInstance'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
+        return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
+
+    def deleteVxlanEntryById(self, uuid):
+        reqUrl =  self.urlBase+'VxlanInstance'+'/'+uuid
+        r = requests.delete(reqUrl, headers=headers)
+
+    def createVtepEntry(self, vtepId, vxlanId, srcifindex, udp, srcmac, tunnelsrcip, tunneldstip, ttl, tos):
+        obj = {
+           "VtepId" : vtepId,
+	       "VxlanId" : vxlanId,
+	       "SrcIfIndex" : srcifindex,
+	       "UDP" : udp,
+	       "TTL" : ttl,
+	       "TOS" : tos,
+	       "TunnelSourceIp" : tunnelsrcip,
+	       "TunnelDestinationIp" : tunneldstip,
+	       "SrcMac" : srcmac,
+        }
+        reqUrl =  self.urlBase+'VxlanVtepInstances'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
+        return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
+
+    def deleteVtepEntryById(self, uuid):
+        reqUrl =  self.urlBase+'VxlanVtepInstances'+'/'+uuid
+        r = requests.delete(reqUrl, headers=headers)
+
+
     def portAdminStateSet(self, uuid, enable):
         obj = {
             	'AdminState' : "ON" if enable else "OFF"
