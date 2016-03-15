@@ -326,6 +326,7 @@ class FlexSwitch( object):
         }
         reqUrl =  self.urlBase+'VxlanInstance'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
+        print obj, r.__dict__
         return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
 
     def deleteVxlanEntryById(self, uuid):
@@ -347,6 +348,7 @@ class FlexSwitch( object):
         }
         reqUrl =  self.urlBase+'VxlanVtepInstances'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
+        print obj, r.__dict__
         return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
 
     def deleteVtepEntryById(self, uuid):
