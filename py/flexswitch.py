@@ -335,6 +335,7 @@ class FlexSwitch( object):
     def createVtepEntry(self, vtepId, vxlanId, srcifindex, udp, srcmac, tunnelsrcip, tunneldstip, ttl, tos):
         obj = {
            "VtepId" : vtepId,
+           "VtepName" : "vtep%s" %(vtepId)
 	       "VxlanId" : vxlanId,
 	       "SrcIfIndex" : srcifindex,
 	       "UDP" : udp,
