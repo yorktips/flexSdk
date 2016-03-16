@@ -319,7 +319,7 @@ class FlexSwitch( object):
 
     def createVxlanEntry(self, vni, vlanId, GroupIp, MTU):
         obj = {
-            "VxlanId" :  vni,
+            "VxlanId" :  vni, # key
 	        "Group" : "", # UNSUPPORTED
 	        "VlanId" : vlanId,
             "Mtu" : MTU,
@@ -329,15 +329,15 @@ class FlexSwitch( object):
         print obj, r.__dict__
         return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
 
-    def deleteVxlanEntryById(self, uuid):
+    def deleteVxlanEntryByUuid(self, uuid):
         reqUrl =  self.urlBase+'VxlanInstance'+'/'+uuid
         r = requests.delete(reqUrl, headers=headers)
 
     def createVtepEntry(self, vtepId, vxlanId, srcifindex, udp, srcmac, tunnelsrcip, tunneldstip, ttl, tos):
         obj = {
-           "VtepId" : vtepId,
+           "VtepId" : vtepId, #key
            "VtepName" : "vtep%s" %(vtepId),
-	       "VxlanId" : vxlanId,
+	       "VxlanId" : vxlanId, # key
 	       "SrcIfIndex" : srcifindex,
 	       "UDP" : udp,
 	       "TTL" : ttl,
@@ -351,7 +351,7 @@ class FlexSwitch( object):
         print obj, r.__dict__
         return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
 
-    def deleteVtepEntryById(self, uuid):
+    def deleteVtepEntryByUuid(self, uuid):
         reqUrl =  self.urlBase+'VxlanVtepInstances'+'/'+uuid
         r = requests.delete(reqUrl, headers=headers)
 
