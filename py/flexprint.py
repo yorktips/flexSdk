@@ -8,7 +8,7 @@ class FlexPrint( object):
         self.swtch = FlexSwitch(ip, port)
 
     def printRoutes(self):
-        routes = self.swtch.getObjects('IPV4Routes')
+        routes = self.swtch.getObjects('IPv4RouteStates')
         if len(routes):
             print '\n\n---- Routes ----'
             print 'Network            Mask         NextHop         Cost       Protocol   IfType IfIndex'
@@ -39,8 +39,6 @@ class FlexPrint( object):
         if len(hosts) :
             print '\n\n---- Hosts ----'
             print 'MacAddress  ServerIP   DiscoverSent@   OfferReceived@  RequestSent@  AckReceived@   OfferedIP   RequestedIP   AcceptedIP    GWIP   ClntTx  ClntRx  SvrRx  SvrTx'
-            #print 'MacAddress  ServerIP   DiscoverSent@   OfferReceived@  RequestSent@  AckReceived@   OfferedIP   RequestedIP   AcceptedIP    GWIP'
-        #import ipdb;ipdb.set_trace()
         for host in hosts:
             print '%s   %s  %s   %s     %s   %s  %s   %s     %s   %s  %s   %s   %s  %s' %(
                         host['MacAddr'],
