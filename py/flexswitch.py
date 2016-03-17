@@ -354,6 +354,33 @@ class FlexSwitch( object):
         reqUrl =  self.urlBase+'VxlanVtepInstances'+'/'+uuid
         r = requests.delete(reqUrl, headers=headers)
 
+    def createLogicalIntf(self, name, type):
+        obj = {
+            "Name" : name,
+	        "Type" : type,
+        }
+        reqUrl =  self.urlBase+'LogicalIntfConfig'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
+        print obj, r.__dict__
+        return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
+
+    def deleteLogicalIntf(self, uuid):
+        reqUrl =  self.urlBase+'LogicalIntfConfig'+'/'+uuid
+        r = requests.delete(reqUrl, headers=headers)
+
+    def createIpV4Intf(self, ip, ifindex):
+        obj = {
+            "IpAddr" : ip,
+	        "IfIndex" : ifindex,
+        }
+        reqUrl =  self.urlBase+'IPv4Intf'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
+        print obj, r.__dict__
+        return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
+
+    def deleteIpV4Intf(self, uuid):
+        reqUrl =  self.urlBase+'IPv4Intf'+'/'+uuid
+        r = requests.delete(reqUrl, headers=headers)
 
     def portAdminStateSet(self, uuid, enable):
         obj = {
