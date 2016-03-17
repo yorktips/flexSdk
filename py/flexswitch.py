@@ -44,7 +44,7 @@ class FlexSwitch( object):
 		'IBGPMaxPaths': ibgpmp  
                }
  
-        reqUrl =  self.urlBase+'BGPGlobalConfig'
+        reqUrl =  self.urlBase+'BGPGlobal'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
         return r.json()
         
@@ -72,7 +72,7 @@ class FlexSwitch( object):
                 'HoldTime'         : 3,
                 'KeepaliveTime'    : 1,
                }
-        reqUrl =  self.urlBase+'BGPNeighborConfig'
+        reqUrl =  self.urlBase+'BGPNeighbor'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
         return r.json()
         
@@ -194,7 +194,7 @@ class FlexSwitch( object):
         }
         reqUrl =  self.urlBase+'AggregationLacpConfig'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
-        print obj["NameKey"], r.__dict__
+        #print obj["NameKey"], r.__dict__
         return r.json()
         
     # id - port number will be conververt to fpPort-<id>
@@ -235,7 +235,8 @@ class FlexSwitch( object):
         return entries 
 		
     def getVlanInfo (self, vlanId) :
-        for vlan in self.getObjects ('Vlans'):
+        for vlanObj in self.getObjects ('Vlans'):
+            vlan = vlanObj['Object']
             if vlan['VlanId'] == vlanId:
                 return int(vlan['IfIndex'])
 			
