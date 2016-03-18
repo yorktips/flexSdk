@@ -236,7 +236,7 @@ class FlexSwitch( object):
 		
     def getVlanInfo (self, vlanId) :
         for vlanObj in self.getObjects ('Vlans'):
-            vlan = vlanObj['Object']
+            vlan = vlanObj['ConfigObj']
             if vlan['VlanId'] == vlanId:
                 return int(vlan['IfIndex'])
 			
