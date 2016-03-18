@@ -109,6 +109,38 @@ class FlexSwitch( object):
         print r.__dict__
         return r.json()
 
+    def createVrrpIntfConfig(self, 
+			     vlanId, 
+                             priority, 
+                             vrid, 
+                             virturalIp, 
+                             advertime, 
+                             preempt, 
+                             accept):
+        IfIndex = self.getVlanInfo(vlanId)
+        if virturalIp == "":
+            obj = {
+                'IfIndex': IfIndex,
+                'VRID': vrid,
+                'Priority':priority,
+                'AdvertisementInterval': advertime,
+                'PreemptMode': preempt,
+                'AcceptMode':accept
+            }
+        elif virturalIp != "":
+            obj = {
+                'IfIndex': IfIndex,
+                'VRID': vrid,
+                'AdvertisementInterval': advertime,
+                'PreemptMode': preempt,
+                'AcceptMode':accept,
+                'VirtualIPv4Addr':virturalIp
+            }
+
+        #print obj
+        reqUrl = self.urlBase+'VrrpIntf'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
+	return r.json()
 
     def createOspfIntf(self, 
                        ipaddr, 

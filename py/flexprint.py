@@ -85,7 +85,6 @@ class FlexPrint( object):
 	entry.VirtualRouterMACAddress = gblInfo.IntfConfig.VirtualRouterMACAddress
 	entry.SkewTime = gblInfo.SkewTime
 	entry.MasterDownInterval = gblInfo.MasterDownInterval
-
         '''
         if len(vrids):
             print ''
