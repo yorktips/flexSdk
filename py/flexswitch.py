@@ -246,51 +246,52 @@ class FlexSwitch( object):
 
     def createStpBridge(self, vlan, mac, prio, age, hellotime, forwarddelay):
         obj = {
-            "Dot1dBridgeAddress" : mac, #string `SNAPROUTE: KEY`
-            "Dot1dStpPriority": prio,  #int32 `SNAPROUTE: KEY`
-            "Dot1dStpBridgeMaxAge": age, # int32
-            "Dot1dStpBridgeHelloTime": hellotime, # int32
-            "Dot1dStpBridgeForwardDelay": forwarddelay, # int32
-            "Dot1dStpBridgeForceVersion": 2, # int32 0 STP compatibility, 2 default mode
-            "Dot1dStpBridgeTxHoldCount": 6, # int32 valid values 1-10s
-            "Dot1dStpVlan": vlan,
+            "Address" : mac, #string `SNAPROUTE: KEY`
+            "Priority": prio,  #int32 `SNAPROUTE: KEY`
+            "MaxAge": age, # int32
+            "HelloTime": hellotime, # int32
+            "ForwardDelay": forwarddelay, # int32
+            "ForceVersion": 2, # int32 0 STP compatibility, 2 default mode
+            "TxHoldCount": 6, # int32 valid values 1-10s
+            "Vlan": vlan,
         }
-        reqUrl =  self.urlBase+'Dot1dStpBridgeConfig'
+        reqUrl =  self.urlBase+'StpBridgeInstance'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
         return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
 
     def deleteStpBridge(self, vlan, mac, prio, age, hellotime, forwarddelay):
         obj = {
-            "Dot1dBridgeAddress" : mac,
-            "Dot1dStpPriority": prio,
-            "Dot1dStpBridgeMaxAge": age, # int32
-            "Dot1dStpBridgeHelloTime": hellotime, # int32
-            "Dot1dStpBridgeForwardDelay": forwarddelay, # int32
-            "Dot1dStpBridgeForceVersion": 2, # int32 0 STP compatibility, 2 default mode
-            "Dot1dStpBridgeTxHoldCount": 6, # int32 valid values 1-10s
-            "Dot1dStpVlan": vlan, # SNAPROUTE KEY
+            "Address" : mac,
+            "Priority": prio,
+            "MaxAge": age, # int32
+            "HelloTime": hellotime, # int32
+            "ForwardDelay": forwarddelay, # int32
+            "ForceVersion": 2, # int32 0 STP compatibility, 2 default mode
+            "TxHoldCount": 6, # int32 valid values 1-10s
+            "Vlan": vlan, # SNAPROUTE KEY
         }
 
     def deleteStpBridgeByUuid(self, uuid):
-        reqUrl =  self.urlBase+'Dot1dStpBridgeConfig'+'/'+uuid
+        reqUrl =  self.urlBase+'StpBridgeInstance'+'/'+uuid
         r = requests.delete(reqUrl, headers=headers)
 
     def createStpPortEntry(self, port, brg, prio, ena, pathcost, protomigra, adminp2p, adminedge, adminpathcost, brgassurance):
 
         obj = {
-            "Dot1dStpPort": port, # int32 `SNAPROUTE: KEY`
-            "Dot1dStpPortPriority": prio, # int32
-            "Dot1dStpPortEnable": ena, # int32
-            "Dot1dStpPortPathCost": pathcost, # int32
-            "Dot1dStpPortPathCost32": pathcost, # int32
-            "Dot1dStpPortProtocolMigration": protomigra, # int32
-            "Dot1dStpPortAdminPointToPoint": adminp2p, # int32
-            "Dot1dStpPortAdminEdgePort": adminedge, # int32
-            "Dot1dStpPortAdminPathCost": adminpathcost, # int32
-            "Dot1dBrgIfIndex": brg, # int32
+            "IfIndex": port, # int32 `SNAPROUTE: KEY`
+            "Priority": prio, # int32
+            "Enable": ena, # int32
+            "PathCost": pathcost, # int32
+            "PathCost32": pathcost, # int32
+            "ProtocolMigration": protomigra, # int32
+            "PointToPoint": adminp2p, # int32
+            "AdminEdgePort": adminedge, # int32
+            "AdminPathCost": adminpathcost, # int32
+            "BrgIfIndex": brg, # int32
             "BridgeAssurance":brgassurance, #int32
+            "BpduGuard": 1 if adminedge else 0,
         }
-        reqUrl =  self.urlBase+'Dot1dStpPortEntryConfig'
+        reqUrl =  self.urlBase+'StpPort'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
         return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
 
@@ -298,22 +299,23 @@ class FlexSwitch( object):
     def deleteStpPortEntry(self, port, brg, prio, ena, pathcost, protomigra, adminp2p, adminedge, adminpathcost, brgassurance):
 
         obj = {
-            "Dot1dStpPort": port, # int32 `SNAPROUTE: KEY`
-            "Dot1dStpPortPriority": prio, # int32
-            "Dot1dStpPortEnable": ena, # int32
-            "Dot1dStpPortPathCost": pathcost, # int32
-            "Dot1dStpPortPathCost32": pathcost, # int32
-            "Dot1dStpPortProtocolMigration": protomigra, # int32
-            "Dot1dStpPortAdminPointToPoint": adminp2p, # int32
-            "Dot1dStpPortAdminEdgePort": adminedge, # int32
-            "Dot1dStpPortAdminPathCost": adminpathcost, # int32
-            "Dot1dBrgIfIndex": brg, # int32
+            "IfIndex": port, # int32 `SNAPROUTE: KEY`
+            "Priority": prio, # int32
+            "Enable": ena, # int32
+            "PathCost": pathcost, # int32
+            "PathCost32": pathcost, # int32
+            "ProtocolMigration": protomigra, # int32
+            "AdminPointToPoint": adminp2p, # int32
+            "AdminEdgePort": adminedge, # int32
+            "AdminPathCost": adminpathcost, # int32
+            "BrgIfIndex": brg, # int32
             "BridgeAssurance":brgassurance, #int32
+            "BpduGuard": 1 if adminedge else 0,
         }
 
 
     def deleteStpPortEntryByUuid(self, uuid):
-        reqUrl =  self.urlBase+'Dot1dStpPortEntryConfig'+'/'+uuid
+        reqUrl =  self.urlBase+'StpPort'+'/'+uuid
         r = requests.delete(reqUrl, headers=headers)
 
     def createVxlanEntry(self, vni, vlanId, GroupIp, MTU):

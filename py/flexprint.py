@@ -196,24 +196,24 @@ class FlexPrint( object):
             count = 0
             for data in brgs:
                 obj = data['Object']
-                print "BrgIfIndex: ", obj["Dot1dBrgIfIndex"]
-                print "Version: ", obj["Dot1dStpBridgeForceVersion"]
-                print "Bridge Id: ", obj["Dot1dBridgeAddress"]
-                print "Bridge Hello time: ", obj["Dot1dStpBridgeHelloTime"]
-                print "Bridge TxHold: ", obj["Dot1dStpBridgeTxHoldCount"]
-                print "Bridge Forwarding Delay: ", obj["Dot1dStpBridgeForwardDelay"]
-                print "Bridge Max Age: ", obj["Dot1dStpBridgeMaxAge"]
-                print "Bridge Priority: ", obj["Dot1dStpPriority"]
+                print "BrgIfIndex: ", obj["IfIndex"]
+                print "Version: ", obj["ForceVersion"]
+                print "Bridge Id: ", obj["Address"]
+                print "Bridge Hello time: ", obj["BridgeHelloTime"]
+                print "Bridge TxHold: ", obj["TxHoldCount"]
+                print "Bridge Forwarding Delay: ", obj["BridgeForwardDelay"]
+                print "Bridge Max Age: ", obj["BridgeMaxAge"]
+                print "Bridge Priority: ", obj["Priority"]
                 print "Time Since Topology Change: UNSUPPORTED" #nextStpBridgeState.Dot1dStpTimeSinceTopologyChange uint32 //The time (in hundredths of a second) since the last time a topology change was detected by the bridge entity. For RSTP, this reports the time since the tcWhile timer for any port on this Bridge was nonzero.
                 print "Topology Changes: UNSUPPORTED" #nextStpBridgeState.Dot1dStpTopChanges              uint32 //The total number of topology changes detected by this bridge since the management entity was last reset or initialized.
-                print "Root Bridge Id: ", obj["Dot1dStpDesignatedRoot"]
-                print "Root Cost: ", obj["Dot1dStpRootCost"]
-                print "Root Port: ", obj["Dot1dStpRootPort"]
-                print "Max Age: ", obj["Dot1dStpMaxAge"]
-                print "Hello Time: ", obj["Dot1dStpHelloTime"]
+                print "Root Bridge Id: ", obj["DesignatedRoot"]
+                print "Root Cost: ", obj["RootCost"]
+                print "Root Port: ", obj["RootPort"]
+                print "Max Age: ", obj["MaxAge"]
+                print "Hello Time: ", obj["HelloTime"]
                 print "Hold Time: UNSUPPORTED" #Dot1dStpHoldTime = int32(b.TxHoldCount)
-                print "Forwarding Delay: ", obj["Dot1dStpForwardDelay"]
-                print "Bridge Vlan: ", obj["Dot1dStpVlan"] if obj["Dot1dStpVlan"] != 0 else "DEFAULT"
+                print "Forwarding Delay: ", obj["ForwardDelay"]
+                print "Bridge Vlan: ", obj["Vlan"] if obj["Vlan"] != 0 else "DEFAULT"
                 print "=====================================================================================\n\n"
 
     def printStpPorts(self):
