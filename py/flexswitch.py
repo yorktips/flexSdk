@@ -131,6 +131,7 @@ class FlexSwitch( object):
             obj = {
                 'IfIndex': IfIndex,
                 'VRID': vrid,
+                'Priority':priority,
                 'AdvertisementInterval': advertime,
                 'PreemptMode': preempt,
                 'AcceptMode':accept,
