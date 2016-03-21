@@ -255,7 +255,7 @@ class FlexSwitch( object):
         		'DhcpRelay': 'Test',
                 'Enable' : True
                }
-        reqUrl =  self.urlBase+'DhcpRelayGlobalConfig'
+        reqUrl =  self.urlBase+'DhcpRelayGlobal'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
         return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
         
@@ -266,7 +266,7 @@ class FlexSwitch( object):
                 'ServerIp': svrIp
                 }
 
-        reqUrl =  self.urlBase+'DhcpRelayIntfConfig'
+        reqUrl =  self.urlBase+'DhcpRelayIntf'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
         return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
 
@@ -586,12 +586,12 @@ class FlexSwitch( object):
     	
         
     def deleteGlobalDHCPRelay (self, uuid):
-        reqUrl =  self.urlBase+'DhcpRelayGlobalConfig/' + uuid
+        reqUrl =  self.urlBase+'DhcpRelayGlobal/' + uuid
         r = requests.delete(reqUrl,  headers=headers)
         return r.json()
         
     def deleteIntfDHCPRelay (self, uuid):
-        reqUrl =  self.urlBase+'DhcpRelayIntfConfig/' + uuid
+        reqUrl =  self.urlBase+'DhcpRelayIntf/' + uuid
         r = requests.delete(reqUrl,  headers=headers)
         return r.json()      
 			
