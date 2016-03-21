@@ -85,23 +85,24 @@ class FlexPrint( object):
 	entry.VirtualRouterMACAddress = gblInfo.IntfConfig.VirtualRouterMACAddress
 	entry.SkewTime = gblInfo.SkewTime
 	entry.MasterDownInterval = gblInfo.MasterDownInterval
-
         '''
         if len(vrids):
             print ''
-            print 'IfIndex   VRID    Vip     Priority        ViMac              IntfIp      Preempt  Advertise    Skew  Master_Down'
+            print 'IfIndex   VRID    Vip     Priority   State     ViMac              IntfIp      Preempt  Advertise    Skew  Master_Down'
             print '================================================================================================================'
-            for entry in vrids:
-                print '%s   %s  %s     %s      %s      %s   %s    %s            %s      %s' %(entry ['IfIndex'],
+            for fObject in vrids:
+                entry = fObject['ConfigObj']
+                print '%s   %s  %s     %s   %s   %s      %s   %s    %s            %s      %s' %(entry ['IfIndex'],
                                                                    entry ['VRID'],
                                                                    entry ['VirtualIPv4Addr'],
                                                                    entry ['Priority'],
+                                                                   entry ['VrrpState'],
                                                                    entry ['VirtualRouterMACAddress'],
                                                                    entry ['IntfIpAddr'],
                                                                    entry ['PreemptMode'],
                                                                    entry ['AdvertisementInterval'],
                                                                    entry ['SkewTime'],
-                                                                   entry ['MasterDownInterval'])
+                                                                   entry ['MasterDownTimer'])
             print ''
 
     def printOspfLsdb(self) :

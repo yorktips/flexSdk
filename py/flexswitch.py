@@ -174,7 +174,41 @@ class FlexSwitch( object):
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
         print r.__dict__
         return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
-    
+
+    def createVrrpIntfConfig(self, 
+			     vlanId, 
+                             priority, 
+                             vrid, 
+                             virturalIp, 
+                             advertime, 
+                             preempt, 
+                             accept):
+        IfIndex = self.getVlanInfo(vlanId)
+        if virturalIp == "":
+            obj = {
+                'IfIndex': IfIndex,
+                'VRID': vrid,
+                'Priority':priority,
+                'AdvertisementInterval': advertime,
+                'PreemptMode': preempt,
+                'AcceptMode':accept
+            }
+        elif virturalIp != "":
+            obj = {
+                'IfIndex': IfIndex,
+                'VRID': vrid,
+                'Priority':priority,
+                'AdvertisementInterval': advertime,
+                'PreemptMode': preempt,
+                'AcceptMode':accept,
+                'VirtualIPv4Addr':virturalIp
+            }
+
+        #print obj
+        reqUrl = self.urlBase+'VrrpIntf'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
+        return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
+
     def createOspfIntf(self, 
                        ipaddr, 
                        ifIndex = 0,
@@ -221,7 +255,7 @@ class FlexSwitch( object):
         		'DhcpRelay': 'Test',
                 'Enable' : True
                }
-        reqUrl =  self.urlBase+'DhcpRelayGlobalConfig'
+        reqUrl =  self.urlBase+'DhcpRelayGlobal'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
         return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
         
@@ -232,7 +266,7 @@ class FlexSwitch( object):
                 'ServerIp': svrIp
                 }
 
-        reqUrl =  self.urlBase+'DhcpRelayIntfConfig'
+        reqUrl =  self.urlBase+'DhcpRelayIntf'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
         return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
 
@@ -552,12 +586,12 @@ class FlexSwitch( object):
     	
         
     def deleteGlobalDHCPRelay (self, uuid):
-        reqUrl =  self.urlBase+'DhcpRelayGlobalConfig/' + uuid
+        reqUrl =  self.urlBase+'DhcpRelayGlobal/' + uuid
         r = requests.delete(reqUrl,  headers=headers)
         return r.json()
         
     def deleteIntfDHCPRelay (self, uuid):
-        reqUrl =  self.urlBase+'DhcpRelayIntfConfig/' + uuid
+        reqUrl =  self.urlBase+'DhcpRelayIntf/' + uuid
         r = requests.delete(reqUrl,  headers=headers)
         return r.json()      
 			
