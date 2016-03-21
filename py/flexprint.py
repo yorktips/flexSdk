@@ -238,7 +238,8 @@ class FlexPrint( object):
                 obj = data['ConfigObj']
                 bainconsistant = "(inconsistant)" if obj["BridgeAssuranceInconsistant"] else ""
                 print "IfIndex %s of BrgIfIndex %s is %s %s" %(obj["IfIndex"], obj["BrgIfIndex"], stateDict[obj["State"]], bainconsistant)
-                print "Enabled %s, Protocol Migration %s" %(obj["Enable"], obj["ProtocolMigration"])
+                #print "Enabled %s, Protocol Migration %s" %(obj["Enable"], obj["ProtocolMigration"])
+                print "Enabled %s" %(obj["Enable"],)
                 print "Port path cost %s, Port priority %s, Port Identifier %s" %(obj["PathCost32"], obj["Priority"], obj["IfIndex"])
                 print "Designated root has bridge id %s" %(obj["DesignatedRoot"])
                 print "Designated bridge has bridge id %s" %(obj["DesignatedBridge"])
