@@ -85,7 +85,7 @@ class FlexSwitch( object):
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
         return r.json()
         
-    def createBgpPeerGroup(self, name, desc, CRT, HT, KpAT, RRClustID=0, RRClient=False):
+    def createBgpPeerGroup(self, name, desc, CRT, HT, KpAT, RRClustID=0, RRClient=False, APRx=False, APTxMax=0):
         obj =  { 
         		'Name' : name,
                 'ConnectRetryTime': CRT, 
@@ -94,7 +94,8 @@ class FlexSwitch( object):
                 'Description'      : desc,
                 'RouteReflectorClusterId' : RRClustID,
                 'RouteReflectorClient': RRClient,
-                
+                'AddPathsRx' : APRx,
+                'AddPathsMaxTx': APTxMax,                
                }
         reqUrl =  self.urlBase+'BGPPeerGroup'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
