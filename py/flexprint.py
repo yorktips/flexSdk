@@ -188,7 +188,7 @@ class FlexPrint( object):
 
     def printStpBridges(self):
 
-        brgs = self.swtch.getObjects('StpBridgeState')
+        brgs = self.swtch.getObjects('StpBridgeStates')
 
         if len(brgs):
             print '\n\n---- STP Bridge DB----'
@@ -230,22 +230,22 @@ class FlexPrint( object):
             1 : "P2P",
         }
 
-        ports = self.swtch.getObjects('StpPortState')
+        ports = self.swtch.getObjects('StpPortStates')
 
         if len(ports):
             print '\n\n---- STP PORT DB----'
             for data in ports:
                 obj = data['Object']
                 bainconsistant = "(inconsistant)" if obj["BridgeAssuranceInconsistant"] else ""
-                print "IfIndex %s of BrgIfIndex %s is %s %s" %(obj["Dot1dStpPort"], obj["Dot1dBrgIfIndex"], stateDict[obj["Dot1dStpPortState"]], bainconsistant)
-                print "Enabled %s, Protocol Migration %s" %(obj["Dot1dStpPortEnable"], obj["Dot1dStpPortProtocolMigration"])
-                print "Port path cost %s, Port priority %s, Port Identifier %s" %(obj["Dot1dStpPortPathCost32"], obj["Dot1dStpPortPriority"], obj["Dot1dStpPort"])
-                print "Designated root has bridge id %s" %(obj["Dot1dStpPortDesignatedRoot"])
-                print "Designated bridge has bridge id %s" %(obj["Dot1dStpPortDesignatedBridge"])
-                print "Designated port id %s, designated path cost %s admin path cost %s" %(obj["Dot1dStpPortDesignatedPort"], obj["Dot1dStpPortDesignatedCost"], obj["Dot1dStpPortAdminPathCost"])
-                print "Root Timers: max age %s, forward delay %s, hello %s" %(obj["Dot1dStpBridgePortMaxAge"],obj["Dot1dStpBridgePortForwardDelay"],obj["Dot1dStpBridgePortHelloTime"],)
-                print "Number of transitions to forwarding state: %s" %(obj["Dot1dStpPortForwardTransitions"],)
-                print "AdminEdge %s OperEdge %s" %(obj["Dot1dStpPortAdminEdgePort"], obj["Dot1dStpPortOperEdgePort"])
+                print "IfIndex %s of BrgIfIndex %s is %s %s" %(obj["IfIndex"], obj["BrgIfIndex"], stateDict[obj["State"]], bainconsistant)
+                print "Enabled %s, Protocol Migration %s" %(obj["PortEnable"], obj["ProtocolMigration"])
+                print "Port path cost %s, Port priority %s, Port Identifier %s" %(obj["PathCost32"], obj["Priority"], obj["IfIndex"])
+                print "Designated root has bridge id %s" %(obj["DesignatedRoot"])
+                print "Designated bridge has bridge id %s" %(obj["DesignatedBridge"])
+                print "Designated port id %s, designated path cost %s admin path cost %s" %(obj["DesignatedPort"], obj["DesignatedCost"], obj["AdminPathCost"])
+                print "Root Timers: max age %s, forward delay %s, hello %s" %(obj["MaxAge"],obj["ForwardDelay"],obj["HelloTime"],)
+                print "Number of transitions to forwarding state: %s" %(obj["ForwardTransitions"],)
+                print "AdminEdge %s OperEdge %s" %(obj["AdminEdgePort"], obj["OperEdgePort"])
                 print "Bridge Assurance %s Bpdu Guard %s" %(obj["BridgeAssurance"], obj["BpduGuard"])
                 print "Link Type %s" %("UNSUPPORTED",)
                 print "\nPort Timers: (current tick(seconds) count)"
