@@ -197,7 +197,7 @@ class FlexPrint( object):
             for data in brgs:
                 obj = data['ConfigObj']
                 print "BrgIfIndex: ", obj["IfIndex"]
-                print "Version: ", obj["ForceVersion"]
+                #print "Version: ", obj["ForceVersion"]
                 print "Bridge Id: ", obj["Address"]
                 print "Bridge Hello time: ", obj["BridgeHelloTime"]
                 print "Bridge TxHold: ", obj["TxHoldCount"]
