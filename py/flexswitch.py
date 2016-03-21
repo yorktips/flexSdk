@@ -38,52 +38,105 @@ class FlexSwitch( object):
         print obj["VlanId"], r.__dict__
         return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
 
-    def deleteVlan(self, vlanId, ports, taggedports):
-        obj =  { 'VlanId': int(vlanId),
-                 'IfIndexList' : ports,
-                 'UntagIfIndexList': taggedports
-               }
 
     def deleteVlanByUuid(self, uuid):
         reqUrl =  self.urlBase+'Vlan'+'/'+ uuid
         r = requests.delete(reqUrl, headers=headers)
 
     def createBgpGlobal(self, asnum, rtrid, usemp=False, ebgpmp=1, ibgpmp=1):
+        return r.json()
+
+    def createBfdGlobal(self, bfd_type, bfd_enable):
+    	obj =  {
+        		'Bfd': bfd_type, 
+        		'Enable': bfd_enable
+        		}
+        reqUrl =  self.urlBase+'BfdGlobal'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
+        return r.json()    
+        		
+    def createBfdintf(self, ifindex, multiplier, mintx_int, minrx_int, minrx_echo, demand, auth, auth_type, auth_key, auth_data):
+    	obj =  {
+        		'IfIndex': ifindex,
+    			'LocalMultiplier': multiplier, 
+    			'DesiredMinTxInterval': mintx_int, 
+    			'RequiredMinRxInterval': minrx_int, 
+    			'RequiredMinEchoRxInterval': minrx_echo, 
+    			'DemandEnabled': demand, 
+    			'AuthenticationEnabled': auth, 
+    			'AuthenticationType': auth_type, 
+    			'AuthenticationKeyId': auth_key, 
+    			'AuthenticationData': auth_data
+    			}
+        reqUrl =  self.urlBase+'BfdInterface'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
+        return r.json() 
+
+    def createBfdSession(self, ipaddr, perlink, owner):
+    	obj =  {
+ 				'IpAddr': ipaddr, 
+ 				'PerLink': perlink, 
+ 				'Owner': owner, 
+    			}
+        reqUrl =  self.urlBase+'BfdSession'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
+        return r.json() 
+
+      
+    def createBgpGlobal(self, asnum, rtrid, usemp, ebgpmp, ibgpmp):
         obj =  { 
                 'ASNum'         : asnum,
                 'RouterId'   : rtrid,  
                 'UseMultiplePaths': usemp, 
-		'EBGPMaxPaths': ebgpmp, 
-		'IBGPMaxPaths': ibgpmp  
+				'EBGPMaxPaths': ebgpmp, 
+				'IBGPMaxPaths': ibgpmp  
                }
  
         reqUrl =  self.urlBase+'BGPGlobal'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
         return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
         
-    def createBgpPeerGroup(self, name, desc, CRT, HT, KpAT):
+    def createBgpPeerGroup(self, name, desc, CRT, HT, KpAT, RRClustID=0, RRClient=False, APRx=False, APTxMax=0):
         obj =  { 
-        	'Name' : name,
+        		'Name' : name,
                 'ConnectRetryTime': CRT, 
                 'HoldTime'         : HT,
                 'KeepaliveTime'    : KpAT,
-                'Description'      : desc
+                'Description'      : desc,
+                'RouteReflectorClusterId' : RRClustID,
+                'RouteReflectorClient': RRClient,
+                'AddPathsRx' : APRx,
+                'AddPathsMaxTx': APTxMax,                
                }
         reqUrl =  self.urlBase+'BGPPeerGroup'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
         return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
         
     def createBgpPeer(self, nbrIp, peeras, localas, peergroup=None, desc=''):
+        return r.json()
+
+    def createBgpPeer(self, nbrIp, peeras, peergroup, desc, bfd):
+        obj =  { 
+                'PeerAS'         : peeras,
+                'AuthPassword'   : '',
+                'Description'      : desc ,
+                'PeerGroup'		: peergroup,
+                'NeighborAddress' : nbrIp,
+                'BfdEnable'	: bfd
+               }
+        reqUrl =  self.urlBase+'BGPNeighbor'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
+        return r.json()
+
+    def createBgpPeerLocAs(self, nbrIp, peeras, localas, peergroup, desc, bfd):
         obj =  { 
                 'PeerAS'         : peeras,
                 'LocalAS'        : localas,
                 'AuthPassword'   : '',
-                'Description'    : desc ,
-                'PeerGroup'	 : peergroup,
-                'NeighborAddress': nbrIp ,
-                'ConnectRetryTime': 30, 
-                'HoldTime'         : 3,
-                'KeepaliveTime'    : 1,
+                'Description'      : desc ,
+                'PeerGroup'		: peergroup,
+                'NeighborAddress' : nbrIp,
+                'BfdEnable'	: bfd
                }
         reqUrl =  self.urlBase+'BGPNeighbor'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
@@ -93,36 +146,35 @@ class FlexSwitch( object):
         obj =  { 
                 'RouterIdKey' : rtrid,
                }
-        reqUrl =  self.urlBase+'OspfGlobalConfig'
+        reqUrl =  self.urlBase+'OspfGlobal'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
         return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
         
     def createPolicyCondition(self, condition ):
         obj = condition 
-        reqUrl =  self.urlBase+'PolicyConditionConfig'
+        reqUrl =  self.urlBase+'PolicyCondition'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
         return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
         
     def createPolicyAction (self, action):
         obj = action
-        reqUrl =  self.urlBase+'PolicyActionConfig'
+        reqUrl =  self.urlBase+'PolicyAction'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
         return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
         
     def createPolicyStatement (self, stmt):
         obj = stmt 
-        reqUrl =  self.urlBase+'PolicyStmtConfig'
+        reqUrl =  self.urlBase+'PolicyStmt'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
         return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
         
     def createPolicy(self, policy ):
         obj = policy 
-        reqUrl =  self.urlBase+'PolicyConfig'
+        reqUrl =  self.urlBase+'PolicyDefinition'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
         print r.__dict__
         return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
-
-
+    
     def createOspfIntf(self, 
                        ipaddr, 
                        ifIndex = 0,
@@ -148,7 +200,7 @@ class FlexSwitch( object):
                 'IfAuthKey' : authKey ,
                 'IfAuthType' : authType
                }
-        reqUrl =  self.urlBase+'OspfIfEntryConfig'
+        reqUrl =  self.urlBase+'OspfIfEntry'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
         return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
     
@@ -160,13 +212,14 @@ class FlexSwitch( object):
           'Redistribute':True, 
           'RedistributeTargetProtocol':'BGP'}
 
-        reqUrl =  self.urlBase+'PolicyStmt'
+        reqUrl =  self.urlBase+'PolicyDefinitionStmt'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
         return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
         
     def enableGlobalDHCPRelay (self) :
         obj =  { 
-                'Enable' : True,
+        		'DhcpRelay': 'Test',
+                'Enable' : True
                }
         reqUrl =  self.urlBase+'DhcpRelayGlobalConfig'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
@@ -418,10 +471,95 @@ class FlexSwitch( object):
         return entries 
 		
     def getVlanInfo (self, vlanId) :
-        for vlanObj in self.getObjects ('Vlans'):
-            vlan = vlanObj['ConfigObj']
-            if vlan['VlanId'] == vlanId:
-                return int(vlan['IfIndex'])
+        for vlan in self.getObjects('Vlans'):
+            #print vlan
+            if vlan['ConfigObj']['VlanId'] == vlanId:
+                return int(vlan['ConfigObj']['IfIndex'])
+                
+####################################################################               
+#################### DELETE OPERATIONS #############################
+####################################################################               
+
+    def deleteIPv4Address( self, uuid) :
+        reqUrl =  self.urlBase+'IPv4Intf/'+ uuid
+        r = requests.delete(reqUrl,  headers=headers)
+        return r.json()
+      
+    def deleteVlan (self, uuid):
+        reqUrl =  self.urlBase+'Vlan/' + uuid
+        r = requests.delete(reqUrl,  headers=headers)
+        return r.json()
+    
+    def deleteBfdGlobal(self, uuid):
+        reqUrl =  self.urlBase+'BfdGlobalConfig/' + uuid
+        r = requests.delete(reqUrl,  headers=headers)
+        return r.json()    
+        
+    def deleteBfdintf(self, uuid):
+        reqUrl =  self.urlBase+'BfdIntfConfig/' + uuid
+        r = requests.post(reqUrl,  headers=headers)
+        return r.json() 
+    
+    def deleteBfdSession(self, uuid):
+        reqUrl =  self.urlBase+'BfdSessionConfig/' + uuid
+        r = requests.post(reqUrl,  headers=headers)
+        return r.json() 
+      
+    def deleteBgpGlobal(self, uuid):
+        reqUrl =  self.urlBase+'BGPGlobalConfig/' + uuid
+        r = requests.post(reqUrl,  headers=headers)
+        return r.json()
+        
+    def deleteBgpPeerGroup(self, uuid):
+        reqUrl =  self.urlBase+'BGPPeerGroup/' + uuid
+        r = requests.post(reqUrl,  headers=headers)
+        return r.json()
+    
+    def deleteBgpPeer(self, uuid):
+        reqUrl =  self.urlBase+'BGPNeighborConfig/' + uuid
+        r = requests.post(reqUrl,  headers=headers)
+        return r.json()
+    
+    def deleteOspfGlobal(self, uuid):
+        reqUrl =  self.urlBase+'OspfGlobalConfig/'+ uuid
+        r = requests.delete(reqUrl,  headers=headers)
+        return r.json()
+        
+    def deletePolicyCondition(self, uuid ):
+        reqUrl =  self.urlBase+'PolicyConditionConfig/'+ uuid
+        r = requests.delete(reqUrl,  headers=headers)
+        return r.json()
+        
+    def deletePolicyAction (self, uuid):
+        reqUrl =  self.urlBase+'PolicyActionConfig/'+ uuid
+        r = requests.delete(reqUrl,  headers=headers)
+        return r.json()
+        
+    def deletePolicyStatement (self, uuid):
+        reqUrl =  self.urlBase+'PolicyStmtConfig/'+ uuid
+        r = requests.delete(reqUrl,  headers=headers)
+        return r.json()
+        
+    def deletePolicy(self, uuid ):
+        reqUrl =  self.urlBase+'PolicyDefinitionConfig/'+ uuid
+        r = requests.delete(reqUrl,  headers=headers)
+        return r.json()
+    
+    def deleteOspfIntf(self, uuid):
+        reqUrl =  self.urlBase+'OspfIfEntryConfig/' + uuid
+        r = requests.delete(reqUrl,  headers=headers)
+        return r.json()
+    	
+        
+    def deleteGlobalDHCPRelay (self, uuid):
+        reqUrl =  self.urlBase+'DhcpRelayGlobalConfig/' + uuid
+        r = requests.delete(reqUrl,  headers=headers)
+        return r.json()
+        
+    def deleteIntfDHCPRelay (self, uuid):
+        reqUrl =  self.urlBase+'DhcpRelayIntfConfig/' + uuid
+        r = requests.delete(reqUrl,  headers=headers)
+        return r.json()      
 			
 
 if __name__=='__main__':
