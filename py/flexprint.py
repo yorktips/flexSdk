@@ -188,7 +188,7 @@ class FlexPrint( object):
 
     def printStpBridges(self):
 
-        brgs = self.swtch.getObjects('Dot1dStpBridgeStates')
+        brgs = self.swtch.getObjects('StpBridgeState')
 
         if len(brgs):
             print '\n\n---- STP Bridge DB----'
@@ -230,7 +230,7 @@ class FlexPrint( object):
             1 : "P2P",
         }
 
-        ports = self.swtch.getObjects('Dot1dStpPortEntryStateCountersFsmStatesPortTimers')
+        ports = self.swtch.getObjects('StpPortState')
 
         if len(ports):
             print '\n\n---- STP PORT DB----'
