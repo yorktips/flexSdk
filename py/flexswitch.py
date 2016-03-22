@@ -209,6 +209,15 @@ class FlexSwitch( object):
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers)
         return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
 
+    def updateVrrpIntfConfig(self, priority, vlanId, uuid):
+        IfIndex = self.getVlanInfo(vlanId)
+        obj = {
+                'Priority':priority
+              }
+        reqUrl = self.urlBase+'VrrpIntf/' + uuid
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers)
+        return r.json() if r.status_code == SUCCESS_STATUS_CODE else None
+
     def createOspfIntf(self, 
                        ipaddr, 
                        ifIndex = 0,
