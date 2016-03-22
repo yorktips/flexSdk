@@ -1,4 +1,4 @@
-!/usr/bin/python                                                                                                       
+#!/usr/bin/python                                                                                                       
 import requests                                                                                                         
 import json                                                                                                             
 import urllib2                                                                                                          
@@ -32,17 +32,17 @@ class FlexSwitch( object):
                               HostTOS,
                               HostIpAddress):
         obj =  { 
-                'HostTOS' : HostTOS
-                'HostIpAddress' : HostIpAddress
+                'HostTOS' : HostTOS,
+                'HostIpAddress' : HostIpAddress,
                 }
         reqUrl =  self.urlBase+'OspfHostEntryState'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteOspfHostEntryStateById(self, objectId ):
+    def getOspfHostEntryStateById(self, objectId ):
         reqUrl =  self.urlBase+'OspfHostEntryState'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -53,16 +53,16 @@ class FlexSwitch( object):
     def getVxlanStateVxlanInstanceMapL3interface(self,
                                                  InterfaceName):
         obj =  { 
-                'InterfaceName' : InterfaceName
+                'InterfaceName' : InterfaceName,
                 }
         reqUrl =  self.urlBase+'VxlanStateVxlanInstanceMapL3interface'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteVxlanStateVxlanInstanceMapL3interfaceById(self, objectId ):
+    def getVxlanStateVxlanInstanceMapL3interfaceById(self, objectId ):
         reqUrl =  self.urlBase+'VxlanStateVxlanInstanceMapL3interface'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -76,10 +76,10 @@ class FlexSwitch( object):
                          Conditions,
                          Actions):
         obj =  { 
-                'Name' : Name
-                'MatchConditions' : MatchConditions
-                'Conditions' : Conditions
-                'Actions' : Actions
+                'Name' : Name,
+                'MatchConditions' : MatchConditions,
+                'Conditions' : Conditions,
+                'Actions' : Actions,
                 }
         reqUrl =  self.urlBase+'PolicyStmt'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -92,10 +92,10 @@ class FlexSwitch( object):
                          Conditions = None,
                          Actions = None):
         obj =  { 
-                'Name' : Name
-                'MatchConditions' : MatchConditions
-                'Conditions' : Conditions
-                'Actions' : Actions
+                'Name' : Name,
+                'MatchConditions' : MatchConditions,
+                'Conditions' : Conditions,
+                'Actions' : Actions,
                 }
         reqUrl =  self.urlBase+'PolicyStmt'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -108,10 +108,10 @@ class FlexSwitch( object):
                               Conditions = None,
                               Actions = None):
         obj =  { 
-                'objectId': objectId
-                'MatchConditions' : MatchConditions
-                'Conditions' : Conditions
-                'Actions' : Actions
+                'objectId': objectId,
+                'MatchConditions' : MatchConditions,
+                'Conditions' : Conditions,
+                'Actions' : Actions,
                 }
         reqUrl =  self.urlBase+'PolicyStmt'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -121,7 +121,7 @@ class FlexSwitch( object):
     def deletePolicyStmt(self,
                          Name):
         obj =  { 
-                'Name' : Name
+                'Name' : Name,
                 }
         reqUrl =  self.urlBase+'PolicyStmt'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -137,16 +137,16 @@ class FlexSwitch( object):
     def getPolicyStmt(self,
                       Name):
         obj =  { 
-                'Name' : Name
+                'Name' : Name,
                 }
         reqUrl =  self.urlBase+'PolicyStmt'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deletePolicyStmtById(self, objectId ):
+    def getPolicyStmtById(self, objectId ):
         reqUrl =  self.urlBase+'PolicyStmt'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -159,9 +159,9 @@ class FlexSwitch( object):
                                  NbrAddressLessIndex,
                                  NbrPriority):
         obj =  { 
-                'NbrIpAddr' : NbrIpAddr
-                'NbrAddressLessIndex' : NbrAddressLessIndex
-                'NbrPriority' : NbrPriority
+                'NbrIpAddr' : NbrIpAddr,
+                'NbrAddressLessIndex' : NbrAddressLessIndex,
+                'NbrPriority' : NbrPriority,
                 }
         reqUrl =  self.urlBase+'OspfNbrEntryConfig'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -173,9 +173,9 @@ class FlexSwitch( object):
                                  NbrAddressLessIndex,
                                  NbrPriority = None):
         obj =  { 
-                'NbrIpAddr' : NbrIpAddr
-                'NbrAddressLessIndex' : NbrAddressLessIndex
-                'NbrPriority' : NbrPriority
+                'NbrIpAddr' : NbrIpAddr,
+                'NbrAddressLessIndex' : NbrAddressLessIndex,
+                'NbrPriority' : NbrPriority,
                 }
         reqUrl =  self.urlBase+'OspfNbrEntryConfig'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -186,8 +186,8 @@ class FlexSwitch( object):
                                       objectId,
                                       NbrPriority = None):
         obj =  { 
-                'objectId': objectId
-                'NbrPriority' : NbrPriority
+                'objectId': objectId,
+                'NbrPriority' : NbrPriority,
                 }
         reqUrl =  self.urlBase+'OspfNbrEntryConfig'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -198,8 +198,8 @@ class FlexSwitch( object):
                                  NbrIpAddr,
                                  NbrAddressLessIndex):
         obj =  { 
-                'NbrIpAddr' : NbrIpAddr
-                'NbrAddressLessIndex' : NbrAddressLessIndex
+                'NbrIpAddr' : NbrIpAddr,
+                'NbrAddressLessIndex' : NbrAddressLessIndex,
                 }
         reqUrl =  self.urlBase+'OspfNbrEntryConfig'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -216,17 +216,17 @@ class FlexSwitch( object):
                               NbrIpAddr,
                               NbrAddressLessIndex):
         obj =  { 
-                'NbrIpAddr' : NbrIpAddr
-                'NbrAddressLessIndex' : NbrAddressLessIndex
+                'NbrIpAddr' : NbrIpAddr,
+                'NbrAddressLessIndex' : NbrAddressLessIndex,
                 }
         reqUrl =  self.urlBase+'OspfNbrEntryConfig'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteOspfNbrEntryConfigById(self, objectId ):
+    def getOspfNbrEntryConfigById(self, objectId ):
         reqUrl =  self.urlBase+'OspfNbrEntryConfig'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -242,12 +242,12 @@ class FlexSwitch( object):
                    IfIndexList,
                    UntagIfIndexList):
         obj =  { 
-                'VlanId' : VlanId
-                'VlanName' : VlanName
-                'OperState' : OperState
-                'IfIndex' : IfIndex
-                'IfIndexList' : IfIndexList
-                'UntagIfIndexList' : UntagIfIndexList
+                'VlanId' : VlanId,
+                'VlanName' : VlanName,
+                'OperState' : OperState,
+                'IfIndex' : IfIndex,
+                'IfIndexList' : IfIndexList,
+                'UntagIfIndexList' : UntagIfIndexList,
                 }
         reqUrl =  self.urlBase+'Vlan'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -262,12 +262,12 @@ class FlexSwitch( object):
                    IfIndexList = None,
                    UntagIfIndexList = None):
         obj =  { 
-                'VlanId' : VlanId
-                'VlanName' : VlanName
-                'OperState' : OperState
-                'IfIndex' : IfIndex
-                'IfIndexList' : IfIndexList
-                'UntagIfIndexList' : UntagIfIndexList
+                'VlanId' : VlanId,
+                'VlanName' : VlanName,
+                'OperState' : OperState,
+                'IfIndex' : IfIndex,
+                'IfIndexList' : IfIndexList,
+                'UntagIfIndexList' : UntagIfIndexList,
                 }
         reqUrl =  self.urlBase+'Vlan'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -282,12 +282,12 @@ class FlexSwitch( object):
                         IfIndexList = None,
                         UntagIfIndexList = None):
         obj =  { 
-                'objectId': objectId
-                'VlanName' : VlanName
-                'OperState' : OperState
-                'IfIndex' : IfIndex
-                'IfIndexList' : IfIndexList
-                'UntagIfIndexList' : UntagIfIndexList
+                'objectId': objectId,
+                'VlanName' : VlanName,
+                'OperState' : OperState,
+                'IfIndex' : IfIndex,
+                'IfIndexList' : IfIndexList,
+                'UntagIfIndexList' : UntagIfIndexList,
                 }
         reqUrl =  self.urlBase+'Vlan'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -297,7 +297,7 @@ class FlexSwitch( object):
     def deleteVlan(self,
                    VlanId):
         obj =  { 
-                'VlanId' : VlanId
+                'VlanId' : VlanId,
                 }
         reqUrl =  self.urlBase+'Vlan'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -313,16 +313,16 @@ class FlexSwitch( object):
     def getVlan(self,
                 VlanId):
         obj =  { 
-                'VlanId' : VlanId
+                'VlanId' : VlanId,
                 }
         reqUrl =  self.urlBase+'Vlan'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteVlanById(self, objectId ):
+    def getVlanById(self, objectId ):
         reqUrl =  self.urlBase+'Vlan'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -332,25 +332,25 @@ class FlexSwitch( object):
 
     def getOspfLocalLsdbEntryState(self,
                                    LocalLsdbAddressLessIf,
-                                   LocalLsdbType,
                                    LocalLsdbIpAddress,
                                    LocalLsdbRouterId,
-                                   LocalLsdbLsid):
+                                   LocalLsdbLsid,
+                                   LocalLsdbType):
         obj =  { 
-                'LocalLsdbAddressLessIf' : LocalLsdbAddressLessIf
-                'LocalLsdbType' : LocalLsdbType
-                'LocalLsdbIpAddress' : LocalLsdbIpAddress
-                'LocalLsdbRouterId' : LocalLsdbRouterId
-                'LocalLsdbLsid' : LocalLsdbLsid
+                'LocalLsdbAddressLessIf' : LocalLsdbAddressLessIf,
+                'LocalLsdbIpAddress' : LocalLsdbIpAddress,
+                'LocalLsdbRouterId' : LocalLsdbRouterId,
+                'LocalLsdbLsid' : LocalLsdbLsid,
+                'LocalLsdbType' : LocalLsdbType,
                 }
         reqUrl =  self.urlBase+'OspfLocalLsdbEntryState'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteOspfLocalLsdbEntryStateById(self, objectId ):
+    def getOspfLocalLsdbEntryStateById(self, objectId ):
         reqUrl =  self.urlBase+'OspfLocalLsdbEntryState'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -362,8 +362,8 @@ class FlexSwitch( object):
                                Module,
                                Level='info'):
         obj =  { 
-                'Module' : Module
-                'Level' : Level
+                'Module' : Module,
+                'Level' : Level,
                 }
         reqUrl =  self.urlBase+'ComponentLogging'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -374,8 +374,8 @@ class FlexSwitch( object):
                                Module,
                                Level = None):
         obj =  { 
-                'Module' : Module
-                'Level' : Level
+                'Module' : Module,
+                'Level' : Level,
                 }
         reqUrl =  self.urlBase+'ComponentLogging'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -386,8 +386,8 @@ class FlexSwitch( object):
                                     objectId,
                                     Level = None):
         obj =  { 
-                'objectId': objectId
-                'Level' : Level
+                'objectId': objectId,
+                'Level' : Level,
                 }
         reqUrl =  self.urlBase+'ComponentLogging'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -397,7 +397,7 @@ class FlexSwitch( object):
     def deleteComponentLogging(self,
                                Module):
         obj =  { 
-                'Module' : Module
+                'Module' : Module,
                 }
         reqUrl =  self.urlBase+'ComponentLogging'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -413,16 +413,16 @@ class FlexSwitch( object):
     def getComponentLogging(self,
                             Module):
         obj =  { 
-                'Module' : Module
+                'Module' : Module,
                 }
         reqUrl =  self.urlBase+'ComponentLogging'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteComponentLoggingById(self, objectId ):
+    def getComponentLoggingById(self, objectId ):
         reqUrl =  self.urlBase+'ComponentLogging'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -433,16 +433,16 @@ class FlexSwitch( object):
     def getIPv4EventState(self,
                           Index):
         obj =  { 
-                'Index' : Index
+                'Index' : Index,
                 }
         reqUrl =  self.urlBase+'IPv4EventState'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteIPv4EventStateById(self, objectId ):
+    def getIPv4EventStateById(self, objectId ):
         reqUrl =  self.urlBase+'IPv4EventState'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -455,9 +455,9 @@ class FlexSwitch( object):
                             Enable,
                             ServerIp):
         obj =  { 
-                'IfIndex' : IfIndex
-                'Enable' : Enable
-                'ServerIp' : ServerIp
+                'IfIndex' : IfIndex,
+                'Enable' : Enable,
+                'ServerIp' : ServerIp,
                 }
         reqUrl =  self.urlBase+'DhcpRelayIntf'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -469,9 +469,9 @@ class FlexSwitch( object):
                             Enable = None,
                             ServerIp = None):
         obj =  { 
-                'IfIndex' : IfIndex
-                'Enable' : Enable
-                'ServerIp' : ServerIp
+                'IfIndex' : IfIndex,
+                'Enable' : Enable,
+                'ServerIp' : ServerIp,
                 }
         reqUrl =  self.urlBase+'DhcpRelayIntf'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -483,9 +483,9 @@ class FlexSwitch( object):
                                  Enable = None,
                                  ServerIp = None):
         obj =  { 
-                'objectId': objectId
-                'Enable' : Enable
-                'ServerIp' : ServerIp
+                'objectId': objectId,
+                'Enable' : Enable,
+                'ServerIp' : ServerIp,
                 }
         reqUrl =  self.urlBase+'DhcpRelayIntf'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -495,7 +495,7 @@ class FlexSwitch( object):
     def deleteDhcpRelayIntf(self,
                             IfIndex):
         obj =  { 
-                'IfIndex' : IfIndex
+                'IfIndex' : IfIndex,
                 }
         reqUrl =  self.urlBase+'DhcpRelayIntf'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -511,16 +511,16 @@ class FlexSwitch( object):
     def getDhcpRelayIntf(self,
                          IfIndex):
         obj =  { 
-                'IfIndex' : IfIndex
+                'IfIndex' : IfIndex,
                 }
         reqUrl =  self.urlBase+'DhcpRelayIntf'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteDhcpRelayIntfById(self, objectId ):
+    def getDhcpRelayIntfById(self, objectId ):
         reqUrl =  self.urlBase+'DhcpRelayIntf'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -538,14 +538,14 @@ class FlexSwitch( object):
                            RedistributeTargetProtocol,
                            NetworkStatementTargetProtocol):
         obj =  { 
-                'Name' : Name
-                'ActionType' : ActionType
-                'SetAdminDistanceValue' : SetAdminDistanceValue
-                'Accept' : Accept
-                'Reject' : Reject
-                'RedistributeAction' : RedistributeAction
-                'RedistributeTargetProtocol' : RedistributeTargetProtocol
-                'NetworkStatementTargetProtocol' : NetworkStatementTargetProtocol
+                'Name' : Name,
+                'ActionType' : ActionType,
+                'SetAdminDistanceValue' : SetAdminDistanceValue,
+                'Accept' : Accept,
+                'Reject' : Reject,
+                'RedistributeAction' : RedistributeAction,
+                'RedistributeTargetProtocol' : RedistributeTargetProtocol,
+                'NetworkStatementTargetProtocol' : NetworkStatementTargetProtocol,
                 }
         reqUrl =  self.urlBase+'PolicyAction'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -562,14 +562,14 @@ class FlexSwitch( object):
                            RedistributeTargetProtocol = None,
                            NetworkStatementTargetProtocol = None):
         obj =  { 
-                'Name' : Name
-                'ActionType' : ActionType
-                'SetAdminDistanceValue' : SetAdminDistanceValue
-                'Accept' : Accept
-                'Reject' : Reject
-                'RedistributeAction' : RedistributeAction
-                'RedistributeTargetProtocol' : RedistributeTargetProtocol
-                'NetworkStatementTargetProtocol' : NetworkStatementTargetProtocol
+                'Name' : Name,
+                'ActionType' : ActionType,
+                'SetAdminDistanceValue' : SetAdminDistanceValue,
+                'Accept' : Accept,
+                'Reject' : Reject,
+                'RedistributeAction' : RedistributeAction,
+                'RedistributeTargetProtocol' : RedistributeTargetProtocol,
+                'NetworkStatementTargetProtocol' : NetworkStatementTargetProtocol,
                 }
         reqUrl =  self.urlBase+'PolicyAction'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -586,14 +586,14 @@ class FlexSwitch( object):
                                 RedistributeTargetProtocol = None,
                                 NetworkStatementTargetProtocol = None):
         obj =  { 
-                'objectId': objectId
-                'ActionType' : ActionType
-                'SetAdminDistanceValue' : SetAdminDistanceValue
-                'Accept' : Accept
-                'Reject' : Reject
-                'RedistributeAction' : RedistributeAction
-                'RedistributeTargetProtocol' : RedistributeTargetProtocol
-                'NetworkStatementTargetProtocol' : NetworkStatementTargetProtocol
+                'objectId': objectId,
+                'ActionType' : ActionType,
+                'SetAdminDistanceValue' : SetAdminDistanceValue,
+                'Accept' : Accept,
+                'Reject' : Reject,
+                'RedistributeAction' : RedistributeAction,
+                'RedistributeTargetProtocol' : RedistributeTargetProtocol,
+                'NetworkStatementTargetProtocol' : NetworkStatementTargetProtocol,
                 }
         reqUrl =  self.urlBase+'PolicyAction'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -603,7 +603,7 @@ class FlexSwitch( object):
     def deletePolicyAction(self,
                            Name):
         obj =  { 
-                'Name' : Name
+                'Name' : Name,
                 }
         reqUrl =  self.urlBase+'PolicyAction'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -619,16 +619,16 @@ class FlexSwitch( object):
     def getPolicyAction(self,
                         Name):
         obj =  { 
-                'Name' : Name
+                'Name' : Name,
                 }
         reqUrl =  self.urlBase+'PolicyAction'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deletePolicyActionById(self, objectId ):
+    def getPolicyActionById(self, objectId ):
         reqUrl =  self.urlBase+'PolicyAction'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -638,18 +638,18 @@ class FlexSwitch( object):
 
     def createIpTableAcl(self,
                          Name,
-                         PhysicalPort='all',
                          Action,
                          IpAddr,
                          Protocol,
-                         Port='all'):
+                         Port='all',
+                         PhysicalPort='all'):
         obj =  { 
-                'Name' : Name
-                'PhysicalPort' : PhysicalPort
-                'Action' : Action
-                'IpAddr' : IpAddr
-                'Protocol' : Protocol
-                'Port' : Port
+                'Name' : Name,
+                'Action' : Action,
+                'IpAddr' : IpAddr,
+                'Protocol' : Protocol,
+                'Port' : Port,
+                'PhysicalPort' : PhysicalPort,
                 }
         reqUrl =  self.urlBase+'IpTableAcl'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -658,18 +658,18 @@ class FlexSwitch( object):
 
     def updateIpTableAcl(self,
                          Name,
-                         PhysicalPort = None,
                          Action = None,
                          IpAddr = None,
                          Protocol = None,
-                         Port = None):
+                         Port = None,
+                         PhysicalPort = None):
         obj =  { 
-                'Name' : Name
-                'PhysicalPort' : PhysicalPort
-                'Action' : Action
-                'IpAddr' : IpAddr
-                'Protocol' : Protocol
-                'Port' : Port
+                'Name' : Name,
+                'Action' : Action,
+                'IpAddr' : IpAddr,
+                'Protocol' : Protocol,
+                'Port' : Port,
+                'PhysicalPort' : PhysicalPort,
                 }
         reqUrl =  self.urlBase+'IpTableAcl'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -678,18 +678,18 @@ class FlexSwitch( object):
 
     def updateIpTableAclById(self,
                               objectId,
-                              PhysicalPort = None,
                               Action = None,
                               IpAddr = None,
                               Protocol = None,
-                              Port = None):
+                              Port = None,
+                              PhysicalPort = None):
         obj =  { 
-                'objectId': objectId
-                'PhysicalPort' : PhysicalPort
-                'Action' : Action
-                'IpAddr' : IpAddr
-                'Protocol' : Protocol
-                'Port' : Port
+                'objectId': objectId,
+                'Action' : Action,
+                'IpAddr' : IpAddr,
+                'Protocol' : Protocol,
+                'Port' : Port,
+                'PhysicalPort' : PhysicalPort,
                 }
         reqUrl =  self.urlBase+'IpTableAcl'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -699,7 +699,7 @@ class FlexSwitch( object):
     def deleteIpTableAcl(self,
                          Name):
         obj =  { 
-                'Name' : Name
+                'Name' : Name,
                 }
         reqUrl =  self.urlBase+'IpTableAcl'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -715,16 +715,16 @@ class FlexSwitch( object):
     def getIpTableAcl(self,
                       Name):
         obj =  { 
-                'Name' : Name
+                'Name' : Name,
                 }
         reqUrl =  self.urlBase+'IpTableAcl'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteIpTableAclById(self, objectId ):
+    def getIpTableAclById(self, objectId ):
         reqUrl =  self.urlBase+'IpTableAcl'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -733,20 +733,20 @@ class FlexSwitch( object):
 
 
     def getStpPortState(self,
-                        IfIndex,
-                        BrgIfIndex):
+                        BrgIfIndex,
+                        IfIndex):
         obj =  { 
-                'IfIndex' : IfIndex
-                'BrgIfIndex' : BrgIfIndex
+                'BrgIfIndex' : BrgIfIndex,
+                'IfIndex' : IfIndex,
                 }
         reqUrl =  self.urlBase+'StpPortState'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteStpPortStateById(self, objectId ):
+    def getStpPortStateById(self, objectId ):
         reqUrl =  self.urlBase+'StpPortState'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -762,12 +762,12 @@ class FlexSwitch( object):
                                   AreaNssaTranslatorRole,
                                   AreaNssaTranslatorStabilityInterval):
         obj =  { 
-                'AreaId' : AreaId
-                'AuthType' : AuthType
-                'ImportAsExtern' : ImportAsExtern
-                'AreaSummary' : AreaSummary
-                'AreaNssaTranslatorRole' : AreaNssaTranslatorRole
-                'AreaNssaTranslatorStabilityInterval' : AreaNssaTranslatorStabilityInterval
+                'AreaId' : AreaId,
+                'AuthType' : AuthType,
+                'ImportAsExtern' : ImportAsExtern,
+                'AreaSummary' : AreaSummary,
+                'AreaNssaTranslatorRole' : AreaNssaTranslatorRole,
+                'AreaNssaTranslatorStabilityInterval' : AreaNssaTranslatorStabilityInterval,
                 }
         reqUrl =  self.urlBase+'OspfAreaEntryConfig'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -782,12 +782,12 @@ class FlexSwitch( object):
                                   AreaNssaTranslatorRole = None,
                                   AreaNssaTranslatorStabilityInterval = None):
         obj =  { 
-                'AreaId' : AreaId
-                'AuthType' : AuthType
-                'ImportAsExtern' : ImportAsExtern
-                'AreaSummary' : AreaSummary
-                'AreaNssaTranslatorRole' : AreaNssaTranslatorRole
-                'AreaNssaTranslatorStabilityInterval' : AreaNssaTranslatorStabilityInterval
+                'AreaId' : AreaId,
+                'AuthType' : AuthType,
+                'ImportAsExtern' : ImportAsExtern,
+                'AreaSummary' : AreaSummary,
+                'AreaNssaTranslatorRole' : AreaNssaTranslatorRole,
+                'AreaNssaTranslatorStabilityInterval' : AreaNssaTranslatorStabilityInterval,
                 }
         reqUrl =  self.urlBase+'OspfAreaEntryConfig'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -802,12 +802,12 @@ class FlexSwitch( object):
                                        AreaNssaTranslatorRole = None,
                                        AreaNssaTranslatorStabilityInterval = None):
         obj =  { 
-                'objectId': objectId
-                'AuthType' : AuthType
-                'ImportAsExtern' : ImportAsExtern
-                'AreaSummary' : AreaSummary
-                'AreaNssaTranslatorRole' : AreaNssaTranslatorRole
-                'AreaNssaTranslatorStabilityInterval' : AreaNssaTranslatorStabilityInterval
+                'objectId': objectId,
+                'AuthType' : AuthType,
+                'ImportAsExtern' : ImportAsExtern,
+                'AreaSummary' : AreaSummary,
+                'AreaNssaTranslatorRole' : AreaNssaTranslatorRole,
+                'AreaNssaTranslatorStabilityInterval' : AreaNssaTranslatorStabilityInterval,
                 }
         reqUrl =  self.urlBase+'OspfAreaEntryConfig'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -817,7 +817,7 @@ class FlexSwitch( object):
     def deleteOspfAreaEntryConfig(self,
                                   AreaId):
         obj =  { 
-                'AreaId' : AreaId
+                'AreaId' : AreaId,
                 }
         reqUrl =  self.urlBase+'OspfAreaEntryConfig'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -833,16 +833,16 @@ class FlexSwitch( object):
     def getOspfAreaEntryConfig(self,
                                AreaId):
         obj =  { 
-                'AreaId' : AreaId
+                'AreaId' : AreaId,
                 }
         reqUrl =  self.urlBase+'OspfAreaEntryConfig'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteOspfAreaEntryConfigById(self, objectId ):
+    def getOspfAreaEntryConfigById(self, objectId ):
         reqUrl =  self.urlBase+'OspfAreaEntryConfig'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -853,16 +853,16 @@ class FlexSwitch( object):
     def getBGPPolicyConditionState(self,
                                    Name):
         obj =  { 
-                'Name' : Name
+                'Name' : Name,
                 }
         reqUrl =  self.urlBase+'BGPPolicyConditionState'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteBGPPolicyConditionStateById(self, objectId ):
+    def getBGPPolicyConditionStateById(self, objectId ):
         reqUrl =  self.urlBase+'BGPPolicyConditionState'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -873,16 +873,16 @@ class FlexSwitch( object):
     def getArpEntry(self,
                     IpAddr):
         obj =  { 
-                'IpAddr' : IpAddr
+                'IpAddr' : IpAddr,
                 }
         reqUrl =  self.urlBase+'ArpEntry'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteArpEntryById(self, objectId ):
+    def getArpEntryById(self, objectId ):
         reqUrl =  self.urlBase+'ArpEntry'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -894,8 +894,8 @@ class FlexSwitch( object):
                         ArpConfigKey,
                         Timeout):
         obj =  { 
-                'ArpConfigKey' : ArpConfigKey
-                'Timeout' : Timeout
+                'ArpConfigKey' : ArpConfigKey,
+                'Timeout' : Timeout,
                 }
         reqUrl =  self.urlBase+'ArpConfig'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -906,8 +906,8 @@ class FlexSwitch( object):
                         ArpConfigKey,
                         Timeout = None):
         obj =  { 
-                'ArpConfigKey' : ArpConfigKey
-                'Timeout' : Timeout
+                'ArpConfigKey' : ArpConfigKey,
+                'Timeout' : Timeout,
                 }
         reqUrl =  self.urlBase+'ArpConfig'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -918,8 +918,8 @@ class FlexSwitch( object):
                              objectId,
                              Timeout = None):
         obj =  { 
-                'objectId': objectId
-                'Timeout' : Timeout
+                'objectId': objectId,
+                'Timeout' : Timeout,
                 }
         reqUrl =  self.urlBase+'ArpConfig'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -929,7 +929,7 @@ class FlexSwitch( object):
     def deleteArpConfig(self,
                         ArpConfigKey):
         obj =  { 
-                'ArpConfigKey' : ArpConfigKey
+                'ArpConfigKey' : ArpConfigKey,
                 }
         reqUrl =  self.urlBase+'ArpConfig'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -945,16 +945,16 @@ class FlexSwitch( object):
     def getArpConfig(self,
                      ArpConfigKey):
         obj =  { 
-                'ArpConfigKey' : ArpConfigKey
+                'ArpConfigKey' : ArpConfigKey,
                 }
         reqUrl =  self.urlBase+'ArpConfig'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteArpConfigById(self, objectId ):
+    def getArpConfigById(self, objectId ):
         reqUrl =  self.urlBase+'ArpConfig'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -966,17 +966,17 @@ class FlexSwitch( object):
                              NbrIpAddr,
                              NbrAddressLessIndex):
         obj =  { 
-                'NbrIpAddr' : NbrIpAddr
-                'NbrAddressLessIndex' : NbrAddressLessIndex
+                'NbrIpAddr' : NbrIpAddr,
+                'NbrAddressLessIndex' : NbrAddressLessIndex,
                 }
         reqUrl =  self.urlBase+'OspfNbrEntryState'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteOspfNbrEntryStateById(self, objectId ):
+    def getOspfNbrEntryStateById(self, objectId ):
         reqUrl =  self.urlBase+'OspfNbrEntryState'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -987,16 +987,16 @@ class FlexSwitch( object):
     def getDhcpRelayIntfState(self,
                               IntfId):
         obj =  { 
-                'IntfId' : IntfId
+                'IntfId' : IntfId,
                 }
         reqUrl =  self.urlBase+'DhcpRelayIntfState'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteDhcpRelayIntfStateById(self, objectId ):
+    def getDhcpRelayIntfStateById(self, objectId ):
         reqUrl =  self.urlBase+'DhcpRelayIntfState'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -1008,8 +1008,8 @@ class FlexSwitch( object):
                               DhcpRelay,
                               Enable):
         obj =  { 
-                'DhcpRelay' : DhcpRelay
-                'Enable' : Enable
+                'DhcpRelay' : DhcpRelay,
+                'Enable' : Enable,
                 }
         reqUrl =  self.urlBase+'DhcpRelayGlobal'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -1020,8 +1020,8 @@ class FlexSwitch( object):
                               DhcpRelay,
                               Enable = None):
         obj =  { 
-                'DhcpRelay' : DhcpRelay
-                'Enable' : Enable
+                'DhcpRelay' : DhcpRelay,
+                'Enable' : Enable,
                 }
         reqUrl =  self.urlBase+'DhcpRelayGlobal'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -1032,8 +1032,8 @@ class FlexSwitch( object):
                                    objectId,
                                    Enable = None):
         obj =  { 
-                'objectId': objectId
-                'Enable' : Enable
+                'objectId': objectId,
+                'Enable' : Enable,
                 }
         reqUrl =  self.urlBase+'DhcpRelayGlobal'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -1043,7 +1043,7 @@ class FlexSwitch( object):
     def deleteDhcpRelayGlobal(self,
                               DhcpRelay):
         obj =  { 
-                'DhcpRelay' : DhcpRelay
+                'DhcpRelay' : DhcpRelay,
                 }
         reqUrl =  self.urlBase+'DhcpRelayGlobal'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -1059,16 +1059,16 @@ class FlexSwitch( object):
     def getDhcpRelayGlobal(self,
                            DhcpRelay):
         obj =  { 
-                'DhcpRelay' : DhcpRelay
+                'DhcpRelay' : DhcpRelay,
                 }
         reqUrl =  self.urlBase+'DhcpRelayGlobal'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteDhcpRelayGlobalById(self, objectId ):
+    def getDhcpRelayGlobalById(self, objectId ):
         reqUrl =  self.urlBase+'DhcpRelayGlobal'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -1078,23 +1078,23 @@ class FlexSwitch( object):
 
     def getOspfLsdbEntryState(self,
                               LsdbType,
-                              LsdbLsid,
                               LsdbAreaId,
+                              LsdbLsid,
                               LsdbRouterId):
         obj =  { 
-                'LsdbType' : LsdbType
-                'LsdbLsid' : LsdbLsid
-                'LsdbAreaId' : LsdbAreaId
-                'LsdbRouterId' : LsdbRouterId
+                'LsdbType' : LsdbType,
+                'LsdbAreaId' : LsdbAreaId,
+                'LsdbLsid' : LsdbLsid,
+                'LsdbRouterId' : LsdbRouterId,
                 }
         reqUrl =  self.urlBase+'OspfLsdbEntryState'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteOspfLsdbEntryStateById(self, objectId ):
+    def getOspfLsdbEntryStateById(self, objectId ):
         reqUrl =  self.urlBase+'OspfLsdbEntryState'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -1103,11 +1103,11 @@ class FlexSwitch( object):
 
 
     def createVxlanVxlanInstanceAccessTypeVlanVlanList(self,
-                                                       VlanId,
-                                                       VxlanId):
+                                                       VxlanId,
+                                                       VlanId):
         obj =  { 
-                'VlanId' : VlanId
-                'VxlanId' : VxlanId
+                'VxlanId' : VxlanId,
+                'VlanId' : VlanId,
                 }
         reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeVlanVlanList'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -1115,11 +1115,11 @@ class FlexSwitch( object):
 
 
     def updateVxlanVxlanInstanceAccessTypeVlanVlanList(self,
-                                                       VlanId,
-                                                       VxlanId):
+                                                       VxlanId,
+                                                       VlanId):
         obj =  { 
-                'VlanId' : VlanId
-                'VxlanId' : VxlanId
+                'VxlanId' : VxlanId,
+                'VlanId' : VlanId,
                 }
         reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeVlanVlanList'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -1129,7 +1129,7 @@ class FlexSwitch( object):
     def updateVxlanVxlanInstanceAccessTypeVlanVlanListById(self,
                                                             objectId):
         obj =  { 
-                'objectId': objectId
+                'objectId': objectId,
                 }
         reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeVlanVlanList'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -1137,11 +1137,11 @@ class FlexSwitch( object):
 
 
     def deleteVxlanVxlanInstanceAccessTypeVlanVlanList(self,
-                                                       VlanId,
-                                                       VxlanId):
+                                                       VxlanId,
+                                                       VlanId):
         obj =  { 
-                'VlanId' : VlanId
-                'VxlanId' : VxlanId
+                'VxlanId' : VxlanId,
+                'VlanId' : VlanId,
                 }
         reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeVlanVlanList'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -1155,20 +1155,20 @@ class FlexSwitch( object):
 
 
     def getVxlanVxlanInstanceAccessTypeVlanVlanList(self,
-                                                    VlanId,
-                                                    VxlanId):
+                                                    VxlanId,
+                                                    VlanId):
         obj =  { 
-                'VlanId' : VlanId
-                'VxlanId' : VxlanId
+                'VxlanId' : VxlanId,
+                'VlanId' : VlanId,
                 }
         reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeVlanVlanList'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteVxlanVxlanInstanceAccessTypeVlanVlanListById(self, objectId ):
+    def getVxlanVxlanInstanceAccessTypeVlanVlanListById(self, objectId ):
         reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeVlanVlanList'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -1182,10 +1182,10 @@ class FlexSwitch( object):
                                  IpPrefix,
                                  MaskLengthRange):
         obj =  { 
-                'Name' : Name
-                'ConditionType' : ConditionType
-                'IpPrefix' : IpPrefix
-                'MaskLengthRange' : MaskLengthRange
+                'Name' : Name,
+                'ConditionType' : ConditionType,
+                'IpPrefix' : IpPrefix,
+                'MaskLengthRange' : MaskLengthRange,
                 }
         reqUrl =  self.urlBase+'BGPPolicyCondition'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -1198,10 +1198,10 @@ class FlexSwitch( object):
                                  IpPrefix = None,
                                  MaskLengthRange = None):
         obj =  { 
-                'Name' : Name
-                'ConditionType' : ConditionType
-                'IpPrefix' : IpPrefix
-                'MaskLengthRange' : MaskLengthRange
+                'Name' : Name,
+                'ConditionType' : ConditionType,
+                'IpPrefix' : IpPrefix,
+                'MaskLengthRange' : MaskLengthRange,
                 }
         reqUrl =  self.urlBase+'BGPPolicyCondition'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -1214,10 +1214,10 @@ class FlexSwitch( object):
                                       IpPrefix = None,
                                       MaskLengthRange = None):
         obj =  { 
-                'objectId': objectId
-                'ConditionType' : ConditionType
-                'IpPrefix' : IpPrefix
-                'MaskLengthRange' : MaskLengthRange
+                'objectId': objectId,
+                'ConditionType' : ConditionType,
+                'IpPrefix' : IpPrefix,
+                'MaskLengthRange' : MaskLengthRange,
                 }
         reqUrl =  self.urlBase+'BGPPolicyCondition'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -1227,7 +1227,7 @@ class FlexSwitch( object):
     def deleteBGPPolicyCondition(self,
                                  Name):
         obj =  { 
-                'Name' : Name
+                'Name' : Name,
                 }
         reqUrl =  self.urlBase+'BGPPolicyCondition'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -1243,16 +1243,16 @@ class FlexSwitch( object):
     def getBGPPolicyCondition(self,
                               Name):
         obj =  { 
-                'Name' : Name
+                'Name' : Name,
                 }
         reqUrl =  self.urlBase+'BGPPolicyCondition'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteBGPPolicyConditionById(self, objectId ):
+    def getBGPPolicyConditionById(self, objectId ):
         reqUrl =  self.urlBase+'BGPPolicyCondition'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -1263,16 +1263,16 @@ class FlexSwitch( object):
     def getDhcpRelayHostDhcpState(self,
                                   MacAddr):
         obj =  { 
-                'MacAddr' : MacAddr
+                'MacAddr' : MacAddr,
                 }
         reqUrl =  self.urlBase+'DhcpRelayHostDhcpState'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteDhcpRelayHostDhcpStateById(self, objectId ):
+    def getDhcpRelayHostDhcpStateById(self, objectId ):
         reqUrl =  self.urlBase+'DhcpRelayHostDhcpState'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -1283,16 +1283,16 @@ class FlexSwitch( object):
     def getDhcpRelayIntfServerState(self,
                                     IntfId):
         obj =  { 
-                'IntfId' : IntfId
+                'IntfId' : IntfId,
                 }
         reqUrl =  self.urlBase+'DhcpRelayIntfServerState'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteDhcpRelayIntfServerStateById(self, objectId ):
+    def getDhcpRelayIntfServerStateById(self, objectId ):
         reqUrl =  self.urlBase+'DhcpRelayIntfServerState'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -1306,10 +1306,10 @@ class FlexSwitch( object):
                                MatchType,
                                StatementList):
         obj =  { 
-                'Name' : Name
-                'Precedence' : Precedence
-                'MatchType' : MatchType
-                'StatementList' : StatementList
+                'Name' : Name,
+                'Precedence' : Precedence,
+                'MatchType' : MatchType,
+                'StatementList' : StatementList,
                 }
         reqUrl =  self.urlBase+'PolicyDefinition'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -1322,10 +1322,10 @@ class FlexSwitch( object):
                                MatchType = None,
                                StatementList = None):
         obj =  { 
-                'Name' : Name
-                'Precedence' : Precedence
-                'MatchType' : MatchType
-                'StatementList' : StatementList
+                'Name' : Name,
+                'Precedence' : Precedence,
+                'MatchType' : MatchType,
+                'StatementList' : StatementList,
                 }
         reqUrl =  self.urlBase+'PolicyDefinition'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -1338,10 +1338,10 @@ class FlexSwitch( object):
                                     MatchType = None,
                                     StatementList = None):
         obj =  { 
-                'objectId': objectId
-                'Precedence' : Precedence
-                'MatchType' : MatchType
-                'StatementList' : StatementList
+                'objectId': objectId,
+                'Precedence' : Precedence,
+                'MatchType' : MatchType,
+                'StatementList' : StatementList,
                 }
         reqUrl =  self.urlBase+'PolicyDefinition'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -1351,7 +1351,7 @@ class FlexSwitch( object):
     def deletePolicyDefinition(self,
                                Name):
         obj =  { 
-                'Name' : Name
+                'Name' : Name,
                 }
         reqUrl =  self.urlBase+'PolicyDefinition'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -1367,16 +1367,16 @@ class FlexSwitch( object):
     def getPolicyDefinition(self,
                             Name):
         obj =  { 
-                'Name' : Name
+                'Name' : Name,
                 }
         reqUrl =  self.urlBase+'PolicyDefinition'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deletePolicyDefinitionById(self, objectId ):
+    def getPolicyDefinitionById(self, objectId ):
         reqUrl =  self.urlBase+'PolicyDefinition'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -1388,17 +1388,17 @@ class FlexSwitch( object):
                                  VirtNbrRtrId,
                                  VirtNbrArea):
         obj =  { 
-                'VirtNbrRtrId' : VirtNbrRtrId
-                'VirtNbrArea' : VirtNbrArea
+                'VirtNbrRtrId' : VirtNbrRtrId,
+                'VirtNbrArea' : VirtNbrArea,
                 }
         reqUrl =  self.urlBase+'OspfVirtNbrEntryState'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteOspfVirtNbrEntryStateById(self, objectId ):
+    def getOspfVirtNbrEntryStateById(self, objectId ):
         reqUrl =  self.urlBase+'OspfVirtNbrEntryState'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -1421,19 +1421,19 @@ class FlexSwitch( object):
                       BpduGuardInterval,
                       BridgeAssurance):
         obj =  { 
-                'BrgIfIndex' : BrgIfIndex
-                'IfIndex' : IfIndex
-                'Priority' : Priority
-                'Enable' : Enable
-                'PathCost' : PathCost
-                'PathCost32' : PathCost32
-                'ProtocolMigration' : ProtocolMigration
-                'AdminPointToPoint' : AdminPointToPoint
-                'AdminEdgePort' : AdminEdgePort
-                'AdminPathCost' : AdminPathCost
-                'BpduGuard' : BpduGuard
-                'BpduGuardInterval' : BpduGuardInterval
-                'BridgeAssurance' : BridgeAssurance
+                'BrgIfIndex' : BrgIfIndex,
+                'IfIndex' : IfIndex,
+                'Priority' : Priority,
+                'Enable' : Enable,
+                'PathCost' : PathCost,
+                'PathCost32' : PathCost32,
+                'ProtocolMigration' : ProtocolMigration,
+                'AdminPointToPoint' : AdminPointToPoint,
+                'AdminEdgePort' : AdminEdgePort,
+                'AdminPathCost' : AdminPathCost,
+                'BpduGuard' : BpduGuard,
+                'BpduGuardInterval' : BpduGuardInterval,
+                'BridgeAssurance' : BridgeAssurance,
                 }
         reqUrl =  self.urlBase+'StpPort'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -1455,19 +1455,19 @@ class FlexSwitch( object):
                       BpduGuardInterval = None,
                       BridgeAssurance = None):
         obj =  { 
-                'BrgIfIndex' : BrgIfIndex
-                'IfIndex' : IfIndex
-                'Priority' : Priority
-                'Enable' : Enable
-                'PathCost' : PathCost
-                'PathCost32' : PathCost32
-                'ProtocolMigration' : ProtocolMigration
-                'AdminPointToPoint' : AdminPointToPoint
-                'AdminEdgePort' : AdminEdgePort
-                'AdminPathCost' : AdminPathCost
-                'BpduGuard' : BpduGuard
-                'BpduGuardInterval' : BpduGuardInterval
-                'BridgeAssurance' : BridgeAssurance
+                'BrgIfIndex' : BrgIfIndex,
+                'IfIndex' : IfIndex,
+                'Priority' : Priority,
+                'Enable' : Enable,
+                'PathCost' : PathCost,
+                'PathCost32' : PathCost32,
+                'ProtocolMigration' : ProtocolMigration,
+                'AdminPointToPoint' : AdminPointToPoint,
+                'AdminEdgePort' : AdminEdgePort,
+                'AdminPathCost' : AdminPathCost,
+                'BpduGuard' : BpduGuard,
+                'BpduGuardInterval' : BpduGuardInterval,
+                'BridgeAssurance' : BridgeAssurance,
                 }
         reqUrl =  self.urlBase+'StpPort'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -1488,18 +1488,18 @@ class FlexSwitch( object):
                            BpduGuardInterval = None,
                            BridgeAssurance = None):
         obj =  { 
-                'objectId': objectId
-                'Priority' : Priority
-                'Enable' : Enable
-                'PathCost' : PathCost
-                'PathCost32' : PathCost32
-                'ProtocolMigration' : ProtocolMigration
-                'AdminPointToPoint' : AdminPointToPoint
-                'AdminEdgePort' : AdminEdgePort
-                'AdminPathCost' : AdminPathCost
-                'BpduGuard' : BpduGuard
-                'BpduGuardInterval' : BpduGuardInterval
-                'BridgeAssurance' : BridgeAssurance
+                'objectId': objectId,
+                'Priority' : Priority,
+                'Enable' : Enable,
+                'PathCost' : PathCost,
+                'PathCost32' : PathCost32,
+                'ProtocolMigration' : ProtocolMigration,
+                'AdminPointToPoint' : AdminPointToPoint,
+                'AdminEdgePort' : AdminEdgePort,
+                'AdminPathCost' : AdminPathCost,
+                'BpduGuard' : BpduGuard,
+                'BpduGuardInterval' : BpduGuardInterval,
+                'BridgeAssurance' : BridgeAssurance,
                 }
         reqUrl =  self.urlBase+'StpPort'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -1510,8 +1510,8 @@ class FlexSwitch( object):
                       BrgIfIndex,
                       IfIndex):
         obj =  { 
-                'BrgIfIndex' : BrgIfIndex
-                'IfIndex' : IfIndex
+                'BrgIfIndex' : BrgIfIndex,
+                'IfIndex' : IfIndex,
                 }
         reqUrl =  self.urlBase+'StpPort'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -1528,17 +1528,17 @@ class FlexSwitch( object):
                    BrgIfIndex,
                    IfIndex):
         obj =  { 
-                'BrgIfIndex' : BrgIfIndex
-                'IfIndex' : IfIndex
+                'BrgIfIndex' : BrgIfIndex,
+                'IfIndex' : IfIndex,
                 }
         reqUrl =  self.urlBase+'StpPort'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteStpPortById(self, objectId ):
+    def getStpPortById(self, objectId ):
         reqUrl =  self.urlBase+'StpPort'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -1549,16 +1549,16 @@ class FlexSwitch( object):
     def getRouteDistanceState(self,
                               Protocol):
         obj =  { 
-                'Protocol' : Protocol
+                'Protocol' : Protocol,
                 }
         reqUrl =  self.urlBase+'RouteDistanceState'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteRouteDistanceStateById(self, objectId ):
+    def getRouteDistanceStateById(self, objectId ):
         reqUrl =  self.urlBase+'RouteDistanceState'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -1570,8 +1570,8 @@ class FlexSwitch( object):
                           Name,
                           Type):
         obj =  { 
-                'Name' : Name
-                'Type' : Type
+                'Name' : Name,
+                'Type' : Type,
                 }
         reqUrl =  self.urlBase+'LogicalIntf'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -1582,8 +1582,8 @@ class FlexSwitch( object):
                           Name,
                           Type = None):
         obj =  { 
-                'Name' : Name
-                'Type' : Type
+                'Name' : Name,
+                'Type' : Type,
                 }
         reqUrl =  self.urlBase+'LogicalIntf'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -1594,8 +1594,8 @@ class FlexSwitch( object):
                                objectId,
                                Type = None):
         obj =  { 
-                'objectId': objectId
-                'Type' : Type
+                'objectId': objectId,
+                'Type' : Type,
                 }
         reqUrl =  self.urlBase+'LogicalIntf'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -1605,7 +1605,7 @@ class FlexSwitch( object):
     def deleteLogicalIntf(self,
                           Name):
         obj =  { 
-                'Name' : Name
+                'Name' : Name,
                 }
         reqUrl =  self.urlBase+'LogicalIntf'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -1621,16 +1621,16 @@ class FlexSwitch( object):
     def getLogicalIntf(self,
                        Name):
         obj =  { 
-                'Name' : Name
+                'Name' : Name,
                 }
         reqUrl =  self.urlBase+'LogicalIntf'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteLogicalIntfById(self, objectId ):
+    def getLogicalIntfById(self, objectId ):
         reqUrl =  self.urlBase+'LogicalIntf'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -1639,35 +1639,35 @@ class FlexSwitch( object):
 
 
     def createBGPPeerGroup(self,
-                           PeerAS,
-                           LocalAS= 0,
-                           AuthPassword='',
-                           Description='',
                            Name,
+                           PeerAS,
                            RouteReflectorClusterId= 0,
                            RouteReflectorClient='false',
-                           MultiHopEnable='false',
+                           Description='',
                            MultiHopTTL='0',
-                           ConnectRetryTime= 60,
-                           HoldTime= 180,
+                           LocalAS= 0,
                            KeepaliveTime= 60,
+                           AddPathsMaxTx='0',
+                           MultiHopEnable='false',
                            AddPathsRx='false',
-                           AddPathsMaxTx='0'):
+                           HoldTime= 180,
+                           AuthPassword='',
+                           ConnectRetryTime= 60):
         obj =  { 
-                'PeerAS' : PeerAS
-                'LocalAS' : LocalAS
-                'AuthPassword' : AuthPassword
-                'Description' : Description
-                'Name' : Name
-                'RouteReflectorClusterId' : RouteReflectorClusterId
-                'RouteReflectorClient' : RouteReflectorClient
-                'MultiHopEnable' : MultiHopEnable
-                'MultiHopTTL' : MultiHopTTL
-                'ConnectRetryTime' : ConnectRetryTime
-                'HoldTime' : HoldTime
-                'KeepaliveTime' : KeepaliveTime
-                'AddPathsRx' : AddPathsRx
-                'AddPathsMaxTx' : AddPathsMaxTx
+                'Name' : Name,
+                'PeerAS' : PeerAS,
+                'RouteReflectorClusterId' : RouteReflectorClusterId,
+                'RouteReflectorClient' : RouteReflectorClient,
+                'Description' : Description,
+                'MultiHopTTL' : MultiHopTTL,
+                'LocalAS' : LocalAS,
+                'KeepaliveTime' : KeepaliveTime,
+                'AddPathsMaxTx' : AddPathsMaxTx,
+                'MultiHopEnable' : MultiHopEnable,
+                'AddPathsRx' : AddPathsRx,
+                'HoldTime' : HoldTime,
+                'AuthPassword' : AuthPassword,
+                'ConnectRetryTime' : ConnectRetryTime,
                 }
         reqUrl =  self.urlBase+'BGPPeerGroup'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -1675,35 +1675,35 @@ class FlexSwitch( object):
 
 
     def updateBGPPeerGroup(self,
-                           PeerAS = None,
-                           LocalAS = None,
-                           AuthPassword = None,
-                           Description = None,
                            Name,
+                           PeerAS = None,
                            RouteReflectorClusterId = None,
                            RouteReflectorClient = None,
-                           MultiHopEnable = None,
+                           Description = None,
                            MultiHopTTL = None,
-                           ConnectRetryTime = None,
-                           HoldTime = None,
+                           LocalAS = None,
                            KeepaliveTime = None,
+                           AddPathsMaxTx = None,
+                           MultiHopEnable = None,
                            AddPathsRx = None,
-                           AddPathsMaxTx = None):
+                           HoldTime = None,
+                           AuthPassword = None,
+                           ConnectRetryTime = None):
         obj =  { 
-                'PeerAS' : PeerAS
-                'LocalAS' : LocalAS
-                'AuthPassword' : AuthPassword
-                'Description' : Description
-                'Name' : Name
-                'RouteReflectorClusterId' : RouteReflectorClusterId
-                'RouteReflectorClient' : RouteReflectorClient
-                'MultiHopEnable' : MultiHopEnable
-                'MultiHopTTL' : MultiHopTTL
-                'ConnectRetryTime' : ConnectRetryTime
-                'HoldTime' : HoldTime
-                'KeepaliveTime' : KeepaliveTime
-                'AddPathsRx' : AddPathsRx
-                'AddPathsMaxTx' : AddPathsMaxTx
+                'Name' : Name,
+                'PeerAS' : PeerAS,
+                'RouteReflectorClusterId' : RouteReflectorClusterId,
+                'RouteReflectorClient' : RouteReflectorClient,
+                'Description' : Description,
+                'MultiHopTTL' : MultiHopTTL,
+                'LocalAS' : LocalAS,
+                'KeepaliveTime' : KeepaliveTime,
+                'AddPathsMaxTx' : AddPathsMaxTx,
+                'MultiHopEnable' : MultiHopEnable,
+                'AddPathsRx' : AddPathsRx,
+                'HoldTime' : HoldTime,
+                'AuthPassword' : AuthPassword,
+                'ConnectRetryTime' : ConnectRetryTime,
                 }
         reqUrl =  self.urlBase+'BGPPeerGroup'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -1713,33 +1713,33 @@ class FlexSwitch( object):
     def updateBGPPeerGroupById(self,
                                 objectId,
                                 PeerAS = None,
-                                LocalAS = None,
-                                AuthPassword = None,
-                                Description = None,
                                 RouteReflectorClusterId = None,
                                 RouteReflectorClient = None,
-                                MultiHopEnable = None,
+                                Description = None,
                                 MultiHopTTL = None,
-                                ConnectRetryTime = None,
-                                HoldTime = None,
+                                LocalAS = None,
                                 KeepaliveTime = None,
+                                AddPathsMaxTx = None,
+                                MultiHopEnable = None,
                                 AddPathsRx = None,
-                                AddPathsMaxTx = None):
+                                HoldTime = None,
+                                AuthPassword = None,
+                                ConnectRetryTime = None):
         obj =  { 
-                'objectId': objectId
-                'PeerAS' : PeerAS
-                'LocalAS' : LocalAS
-                'AuthPassword' : AuthPassword
-                'Description' : Description
-                'RouteReflectorClusterId' : RouteReflectorClusterId
-                'RouteReflectorClient' : RouteReflectorClient
-                'MultiHopEnable' : MultiHopEnable
-                'MultiHopTTL' : MultiHopTTL
-                'ConnectRetryTime' : ConnectRetryTime
-                'HoldTime' : HoldTime
-                'KeepaliveTime' : KeepaliveTime
-                'AddPathsRx' : AddPathsRx
-                'AddPathsMaxTx' : AddPathsMaxTx
+                'objectId': objectId,
+                'PeerAS' : PeerAS,
+                'RouteReflectorClusterId' : RouteReflectorClusterId,
+                'RouteReflectorClient' : RouteReflectorClient,
+                'Description' : Description,
+                'MultiHopTTL' : MultiHopTTL,
+                'LocalAS' : LocalAS,
+                'KeepaliveTime' : KeepaliveTime,
+                'AddPathsMaxTx' : AddPathsMaxTx,
+                'MultiHopEnable' : MultiHopEnable,
+                'AddPathsRx' : AddPathsRx,
+                'HoldTime' : HoldTime,
+                'AuthPassword' : AuthPassword,
+                'ConnectRetryTime' : ConnectRetryTime,
                 }
         reqUrl =  self.urlBase+'BGPPeerGroup'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -1749,7 +1749,7 @@ class FlexSwitch( object):
     def deleteBGPPeerGroup(self,
                            Name):
         obj =  { 
-                'Name' : Name
+                'Name' : Name,
                 }
         reqUrl =  self.urlBase+'BGPPeerGroup'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -1765,16 +1765,16 @@ class FlexSwitch( object):
     def getBGPPeerGroup(self,
                         Name):
         obj =  { 
-                'Name' : Name
+                'Name' : Name,
                 }
         reqUrl =  self.urlBase+'BGPPeerGroup'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteBGPPeerGroupById(self, objectId ):
+    def getBGPPeerGroupById(self, objectId ):
         reqUrl =  self.urlBase+'BGPPeerGroup'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -1785,16 +1785,16 @@ class FlexSwitch( object):
     def getBfdInterfaceState(self,
                              IfIndex):
         obj =  { 
-                'IfIndex' : IfIndex
+                'IfIndex' : IfIndex,
                 }
         reqUrl =  self.urlBase+'BfdInterfaceState'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteBfdInterfaceStateById(self, objectId ):
+    def getBfdInterfaceStateById(self, objectId ):
         reqUrl =  self.urlBase+'BfdInterfaceState'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -1806,8 +1806,8 @@ class FlexSwitch( object):
                         Bfd,
                         Enable='true'):
         obj =  { 
-                'Bfd' : Bfd
-                'Enable' : Enable
+                'Bfd' : Bfd,
+                'Enable' : Enable,
                 }
         reqUrl =  self.urlBase+'BfdGlobal'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -1818,8 +1818,8 @@ class FlexSwitch( object):
                         Bfd,
                         Enable = None):
         obj =  { 
-                'Bfd' : Bfd
-                'Enable' : Enable
+                'Bfd' : Bfd,
+                'Enable' : Enable,
                 }
         reqUrl =  self.urlBase+'BfdGlobal'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -1830,8 +1830,8 @@ class FlexSwitch( object):
                              objectId,
                              Enable = None):
         obj =  { 
-                'objectId': objectId
-                'Enable' : Enable
+                'objectId': objectId,
+                'Enable' : Enable,
                 }
         reqUrl =  self.urlBase+'BfdGlobal'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -1841,7 +1841,7 @@ class FlexSwitch( object):
     def deleteBfdGlobal(self,
                         Bfd):
         obj =  { 
-                'Bfd' : Bfd
+                'Bfd' : Bfd,
                 }
         reqUrl =  self.urlBase+'BfdGlobal'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -1857,16 +1857,16 @@ class FlexSwitch( object):
     def getBfdGlobal(self,
                      Bfd):
         obj =  { 
-                'Bfd' : Bfd
+                'Bfd' : Bfd,
                 }
         reqUrl =  self.urlBase+'BfdGlobal'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteBfdGlobalById(self, objectId ):
+    def getBfdGlobalById(self, objectId ):
         reqUrl =  self.urlBase+'BfdGlobal'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -1880,10 +1880,10 @@ class FlexSwitch( object):
                                                     RouteDistinguisher,
                                                     RtType):
         obj =  { 
-                'RtValue' : RtValue
-                'VxlanId' : VxlanId
-                'RouteDistinguisher' : RouteDistinguisher
-                'RtType' : RtType
+                'RtValue' : RtValue,
+                'VxlanId' : VxlanId,
+                'RouteDistinguisher' : RouteDistinguisher,
+                'RtType' : RtType,
                 }
         reqUrl =  self.urlBase+'VxlanVxlanInstanceVxlanEvpnVpnTargets'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -1896,10 +1896,10 @@ class FlexSwitch( object):
                                                     RouteDistinguisher = None,
                                                     RtType = None):
         obj =  { 
-                'RtValue' : RtValue
-                'VxlanId' : VxlanId
-                'RouteDistinguisher' : RouteDistinguisher
-                'RtType' : RtType
+                'RtValue' : RtValue,
+                'VxlanId' : VxlanId,
+                'RouteDistinguisher' : RouteDistinguisher,
+                'RtType' : RtType,
                 }
         reqUrl =  self.urlBase+'VxlanVxlanInstanceVxlanEvpnVpnTargets'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -1911,9 +1911,9 @@ class FlexSwitch( object):
                                                          RouteDistinguisher = None,
                                                          RtType = None):
         obj =  { 
-                'objectId': objectId
-                'RouteDistinguisher' : RouteDistinguisher
-                'RtType' : RtType
+                'objectId': objectId,
+                'RouteDistinguisher' : RouteDistinguisher,
+                'RtType' : RtType,
                 }
         reqUrl =  self.urlBase+'VxlanVxlanInstanceVxlanEvpnVpnTargets'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -1924,8 +1924,8 @@ class FlexSwitch( object):
                                                     RtValue,
                                                     VxlanId):
         obj =  { 
-                'RtValue' : RtValue
-                'VxlanId' : VxlanId
+                'RtValue' : RtValue,
+                'VxlanId' : VxlanId,
                 }
         reqUrl =  self.urlBase+'VxlanVxlanInstanceVxlanEvpnVpnTargets'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -1942,17 +1942,17 @@ class FlexSwitch( object):
                                                  RtValue,
                                                  VxlanId):
         obj =  { 
-                'RtValue' : RtValue
-                'VxlanId' : VxlanId
+                'RtValue' : RtValue,
+                'VxlanId' : VxlanId,
                 }
         reqUrl =  self.urlBase+'VxlanVxlanInstanceVxlanEvpnVpnTargets'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteVxlanVxlanInstanceVxlanEvpnVpnTargetsById(self, objectId ):
+    def getVxlanVxlanInstanceVxlanEvpnVpnTargetsById(self, objectId ):
         reqUrl =  self.urlBase+'VxlanVxlanInstanceVxlanEvpnVpnTargets'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -1964,17 +1964,17 @@ class FlexSwitch( object):
                                       AreaLsaCountAreaId,
                                       AreaLsaCountLsaType):
         obj =  { 
-                'AreaLsaCountAreaId' : AreaLsaCountAreaId
-                'AreaLsaCountLsaType' : AreaLsaCountLsaType
+                'AreaLsaCountAreaId' : AreaLsaCountAreaId,
+                'AreaLsaCountLsaType' : AreaLsaCountLsaType,
                 }
         reqUrl =  self.urlBase+'OspfAreaLsaCountEntryState'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteOspfAreaLsaCountEntryStateById(self, objectId ):
+    def getOspfAreaLsaCountEntryStateById(self, objectId ):
         reqUrl =  self.urlBase+'OspfAreaLsaCountEntryState'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -1988,10 +1988,10 @@ class FlexSwitch( object):
                             Conditions,
                             Actions):
         obj =  { 
-                'Name' : Name
-                'MatchConditions' : MatchConditions
-                'Conditions' : Conditions
-                'Actions' : Actions
+                'Name' : Name,
+                'MatchConditions' : MatchConditions,
+                'Conditions' : Conditions,
+                'Actions' : Actions,
                 }
         reqUrl =  self.urlBase+'BGPPolicyStmt'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -2004,10 +2004,10 @@ class FlexSwitch( object):
                             Conditions = None,
                             Actions = None):
         obj =  { 
-                'Name' : Name
-                'MatchConditions' : MatchConditions
-                'Conditions' : Conditions
-                'Actions' : Actions
+                'Name' : Name,
+                'MatchConditions' : MatchConditions,
+                'Conditions' : Conditions,
+                'Actions' : Actions,
                 }
         reqUrl =  self.urlBase+'BGPPolicyStmt'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -2020,10 +2020,10 @@ class FlexSwitch( object):
                                  Conditions = None,
                                  Actions = None):
         obj =  { 
-                'objectId': objectId
-                'MatchConditions' : MatchConditions
-                'Conditions' : Conditions
-                'Actions' : Actions
+                'objectId': objectId,
+                'MatchConditions' : MatchConditions,
+                'Conditions' : Conditions,
+                'Actions' : Actions,
                 }
         reqUrl =  self.urlBase+'BGPPolicyStmt'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -2033,7 +2033,7 @@ class FlexSwitch( object):
     def deleteBGPPolicyStmt(self,
                             Name):
         obj =  { 
-                'Name' : Name
+                'Name' : Name,
                 }
         reqUrl =  self.urlBase+'BGPPolicyStmt'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -2049,16 +2049,16 @@ class FlexSwitch( object):
     def getBGPPolicyStmt(self,
                          Name):
         obj =  { 
-                'Name' : Name
+                'Name' : Name,
                 }
         reqUrl =  self.urlBase+'BGPPolicyStmt'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteBGPPolicyStmtById(self, objectId ):
+    def getBGPPolicyStmtById(self, objectId ):
         reqUrl =  self.urlBase+'BGPPolicyStmt'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -2072,10 +2072,10 @@ class FlexSwitch( object):
                                       StubMetric,
                                       StubMetricType):
         obj =  { 
-                'StubTOS' : StubTOS
-                'StubAreaId' : StubAreaId
-                'StubMetric' : StubMetric
-                'StubMetricType' : StubMetricType
+                'StubTOS' : StubTOS,
+                'StubAreaId' : StubAreaId,
+                'StubMetric' : StubMetric,
+                'StubMetricType' : StubMetricType,
                 }
         reqUrl =  self.urlBase+'OspfStubAreaEntryConfig'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -2088,10 +2088,10 @@ class FlexSwitch( object):
                                       StubMetric = None,
                                       StubMetricType = None):
         obj =  { 
-                'StubTOS' : StubTOS
-                'StubAreaId' : StubAreaId
-                'StubMetric' : StubMetric
-                'StubMetricType' : StubMetricType
+                'StubTOS' : StubTOS,
+                'StubAreaId' : StubAreaId,
+                'StubMetric' : StubMetric,
+                'StubMetricType' : StubMetricType,
                 }
         reqUrl =  self.urlBase+'OspfStubAreaEntryConfig'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -2103,9 +2103,9 @@ class FlexSwitch( object):
                                            StubMetric = None,
                                            StubMetricType = None):
         obj =  { 
-                'objectId': objectId
-                'StubMetric' : StubMetric
-                'StubMetricType' : StubMetricType
+                'objectId': objectId,
+                'StubMetric' : StubMetric,
+                'StubMetricType' : StubMetricType,
                 }
         reqUrl =  self.urlBase+'OspfStubAreaEntryConfig'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -2116,8 +2116,8 @@ class FlexSwitch( object):
                                       StubTOS,
                                       StubAreaId):
         obj =  { 
-                'StubTOS' : StubTOS
-                'StubAreaId' : StubAreaId
+                'StubTOS' : StubTOS,
+                'StubAreaId' : StubAreaId,
                 }
         reqUrl =  self.urlBase+'OspfStubAreaEntryConfig'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -2134,17 +2134,17 @@ class FlexSwitch( object):
                                    StubTOS,
                                    StubAreaId):
         obj =  { 
-                'StubTOS' : StubTOS
-                'StubAreaId' : StubAreaId
+                'StubTOS' : StubTOS,
+                'StubAreaId' : StubAreaId,
                 }
         reqUrl =  self.urlBase+'OspfStubAreaEntryConfig'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteOspfStubAreaEntryConfigById(self, objectId ):
+    def getOspfStubAreaEntryConfigById(self, objectId ):
         reqUrl =  self.urlBase+'OspfStubAreaEntryConfig'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -2155,16 +2155,16 @@ class FlexSwitch( object):
     def getVxlanStateVxlanInstanceAccessVlan(self,
                                              VlanId):
         obj =  { 
-                'VlanId' : VlanId
+                'VlanId' : VlanId,
                 }
         reqUrl =  self.urlBase+'VxlanStateVxlanInstanceAccessVlan'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteVxlanStateVxlanInstanceAccessVlanById(self, objectId ):
+    def getVxlanStateVxlanInstanceAccessVlanById(self, objectId ):
         reqUrl =  self.urlBase+'VxlanStateVxlanInstanceAccessVlan'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -2176,17 +2176,17 @@ class FlexSwitch( object):
                           DestinationNw,
                           NextHopIp):
         obj =  { 
-                'DestinationNw' : DestinationNw
-                'NextHopIp' : NextHopIp
+                'DestinationNw' : DestinationNw,
+                'NextHopIp' : NextHopIp,
                 }
         reqUrl =  self.urlBase+'IPv4RouteState'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteIPv4RouteStateById(self, objectId ):
+    def getIPv4RouteStateById(self, objectId ):
         reqUrl =  self.urlBase+'IPv4RouteState'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -2197,16 +2197,16 @@ class FlexSwitch( object):
     def getBfdGlobalState(self,
                           Bfd):
         obj =  { 
-                'Bfd' : Bfd
+                'Bfd' : Bfd,
                 }
         reqUrl =  self.urlBase+'BfdGlobalState'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteBfdGlobalStateById(self, objectId ):
+    def getBfdGlobalStateById(self, objectId ):
         reqUrl =  self.urlBase+'BfdGlobalState'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -2215,26 +2215,26 @@ class FlexSwitch( object):
 
 
     def getOspfVirtLocalLsdbEntryState(self,
+                                       VirtLocalLsdbLsid,
                                        VirtLocalLsdbType,
                                        VirtLocalLsdbNeighbor,
-                                       VirtLocalLsdbLsid,
-                                       VirtLocalLsdbTransitArea,
-                                       VirtLocalLsdbRouterId):
+                                       VirtLocalLsdbRouterId,
+                                       VirtLocalLsdbTransitArea):
         obj =  { 
-                'VirtLocalLsdbType' : VirtLocalLsdbType
-                'VirtLocalLsdbNeighbor' : VirtLocalLsdbNeighbor
-                'VirtLocalLsdbLsid' : VirtLocalLsdbLsid
-                'VirtLocalLsdbTransitArea' : VirtLocalLsdbTransitArea
-                'VirtLocalLsdbRouterId' : VirtLocalLsdbRouterId
+                'VirtLocalLsdbLsid' : VirtLocalLsdbLsid,
+                'VirtLocalLsdbType' : VirtLocalLsdbType,
+                'VirtLocalLsdbNeighbor' : VirtLocalLsdbNeighbor,
+                'VirtLocalLsdbRouterId' : VirtLocalLsdbRouterId,
+                'VirtLocalLsdbTransitArea' : VirtLocalLsdbTransitArea,
                 }
         reqUrl =  self.urlBase+'OspfVirtLocalLsdbEntryState'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteOspfVirtLocalLsdbEntryStateById(self, objectId ):
+    def getOspfVirtLocalLsdbEntryStateById(self, objectId ):
         reqUrl =  self.urlBase+'OspfVirtLocalLsdbEntryState'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -2245,16 +2245,16 @@ class FlexSwitch( object):
     def getVxlanStateVxlanInstanceVxlanEvpnVpnTargets(self,
                                                       RtValue):
         obj =  { 
-                'RtValue' : RtValue
+                'RtValue' : RtValue,
                 }
         reqUrl =  self.urlBase+'VxlanStateVxlanInstanceVxlanEvpnVpnTargets'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteVxlanStateVxlanInstanceVxlanEvpnVpnTargetsById(self, objectId ):
+    def getVxlanStateVxlanInstanceVxlanEvpnVpnTargetsById(self, objectId ):
         reqUrl =  self.urlBase+'VxlanStateVxlanInstanceVxlanEvpnVpnTargets'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -2265,16 +2265,16 @@ class FlexSwitch( object):
     def getBGPGlobalState(self,
                           RouterId):
         obj =  { 
-                'RouterId' : RouterId
+                'RouterId' : RouterId,
                 }
         reqUrl =  self.urlBase+'BGPGlobalState'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteBGPGlobalStateById(self, objectId ):
+    def getBGPGlobalStateById(self, objectId ):
         reqUrl =  self.urlBase+'BGPGlobalState'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -2285,16 +2285,16 @@ class FlexSwitch( object):
     def getBfdSessionState(self,
                            SessionId):
         obj =  { 
-                'SessionId' : SessionId
+                'SessionId' : SessionId,
                 }
         reqUrl =  self.urlBase+'BfdSessionState'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteBfdSessionStateById(self, objectId ):
+    def getBfdSessionStateById(self, objectId ):
         reqUrl =  self.urlBase+'BfdSessionState'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -2312,14 +2312,14 @@ class FlexSwitch( object):
                                     VirtIfAuthKey,
                                     VirtIfAuthType):
         obj =  { 
-                'VirtIfNeighbor' : VirtIfNeighbor
-                'VirtIfAreaId' : VirtIfAreaId
-                'VirtIfTransitDelay' : VirtIfTransitDelay
-                'VirtIfRetransInterval' : VirtIfRetransInterval
-                'VirtIfHelloInterval' : VirtIfHelloInterval
-                'VirtIfRtrDeadInterval' : VirtIfRtrDeadInterval
-                'VirtIfAuthKey' : VirtIfAuthKey
-                'VirtIfAuthType' : VirtIfAuthType
+                'VirtIfNeighbor' : VirtIfNeighbor,
+                'VirtIfAreaId' : VirtIfAreaId,
+                'VirtIfTransitDelay' : VirtIfTransitDelay,
+                'VirtIfRetransInterval' : VirtIfRetransInterval,
+                'VirtIfHelloInterval' : VirtIfHelloInterval,
+                'VirtIfRtrDeadInterval' : VirtIfRtrDeadInterval,
+                'VirtIfAuthKey' : VirtIfAuthKey,
+                'VirtIfAuthType' : VirtIfAuthType,
                 }
         reqUrl =  self.urlBase+'OspfVirtIfEntryConfig'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -2336,14 +2336,14 @@ class FlexSwitch( object):
                                     VirtIfAuthKey = None,
                                     VirtIfAuthType = None):
         obj =  { 
-                'VirtIfNeighbor' : VirtIfNeighbor
-                'VirtIfAreaId' : VirtIfAreaId
-                'VirtIfTransitDelay' : VirtIfTransitDelay
-                'VirtIfRetransInterval' : VirtIfRetransInterval
-                'VirtIfHelloInterval' : VirtIfHelloInterval
-                'VirtIfRtrDeadInterval' : VirtIfRtrDeadInterval
-                'VirtIfAuthKey' : VirtIfAuthKey
-                'VirtIfAuthType' : VirtIfAuthType
+                'VirtIfNeighbor' : VirtIfNeighbor,
+                'VirtIfAreaId' : VirtIfAreaId,
+                'VirtIfTransitDelay' : VirtIfTransitDelay,
+                'VirtIfRetransInterval' : VirtIfRetransInterval,
+                'VirtIfHelloInterval' : VirtIfHelloInterval,
+                'VirtIfRtrDeadInterval' : VirtIfRtrDeadInterval,
+                'VirtIfAuthKey' : VirtIfAuthKey,
+                'VirtIfAuthType' : VirtIfAuthType,
                 }
         reqUrl =  self.urlBase+'OspfVirtIfEntryConfig'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -2359,13 +2359,13 @@ class FlexSwitch( object):
                                          VirtIfAuthKey = None,
                                          VirtIfAuthType = None):
         obj =  { 
-                'objectId': objectId
-                'VirtIfTransitDelay' : VirtIfTransitDelay
-                'VirtIfRetransInterval' : VirtIfRetransInterval
-                'VirtIfHelloInterval' : VirtIfHelloInterval
-                'VirtIfRtrDeadInterval' : VirtIfRtrDeadInterval
-                'VirtIfAuthKey' : VirtIfAuthKey
-                'VirtIfAuthType' : VirtIfAuthType
+                'objectId': objectId,
+                'VirtIfTransitDelay' : VirtIfTransitDelay,
+                'VirtIfRetransInterval' : VirtIfRetransInterval,
+                'VirtIfHelloInterval' : VirtIfHelloInterval,
+                'VirtIfRtrDeadInterval' : VirtIfRtrDeadInterval,
+                'VirtIfAuthKey' : VirtIfAuthKey,
+                'VirtIfAuthType' : VirtIfAuthType,
                 }
         reqUrl =  self.urlBase+'OspfVirtIfEntryConfig'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -2376,8 +2376,8 @@ class FlexSwitch( object):
                                     VirtIfNeighbor,
                                     VirtIfAreaId):
         obj =  { 
-                'VirtIfNeighbor' : VirtIfNeighbor
-                'VirtIfAreaId' : VirtIfAreaId
+                'VirtIfNeighbor' : VirtIfNeighbor,
+                'VirtIfAreaId' : VirtIfAreaId,
                 }
         reqUrl =  self.urlBase+'OspfVirtIfEntryConfig'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -2394,17 +2394,17 @@ class FlexSwitch( object):
                                  VirtIfNeighbor,
                                  VirtIfAreaId):
         obj =  { 
-                'VirtIfNeighbor' : VirtIfNeighbor
-                'VirtIfAreaId' : VirtIfAreaId
+                'VirtIfNeighbor' : VirtIfNeighbor,
+                'VirtIfAreaId' : VirtIfAreaId,
                 }
         reqUrl =  self.urlBase+'OspfVirtIfEntryConfig'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteOspfVirtIfEntryConfigById(self, objectId ):
+    def getOspfVirtIfEntryConfigById(self, objectId ):
         reqUrl =  self.urlBase+'OspfVirtIfEntryConfig'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -2416,8 +2416,8 @@ class FlexSwitch( object):
                        IpAddr,
                        IfIndex):
         obj =  { 
-                'IpAddr' : IpAddr
-                'IfIndex' : IfIndex
+                'IpAddr' : IpAddr,
+                'IfIndex' : IfIndex,
                 }
         reqUrl =  self.urlBase+'IPv4Intf'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -2428,8 +2428,8 @@ class FlexSwitch( object):
                        IpAddr,
                        IfIndex = None):
         obj =  { 
-                'IpAddr' : IpAddr
-                'IfIndex' : IfIndex
+                'IpAddr' : IpAddr,
+                'IfIndex' : IfIndex,
                 }
         reqUrl =  self.urlBase+'IPv4Intf'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -2440,8 +2440,8 @@ class FlexSwitch( object):
                             objectId,
                             IfIndex = None):
         obj =  { 
-                'objectId': objectId
-                'IfIndex' : IfIndex
+                'objectId': objectId,
+                'IfIndex' : IfIndex,
                 }
         reqUrl =  self.urlBase+'IPv4Intf'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -2451,7 +2451,7 @@ class FlexSwitch( object):
     def deleteIPv4Intf(self,
                        IpAddr):
         obj =  { 
-                'IpAddr' : IpAddr
+                'IpAddr' : IpAddr,
                 }
         reqUrl =  self.urlBase+'IPv4Intf'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -2467,16 +2467,16 @@ class FlexSwitch( object):
     def getIPv4Intf(self,
                     IpAddr):
         obj =  { 
-                'IpAddr' : IpAddr
+                'IpAddr' : IpAddr,
                 }
         reqUrl =  self.urlBase+'IPv4Intf'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteIPv4IntfById(self, objectId ):
+    def getIPv4IntfById(self, objectId ):
         reqUrl =  self.urlBase+'IPv4Intf'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -2487,16 +2487,16 @@ class FlexSwitch( object):
     def getPolicyStmtState(self,
                            Name):
         obj =  { 
-                'Name' : Name
+                'Name' : Name,
                 }
         reqUrl =  self.urlBase+'PolicyStmtState'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deletePolicyStmtStateById(self, objectId ):
+    def getPolicyStmtStateById(self, objectId ):
         reqUrl =  self.urlBase+'PolicyStmtState'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -2507,16 +2507,16 @@ class FlexSwitch( object):
     def getStpBridgeState(self,
                           Vlan):
         obj =  { 
-                'Vlan' : Vlan
+                'Vlan' : Vlan,
                 }
         reqUrl =  self.urlBase+'StpBridgeState'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteStpBridgeStateById(self, objectId ):
+    def getStpBridgeStateById(self, objectId ):
         reqUrl =  self.urlBase+'StpBridgeState'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -2525,20 +2525,20 @@ class FlexSwitch( object):
 
 
     def getVrrpIntfState(self,
-                         IfIndex,
-                         VRID):
+                         VRID,
+                         IfIndex):
         obj =  { 
-                'IfIndex' : IfIndex
-                'VRID' : VRID
+                'VRID' : VRID,
+                'IfIndex' : IfIndex,
                 }
         reqUrl =  self.urlBase+'VrrpIntfState'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteVrrpIntfStateById(self, objectId ):
+    def getVrrpIntfStateById(self, objectId ):
         reqUrl =  self.urlBase+'VrrpIntfState'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -2548,20 +2548,20 @@ class FlexSwitch( object):
 
     def createVxlanInterfacesInterfaceVtepInstancesBindVxlanId(self,
                                                                VtepId,
+                                                               Name,
+                                                               VxlanId,
                                                                InnerVlanHandlingMode,
                                                                SourceInterface,
-                                                               VxlanId,
                                                                MulticastIp,
-                                                               VtepName,
-                                                               Name):
+                                                               VtepName):
         obj =  { 
-                'VtepId' : VtepId
-                'InnerVlanHandlingMode' : InnerVlanHandlingMode
-                'SourceInterface' : SourceInterface
-                'VxlanId' : VxlanId
-                'MulticastIp' : MulticastIp
-                'VtepName' : VtepName
-                'Name' : Name
+                'VtepId' : VtepId,
+                'Name' : Name,
+                'VxlanId' : VxlanId,
+                'InnerVlanHandlingMode' : InnerVlanHandlingMode,
+                'SourceInterface' : SourceInterface,
+                'MulticastIp' : MulticastIp,
+                'VtepName' : VtepName,
                 }
         reqUrl =  self.urlBase+'VxlanInterfacesInterfaceVtepInstancesBindVxlanId'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -2570,20 +2570,20 @@ class FlexSwitch( object):
 
     def updateVxlanInterfacesInterfaceVtepInstancesBindVxlanId(self,
                                                                VtepId,
+                                                               Name,
+                                                               VxlanId,
                                                                InnerVlanHandlingMode = None,
                                                                SourceInterface = None,
-                                                               VxlanId,
                                                                MulticastIp = None,
-                                                               VtepName = None,
-                                                               Name):
+                                                               VtepName = None):
         obj =  { 
-                'VtepId' : VtepId
-                'InnerVlanHandlingMode' : InnerVlanHandlingMode
-                'SourceInterface' : SourceInterface
-                'VxlanId' : VxlanId
-                'MulticastIp' : MulticastIp
-                'VtepName' : VtepName
-                'Name' : Name
+                'VtepId' : VtepId,
+                'Name' : Name,
+                'VxlanId' : VxlanId,
+                'InnerVlanHandlingMode' : InnerVlanHandlingMode,
+                'SourceInterface' : SourceInterface,
+                'MulticastIp' : MulticastIp,
+                'VtepName' : VtepName,
                 }
         reqUrl =  self.urlBase+'VxlanInterfacesInterfaceVtepInstancesBindVxlanId'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -2597,11 +2597,11 @@ class FlexSwitch( object):
                                                                     MulticastIp = None,
                                                                     VtepName = None):
         obj =  { 
-                'objectId': objectId
-                'InnerVlanHandlingMode' : InnerVlanHandlingMode
-                'SourceInterface' : SourceInterface
-                'MulticastIp' : MulticastIp
-                'VtepName' : VtepName
+                'objectId': objectId,
+                'InnerVlanHandlingMode' : InnerVlanHandlingMode,
+                'SourceInterface' : SourceInterface,
+                'MulticastIp' : MulticastIp,
+                'VtepName' : VtepName,
                 }
         reqUrl =  self.urlBase+'VxlanInterfacesInterfaceVtepInstancesBindVxlanId'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -2610,12 +2610,12 @@ class FlexSwitch( object):
 
     def deleteVxlanInterfacesInterfaceVtepInstancesBindVxlanId(self,
                                                                VtepId,
-                                                               VxlanId,
-                                                               Name):
+                                                               Name,
+                                                               VxlanId):
         obj =  { 
-                'VtepId' : VtepId
-                'VxlanId' : VxlanId
-                'Name' : Name
+                'VtepId' : VtepId,
+                'Name' : Name,
+                'VxlanId' : VxlanId,
                 }
         reqUrl =  self.urlBase+'VxlanInterfacesInterfaceVtepInstancesBindVxlanId'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -2630,21 +2630,21 @@ class FlexSwitch( object):
 
     def getVxlanInterfacesInterfaceVtepInstancesBindVxlanId(self,
                                                             VtepId,
-                                                            VxlanId,
-                                                            Name):
+                                                            Name,
+                                                            VxlanId):
         obj =  { 
-                'VtepId' : VtepId
-                'VxlanId' : VxlanId
-                'Name' : Name
+                'VtepId' : VtepId,
+                'Name' : Name,
+                'VxlanId' : VxlanId,
                 }
         reqUrl =  self.urlBase+'VxlanInterfacesInterfaceVtepInstancesBindVxlanId'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteVxlanInterfacesInterfaceVtepInstancesBindVxlanIdById(self, objectId ):
+    def getVxlanInterfacesInterfaceVtepInstancesBindVxlanIdById(self, objectId ):
         reqUrl =  self.urlBase+'VxlanInterfacesInterfaceVtepInstancesBindVxlanId'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -2653,22 +2653,22 @@ class FlexSwitch( object):
 
 
     def getVxlanStateStaticVxlanTunnelAddressFamilyBindVxlanId(self,
-                                                               VxlanTunnelId,
+                                                               VxlanId,
                                                                Af,
-                                                               VxlanId):
+                                                               VxlanTunnelId):
         obj =  { 
-                'VxlanTunnelId' : VxlanTunnelId
-                'Af' : Af
-                'VxlanId' : VxlanId
+                'VxlanId' : VxlanId,
+                'Af' : Af,
+                'VxlanTunnelId' : VxlanTunnelId,
                 }
         reqUrl =  self.urlBase+'VxlanStateStaticVxlanTunnelAddressFamilyBindVxlanId'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteVxlanStateStaticVxlanTunnelAddressFamilyBindVxlanIdById(self, objectId ):
+    def getVxlanStateStaticVxlanTunnelAddressFamilyBindVxlanIdById(self, objectId ):
         reqUrl =  self.urlBase+'VxlanStateStaticVxlanTunnelAddressFamilyBindVxlanId'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -2677,19 +2677,19 @@ class FlexSwitch( object):
 
 
     def createBGPGlobal(self,
-                        ASNum,
                         RouterId,
-                        UseMultiplePaths='false',
+                        ASNum,
                         EBGPMaxPaths= 0,
                         EBGPAllowMultipleAS='false',
-                        IBGPMaxPaths= 0):
+                        IBGPMaxPaths= 0,
+                        UseMultiplePaths='false'):
         obj =  { 
-                'ASNum' : ASNum
-                'RouterId' : RouterId
-                'UseMultiplePaths' : UseMultiplePaths
-                'EBGPMaxPaths' : EBGPMaxPaths
-                'EBGPAllowMultipleAS' : EBGPAllowMultipleAS
-                'IBGPMaxPaths' : IBGPMaxPaths
+                'RouterId' : RouterId,
+                'ASNum' : ASNum,
+                'EBGPMaxPaths' : EBGPMaxPaths,
+                'EBGPAllowMultipleAS' : EBGPAllowMultipleAS,
+                'IBGPMaxPaths' : IBGPMaxPaths,
+                'UseMultiplePaths' : UseMultiplePaths,
                 }
         reqUrl =  self.urlBase+'BGPGlobal'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -2697,19 +2697,19 @@ class FlexSwitch( object):
 
 
     def updateBGPGlobal(self,
-                        ASNum = None,
                         RouterId,
-                        UseMultiplePaths = None,
+                        ASNum = None,
                         EBGPMaxPaths = None,
                         EBGPAllowMultipleAS = None,
-                        IBGPMaxPaths = None):
+                        IBGPMaxPaths = None,
+                        UseMultiplePaths = None):
         obj =  { 
-                'ASNum' : ASNum
-                'RouterId' : RouterId
-                'UseMultiplePaths' : UseMultiplePaths
-                'EBGPMaxPaths' : EBGPMaxPaths
-                'EBGPAllowMultipleAS' : EBGPAllowMultipleAS
-                'IBGPMaxPaths' : IBGPMaxPaths
+                'RouterId' : RouterId,
+                'ASNum' : ASNum,
+                'EBGPMaxPaths' : EBGPMaxPaths,
+                'EBGPAllowMultipleAS' : EBGPAllowMultipleAS,
+                'IBGPMaxPaths' : IBGPMaxPaths,
+                'UseMultiplePaths' : UseMultiplePaths,
                 }
         reqUrl =  self.urlBase+'BGPGlobal'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -2719,17 +2719,17 @@ class FlexSwitch( object):
     def updateBGPGlobalById(self,
                              objectId,
                              ASNum = None,
-                             UseMultiplePaths = None,
                              EBGPMaxPaths = None,
                              EBGPAllowMultipleAS = None,
-                             IBGPMaxPaths = None):
+                             IBGPMaxPaths = None,
+                             UseMultiplePaths = None):
         obj =  { 
-                'objectId': objectId
-                'ASNum' : ASNum
-                'UseMultiplePaths' : UseMultiplePaths
-                'EBGPMaxPaths' : EBGPMaxPaths
-                'EBGPAllowMultipleAS' : EBGPAllowMultipleAS
-                'IBGPMaxPaths' : IBGPMaxPaths
+                'objectId': objectId,
+                'ASNum' : ASNum,
+                'EBGPMaxPaths' : EBGPMaxPaths,
+                'EBGPAllowMultipleAS' : EBGPAllowMultipleAS,
+                'IBGPMaxPaths' : IBGPMaxPaths,
+                'UseMultiplePaths' : UseMultiplePaths,
                 }
         reqUrl =  self.urlBase+'BGPGlobal'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -2739,7 +2739,7 @@ class FlexSwitch( object):
     def deleteBGPGlobal(self,
                         RouterId):
         obj =  { 
-                'RouterId' : RouterId
+                'RouterId' : RouterId,
                 }
         reqUrl =  self.urlBase+'BGPGlobal'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -2755,16 +2755,16 @@ class FlexSwitch( object):
     def getBGPGlobal(self,
                      RouterId):
         obj =  { 
-                'RouterId' : RouterId
+                'RouterId' : RouterId,
                 }
         reqUrl =  self.urlBase+'BGPGlobal'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteBGPGlobalById(self, objectId ):
+    def getBGPGlobalById(self, objectId ):
         reqUrl =  self.urlBase+'BGPGlobal'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -2789,21 +2789,21 @@ class FlexSwitch( object):
                                 IfDemand,
                                 IfAuthType):
         obj =  { 
-                'IfIpAddress' : IfIpAddress
-                'AddressLessIf' : AddressLessIf
-                'IfAreaId' : IfAreaId
-                'IfType' : IfType
-                'IfAdminStat' : IfAdminStat
-                'IfRtrPriority' : IfRtrPriority
-                'IfTransitDelay' : IfTransitDelay
-                'IfRetransInterval' : IfRetransInterval
-                'IfHelloInterval' : IfHelloInterval
-                'IfRtrDeadInterval' : IfRtrDeadInterval
-                'IfPollInterval' : IfPollInterval
-                'IfAuthKey' : IfAuthKey
-                'IfMulticastForwarding' : IfMulticastForwarding
-                'IfDemand' : IfDemand
-                'IfAuthType' : IfAuthType
+                'IfIpAddress' : IfIpAddress,
+                'AddressLessIf' : AddressLessIf,
+                'IfAreaId' : IfAreaId,
+                'IfType' : IfType,
+                'IfAdminStat' : IfAdminStat,
+                'IfRtrPriority' : IfRtrPriority,
+                'IfTransitDelay' : IfTransitDelay,
+                'IfRetransInterval' : IfRetransInterval,
+                'IfHelloInterval' : IfHelloInterval,
+                'IfRtrDeadInterval' : IfRtrDeadInterval,
+                'IfPollInterval' : IfPollInterval,
+                'IfAuthKey' : IfAuthKey,
+                'IfMulticastForwarding' : IfMulticastForwarding,
+                'IfDemand' : IfDemand,
+                'IfAuthType' : IfAuthType,
                 }
         reqUrl =  self.urlBase+'OspfIfEntryConfig'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -2827,21 +2827,21 @@ class FlexSwitch( object):
                                 IfDemand = None,
                                 IfAuthType = None):
         obj =  { 
-                'IfIpAddress' : IfIpAddress
-                'AddressLessIf' : AddressLessIf
-                'IfAreaId' : IfAreaId
-                'IfType' : IfType
-                'IfAdminStat' : IfAdminStat
-                'IfRtrPriority' : IfRtrPriority
-                'IfTransitDelay' : IfTransitDelay
-                'IfRetransInterval' : IfRetransInterval
-                'IfHelloInterval' : IfHelloInterval
-                'IfRtrDeadInterval' : IfRtrDeadInterval
-                'IfPollInterval' : IfPollInterval
-                'IfAuthKey' : IfAuthKey
-                'IfMulticastForwarding' : IfMulticastForwarding
-                'IfDemand' : IfDemand
-                'IfAuthType' : IfAuthType
+                'IfIpAddress' : IfIpAddress,
+                'AddressLessIf' : AddressLessIf,
+                'IfAreaId' : IfAreaId,
+                'IfType' : IfType,
+                'IfAdminStat' : IfAdminStat,
+                'IfRtrPriority' : IfRtrPriority,
+                'IfTransitDelay' : IfTransitDelay,
+                'IfRetransInterval' : IfRetransInterval,
+                'IfHelloInterval' : IfHelloInterval,
+                'IfRtrDeadInterval' : IfRtrDeadInterval,
+                'IfPollInterval' : IfPollInterval,
+                'IfAuthKey' : IfAuthKey,
+                'IfMulticastForwarding' : IfMulticastForwarding,
+                'IfDemand' : IfDemand,
+                'IfAuthType' : IfAuthType,
                 }
         reqUrl =  self.urlBase+'OspfIfEntryConfig'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -2864,20 +2864,20 @@ class FlexSwitch( object):
                                      IfDemand = None,
                                      IfAuthType = None):
         obj =  { 
-                'objectId': objectId
-                'IfAreaId' : IfAreaId
-                'IfType' : IfType
-                'IfAdminStat' : IfAdminStat
-                'IfRtrPriority' : IfRtrPriority
-                'IfTransitDelay' : IfTransitDelay
-                'IfRetransInterval' : IfRetransInterval
-                'IfHelloInterval' : IfHelloInterval
-                'IfRtrDeadInterval' : IfRtrDeadInterval
-                'IfPollInterval' : IfPollInterval
-                'IfAuthKey' : IfAuthKey
-                'IfMulticastForwarding' : IfMulticastForwarding
-                'IfDemand' : IfDemand
-                'IfAuthType' : IfAuthType
+                'objectId': objectId,
+                'IfAreaId' : IfAreaId,
+                'IfType' : IfType,
+                'IfAdminStat' : IfAdminStat,
+                'IfRtrPriority' : IfRtrPriority,
+                'IfTransitDelay' : IfTransitDelay,
+                'IfRetransInterval' : IfRetransInterval,
+                'IfHelloInterval' : IfHelloInterval,
+                'IfRtrDeadInterval' : IfRtrDeadInterval,
+                'IfPollInterval' : IfPollInterval,
+                'IfAuthKey' : IfAuthKey,
+                'IfMulticastForwarding' : IfMulticastForwarding,
+                'IfDemand' : IfDemand,
+                'IfAuthType' : IfAuthType,
                 }
         reqUrl =  self.urlBase+'OspfIfEntryConfig'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -2888,8 +2888,8 @@ class FlexSwitch( object):
                                 IfIpAddress,
                                 AddressLessIf):
         obj =  { 
-                'IfIpAddress' : IfIpAddress
-                'AddressLessIf' : AddressLessIf
+                'IfIpAddress' : IfIpAddress,
+                'AddressLessIf' : AddressLessIf,
                 }
         reqUrl =  self.urlBase+'OspfIfEntryConfig'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -2906,17 +2906,17 @@ class FlexSwitch( object):
                              IfIpAddress,
                              AddressLessIf):
         obj =  { 
-                'IfIpAddress' : IfIpAddress
-                'AddressLessIf' : AddressLessIf
+                'IfIpAddress' : IfIpAddress,
+                'AddressLessIf' : AddressLessIf,
                 }
         reqUrl =  self.urlBase+'OspfIfEntryConfig'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteOspfIfEntryConfigById(self, objectId ):
+    def getOspfIfEntryConfigById(self, objectId ):
         reqUrl =  self.urlBase+'OspfIfEntryConfig'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -2927,16 +2927,16 @@ class FlexSwitch( object):
     def getOspfAreaEntryState(self,
                               AreaId):
         obj =  { 
-                'AreaId' : AreaId
+                'AreaId' : AreaId,
                 }
         reqUrl =  self.urlBase+'OspfAreaEntryState'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteOspfAreaEntryStateById(self, objectId ):
+    def getOspfAreaEntryStateById(self, objectId ):
         reqUrl =  self.urlBase+'OspfAreaEntryState'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -2946,18 +2946,18 @@ class FlexSwitch( object):
 
     def createOspfAreaAggregateEntryConfig(self,
                                            AreaAggregateLsdbType,
+                                           AreaAggregateMask,
                                            AreaAggregateAreaID,
                                            AreaAggregateNet,
-                                           AreaAggregateMask,
                                            AreaAggregateEffect,
                                            AreaAggregateExtRouteTag):
         obj =  { 
-                'AreaAggregateLsdbType' : AreaAggregateLsdbType
-                'AreaAggregateAreaID' : AreaAggregateAreaID
-                'AreaAggregateNet' : AreaAggregateNet
-                'AreaAggregateMask' : AreaAggregateMask
-                'AreaAggregateEffect' : AreaAggregateEffect
-                'AreaAggregateExtRouteTag' : AreaAggregateExtRouteTag
+                'AreaAggregateLsdbType' : AreaAggregateLsdbType,
+                'AreaAggregateMask' : AreaAggregateMask,
+                'AreaAggregateAreaID' : AreaAggregateAreaID,
+                'AreaAggregateNet' : AreaAggregateNet,
+                'AreaAggregateEffect' : AreaAggregateEffect,
+                'AreaAggregateExtRouteTag' : AreaAggregateExtRouteTag,
                 }
         reqUrl =  self.urlBase+'OspfAreaAggregateEntryConfig'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -2966,18 +2966,18 @@ class FlexSwitch( object):
 
     def updateOspfAreaAggregateEntryConfig(self,
                                            AreaAggregateLsdbType,
+                                           AreaAggregateMask,
                                            AreaAggregateAreaID,
                                            AreaAggregateNet,
-                                           AreaAggregateMask,
                                            AreaAggregateEffect = None,
                                            AreaAggregateExtRouteTag = None):
         obj =  { 
-                'AreaAggregateLsdbType' : AreaAggregateLsdbType
-                'AreaAggregateAreaID' : AreaAggregateAreaID
-                'AreaAggregateNet' : AreaAggregateNet
-                'AreaAggregateMask' : AreaAggregateMask
-                'AreaAggregateEffect' : AreaAggregateEffect
-                'AreaAggregateExtRouteTag' : AreaAggregateExtRouteTag
+                'AreaAggregateLsdbType' : AreaAggregateLsdbType,
+                'AreaAggregateMask' : AreaAggregateMask,
+                'AreaAggregateAreaID' : AreaAggregateAreaID,
+                'AreaAggregateNet' : AreaAggregateNet,
+                'AreaAggregateEffect' : AreaAggregateEffect,
+                'AreaAggregateExtRouteTag' : AreaAggregateExtRouteTag,
                 }
         reqUrl =  self.urlBase+'OspfAreaAggregateEntryConfig'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -2989,9 +2989,9 @@ class FlexSwitch( object):
                                                 AreaAggregateEffect = None,
                                                 AreaAggregateExtRouteTag = None):
         obj =  { 
-                'objectId': objectId
-                'AreaAggregateEffect' : AreaAggregateEffect
-                'AreaAggregateExtRouteTag' : AreaAggregateExtRouteTag
+                'objectId': objectId,
+                'AreaAggregateEffect' : AreaAggregateEffect,
+                'AreaAggregateExtRouteTag' : AreaAggregateExtRouteTag,
                 }
         reqUrl =  self.urlBase+'OspfAreaAggregateEntryConfig'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3000,14 +3000,14 @@ class FlexSwitch( object):
 
     def deleteOspfAreaAggregateEntryConfig(self,
                                            AreaAggregateLsdbType,
+                                           AreaAggregateMask,
                                            AreaAggregateAreaID,
-                                           AreaAggregateNet,
-                                           AreaAggregateMask):
+                                           AreaAggregateNet):
         obj =  { 
-                'AreaAggregateLsdbType' : AreaAggregateLsdbType
-                'AreaAggregateAreaID' : AreaAggregateAreaID
-                'AreaAggregateNet' : AreaAggregateNet
-                'AreaAggregateMask' : AreaAggregateMask
+                'AreaAggregateLsdbType' : AreaAggregateLsdbType,
+                'AreaAggregateMask' : AreaAggregateMask,
+                'AreaAggregateAreaID' : AreaAggregateAreaID,
+                'AreaAggregateNet' : AreaAggregateNet,
                 }
         reqUrl =  self.urlBase+'OspfAreaAggregateEntryConfig'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3022,23 +3022,23 @@ class FlexSwitch( object):
 
     def getOspfAreaAggregateEntryConfig(self,
                                         AreaAggregateLsdbType,
+                                        AreaAggregateMask,
                                         AreaAggregateAreaID,
-                                        AreaAggregateNet,
-                                        AreaAggregateMask):
+                                        AreaAggregateNet):
         obj =  { 
-                'AreaAggregateLsdbType' : AreaAggregateLsdbType
-                'AreaAggregateAreaID' : AreaAggregateAreaID
-                'AreaAggregateNet' : AreaAggregateNet
-                'AreaAggregateMask' : AreaAggregateMask
+                'AreaAggregateLsdbType' : AreaAggregateLsdbType,
+                'AreaAggregateMask' : AreaAggregateMask,
+                'AreaAggregateAreaID' : AreaAggregateAreaID,
+                'AreaAggregateNet' : AreaAggregateNet,
                 }
         reqUrl =  self.urlBase+'OspfAreaAggregateEntryConfig'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteOspfAreaAggregateEntryConfigById(self, objectId ):
+    def getOspfAreaAggregateEntryConfigById(self, objectId ):
         reqUrl =  self.urlBase+'OspfAreaAggregateEntryConfig'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -3047,21 +3047,21 @@ class FlexSwitch( object):
 
 
     def createVxlanInterfacesInterfaceStaticVxlanTunnelAddressFamilyBindVxlanId(self,
-                                                                                TunnelSourceIp,
-                                                                                VxlanTunnelId,
                                                                                 Name,
                                                                                 Af,
-                                                                                TunnelDestinationIp,
                                                                                 VxlanId,
+                                                                                VxlanTunnelId,
+                                                                                TunnelSourceIp,
+                                                                                TunnelDestinationIp,
                                                                                 VxlanTunnelName):
         obj =  { 
-                'TunnelSourceIp' : TunnelSourceIp
-                'VxlanTunnelId' : VxlanTunnelId
-                'Name' : Name
-                'Af' : Af
-                'TunnelDestinationIp' : TunnelDestinationIp
-                'VxlanId' : VxlanId
-                'VxlanTunnelName' : VxlanTunnelName
+                'Name' : Name,
+                'Af' : Af,
+                'VxlanId' : VxlanId,
+                'VxlanTunnelId' : VxlanTunnelId,
+                'TunnelSourceIp' : TunnelSourceIp,
+                'TunnelDestinationIp' : TunnelDestinationIp,
+                'VxlanTunnelName' : VxlanTunnelName,
                 }
         reqUrl =  self.urlBase+'VxlanInterfacesInterfaceStaticVxlanTunnelAddressFamilyBindVxlanId'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3069,21 +3069,21 @@ class FlexSwitch( object):
 
 
     def updateVxlanInterfacesInterfaceStaticVxlanTunnelAddressFamilyBindVxlanId(self,
-                                                                                TunnelSourceIp = None,
-                                                                                VxlanTunnelId,
                                                                                 Name,
                                                                                 Af,
-                                                                                TunnelDestinationIp = None,
                                                                                 VxlanId,
+                                                                                VxlanTunnelId,
+                                                                                TunnelSourceIp = None,
+                                                                                TunnelDestinationIp = None,
                                                                                 VxlanTunnelName = None):
         obj =  { 
-                'TunnelSourceIp' : TunnelSourceIp
-                'VxlanTunnelId' : VxlanTunnelId
-                'Name' : Name
-                'Af' : Af
-                'TunnelDestinationIp' : TunnelDestinationIp
-                'VxlanId' : VxlanId
-                'VxlanTunnelName' : VxlanTunnelName
+                'Name' : Name,
+                'Af' : Af,
+                'VxlanId' : VxlanId,
+                'VxlanTunnelId' : VxlanTunnelId,
+                'TunnelSourceIp' : TunnelSourceIp,
+                'TunnelDestinationIp' : TunnelDestinationIp,
+                'VxlanTunnelName' : VxlanTunnelName,
                 }
         reqUrl =  self.urlBase+'VxlanInterfacesInterfaceStaticVxlanTunnelAddressFamilyBindVxlanId'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3096,10 +3096,10 @@ class FlexSwitch( object):
                                                                                      TunnelDestinationIp = None,
                                                                                      VxlanTunnelName = None):
         obj =  { 
-                'objectId': objectId
-                'TunnelSourceIp' : TunnelSourceIp
-                'TunnelDestinationIp' : TunnelDestinationIp
-                'VxlanTunnelName' : VxlanTunnelName
+                'objectId': objectId,
+                'TunnelSourceIp' : TunnelSourceIp,
+                'TunnelDestinationIp' : TunnelDestinationIp,
+                'VxlanTunnelName' : VxlanTunnelName,
                 }
         reqUrl =  self.urlBase+'VxlanInterfacesInterfaceStaticVxlanTunnelAddressFamilyBindVxlanId'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3107,15 +3107,15 @@ class FlexSwitch( object):
 
 
     def deleteVxlanInterfacesInterfaceStaticVxlanTunnelAddressFamilyBindVxlanId(self,
-                                                                                VxlanTunnelId,
                                                                                 Name,
                                                                                 Af,
-                                                                                VxlanId):
+                                                                                VxlanId,
+                                                                                VxlanTunnelId):
         obj =  { 
-                'VxlanTunnelId' : VxlanTunnelId
-                'Name' : Name
-                'Af' : Af
-                'VxlanId' : VxlanId
+                'Name' : Name,
+                'Af' : Af,
+                'VxlanId' : VxlanId,
+                'VxlanTunnelId' : VxlanTunnelId,
                 }
         reqUrl =  self.urlBase+'VxlanInterfacesInterfaceStaticVxlanTunnelAddressFamilyBindVxlanId'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3129,24 +3129,24 @@ class FlexSwitch( object):
 
 
     def getVxlanInterfacesInterfaceStaticVxlanTunnelAddressFamilyBindVxlanId(self,
-                                                                             VxlanTunnelId,
                                                                              Name,
                                                                              Af,
-                                                                             VxlanId):
+                                                                             VxlanId,
+                                                                             VxlanTunnelId):
         obj =  { 
-                'VxlanTunnelId' : VxlanTunnelId
-                'Name' : Name
-                'Af' : Af
-                'VxlanId' : VxlanId
+                'Name' : Name,
+                'Af' : Af,
+                'VxlanId' : VxlanId,
+                'VxlanTunnelId' : VxlanTunnelId,
                 }
         reqUrl =  self.urlBase+'VxlanInterfacesInterfaceStaticVxlanTunnelAddressFamilyBindVxlanId'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteVxlanInterfacesInterfaceStaticVxlanTunnelAddressFamilyBindVxlanIdById(self, objectId ):
+    def getVxlanInterfacesInterfaceStaticVxlanTunnelAddressFamilyBindVxlanIdById(self, objectId ):
         reqUrl =  self.urlBase+'VxlanInterfacesInterfaceStaticVxlanTunnelAddressFamilyBindVxlanId'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -3156,12 +3156,12 @@ class FlexSwitch( object):
 
     def createBfdSession(self,
                          IpAddr,
-                         PerLink='false',
-                         Owner='user'):
+                         Owner='user',
+                         PerLink='false'):
         obj =  { 
-                'IpAddr' : IpAddr
-                'PerLink' : PerLink
-                'Owner' : Owner
+                'IpAddr' : IpAddr,
+                'Owner' : Owner,
+                'PerLink' : PerLink,
                 }
         reqUrl =  self.urlBase+'BfdSession'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3170,12 +3170,12 @@ class FlexSwitch( object):
 
     def updateBfdSession(self,
                          IpAddr,
-                         PerLink = None,
-                         Owner = None):
+                         Owner = None,
+                         PerLink = None):
         obj =  { 
-                'IpAddr' : IpAddr
-                'PerLink' : PerLink
-                'Owner' : Owner
+                'IpAddr' : IpAddr,
+                'Owner' : Owner,
+                'PerLink' : PerLink,
                 }
         reqUrl =  self.urlBase+'BfdSession'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3184,12 +3184,12 @@ class FlexSwitch( object):
 
     def updateBfdSessionById(self,
                               objectId,
-                              PerLink = None,
-                              Owner = None):
+                              Owner = None,
+                              PerLink = None):
         obj =  { 
-                'objectId': objectId
-                'PerLink' : PerLink
-                'Owner' : Owner
+                'objectId': objectId,
+                'Owner' : Owner,
+                'PerLink' : PerLink,
                 }
         reqUrl =  self.urlBase+'BfdSession'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3199,7 +3199,7 @@ class FlexSwitch( object):
     def deleteBfdSession(self,
                          IpAddr):
         obj =  { 
-                'IpAddr' : IpAddr
+                'IpAddr' : IpAddr,
                 }
         reqUrl =  self.urlBase+'BfdSession'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3215,16 +3215,16 @@ class FlexSwitch( object):
     def getBfdSession(self,
                       IpAddr):
         obj =  { 
-                'IpAddr' : IpAddr
+                'IpAddr' : IpAddr,
                 }
         reqUrl =  self.urlBase+'BfdSession'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteBfdSessionById(self, objectId ):
+    def getBfdSessionById(self, objectId ):
         reqUrl =  self.urlBase+'BfdSession'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -3235,16 +3235,16 @@ class FlexSwitch( object):
     def getPolicyConditionState(self,
                                 Name):
         obj =  { 
-                'Name' : Name
+                'Name' : Name,
                 }
         reqUrl =  self.urlBase+'PolicyConditionState'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deletePolicyConditionStateById(self, objectId ):
+    def getPolicyConditionStateById(self, objectId ):
         reqUrl =  self.urlBase+'PolicyConditionState'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -3253,21 +3253,21 @@ class FlexSwitch( object):
 
 
     def createVrrpIntf(self,
-                       IfIndex,
                        VRID,
-                       Priority= 100,
+                       IfIndex,
                        VirtualIPv4Addr,
-                       AdvertisementInterval=1,
                        PreemptMode='true',
+                       Priority= 100,
+                       AdvertisementInterval=1,
                        AcceptMode='false'):
         obj =  { 
-                'IfIndex' : IfIndex
-                'VRID' : VRID
-                'Priority' : Priority
-                'VirtualIPv4Addr' : VirtualIPv4Addr
-                'AdvertisementInterval' : AdvertisementInterval
-                'PreemptMode' : PreemptMode
-                'AcceptMode' : AcceptMode
+                'VRID' : VRID,
+                'IfIndex' : IfIndex,
+                'VirtualIPv4Addr' : VirtualIPv4Addr,
+                'PreemptMode' : PreemptMode,
+                'Priority' : Priority,
+                'AdvertisementInterval' : AdvertisementInterval,
+                'AcceptMode' : AcceptMode,
                 }
         reqUrl =  self.urlBase+'VrrpIntf'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3275,21 +3275,21 @@ class FlexSwitch( object):
 
 
     def updateVrrpIntf(self,
-                       IfIndex,
                        VRID,
-                       Priority = None,
+                       IfIndex,
                        VirtualIPv4Addr = None,
-                       AdvertisementInterval = None,
                        PreemptMode = None,
+                       Priority = None,
+                       AdvertisementInterval = None,
                        AcceptMode = None):
         obj =  { 
-                'IfIndex' : IfIndex
-                'VRID' : VRID
-                'Priority' : Priority
-                'VirtualIPv4Addr' : VirtualIPv4Addr
-                'AdvertisementInterval' : AdvertisementInterval
-                'PreemptMode' : PreemptMode
-                'AcceptMode' : AcceptMode
+                'VRID' : VRID,
+                'IfIndex' : IfIndex,
+                'VirtualIPv4Addr' : VirtualIPv4Addr,
+                'PreemptMode' : PreemptMode,
+                'Priority' : Priority,
+                'AdvertisementInterval' : AdvertisementInterval,
+                'AcceptMode' : AcceptMode,
                 }
         reqUrl =  self.urlBase+'VrrpIntf'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3298,18 +3298,18 @@ class FlexSwitch( object):
 
     def updateVrrpIntfById(self,
                             objectId,
-                            Priority = None,
                             VirtualIPv4Addr = None,
-                            AdvertisementInterval = None,
                             PreemptMode = None,
+                            Priority = None,
+                            AdvertisementInterval = None,
                             AcceptMode = None):
         obj =  { 
-                'objectId': objectId
-                'Priority' : Priority
-                'VirtualIPv4Addr' : VirtualIPv4Addr
-                'AdvertisementInterval' : AdvertisementInterval
-                'PreemptMode' : PreemptMode
-                'AcceptMode' : AcceptMode
+                'objectId': objectId,
+                'VirtualIPv4Addr' : VirtualIPv4Addr,
+                'PreemptMode' : PreemptMode,
+                'Priority' : Priority,
+                'AdvertisementInterval' : AdvertisementInterval,
+                'AcceptMode' : AcceptMode,
                 }
         reqUrl =  self.urlBase+'VrrpIntf'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3317,11 +3317,11 @@ class FlexSwitch( object):
 
 
     def deleteVrrpIntf(self,
-                       IfIndex,
-                       VRID):
+                       VRID,
+                       IfIndex):
         obj =  { 
-                'IfIndex' : IfIndex
-                'VRID' : VRID
+                'VRID' : VRID,
+                'IfIndex' : IfIndex,
                 }
         reqUrl =  self.urlBase+'VrrpIntf'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3335,20 +3335,20 @@ class FlexSwitch( object):
 
 
     def getVrrpIntf(self,
-                    IfIndex,
-                    VRID):
+                    VRID,
+                    IfIndex):
         obj =  { 
-                'IfIndex' : IfIndex
-                'VRID' : VRID
+                'VRID' : VRID,
+                'IfIndex' : IfIndex,
                 }
         reqUrl =  self.urlBase+'VrrpIntf'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteVrrpIntfById(self, objectId ):
+    def getVrrpIntfById(self, objectId ):
         reqUrl =  self.urlBase+'VrrpIntf'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -3359,16 +3359,16 @@ class FlexSwitch( object):
     def getPolicyDefinitionState(self,
                                  Name):
         obj =  { 
-                'Name' : Name
+                'Name' : Name,
                 }
         reqUrl =  self.urlBase+'PolicyDefinitionState'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deletePolicyDefinitionStateById(self, objectId ):
+    def getPolicyDefinitionStateById(self, objectId ):
         reqUrl =  self.urlBase+'PolicyDefinitionState'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -3382,10 +3382,10 @@ class FlexSwitch( object):
                                       IfMetricIpAddress,
                                       IfMetricValue):
         obj =  { 
-                'IfMetricAddressLessIf' : IfMetricAddressLessIf
-                'IfMetricTOS' : IfMetricTOS
-                'IfMetricIpAddress' : IfMetricIpAddress
-                'IfMetricValue' : IfMetricValue
+                'IfMetricAddressLessIf' : IfMetricAddressLessIf,
+                'IfMetricTOS' : IfMetricTOS,
+                'IfMetricIpAddress' : IfMetricIpAddress,
+                'IfMetricValue' : IfMetricValue,
                 }
         reqUrl =  self.urlBase+'OspfIfMetricEntryConfig'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3398,10 +3398,10 @@ class FlexSwitch( object):
                                       IfMetricIpAddress,
                                       IfMetricValue = None):
         obj =  { 
-                'IfMetricAddressLessIf' : IfMetricAddressLessIf
-                'IfMetricTOS' : IfMetricTOS
-                'IfMetricIpAddress' : IfMetricIpAddress
-                'IfMetricValue' : IfMetricValue
+                'IfMetricAddressLessIf' : IfMetricAddressLessIf,
+                'IfMetricTOS' : IfMetricTOS,
+                'IfMetricIpAddress' : IfMetricIpAddress,
+                'IfMetricValue' : IfMetricValue,
                 }
         reqUrl =  self.urlBase+'OspfIfMetricEntryConfig'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3412,8 +3412,8 @@ class FlexSwitch( object):
                                            objectId,
                                            IfMetricValue = None):
         obj =  { 
-                'objectId': objectId
-                'IfMetricValue' : IfMetricValue
+                'objectId': objectId,
+                'IfMetricValue' : IfMetricValue,
                 }
         reqUrl =  self.urlBase+'OspfIfMetricEntryConfig'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3425,9 +3425,9 @@ class FlexSwitch( object):
                                       IfMetricTOS,
                                       IfMetricIpAddress):
         obj =  { 
-                'IfMetricAddressLessIf' : IfMetricAddressLessIf
-                'IfMetricTOS' : IfMetricTOS
-                'IfMetricIpAddress' : IfMetricIpAddress
+                'IfMetricAddressLessIf' : IfMetricAddressLessIf,
+                'IfMetricTOS' : IfMetricTOS,
+                'IfMetricIpAddress' : IfMetricIpAddress,
                 }
         reqUrl =  self.urlBase+'OspfIfMetricEntryConfig'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3445,18 +3445,18 @@ class FlexSwitch( object):
                                    IfMetricTOS,
                                    IfMetricIpAddress):
         obj =  { 
-                'IfMetricAddressLessIf' : IfMetricAddressLessIf
-                'IfMetricTOS' : IfMetricTOS
-                'IfMetricIpAddress' : IfMetricIpAddress
+                'IfMetricAddressLessIf' : IfMetricAddressLessIf,
+                'IfMetricTOS' : IfMetricTOS,
+                'IfMetricIpAddress' : IfMetricIpAddress,
                 }
         reqUrl =  self.urlBase+'OspfIfMetricEntryConfig'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteOspfIfMetricEntryConfigById(self, objectId ):
+    def getOspfIfMetricEntryConfigById(self, objectId ):
         reqUrl =  self.urlBase+'OspfIfMetricEntryConfig'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -3467,16 +3467,16 @@ class FlexSwitch( object):
     def getLogicalIntfState(self,
                             Name):
         obj =  { 
-                'Name' : Name
+                'Name' : Name,
                 }
         reqUrl =  self.urlBase+'LogicalIntfState'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteLogicalIntfStateById(self, objectId ):
+    def getLogicalIntfStateById(self, objectId ):
         reqUrl =  self.urlBase+'LogicalIntfState'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -3491,11 +3491,11 @@ class FlexSwitch( object):
                                               VlanId,
                                               InterfaceName):
         obj =  { 
-                'VxlanId' : VxlanId
-                'Mac' : Mac
-                'L2interface' : L2interface
-                'VlanId' : VlanId
-                'InterfaceName' : InterfaceName
+                'VxlanId' : VxlanId,
+                'Mac' : Mac,
+                'L2interface' : L2interface,
+                'VlanId' : VlanId,
+                'InterfaceName' : InterfaceName,
                 }
         reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeMac'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3509,11 +3509,11 @@ class FlexSwitch( object):
                                               VlanId = None,
                                               InterfaceName = None):
         obj =  { 
-                'VxlanId' : VxlanId
-                'Mac' : Mac
-                'L2interface' : L2interface
-                'VlanId' : VlanId
-                'InterfaceName' : InterfaceName
+                'VxlanId' : VxlanId,
+                'Mac' : Mac,
+                'L2interface' : L2interface,
+                'VlanId' : VlanId,
+                'InterfaceName' : InterfaceName,
                 }
         reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeMac'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3527,11 +3527,11 @@ class FlexSwitch( object):
                                                    VlanId = None,
                                                    InterfaceName = None):
         obj =  { 
-                'objectId': objectId
-                'Mac' : Mac
-                'L2interface' : L2interface
-                'VlanId' : VlanId
-                'InterfaceName' : InterfaceName
+                'objectId': objectId,
+                'Mac' : Mac,
+                'L2interface' : L2interface,
+                'VlanId' : VlanId,
+                'InterfaceName' : InterfaceName,
                 }
         reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeMac'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3541,7 +3541,7 @@ class FlexSwitch( object):
     def deleteVxlanVxlanInstanceAccessTypeMac(self,
                                               VxlanId):
         obj =  { 
-                'VxlanId' : VxlanId
+                'VxlanId' : VxlanId,
                 }
         reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeMac'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3557,16 +3557,16 @@ class FlexSwitch( object):
     def getVxlanVxlanInstanceAccessTypeMac(self,
                                            VxlanId):
         obj =  { 
-                'VxlanId' : VxlanId
+                'VxlanId' : VxlanId,
                 }
         reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeMac'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteVxlanVxlanInstanceAccessTypeMacById(self, objectId ):
+    def getVxlanVxlanInstanceAccessTypeMacById(self, objectId ):
         reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeMac'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -3575,41 +3575,41 @@ class FlexSwitch( object):
 
 
     def createBGPNeighbor(self,
-                          PeerAS,
-                          LocalAS= 0,
-                          AuthPassword='',
-                          Description='',
-                          NeighborAddress,
                           IfIndex,
+                          NeighborAddress,
+                          PeerAS,
+                          BfdEnable='false',
                           RouteReflectorClusterId= 0,
-                          RouteReflectorClient='false',
-                          MultiHopEnable='false',
-                          MultiHopTTL='0',
-                          ConnectRetryTime= 60,
-                          HoldTime= 180,
-                          KeepaliveTime= 60,
-                          AddPathsRx='false',
-                          AddPathsMaxTx='0',
                           PeerGroup='',
-                          BfdEnable='false'):
+                          Description='',
+                          MultiHopTTL='0',
+                          LocalAS= 0,
+                          KeepaliveTime= 60,
+                          AddPathsMaxTx='0',
+                          MultiHopEnable='false',
+                          RouteReflectorClient='false',
+                          AddPathsRx='false',
+                          HoldTime= 180,
+                          AuthPassword='',
+                          ConnectRetryTime= 60):
         obj =  { 
-                'PeerAS' : PeerAS
-                'LocalAS' : LocalAS
-                'AuthPassword' : AuthPassword
-                'Description' : Description
-                'NeighborAddress' : NeighborAddress
-                'IfIndex' : IfIndex
-                'RouteReflectorClusterId' : RouteReflectorClusterId
-                'RouteReflectorClient' : RouteReflectorClient
-                'MultiHopEnable' : MultiHopEnable
-                'MultiHopTTL' : MultiHopTTL
-                'ConnectRetryTime' : ConnectRetryTime
-                'HoldTime' : HoldTime
-                'KeepaliveTime' : KeepaliveTime
-                'AddPathsRx' : AddPathsRx
-                'AddPathsMaxTx' : AddPathsMaxTx
-                'PeerGroup' : PeerGroup
-                'BfdEnable' : BfdEnable
+                'IfIndex' : IfIndex,
+                'NeighborAddress' : NeighborAddress,
+                'PeerAS' : PeerAS,
+                'BfdEnable' : BfdEnable,
+                'RouteReflectorClusterId' : RouteReflectorClusterId,
+                'PeerGroup' : PeerGroup,
+                'Description' : Description,
+                'MultiHopTTL' : MultiHopTTL,
+                'LocalAS' : LocalAS,
+                'KeepaliveTime' : KeepaliveTime,
+                'AddPathsMaxTx' : AddPathsMaxTx,
+                'MultiHopEnable' : MultiHopEnable,
+                'RouteReflectorClient' : RouteReflectorClient,
+                'AddPathsRx' : AddPathsRx,
+                'HoldTime' : HoldTime,
+                'AuthPassword' : AuthPassword,
+                'ConnectRetryTime' : ConnectRetryTime,
                 }
         reqUrl =  self.urlBase+'BGPNeighbor'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3617,41 +3617,41 @@ class FlexSwitch( object):
 
 
     def updateBGPNeighbor(self,
-                          PeerAS = None,
-                          LocalAS = None,
-                          AuthPassword = None,
-                          Description = None,
-                          NeighborAddress,
                           IfIndex,
+                          NeighborAddress,
+                          PeerAS = None,
+                          BfdEnable = None,
                           RouteReflectorClusterId = None,
-                          RouteReflectorClient = None,
-                          MultiHopEnable = None,
-                          MultiHopTTL = None,
-                          ConnectRetryTime = None,
-                          HoldTime = None,
-                          KeepaliveTime = None,
-                          AddPathsRx = None,
-                          AddPathsMaxTx = None,
                           PeerGroup = None,
-                          BfdEnable = None):
+                          Description = None,
+                          MultiHopTTL = None,
+                          LocalAS = None,
+                          KeepaliveTime = None,
+                          AddPathsMaxTx = None,
+                          MultiHopEnable = None,
+                          RouteReflectorClient = None,
+                          AddPathsRx = None,
+                          HoldTime = None,
+                          AuthPassword = None,
+                          ConnectRetryTime = None):
         obj =  { 
-                'PeerAS' : PeerAS
-                'LocalAS' : LocalAS
-                'AuthPassword' : AuthPassword
-                'Description' : Description
-                'NeighborAddress' : NeighborAddress
-                'IfIndex' : IfIndex
-                'RouteReflectorClusterId' : RouteReflectorClusterId
-                'RouteReflectorClient' : RouteReflectorClient
-                'MultiHopEnable' : MultiHopEnable
-                'MultiHopTTL' : MultiHopTTL
-                'ConnectRetryTime' : ConnectRetryTime
-                'HoldTime' : HoldTime
-                'KeepaliveTime' : KeepaliveTime
-                'AddPathsRx' : AddPathsRx
-                'AddPathsMaxTx' : AddPathsMaxTx
-                'PeerGroup' : PeerGroup
-                'BfdEnable' : BfdEnable
+                'IfIndex' : IfIndex,
+                'NeighborAddress' : NeighborAddress,
+                'PeerAS' : PeerAS,
+                'BfdEnable' : BfdEnable,
+                'RouteReflectorClusterId' : RouteReflectorClusterId,
+                'PeerGroup' : PeerGroup,
+                'Description' : Description,
+                'MultiHopTTL' : MultiHopTTL,
+                'LocalAS' : LocalAS,
+                'KeepaliveTime' : KeepaliveTime,
+                'AddPathsMaxTx' : AddPathsMaxTx,
+                'MultiHopEnable' : MultiHopEnable,
+                'RouteReflectorClient' : RouteReflectorClient,
+                'AddPathsRx' : AddPathsRx,
+                'HoldTime' : HoldTime,
+                'AuthPassword' : AuthPassword,
+                'ConnectRetryTime' : ConnectRetryTime,
                 }
         reqUrl =  self.urlBase+'BGPNeighbor'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3661,37 +3661,37 @@ class FlexSwitch( object):
     def updateBGPNeighborById(self,
                                objectId,
                                PeerAS = None,
-                               LocalAS = None,
-                               AuthPassword = None,
-                               Description = None,
+                               BfdEnable = None,
                                RouteReflectorClusterId = None,
-                               RouteReflectorClient = None,
-                               MultiHopEnable = None,
-                               MultiHopTTL = None,
-                               ConnectRetryTime = None,
-                               HoldTime = None,
-                               KeepaliveTime = None,
-                               AddPathsRx = None,
-                               AddPathsMaxTx = None,
                                PeerGroup = None,
-                               BfdEnable = None):
+                               Description = None,
+                               MultiHopTTL = None,
+                               LocalAS = None,
+                               KeepaliveTime = None,
+                               AddPathsMaxTx = None,
+                               MultiHopEnable = None,
+                               RouteReflectorClient = None,
+                               AddPathsRx = None,
+                               HoldTime = None,
+                               AuthPassword = None,
+                               ConnectRetryTime = None):
         obj =  { 
-                'objectId': objectId
-                'PeerAS' : PeerAS
-                'LocalAS' : LocalAS
-                'AuthPassword' : AuthPassword
-                'Description' : Description
-                'RouteReflectorClusterId' : RouteReflectorClusterId
-                'RouteReflectorClient' : RouteReflectorClient
-                'MultiHopEnable' : MultiHopEnable
-                'MultiHopTTL' : MultiHopTTL
-                'ConnectRetryTime' : ConnectRetryTime
-                'HoldTime' : HoldTime
-                'KeepaliveTime' : KeepaliveTime
-                'AddPathsRx' : AddPathsRx
-                'AddPathsMaxTx' : AddPathsMaxTx
-                'PeerGroup' : PeerGroup
-                'BfdEnable' : BfdEnable
+                'objectId': objectId,
+                'PeerAS' : PeerAS,
+                'BfdEnable' : BfdEnable,
+                'RouteReflectorClusterId' : RouteReflectorClusterId,
+                'PeerGroup' : PeerGroup,
+                'Description' : Description,
+                'MultiHopTTL' : MultiHopTTL,
+                'LocalAS' : LocalAS,
+                'KeepaliveTime' : KeepaliveTime,
+                'AddPathsMaxTx' : AddPathsMaxTx,
+                'MultiHopEnable' : MultiHopEnable,
+                'RouteReflectorClient' : RouteReflectorClient,
+                'AddPathsRx' : AddPathsRx,
+                'HoldTime' : HoldTime,
+                'AuthPassword' : AuthPassword,
+                'ConnectRetryTime' : ConnectRetryTime,
                 }
         reqUrl =  self.urlBase+'BGPNeighbor'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3699,11 +3699,11 @@ class FlexSwitch( object):
 
 
     def deleteBGPNeighbor(self,
-                          NeighborAddress,
-                          IfIndex):
+                          IfIndex,
+                          NeighborAddress):
         obj =  { 
-                'NeighborAddress' : NeighborAddress
-                'IfIndex' : IfIndex
+                'IfIndex' : IfIndex,
+                'NeighborAddress' : NeighborAddress,
                 }
         reqUrl =  self.urlBase+'BGPNeighbor'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3717,20 +3717,20 @@ class FlexSwitch( object):
 
 
     def getBGPNeighbor(self,
-                       NeighborAddress,
-                       IfIndex):
+                       IfIndex,
+                       NeighborAddress):
         obj =  { 
-                'NeighborAddress' : NeighborAddress
-                'IfIndex' : IfIndex
+                'IfIndex' : IfIndex,
+                'NeighborAddress' : NeighborAddress,
                 }
         reqUrl =  self.urlBase+'BGPNeighbor'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteBGPNeighborById(self, objectId ):
+    def getBGPNeighborById(self, objectId ):
         reqUrl =  self.urlBase+'BGPNeighbor'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -3742,8 +3742,8 @@ class FlexSwitch( object):
                                                                  VxlanId,
                                                                  InterfaceName):
         obj =  { 
-                'VxlanId' : VxlanId
-                'InterfaceName' : InterfaceName
+                'VxlanId' : VxlanId,
+                'InterfaceName' : InterfaceName,
                 }
         reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeL3interfaceL3interface'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3754,8 +3754,8 @@ class FlexSwitch( object):
                                                                  VxlanId,
                                                                  InterfaceName):
         obj =  { 
-                'VxlanId' : VxlanId
-                'InterfaceName' : InterfaceName
+                'VxlanId' : VxlanId,
+                'InterfaceName' : InterfaceName,
                 }
         reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeL3interfaceL3interface'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3765,7 +3765,7 @@ class FlexSwitch( object):
     def updateVxlanVxlanInstanceAccessTypeL3interfaceL3interfaceById(self,
                                                                       objectId):
         obj =  { 
-                'objectId': objectId
+                'objectId': objectId,
                 }
         reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeL3interfaceL3interface'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3776,8 +3776,8 @@ class FlexSwitch( object):
                                                                  VxlanId,
                                                                  InterfaceName):
         obj =  { 
-                'VxlanId' : VxlanId
-                'InterfaceName' : InterfaceName
+                'VxlanId' : VxlanId,
+                'InterfaceName' : InterfaceName,
                 }
         reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeL3interfaceL3interface'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3794,17 +3794,17 @@ class FlexSwitch( object):
                                                               VxlanId,
                                                               InterfaceName):
         obj =  { 
-                'VxlanId' : VxlanId
-                'InterfaceName' : InterfaceName
+                'VxlanId' : VxlanId,
+                'InterfaceName' : InterfaceName,
                 }
         reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeL3interfaceL3interface'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteVxlanVxlanInstanceAccessTypeL3interfaceL3interfaceById(self, objectId ):
+    def getVxlanVxlanInstanceAccessTypeL3interfaceL3interfaceById(self, objectId ):
         reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeL3interfaceL3interface'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -3822,14 +3822,14 @@ class FlexSwitch( object):
                                 ForceVersion,
                                 TxHoldCount):
         obj =  { 
-                'Vlan' : Vlan
-                'Address' : Address
-                'Priority' : Priority
-                'MaxAge' : MaxAge
-                'HelloTime' : HelloTime
-                'ForwardDelay' : ForwardDelay
-                'ForceVersion' : ForceVersion
-                'TxHoldCount' : TxHoldCount
+                'Vlan' : Vlan,
+                'Address' : Address,
+                'Priority' : Priority,
+                'MaxAge' : MaxAge,
+                'HelloTime' : HelloTime,
+                'ForwardDelay' : ForwardDelay,
+                'ForceVersion' : ForceVersion,
+                'TxHoldCount' : TxHoldCount,
                 }
         reqUrl =  self.urlBase+'StpBridgeInstance'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3846,14 +3846,14 @@ class FlexSwitch( object):
                                 ForceVersion = None,
                                 TxHoldCount = None):
         obj =  { 
-                'Vlan' : Vlan
-                'Address' : Address
-                'Priority' : Priority
-                'MaxAge' : MaxAge
-                'HelloTime' : HelloTime
-                'ForwardDelay' : ForwardDelay
-                'ForceVersion' : ForceVersion
-                'TxHoldCount' : TxHoldCount
+                'Vlan' : Vlan,
+                'Address' : Address,
+                'Priority' : Priority,
+                'MaxAge' : MaxAge,
+                'HelloTime' : HelloTime,
+                'ForwardDelay' : ForwardDelay,
+                'ForceVersion' : ForceVersion,
+                'TxHoldCount' : TxHoldCount,
                 }
         reqUrl =  self.urlBase+'StpBridgeInstance'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3870,14 +3870,14 @@ class FlexSwitch( object):
                                      ForceVersion = None,
                                      TxHoldCount = None):
         obj =  { 
-                'objectId': objectId
-                'Address' : Address
-                'Priority' : Priority
-                'MaxAge' : MaxAge
-                'HelloTime' : HelloTime
-                'ForwardDelay' : ForwardDelay
-                'ForceVersion' : ForceVersion
-                'TxHoldCount' : TxHoldCount
+                'objectId': objectId,
+                'Address' : Address,
+                'Priority' : Priority,
+                'MaxAge' : MaxAge,
+                'HelloTime' : HelloTime,
+                'ForwardDelay' : ForwardDelay,
+                'ForceVersion' : ForceVersion,
+                'TxHoldCount' : TxHoldCount,
                 }
         reqUrl =  self.urlBase+'StpBridgeInstance'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3887,7 +3887,7 @@ class FlexSwitch( object):
     def deleteStpBridgeInstance(self,
                                 Vlan):
         obj =  { 
-                'Vlan' : Vlan
+                'Vlan' : Vlan,
                 }
         reqUrl =  self.urlBase+'StpBridgeInstance'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3903,16 +3903,16 @@ class FlexSwitch( object):
     def getStpBridgeInstance(self,
                              Vlan):
         obj =  { 
-                'Vlan' : Vlan
+                'Vlan' : Vlan,
                 }
         reqUrl =  self.urlBase+'StpBridgeInstance'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteStpBridgeInstanceById(self, objectId ):
+    def getStpBridgeInstanceById(self, objectId ):
         reqUrl =  self.urlBase+'StpBridgeInstance'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -3921,22 +3921,22 @@ class FlexSwitch( object):
 
 
     def getOspfExtLsdbEntryState(self,
-                                 ExtLsdbType,
                                  ExtLsdbLsid,
-                                 ExtLsdbRouterId):
+                                 ExtLsdbRouterId,
+                                 ExtLsdbType):
         obj =  { 
-                'ExtLsdbType' : ExtLsdbType
-                'ExtLsdbLsid' : ExtLsdbLsid
-                'ExtLsdbRouterId' : ExtLsdbRouterId
+                'ExtLsdbLsid' : ExtLsdbLsid,
+                'ExtLsdbRouterId' : ExtLsdbRouterId,
+                'ExtLsdbType' : ExtLsdbType,
                 }
         reqUrl =  self.urlBase+'OspfExtLsdbEntryState'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteOspfExtLsdbEntryStateById(self, objectId ):
+    def getOspfExtLsdbEntryStateById(self, objectId ):
         reqUrl =  self.urlBase+'OspfExtLsdbEntryState'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -3946,26 +3946,26 @@ class FlexSwitch( object):
 
     def createBfdInterface(self,
                            IfIndex,
-                           LocalMultiplier= 3,
-                           DesiredMinTxInterval= 1000,
                            RequiredMinRxInterval= 1000,
-                           RequiredMinEchoRxInterval= 0,
+                           AuthData='snaproute',
                            DemandEnabled='false',
-                           AuthenticationEnabled='false',
-                           AuthType='simple',
                            AuthKeyId= 1,
-                           AuthData='snaproute'):
+                           AuthType='simple',
+                           DesiredMinTxInterval= 1000,
+                           AuthenticationEnabled='false',
+                           RequiredMinEchoRxInterval= 0,
+                           LocalMultiplier= 3):
         obj =  { 
-                'IfIndex' : IfIndex
-                'LocalMultiplier' : LocalMultiplier
-                'DesiredMinTxInterval' : DesiredMinTxInterval
-                'RequiredMinRxInterval' : RequiredMinRxInterval
-                'RequiredMinEchoRxInterval' : RequiredMinEchoRxInterval
-                'DemandEnabled' : DemandEnabled
-                'AuthenticationEnabled' : AuthenticationEnabled
-                'AuthType' : AuthType
-                'AuthKeyId' : AuthKeyId
-                'AuthData' : AuthData
+                'IfIndex' : IfIndex,
+                'RequiredMinRxInterval' : RequiredMinRxInterval,
+                'AuthData' : AuthData,
+                'DemandEnabled' : DemandEnabled,
+                'AuthKeyId' : AuthKeyId,
+                'AuthType' : AuthType,
+                'DesiredMinTxInterval' : DesiredMinTxInterval,
+                'AuthenticationEnabled' : AuthenticationEnabled,
+                'RequiredMinEchoRxInterval' : RequiredMinEchoRxInterval,
+                'LocalMultiplier' : LocalMultiplier,
                 }
         reqUrl =  self.urlBase+'BfdInterface'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3974,26 +3974,26 @@ class FlexSwitch( object):
 
     def updateBfdInterface(self,
                            IfIndex,
-                           LocalMultiplier = None,
-                           DesiredMinTxInterval = None,
                            RequiredMinRxInterval = None,
-                           RequiredMinEchoRxInterval = None,
+                           AuthData = None,
                            DemandEnabled = None,
-                           AuthenticationEnabled = None,
-                           AuthType = None,
                            AuthKeyId = None,
-                           AuthData = None):
+                           AuthType = None,
+                           DesiredMinTxInterval = None,
+                           AuthenticationEnabled = None,
+                           RequiredMinEchoRxInterval = None,
+                           LocalMultiplier = None):
         obj =  { 
-                'IfIndex' : IfIndex
-                'LocalMultiplier' : LocalMultiplier
-                'DesiredMinTxInterval' : DesiredMinTxInterval
-                'RequiredMinRxInterval' : RequiredMinRxInterval
-                'RequiredMinEchoRxInterval' : RequiredMinEchoRxInterval
-                'DemandEnabled' : DemandEnabled
-                'AuthenticationEnabled' : AuthenticationEnabled
-                'AuthType' : AuthType
-                'AuthKeyId' : AuthKeyId
-                'AuthData' : AuthData
+                'IfIndex' : IfIndex,
+                'RequiredMinRxInterval' : RequiredMinRxInterval,
+                'AuthData' : AuthData,
+                'DemandEnabled' : DemandEnabled,
+                'AuthKeyId' : AuthKeyId,
+                'AuthType' : AuthType,
+                'DesiredMinTxInterval' : DesiredMinTxInterval,
+                'AuthenticationEnabled' : AuthenticationEnabled,
+                'RequiredMinEchoRxInterval' : RequiredMinEchoRxInterval,
+                'LocalMultiplier' : LocalMultiplier,
                 }
         reqUrl =  self.urlBase+'BfdInterface'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -4002,26 +4002,26 @@ class FlexSwitch( object):
 
     def updateBfdInterfaceById(self,
                                 objectId,
-                                LocalMultiplier = None,
-                                DesiredMinTxInterval = None,
                                 RequiredMinRxInterval = None,
-                                RequiredMinEchoRxInterval = None,
+                                AuthData = None,
                                 DemandEnabled = None,
-                                AuthenticationEnabled = None,
-                                AuthType = None,
                                 AuthKeyId = None,
-                                AuthData = None):
+                                AuthType = None,
+                                DesiredMinTxInterval = None,
+                                AuthenticationEnabled = None,
+                                RequiredMinEchoRxInterval = None,
+                                LocalMultiplier = None):
         obj =  { 
-                'objectId': objectId
-                'LocalMultiplier' : LocalMultiplier
-                'DesiredMinTxInterval' : DesiredMinTxInterval
-                'RequiredMinRxInterval' : RequiredMinRxInterval
-                'RequiredMinEchoRxInterval' : RequiredMinEchoRxInterval
-                'DemandEnabled' : DemandEnabled
-                'AuthenticationEnabled' : AuthenticationEnabled
-                'AuthType' : AuthType
-                'AuthKeyId' : AuthKeyId
-                'AuthData' : AuthData
+                'objectId': objectId,
+                'RequiredMinRxInterval' : RequiredMinRxInterval,
+                'AuthData' : AuthData,
+                'DemandEnabled' : DemandEnabled,
+                'AuthKeyId' : AuthKeyId,
+                'AuthType' : AuthType,
+                'DesiredMinTxInterval' : DesiredMinTxInterval,
+                'AuthenticationEnabled' : AuthenticationEnabled,
+                'RequiredMinEchoRxInterval' : RequiredMinEchoRxInterval,
+                'LocalMultiplier' : LocalMultiplier,
                 }
         reqUrl =  self.urlBase+'BfdInterface'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -4031,7 +4031,7 @@ class FlexSwitch( object):
     def deleteBfdInterface(self,
                            IfIndex):
         obj =  { 
-                'IfIndex' : IfIndex
+                'IfIndex' : IfIndex,
                 }
         reqUrl =  self.urlBase+'BfdInterface'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -4047,16 +4047,16 @@ class FlexSwitch( object):
     def getBfdInterface(self,
                         IfIndex):
         obj =  { 
-                'IfIndex' : IfIndex
+                'IfIndex' : IfIndex,
                 }
         reqUrl =  self.urlBase+'BfdInterface'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteBfdInterfaceById(self, objectId ):
+    def getBfdInterfaceById(self, objectId ):
         reqUrl =  self.urlBase+'BfdInterface'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -4068,8 +4068,8 @@ class FlexSwitch( object):
                             SRLogger,
                             SystemLogging='on'):
         obj =  { 
-                'SRLogger' : SRLogger
-                'SystemLogging' : SystemLogging
+                'SRLogger' : SRLogger,
+                'SystemLogging' : SystemLogging,
                 }
         reqUrl =  self.urlBase+'SystemLogging'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -4080,8 +4080,8 @@ class FlexSwitch( object):
                             SRLogger,
                             SystemLogging = None):
         obj =  { 
-                'SRLogger' : SRLogger
-                'SystemLogging' : SystemLogging
+                'SRLogger' : SRLogger,
+                'SystemLogging' : SystemLogging,
                 }
         reqUrl =  self.urlBase+'SystemLogging'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -4092,8 +4092,8 @@ class FlexSwitch( object):
                                  objectId,
                                  SystemLogging = None):
         obj =  { 
-                'objectId': objectId
-                'SystemLogging' : SystemLogging
+                'objectId': objectId,
+                'SystemLogging' : SystemLogging,
                 }
         reqUrl =  self.urlBase+'SystemLogging'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -4103,7 +4103,7 @@ class FlexSwitch( object):
     def deleteSystemLogging(self,
                             SRLogger):
         obj =  { 
-                'SRLogger' : SRLogger
+                'SRLogger' : SRLogger,
                 }
         reqUrl =  self.urlBase+'SystemLogging'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -4119,16 +4119,16 @@ class FlexSwitch( object):
     def getSystemLogging(self,
                          SRLogger):
         obj =  { 
-                'SRLogger' : SRLogger
+                'SRLogger' : SRLogger,
                 }
         reqUrl =  self.urlBase+'SystemLogging'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteSystemLoggingById(self, objectId ):
+    def getSystemLoggingById(self, objectId ):
         reqUrl =  self.urlBase+'SystemLogging'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -4152,20 +4152,20 @@ class FlexSwitch( object):
                                RestartStrictLsaChecking,
                                StubRouterAdvertisement):
         obj =  { 
-                'RouterId' : RouterId
-                'AdminStat' : AdminStat
-                'ASBdrRtrStatus' : ASBdrRtrStatus
-                'TOSSupport' : TOSSupport
-                'ExtLsdbLimit' : ExtLsdbLimit
-                'MulticastExtensions' : MulticastExtensions
-                'ExitOverflowInterval' : ExitOverflowInterval
-                'DemandExtensions' : DemandExtensions
-                'RFC1583Compatibility' : RFC1583Compatibility
-                'ReferenceBandwidth' : ReferenceBandwidth
-                'RestartSupport' : RestartSupport
-                'RestartInterval' : RestartInterval
-                'RestartStrictLsaChecking' : RestartStrictLsaChecking
-                'StubRouterAdvertisement' : StubRouterAdvertisement
+                'RouterId' : RouterId,
+                'AdminStat' : AdminStat,
+                'ASBdrRtrStatus' : ASBdrRtrStatus,
+                'TOSSupport' : TOSSupport,
+                'ExtLsdbLimit' : ExtLsdbLimit,
+                'MulticastExtensions' : MulticastExtensions,
+                'ExitOverflowInterval' : ExitOverflowInterval,
+                'DemandExtensions' : DemandExtensions,
+                'RFC1583Compatibility' : RFC1583Compatibility,
+                'ReferenceBandwidth' : ReferenceBandwidth,
+                'RestartSupport' : RestartSupport,
+                'RestartInterval' : RestartInterval,
+                'RestartStrictLsaChecking' : RestartStrictLsaChecking,
+                'StubRouterAdvertisement' : StubRouterAdvertisement,
                 }
         reqUrl =  self.urlBase+'OspfGlobalConfig'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -4188,20 +4188,20 @@ class FlexSwitch( object):
                                RestartStrictLsaChecking = None,
                                StubRouterAdvertisement = None):
         obj =  { 
-                'RouterId' : RouterId
-                'AdminStat' : AdminStat
-                'ASBdrRtrStatus' : ASBdrRtrStatus
-                'TOSSupport' : TOSSupport
-                'ExtLsdbLimit' : ExtLsdbLimit
-                'MulticastExtensions' : MulticastExtensions
-                'ExitOverflowInterval' : ExitOverflowInterval
-                'DemandExtensions' : DemandExtensions
-                'RFC1583Compatibility' : RFC1583Compatibility
-                'ReferenceBandwidth' : ReferenceBandwidth
-                'RestartSupport' : RestartSupport
-                'RestartInterval' : RestartInterval
-                'RestartStrictLsaChecking' : RestartStrictLsaChecking
-                'StubRouterAdvertisement' : StubRouterAdvertisement
+                'RouterId' : RouterId,
+                'AdminStat' : AdminStat,
+                'ASBdrRtrStatus' : ASBdrRtrStatus,
+                'TOSSupport' : TOSSupport,
+                'ExtLsdbLimit' : ExtLsdbLimit,
+                'MulticastExtensions' : MulticastExtensions,
+                'ExitOverflowInterval' : ExitOverflowInterval,
+                'DemandExtensions' : DemandExtensions,
+                'RFC1583Compatibility' : RFC1583Compatibility,
+                'ReferenceBandwidth' : ReferenceBandwidth,
+                'RestartSupport' : RestartSupport,
+                'RestartInterval' : RestartInterval,
+                'RestartStrictLsaChecking' : RestartStrictLsaChecking,
+                'StubRouterAdvertisement' : StubRouterAdvertisement,
                 }
         reqUrl =  self.urlBase+'OspfGlobalConfig'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -4224,20 +4224,20 @@ class FlexSwitch( object):
                                     RestartStrictLsaChecking = None,
                                     StubRouterAdvertisement = None):
         obj =  { 
-                'objectId': objectId
-                'AdminStat' : AdminStat
-                'ASBdrRtrStatus' : ASBdrRtrStatus
-                'TOSSupport' : TOSSupport
-                'ExtLsdbLimit' : ExtLsdbLimit
-                'MulticastExtensions' : MulticastExtensions
-                'ExitOverflowInterval' : ExitOverflowInterval
-                'DemandExtensions' : DemandExtensions
-                'RFC1583Compatibility' : RFC1583Compatibility
-                'ReferenceBandwidth' : ReferenceBandwidth
-                'RestartSupport' : RestartSupport
-                'RestartInterval' : RestartInterval
-                'RestartStrictLsaChecking' : RestartStrictLsaChecking
-                'StubRouterAdvertisement' : StubRouterAdvertisement
+                'objectId': objectId,
+                'AdminStat' : AdminStat,
+                'ASBdrRtrStatus' : ASBdrRtrStatus,
+                'TOSSupport' : TOSSupport,
+                'ExtLsdbLimit' : ExtLsdbLimit,
+                'MulticastExtensions' : MulticastExtensions,
+                'ExitOverflowInterval' : ExitOverflowInterval,
+                'DemandExtensions' : DemandExtensions,
+                'RFC1583Compatibility' : RFC1583Compatibility,
+                'ReferenceBandwidth' : ReferenceBandwidth,
+                'RestartSupport' : RestartSupport,
+                'RestartInterval' : RestartInterval,
+                'RestartStrictLsaChecking' : RestartStrictLsaChecking,
+                'StubRouterAdvertisement' : StubRouterAdvertisement,
                 }
         reqUrl =  self.urlBase+'OspfGlobalConfig'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -4247,7 +4247,7 @@ class FlexSwitch( object):
     def deleteOspfGlobalConfig(self,
                                RouterId):
         obj =  { 
-                'RouterId' : RouterId
+                'RouterId' : RouterId,
                 }
         reqUrl =  self.urlBase+'OspfGlobalConfig'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -4263,16 +4263,16 @@ class FlexSwitch( object):
     def getOspfGlobalConfig(self,
                             RouterId):
         obj =  { 
-                'RouterId' : RouterId
+                'RouterId' : RouterId,
                 }
         reqUrl =  self.urlBase+'OspfGlobalConfig'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteOspfGlobalConfigById(self, objectId ):
+    def getOspfGlobalConfigById(self, objectId ):
         reqUrl =  self.urlBase+'OspfGlobalConfig'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -4283,16 +4283,16 @@ class FlexSwitch( object):
     def getBGPPolicyActionState(self,
                                 Name):
         obj =  { 
-                'Name' : Name
+                'Name' : Name,
                 }
         reqUrl =  self.urlBase+'BGPPolicyActionState'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteBGPPolicyActionStateById(self, objectId ):
+    def getBGPPolicyActionStateById(self, objectId ):
         reqUrl =  self.urlBase+'BGPPolicyActionState'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -4301,22 +4301,22 @@ class FlexSwitch( object):
 
 
     def getOspfAsLsdbEntryState(self,
-                                AsLsdbType,
+                                AsLsdbLsid,
                                 AsLsdbRouterId,
-                                AsLsdbLsid):
+                                AsLsdbType):
         obj =  { 
-                'AsLsdbType' : AsLsdbType
-                'AsLsdbRouterId' : AsLsdbRouterId
-                'AsLsdbLsid' : AsLsdbLsid
+                'AsLsdbLsid' : AsLsdbLsid,
+                'AsLsdbRouterId' : AsLsdbRouterId,
+                'AsLsdbType' : AsLsdbType,
                 }
         reqUrl =  self.urlBase+'OspfAsLsdbEntryState'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteOspfAsLsdbEntryStateById(self, objectId ):
+    def getOspfAsLsdbEntryStateById(self, objectId ):
         reqUrl =  self.urlBase+'OspfAsLsdbEntryState'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -4327,16 +4327,16 @@ class FlexSwitch( object):
     def getBGPPolicyDefinitionState(self,
                                     Name):
         obj =  { 
-                'Name' : Name
+                'Name' : Name,
                 }
         reqUrl =  self.urlBase+'BGPPolicyDefinitionState'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteBGPPolicyDefinitionStateById(self, objectId ):
+    def getBGPPolicyDefinitionStateById(self, objectId ):
         reqUrl =  self.urlBase+'BGPPolicyDefinitionState'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -4347,16 +4347,16 @@ class FlexSwitch( object):
     def getPortState(self,
                      PortNum):
         obj =  { 
-                'PortNum' : PortNum
+                'PortNum' : PortNum,
                 }
         reqUrl =  self.urlBase+'PortState'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deletePortStateById(self, objectId ):
+    def getPortStateById(self, objectId ):
         reqUrl =  self.urlBase+'PortState'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -4370,10 +4370,10 @@ class FlexSwitch( object):
                               GenerateASSet,
                               SendSummaryOnly):
         obj =  { 
-                'Name' : Name
-                'ActionType' : ActionType
-                'GenerateASSet' : GenerateASSet
-                'SendSummaryOnly' : SendSummaryOnly
+                'Name' : Name,
+                'ActionType' : ActionType,
+                'GenerateASSet' : GenerateASSet,
+                'SendSummaryOnly' : SendSummaryOnly,
                 }
         reqUrl =  self.urlBase+'BGPPolicyAction'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -4386,10 +4386,10 @@ class FlexSwitch( object):
                               GenerateASSet = None,
                               SendSummaryOnly = None):
         obj =  { 
-                'Name' : Name
-                'ActionType' : ActionType
-                'GenerateASSet' : GenerateASSet
-                'SendSummaryOnly' : SendSummaryOnly
+                'Name' : Name,
+                'ActionType' : ActionType,
+                'GenerateASSet' : GenerateASSet,
+                'SendSummaryOnly' : SendSummaryOnly,
                 }
         reqUrl =  self.urlBase+'BGPPolicyAction'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -4402,10 +4402,10 @@ class FlexSwitch( object):
                                    GenerateASSet = None,
                                    SendSummaryOnly = None):
         obj =  { 
-                'objectId': objectId
-                'ActionType' : ActionType
-                'GenerateASSet' : GenerateASSet
-                'SendSummaryOnly' : SendSummaryOnly
+                'objectId': objectId,
+                'ActionType' : ActionType,
+                'GenerateASSet' : GenerateASSet,
+                'SendSummaryOnly' : SendSummaryOnly,
                 }
         reqUrl =  self.urlBase+'BGPPolicyAction'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -4415,7 +4415,7 @@ class FlexSwitch( object):
     def deleteBGPPolicyAction(self,
                               Name):
         obj =  { 
-                'Name' : Name
+                'Name' : Name,
                 }
         reqUrl =  self.urlBase+'BGPPolicyAction'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -4431,16 +4431,16 @@ class FlexSwitch( object):
     def getBGPPolicyAction(self,
                            Name):
         obj =  { 
-                'Name' : Name
+                'Name' : Name,
                 }
         reqUrl =  self.urlBase+'BGPPolicyAction'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteBGPPolicyActionById(self, objectId ):
+    def getBGPPolicyActionById(self, objectId ):
         reqUrl =  self.urlBase+'BGPPolicyAction'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -4451,16 +4451,16 @@ class FlexSwitch( object):
     def getBGPPolicyStmtState(self,
                               Name):
         obj =  { 
-                'Name' : Name
+                'Name' : Name,
                 }
         reqUrl =  self.urlBase+'BGPPolicyStmtState'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteBGPPolicyStmtStateById(self, objectId ):
+    def getBGPPolicyStmtStateById(self, objectId ):
         reqUrl =  self.urlBase+'BGPPolicyStmtState'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -4474,10 +4474,10 @@ class FlexSwitch( object):
                                   HostMetric,
                                   HostCfgAreaID):
         obj =  { 
-                'HostTOS' : HostTOS
-                'HostIpAddress' : HostIpAddress
-                'HostMetric' : HostMetric
-                'HostCfgAreaID' : HostCfgAreaID
+                'HostTOS' : HostTOS,
+                'HostIpAddress' : HostIpAddress,
+                'HostMetric' : HostMetric,
+                'HostCfgAreaID' : HostCfgAreaID,
                 }
         reqUrl =  self.urlBase+'OspfHostEntryConfig'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -4490,10 +4490,10 @@ class FlexSwitch( object):
                                   HostMetric = None,
                                   HostCfgAreaID = None):
         obj =  { 
-                'HostTOS' : HostTOS
-                'HostIpAddress' : HostIpAddress
-                'HostMetric' : HostMetric
-                'HostCfgAreaID' : HostCfgAreaID
+                'HostTOS' : HostTOS,
+                'HostIpAddress' : HostIpAddress,
+                'HostMetric' : HostMetric,
+                'HostCfgAreaID' : HostCfgAreaID,
                 }
         reqUrl =  self.urlBase+'OspfHostEntryConfig'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -4505,9 +4505,9 @@ class FlexSwitch( object):
                                        HostMetric = None,
                                        HostCfgAreaID = None):
         obj =  { 
-                'objectId': objectId
-                'HostMetric' : HostMetric
-                'HostCfgAreaID' : HostCfgAreaID
+                'objectId': objectId,
+                'HostMetric' : HostMetric,
+                'HostCfgAreaID' : HostCfgAreaID,
                 }
         reqUrl =  self.urlBase+'OspfHostEntryConfig'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -4518,8 +4518,8 @@ class FlexSwitch( object):
                                   HostTOS,
                                   HostIpAddress):
         obj =  { 
-                'HostTOS' : HostTOS
-                'HostIpAddress' : HostIpAddress
+                'HostTOS' : HostTOS,
+                'HostIpAddress' : HostIpAddress,
                 }
         reqUrl =  self.urlBase+'OspfHostEntryConfig'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -4536,17 +4536,17 @@ class FlexSwitch( object):
                                HostTOS,
                                HostIpAddress):
         obj =  { 
-                'HostTOS' : HostTOS
-                'HostIpAddress' : HostIpAddress
+                'HostTOS' : HostTOS,
+                'HostIpAddress' : HostIpAddress,
                 }
         reqUrl =  self.urlBase+'OspfHostEntryConfig'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteOspfHostEntryConfigById(self, objectId ):
+    def getOspfHostEntryConfigById(self, objectId ):
         reqUrl =  self.urlBase+'OspfHostEntryConfig'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -4563,13 +4563,13 @@ class FlexSwitch( object):
                         OutgoingInterface,
                         Protocol):
         obj =  { 
-                'DestinationNw' : DestinationNw
-                'NetworkMask' : NetworkMask
-                'NextHopIp' : NextHopIp
-                'Cost' : Cost
-                'OutgoingIntfType' : OutgoingIntfType
-                'OutgoingInterface' : OutgoingInterface
-                'Protocol' : Protocol
+                'DestinationNw' : DestinationNw,
+                'NetworkMask' : NetworkMask,
+                'NextHopIp' : NextHopIp,
+                'Cost' : Cost,
+                'OutgoingIntfType' : OutgoingIntfType,
+                'OutgoingInterface' : OutgoingInterface,
+                'Protocol' : Protocol,
                 }
         reqUrl =  self.urlBase+'IPv4Route'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -4585,13 +4585,13 @@ class FlexSwitch( object):
                         OutgoingInterface = None,
                         Protocol = None):
         obj =  { 
-                'DestinationNw' : DestinationNw
-                'NetworkMask' : NetworkMask
-                'NextHopIp' : NextHopIp
-                'Cost' : Cost
-                'OutgoingIntfType' : OutgoingIntfType
-                'OutgoingInterface' : OutgoingInterface
-                'Protocol' : Protocol
+                'DestinationNw' : DestinationNw,
+                'NetworkMask' : NetworkMask,
+                'NextHopIp' : NextHopIp,
+                'Cost' : Cost,
+                'OutgoingIntfType' : OutgoingIntfType,
+                'OutgoingInterface' : OutgoingInterface,
+                'Protocol' : Protocol,
                 }
         reqUrl =  self.urlBase+'IPv4Route'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -4605,11 +4605,11 @@ class FlexSwitch( object):
                              OutgoingInterface = None,
                              Protocol = None):
         obj =  { 
-                'objectId': objectId
-                'Cost' : Cost
-                'OutgoingIntfType' : OutgoingIntfType
-                'OutgoingInterface' : OutgoingInterface
-                'Protocol' : Protocol
+                'objectId': objectId,
+                'Cost' : Cost,
+                'OutgoingIntfType' : OutgoingIntfType,
+                'OutgoingInterface' : OutgoingInterface,
+                'Protocol' : Protocol,
                 }
         reqUrl =  self.urlBase+'IPv4Route'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -4621,9 +4621,9 @@ class FlexSwitch( object):
                         NetworkMask,
                         NextHopIp):
         obj =  { 
-                'DestinationNw' : DestinationNw
-                'NetworkMask' : NetworkMask
-                'NextHopIp' : NextHopIp
+                'DestinationNw' : DestinationNw,
+                'NetworkMask' : NetworkMask,
+                'NextHopIp' : NextHopIp,
                 }
         reqUrl =  self.urlBase+'IPv4Route'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -4641,18 +4641,18 @@ class FlexSwitch( object):
                      NetworkMask,
                      NextHopIp):
         obj =  { 
-                'DestinationNw' : DestinationNw
-                'NetworkMask' : NetworkMask
-                'NextHopIp' : NextHopIp
+                'DestinationNw' : DestinationNw,
+                'NetworkMask' : NetworkMask,
+                'NextHopIp' : NextHopIp,
                 }
         reqUrl =  self.urlBase+'IPv4Route'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteIPv4RouteById(self, objectId ):
+    def getIPv4RouteById(self, objectId ):
         reqUrl =  self.urlBase+'IPv4Route'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -4663,16 +4663,16 @@ class FlexSwitch( object):
     def getVxlanStateVtepInstanceBindVxlanId(self,
                                              VxlanId):
         obj =  { 
-                'VxlanId' : VxlanId
+                'VxlanId' : VxlanId,
                 }
         reqUrl =  self.urlBase+'VxlanStateVtepInstanceBindVxlanId'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteVxlanStateVtepInstanceBindVxlanIdById(self, objectId ):
+    def getVxlanStateVtepInstanceBindVxlanIdById(self, objectId ):
         reqUrl =  self.urlBase+'VxlanStateVtepInstanceBindVxlanId'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -4683,16 +4683,16 @@ class FlexSwitch( object):
     def getPolicyActionState(self,
                              Name):
         obj =  { 
-                'Name' : Name
+                'Name' : Name,
                 }
         reqUrl =  self.urlBase+'PolicyActionState'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deletePolicyActionStateById(self, objectId ):
+    def getPolicyActionStateById(self, objectId ):
         reqUrl =  self.urlBase+'PolicyActionState'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -4703,16 +4703,16 @@ class FlexSwitch( object):
     def getOspfGlobalState(self,
                            RouterId):
         obj =  { 
-                'RouterId' : RouterId
+                'RouterId' : RouterId,
                 }
         reqUrl =  self.urlBase+'OspfGlobalState'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteOspfGlobalStateById(self, objectId ):
+    def getOspfGlobalStateById(self, objectId ):
         reqUrl =  self.urlBase+'OspfGlobalState'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -4721,20 +4721,20 @@ class FlexSwitch( object):
 
 
     def getBGPNeighborState(self,
-                            NeighborAddress,
-                            IfIndex):
+                            IfIndex,
+                            NeighborAddress):
         obj =  { 
-                'NeighborAddress' : NeighborAddress
-                'IfIndex' : IfIndex
+                'IfIndex' : IfIndex,
+                'NeighborAddress' : NeighborAddress,
                 }
         reqUrl =  self.urlBase+'BGPNeighborState'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteBGPNeighborStateById(self, objectId ):
+    def getBGPNeighborStateById(self, objectId ):
         reqUrl =  self.urlBase+'BGPNeighborState'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -4744,21 +4744,21 @@ class FlexSwitch( object):
 
     def getBGPRoute(self,
                     Network,
-                    CIDRLen,
-                    NextHop):
+                    NextHop,
+                    CIDRLen):
         obj =  { 
-                'Network' : Network
-                'CIDRLen' : CIDRLen
-                'NextHop' : NextHop
+                'Network' : Network,
+                'NextHop' : NextHop,
+                'CIDRLen' : CIDRLen,
                 }
         reqUrl =  self.urlBase+'BGPRoute'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteBGPRouteById(self, objectId ):
+    def getBGPRouteById(self, objectId ):
         reqUrl =  self.urlBase+'BGPRoute'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -4767,15 +4767,15 @@ class FlexSwitch( object):
 
 
     def createOspfAreaRangeEntryConfig(self,
-                                       AreaRangeAreaId,
                                        AreaRangeNet,
+                                       AreaRangeAreaId,
                                        AreaRangeMask,
                                        AreaRangeEffect):
         obj =  { 
-                'AreaRangeAreaId' : AreaRangeAreaId
-                'AreaRangeNet' : AreaRangeNet
-                'AreaRangeMask' : AreaRangeMask
-                'AreaRangeEffect' : AreaRangeEffect
+                'AreaRangeNet' : AreaRangeNet,
+                'AreaRangeAreaId' : AreaRangeAreaId,
+                'AreaRangeMask' : AreaRangeMask,
+                'AreaRangeEffect' : AreaRangeEffect,
                 }
         reqUrl =  self.urlBase+'OspfAreaRangeEntryConfig'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -4783,15 +4783,15 @@ class FlexSwitch( object):
 
 
     def updateOspfAreaRangeEntryConfig(self,
-                                       AreaRangeAreaId,
                                        AreaRangeNet,
+                                       AreaRangeAreaId,
                                        AreaRangeMask = None,
                                        AreaRangeEffect = None):
         obj =  { 
-                'AreaRangeAreaId' : AreaRangeAreaId
-                'AreaRangeNet' : AreaRangeNet
-                'AreaRangeMask' : AreaRangeMask
-                'AreaRangeEffect' : AreaRangeEffect
+                'AreaRangeNet' : AreaRangeNet,
+                'AreaRangeAreaId' : AreaRangeAreaId,
+                'AreaRangeMask' : AreaRangeMask,
+                'AreaRangeEffect' : AreaRangeEffect,
                 }
         reqUrl =  self.urlBase+'OspfAreaRangeEntryConfig'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -4803,9 +4803,9 @@ class FlexSwitch( object):
                                             AreaRangeMask = None,
                                             AreaRangeEffect = None):
         obj =  { 
-                'objectId': objectId
-                'AreaRangeMask' : AreaRangeMask
-                'AreaRangeEffect' : AreaRangeEffect
+                'objectId': objectId,
+                'AreaRangeMask' : AreaRangeMask,
+                'AreaRangeEffect' : AreaRangeEffect,
                 }
         reqUrl =  self.urlBase+'OspfAreaRangeEntryConfig'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -4813,11 +4813,11 @@ class FlexSwitch( object):
 
 
     def deleteOspfAreaRangeEntryConfig(self,
-                                       AreaRangeAreaId,
-                                       AreaRangeNet):
+                                       AreaRangeNet,
+                                       AreaRangeAreaId):
         obj =  { 
-                'AreaRangeAreaId' : AreaRangeAreaId
-                'AreaRangeNet' : AreaRangeNet
+                'AreaRangeNet' : AreaRangeNet,
+                'AreaRangeAreaId' : AreaRangeAreaId,
                 }
         reqUrl =  self.urlBase+'OspfAreaRangeEntryConfig'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -4831,20 +4831,20 @@ class FlexSwitch( object):
 
 
     def getOspfAreaRangeEntryConfig(self,
-                                    AreaRangeAreaId,
-                                    AreaRangeNet):
+                                    AreaRangeNet,
+                                    AreaRangeAreaId):
         obj =  { 
-                'AreaRangeAreaId' : AreaRangeAreaId
-                'AreaRangeNet' : AreaRangeNet
+                'AreaRangeNet' : AreaRangeNet,
+                'AreaRangeAreaId' : AreaRangeAreaId,
                 }
         reqUrl =  self.urlBase+'OspfAreaRangeEntryConfig'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteOspfAreaRangeEntryConfigById(self, objectId ):
+    def getOspfAreaRangeEntryConfigById(self, objectId ):
         reqUrl =  self.urlBase+'OspfAreaRangeEntryConfig'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -4858,10 +4858,10 @@ class FlexSwitch( object):
                                   MatchType,
                                   StatementList):
         obj =  { 
-                'Name' : Name
-                'Precedence' : Precedence
-                'MatchType' : MatchType
-                'StatementList' : StatementList
+                'Name' : Name,
+                'Precedence' : Precedence,
+                'MatchType' : MatchType,
+                'StatementList' : StatementList,
                 }
         reqUrl =  self.urlBase+'BGPPolicyDefinition'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -4874,10 +4874,10 @@ class FlexSwitch( object):
                                   MatchType = None,
                                   StatementList = None):
         obj =  { 
-                'Name' : Name
-                'Precedence' : Precedence
-                'MatchType' : MatchType
-                'StatementList' : StatementList
+                'Name' : Name,
+                'Precedence' : Precedence,
+                'MatchType' : MatchType,
+                'StatementList' : StatementList,
                 }
         reqUrl =  self.urlBase+'BGPPolicyDefinition'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -4890,10 +4890,10 @@ class FlexSwitch( object):
                                        MatchType = None,
                                        StatementList = None):
         obj =  { 
-                'objectId': objectId
-                'Precedence' : Precedence
-                'MatchType' : MatchType
-                'StatementList' : StatementList
+                'objectId': objectId,
+                'Precedence' : Precedence,
+                'MatchType' : MatchType,
+                'StatementList' : StatementList,
                 }
         reqUrl =  self.urlBase+'BGPPolicyDefinition'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -4903,7 +4903,7 @@ class FlexSwitch( object):
     def deleteBGPPolicyDefinition(self,
                                   Name):
         obj =  { 
-                'Name' : Name
+                'Name' : Name,
                 }
         reqUrl =  self.urlBase+'BGPPolicyDefinition'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -4919,16 +4919,16 @@ class FlexSwitch( object):
     def getBGPPolicyDefinition(self,
                                Name):
         obj =  { 
-                'Name' : Name
+                'Name' : Name,
                 }
         reqUrl =  self.urlBase+'BGPPolicyDefinition'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteBGPPolicyDefinitionById(self, objectId ):
+    def getBGPPolicyDefinitionById(self, objectId ):
         reqUrl =  self.urlBase+'BGPPolicyDefinition'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -4943,11 +4943,11 @@ class FlexSwitch( object):
                               IpPrefix,
                               MaskLengthRange):
         obj =  { 
-                'Name' : Name
-                'ConditionType' : ConditionType
-                'MatchProtocol' : MatchProtocol
-                'IpPrefix' : IpPrefix
-                'MaskLengthRange' : MaskLengthRange
+                'Name' : Name,
+                'ConditionType' : ConditionType,
+                'MatchProtocol' : MatchProtocol,
+                'IpPrefix' : IpPrefix,
+                'MaskLengthRange' : MaskLengthRange,
                 }
         reqUrl =  self.urlBase+'PolicyCondition'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -4961,11 +4961,11 @@ class FlexSwitch( object):
                               IpPrefix = None,
                               MaskLengthRange = None):
         obj =  { 
-                'Name' : Name
-                'ConditionType' : ConditionType
-                'MatchProtocol' : MatchProtocol
-                'IpPrefix' : IpPrefix
-                'MaskLengthRange' : MaskLengthRange
+                'Name' : Name,
+                'ConditionType' : ConditionType,
+                'MatchProtocol' : MatchProtocol,
+                'IpPrefix' : IpPrefix,
+                'MaskLengthRange' : MaskLengthRange,
                 }
         reqUrl =  self.urlBase+'PolicyCondition'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -4979,11 +4979,11 @@ class FlexSwitch( object):
                                    IpPrefix = None,
                                    MaskLengthRange = None):
         obj =  { 
-                'objectId': objectId
-                'ConditionType' : ConditionType
-                'MatchProtocol' : MatchProtocol
-                'IpPrefix' : IpPrefix
-                'MaskLengthRange' : MaskLengthRange
+                'objectId': objectId,
+                'ConditionType' : ConditionType,
+                'MatchProtocol' : MatchProtocol,
+                'IpPrefix' : IpPrefix,
+                'MaskLengthRange' : MaskLengthRange,
                 }
         reqUrl =  self.urlBase+'PolicyCondition'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -4993,7 +4993,7 @@ class FlexSwitch( object):
     def deletePolicyCondition(self,
                               Name):
         obj =  { 
-                'Name' : Name
+                'Name' : Name,
                 }
         reqUrl =  self.urlBase+'PolicyCondition'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -5009,16 +5009,16 @@ class FlexSwitch( object):
     def getPolicyCondition(self,
                            Name):
         obj =  { 
-                'Name' : Name
+                'Name' : Name,
                 }
         reqUrl =  self.urlBase+'PolicyCondition'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deletePolicyConditionById(self, objectId ):
+    def getPolicyConditionById(self, objectId ):
         reqUrl =  self.urlBase+'PolicyCondition'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -5028,7 +5028,6 @@ class FlexSwitch( object):
 
     def createPort(self,
                    PortNum,
-                   Description,
                    PhyIntfType,
                    AdminState,
                    MacAddr,
@@ -5036,18 +5035,19 @@ class FlexSwitch( object):
                    Duplex,
                    Autoneg,
                    MediaType,
-                   Mtu):
+                   Mtu,
+                   Description='FP Port'):
         obj =  { 
-                'PortNum' : PortNum
-                'Description' : Description
-                'PhyIntfType' : PhyIntfType
-                'AdminState' : AdminState
-                'MacAddr' : MacAddr
-                'Speed' : Speed
-                'Duplex' : Duplex
-                'Autoneg' : Autoneg
-                'MediaType' : MediaType
-                'Mtu' : Mtu
+                'PortNum' : PortNum,
+                'PhyIntfType' : PhyIntfType,
+                'AdminState' : AdminState,
+                'MacAddr' : MacAddr,
+                'Speed' : Speed,
+                'Duplex' : Duplex,
+                'Autoneg' : Autoneg,
+                'MediaType' : MediaType,
+                'Mtu' : Mtu,
+                'Description' : Description,
                 }
         reqUrl =  self.urlBase+'Port'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -5056,7 +5056,6 @@ class FlexSwitch( object):
 
     def updatePort(self,
                    PortNum,
-                   Description = None,
                    PhyIntfType = None,
                    AdminState = None,
                    MacAddr = None,
@@ -5064,18 +5063,19 @@ class FlexSwitch( object):
                    Duplex = None,
                    Autoneg = None,
                    MediaType = None,
-                   Mtu = None):
+                   Mtu = None,
+                   Description = None):
         obj =  { 
-                'PortNum' : PortNum
-                'Description' : Description
-                'PhyIntfType' : PhyIntfType
-                'AdminState' : AdminState
-                'MacAddr' : MacAddr
-                'Speed' : Speed
-                'Duplex' : Duplex
-                'Autoneg' : Autoneg
-                'MediaType' : MediaType
-                'Mtu' : Mtu
+                'PortNum' : PortNum,
+                'PhyIntfType' : PhyIntfType,
+                'AdminState' : AdminState,
+                'MacAddr' : MacAddr,
+                'Speed' : Speed,
+                'Duplex' : Duplex,
+                'Autoneg' : Autoneg,
+                'MediaType' : MediaType,
+                'Mtu' : Mtu,
+                'Description' : Description,
                 }
         reqUrl =  self.urlBase+'Port'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -5084,7 +5084,6 @@ class FlexSwitch( object):
 
     def updatePortById(self,
                         objectId,
-                        Description = None,
                         PhyIntfType = None,
                         AdminState = None,
                         MacAddr = None,
@@ -5092,18 +5091,19 @@ class FlexSwitch( object):
                         Duplex = None,
                         Autoneg = None,
                         MediaType = None,
-                        Mtu = None):
+                        Mtu = None,
+                        Description = None):
         obj =  { 
-                'objectId': objectId
-                'Description' : Description
-                'PhyIntfType' : PhyIntfType
-                'AdminState' : AdminState
-                'MacAddr' : MacAddr
-                'Speed' : Speed
-                'Duplex' : Duplex
-                'Autoneg' : Autoneg
-                'MediaType' : MediaType
-                'Mtu' : Mtu
+                'objectId': objectId,
+                'PhyIntfType' : PhyIntfType,
+                'AdminState' : AdminState,
+                'MacAddr' : MacAddr,
+                'Speed' : Speed,
+                'Duplex' : Duplex,
+                'Autoneg' : Autoneg,
+                'MediaType' : MediaType,
+                'Mtu' : Mtu,
+                'Description' : Description,
                 }
         reqUrl =  self.urlBase+'Port'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -5113,7 +5113,7 @@ class FlexSwitch( object):
     def deletePort(self,
                    PortNum):
         obj =  { 
-                'PortNum' : PortNum
+                'PortNum' : PortNum,
                 }
         reqUrl =  self.urlBase+'Port'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -5129,16 +5129,16 @@ class FlexSwitch( object):
     def getPort(self,
                 PortNum):
         obj =  { 
-                'PortNum' : PortNum
+                'PortNum' : PortNum,
                 }
         reqUrl =  self.urlBase+'Port'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deletePortById(self, objectId ):
+    def getPortById(self, objectId ):
         reqUrl =  self.urlBase+'Port'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
@@ -5150,17 +5150,17 @@ class FlexSwitch( object):
                             IfIpAddress,
                             AddressLessIf):
         obj =  { 
-                'IfIpAddress' : IfIpAddress
-                'AddressLessIf' : AddressLessIf
+                'IfIpAddress' : IfIpAddress,
+                'AddressLessIf' : AddressLessIf,
                 }
         reqUrl =  self.urlBase+'OspfIfEntryState'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r.json() 
 
 
-    def deleteOspfIfEntryStateById(self, objectId ):
+    def getOspfIfEntryStateById(self, objectId ):
         reqUrl =  self.urlBase+'OspfIfEntryState'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.get(reqUrl, data=None, headers=headers) 
         return r.json() 
 
 
