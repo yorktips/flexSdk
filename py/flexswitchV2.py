@@ -11,8 +11,8 @@ def processReturnCode (method) :
         if r.status_code in self.httpSuccessCodes:
             return (r.json(), None)
         else:
-            print 'Error in executing request. Error code %s, Error Message ' %(r.status_code) 
-            return ({}, "Error")
+            print 'Error in executing request. Error code %s, Error Message: %s' %(r.status_code, r.json()['Error']) 
+            return (r.json(), "Error")
     return returnDetails
 
 class FlexSwitch( object):                                                                                              
