@@ -1,0 +1,4730 @@
+#!/usr/bin/python                                                                                                       
+import requests                                                                                                         
+import json                                                                                                             
+import urllib2                                                                                                          
+                                                                                                                        
+headers = {'Accept' : 'application/json', 'Content-Type' : 'application/json'}                                          
+class FlexSwitch( object):                                                                                              
+    def  __init__ (self, ip, port):                                                                                     
+        self.ip    = ip                                                                                                 
+        self.port  = port                                                                                               
+        self.urlBase = 'http://%s:%s/public/v1/'%(ip,str(port))                                                         
+
+                                                                                                                           
+    def getObjects(self, objName):                                                                                         
+        currentMarker = 0                                                                                                  
+        nextMarker = 0                                                                                                     
+        count = 10                                                                                                         
+        more = True                                                                                                        
+        entries = []                                                                                                       
+        while more == True:                                                                                                
+            qry = 'http://%s:8080/public/v1/%ss?CurrentMarker=%d&NextMarker=%d&Count=%d' %(self.ip, objName, currentMarker, nextMarker, count)
+            response = requests.get(qry)                                                                                   
+            data = response.json()                                                                                         
+            more =  data['MoreExist']                                                                                      
+            currentMarker =  data['NextMarker']                                                                            
+            NextMarker    =  data['NextMarker']                                                                            
+            if data['StateObjects'] != None:                                                                               
+                entries.extend(data['StateObjects'])                                                                       
+        return entries
+
+    def getOspfHostEntryState(self,
+                              HostTOS,
+                              HostIpAddress):
+        obj =  { 
+                'HostTOS' : HostTOS,
+                'HostIpAddress' : HostIpAddress,
+                }
+        reqUrl =  self.urlBase+'OspfHostEntryState'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteOspfHostEntryStateById(self, objectId ):
+        reqUrl =  self.urlBase+'OspfHostEntryState'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllOspfHostEntryStates(self):
+        return self.getObjects( 'OspfHostEntryState') 
+
+
+    def getVxlanStateVxlanInstanceMapL3interface(self,
+                                                 InterfaceName):
+        obj =  { 
+                'InterfaceName' : InterfaceName,
+                }
+        reqUrl =  self.urlBase+'VxlanStateVxlanInstanceMapL3interface'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteVxlanStateVxlanInstanceMapL3interfaceById(self, objectId ):
+        reqUrl =  self.urlBase+'VxlanStateVxlanInstanceMapL3interface'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllVxlanStateVxlanInstanceMapL3interfaces(self):
+        return self.getObjects( 'VxlanStateVxlanInstanceMapL3interface') 
+
+
+    def createPolicyStmt(self,
+                         Conditions,
+                         Actions,
+                         MatchConditions,
+                         Name):
+        obj =  { 
+                'Conditions' : Conditions,
+                'Actions' : Actions,
+                'MatchConditions' : MatchConditions,
+                'Name' : Name,
+                }
+        reqUrl =  self.urlBase+'PolicyStmt'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updatePolicyStmt(self,
+                         Conditions,
+                         Actions,
+                         MatchConditions,
+                         Name):
+        obj =  { 
+                'Conditions' : Conditions,
+                'Actions' : Actions,
+                'MatchConditions' : MatchConditions,
+                'Name' : Name,
+                }
+        reqUrl =  self.urlBase+'PolicyStmt'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deletePolicyStmt(self,
+                         Conditions,
+                         Actions,
+                         MatchConditions,
+                         Name):
+        obj =  { 
+                'Conditions' : Conditions,
+                'Actions' : Actions,
+                'MatchConditions' : MatchConditions,
+                'Name' : Name,
+                }
+        reqUrl =  self.urlBase+'PolicyStmt'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deletePolicyStmtById(self, objectId ):
+        reqUrl =  self.urlBase+'PolicyStmt'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getPolicyStmt(self,
+                      Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.urlBase+'PolicyStmt'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deletePolicyStmtById(self, objectId ):
+        reqUrl =  self.urlBase+'PolicyStmt'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllPolicyStmts(self):
+        return self.getObjects( 'PolicyStmt') 
+
+
+    def createOspfNbrEntryConfig(self,
+                                 NbrIpAddr,
+                                 NbrAddressLessIndex,
+                                 NbrPriority):
+        obj =  { 
+                'NbrIpAddr' : NbrIpAddr,
+                'NbrAddressLessIndex' : NbrAddressLessIndex,
+                'NbrPriority' : NbrPriority,
+                }
+        reqUrl =  self.urlBase+'OspfNbrEntryConfig'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updateOspfNbrEntryConfig(self,
+                                 NbrIpAddr,
+                                 NbrAddressLessIndex,
+                                 NbrPriority):
+        obj =  { 
+                'NbrIpAddr' : NbrIpAddr,
+                'NbrAddressLessIndex' : NbrAddressLessIndex,
+                'NbrPriority' : NbrPriority,
+                }
+        reqUrl =  self.urlBase+'OspfNbrEntryConfig'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteOspfNbrEntryConfig(self,
+                                 NbrIpAddr,
+                                 NbrAddressLessIndex,
+                                 NbrPriority):
+        obj =  { 
+                'NbrIpAddr' : NbrIpAddr,
+                'NbrAddressLessIndex' : NbrAddressLessIndex,
+                'NbrPriority' : NbrPriority,
+                }
+        reqUrl =  self.urlBase+'OspfNbrEntryConfig'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteOspfNbrEntryConfigById(self, objectId ):
+        reqUrl =  self.urlBase+'OspfNbrEntryConfig'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getOspfNbrEntryConfig(self,
+                              NbrIpAddr,
+                              NbrAddressLessIndex):
+        obj =  { 
+                'NbrIpAddr' : NbrIpAddr,
+                'NbrAddressLessIndex' : NbrAddressLessIndex,
+                }
+        reqUrl =  self.urlBase+'OspfNbrEntryConfig'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteOspfNbrEntryConfigById(self, objectId ):
+        reqUrl =  self.urlBase+'OspfNbrEntryConfig'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllOspfNbrEntryConfigs(self):
+        return self.getObjects( 'OspfNbrEntryConfig') 
+
+
+    def createVlan(self,
+                   OperState,
+                   IfIndexList,
+                   VlanId,
+                   VlanName,
+                   IfIndex,
+                   UntagIfIndexList):
+        obj =  { 
+                'OperState' : OperState,
+                'IfIndexList' : IfIndexList,
+                'VlanId' : VlanId,
+                'VlanName' : VlanName,
+                'IfIndex' : IfIndex,
+                'UntagIfIndexList' : UntagIfIndexList,
+                }
+        reqUrl =  self.urlBase+'Vlan'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updateVlan(self,
+                   OperState,
+                   IfIndexList,
+                   VlanId,
+                   VlanName,
+                   IfIndex,
+                   UntagIfIndexList):
+        obj =  { 
+                'OperState' : OperState,
+                'IfIndexList' : IfIndexList,
+                'VlanId' : VlanId,
+                'VlanName' : VlanName,
+                'IfIndex' : IfIndex,
+                'UntagIfIndexList' : UntagIfIndexList,
+                }
+        reqUrl =  self.urlBase+'Vlan'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteVlan(self,
+                   OperState,
+                   IfIndexList,
+                   VlanId,
+                   VlanName,
+                   IfIndex,
+                   UntagIfIndexList):
+        obj =  { 
+                'OperState' : OperState,
+                'IfIndexList' : IfIndexList,
+                'VlanId' : VlanId,
+                'VlanName' : VlanName,
+                'IfIndex' : IfIndex,
+                'UntagIfIndexList' : UntagIfIndexList,
+                }
+        reqUrl =  self.urlBase+'Vlan'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteVlanById(self, objectId ):
+        reqUrl =  self.urlBase+'Vlan'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getVlan(self,
+                VlanId):
+        obj =  { 
+                'VlanId' : VlanId,
+                }
+        reqUrl =  self.urlBase+'Vlan'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteVlanById(self, objectId ):
+        reqUrl =  self.urlBase+'Vlan'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllVlans(self):
+        return self.getObjects( 'Vlan') 
+
+
+    def getOspfLocalLsdbEntryState(self,
+                                   LocalLsdbAddressLessIf,
+                                   LocalLsdbIpAddress,
+                                   LocalLsdbRouterId,
+                                   LocalLsdbLsid,
+                                   LocalLsdbType):
+        obj =  { 
+                'LocalLsdbAddressLessIf' : LocalLsdbAddressLessIf,
+                'LocalLsdbIpAddress' : LocalLsdbIpAddress,
+                'LocalLsdbRouterId' : LocalLsdbRouterId,
+                'LocalLsdbLsid' : LocalLsdbLsid,
+                'LocalLsdbType' : LocalLsdbType,
+                }
+        reqUrl =  self.urlBase+'OspfLocalLsdbEntryState'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteOspfLocalLsdbEntryStateById(self, objectId ):
+        reqUrl =  self.urlBase+'OspfLocalLsdbEntryState'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllOspfLocalLsdbEntryStates(self):
+        return self.getObjects( 'OspfLocalLsdbEntryState') 
+
+
+    def createComponentLogging(self,
+                               Module,
+                               Level):
+        obj =  { 
+                'Module' : Module,
+                'Level' : Level,
+                }
+        reqUrl =  self.urlBase+'ComponentLogging'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updateComponentLogging(self,
+                               Module,
+                               Level):
+        obj =  { 
+                'Module' : Module,
+                'Level' : Level,
+                }
+        reqUrl =  self.urlBase+'ComponentLogging'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteComponentLogging(self,
+                               Module,
+                               Level):
+        obj =  { 
+                'Module' : Module,
+                'Level' : Level,
+                }
+        reqUrl =  self.urlBase+'ComponentLogging'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteComponentLoggingById(self, objectId ):
+        reqUrl =  self.urlBase+'ComponentLogging'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getComponentLogging(self,
+                            Module):
+        obj =  { 
+                'Module' : Module,
+                }
+        reqUrl =  self.urlBase+'ComponentLogging'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteComponentLoggingById(self, objectId ):
+        reqUrl =  self.urlBase+'ComponentLogging'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllComponentLoggings(self):
+        return self.getObjects( 'ComponentLogging') 
+
+
+    def getIPv4EventState(self,
+                          Index):
+        obj =  { 
+                'Index' : Index,
+                }
+        reqUrl =  self.urlBase+'IPv4EventState'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteIPv4EventStateById(self, objectId ):
+        reqUrl =  self.urlBase+'IPv4EventState'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllIPv4EventStates(self):
+        return self.getObjects( 'IPv4EventState') 
+
+
+    def createDhcpRelayIntf(self,
+                            IfIndex,
+                            Enable,
+                            ServerIp):
+        obj =  { 
+                'IfIndex' : IfIndex,
+                'Enable' : Enable,
+                'ServerIp' : ServerIp,
+                }
+        reqUrl =  self.urlBase+'DhcpRelayIntf'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updateDhcpRelayIntf(self,
+                            IfIndex,
+                            Enable,
+                            ServerIp):
+        obj =  { 
+                'IfIndex' : IfIndex,
+                'Enable' : Enable,
+                'ServerIp' : ServerIp,
+                }
+        reqUrl =  self.urlBase+'DhcpRelayIntf'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteDhcpRelayIntf(self,
+                            IfIndex,
+                            Enable,
+                            ServerIp):
+        obj =  { 
+                'IfIndex' : IfIndex,
+                'Enable' : Enable,
+                'ServerIp' : ServerIp,
+                }
+        reqUrl =  self.urlBase+'DhcpRelayIntf'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteDhcpRelayIntfById(self, objectId ):
+        reqUrl =  self.urlBase+'DhcpRelayIntf'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getDhcpRelayIntf(self,
+                         IfIndex):
+        obj =  { 
+                'IfIndex' : IfIndex,
+                }
+        reqUrl =  self.urlBase+'DhcpRelayIntf'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteDhcpRelayIntfById(self, objectId ):
+        reqUrl =  self.urlBase+'DhcpRelayIntf'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllDhcpRelayIntfs(self):
+        return self.getObjects( 'DhcpRelayIntf') 
+
+
+    def createPolicyAction(self,
+                           Name,
+                           RedistributeAction,
+                           Accept,
+                           RedistributeTargetProtocol,
+                           ActionType,
+                           Reject,
+                           NetworkStatementTargetProtocol,
+                           SetAdminDistanceValue):
+        obj =  { 
+                'Name' : Name,
+                'RedistributeAction' : RedistributeAction,
+                'Accept' : Accept,
+                'RedistributeTargetProtocol' : RedistributeTargetProtocol,
+                'ActionType' : ActionType,
+                'Reject' : Reject,
+                'NetworkStatementTargetProtocol' : NetworkStatementTargetProtocol,
+                'SetAdminDistanceValue' : SetAdminDistanceValue,
+                }
+        reqUrl =  self.urlBase+'PolicyAction'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updatePolicyAction(self,
+                           Name,
+                           RedistributeAction,
+                           Accept,
+                           RedistributeTargetProtocol,
+                           ActionType,
+                           Reject,
+                           NetworkStatementTargetProtocol,
+                           SetAdminDistanceValue):
+        obj =  { 
+                'Name' : Name,
+                'RedistributeAction' : RedistributeAction,
+                'Accept' : Accept,
+                'RedistributeTargetProtocol' : RedistributeTargetProtocol,
+                'ActionType' : ActionType,
+                'Reject' : Reject,
+                'NetworkStatementTargetProtocol' : NetworkStatementTargetProtocol,
+                'SetAdminDistanceValue' : SetAdminDistanceValue,
+                }
+        reqUrl =  self.urlBase+'PolicyAction'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deletePolicyAction(self,
+                           Name,
+                           RedistributeAction,
+                           Accept,
+                           RedistributeTargetProtocol,
+                           ActionType,
+                           Reject,
+                           NetworkStatementTargetProtocol,
+                           SetAdminDistanceValue):
+        obj =  { 
+                'Name' : Name,
+                'RedistributeAction' : RedistributeAction,
+                'Accept' : Accept,
+                'RedistributeTargetProtocol' : RedistributeTargetProtocol,
+                'ActionType' : ActionType,
+                'Reject' : Reject,
+                'NetworkStatementTargetProtocol' : NetworkStatementTargetProtocol,
+                'SetAdminDistanceValue' : SetAdminDistanceValue,
+                }
+        reqUrl =  self.urlBase+'PolicyAction'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deletePolicyActionById(self, objectId ):
+        reqUrl =  self.urlBase+'PolicyAction'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getPolicyAction(self,
+                        Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.urlBase+'PolicyAction'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deletePolicyActionById(self, objectId ):
+        reqUrl =  self.urlBase+'PolicyAction'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllPolicyActions(self):
+        return self.getObjects( 'PolicyAction') 
+
+
+    def createIpTableAcl(self,
+                         Protocol,
+                         Name,
+                         IpAddr,
+                         Action,
+                         Port,
+                         PhysicalPort):
+        obj =  { 
+                'Protocol' : Protocol,
+                'Name' : Name,
+                'IpAddr' : IpAddr,
+                'Action' : Action,
+                'Port' : Port,
+                'PhysicalPort' : PhysicalPort,
+                }
+        reqUrl =  self.urlBase+'IpTableAcl'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updateIpTableAcl(self,
+                         Protocol,
+                         Name,
+                         IpAddr,
+                         Action,
+                         Port,
+                         PhysicalPort):
+        obj =  { 
+                'Protocol' : Protocol,
+                'Name' : Name,
+                'IpAddr' : IpAddr,
+                'Action' : Action,
+                'Port' : Port,
+                'PhysicalPort' : PhysicalPort,
+                }
+        reqUrl =  self.urlBase+'IpTableAcl'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteIpTableAcl(self,
+                         Protocol,
+                         Name,
+                         IpAddr,
+                         Action,
+                         Port,
+                         PhysicalPort):
+        obj =  { 
+                'Protocol' : Protocol,
+                'Name' : Name,
+                'IpAddr' : IpAddr,
+                'Action' : Action,
+                'Port' : Port,
+                'PhysicalPort' : PhysicalPort,
+                }
+        reqUrl =  self.urlBase+'IpTableAcl'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteIpTableAclById(self, objectId ):
+        reqUrl =  self.urlBase+'IpTableAcl'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getIpTableAcl(self,
+                      Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.urlBase+'IpTableAcl'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteIpTableAclById(self, objectId ):
+        reqUrl =  self.urlBase+'IpTableAcl'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllIpTableAcls(self):
+        return self.getObjects( 'IpTableAcl') 
+
+
+    def getStpPortState(self,
+                        BrgIfIndex,
+                        IfIndex):
+        obj =  { 
+                'BrgIfIndex' : BrgIfIndex,
+                'IfIndex' : IfIndex,
+                }
+        reqUrl =  self.urlBase+'StpPortState'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteStpPortStateById(self, objectId ):
+        reqUrl =  self.urlBase+'StpPortState'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllStpPortStates(self):
+        return self.getObjects( 'StpPortState') 
+
+
+    def createOspfAreaEntryConfig(self,
+                                  AuthType,
+                                  AreaNssaTranslatorStabilityInterval,
+                                  AreaNssaTranslatorRole,
+                                  AreaId,
+                                  ImportAsExtern,
+                                  AreaSummary):
+        obj =  { 
+                'AuthType' : AuthType,
+                'AreaNssaTranslatorStabilityInterval' : AreaNssaTranslatorStabilityInterval,
+                'AreaNssaTranslatorRole' : AreaNssaTranslatorRole,
+                'AreaId' : AreaId,
+                'ImportAsExtern' : ImportAsExtern,
+                'AreaSummary' : AreaSummary,
+                }
+        reqUrl =  self.urlBase+'OspfAreaEntryConfig'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updateOspfAreaEntryConfig(self,
+                                  AuthType,
+                                  AreaNssaTranslatorStabilityInterval,
+                                  AreaNssaTranslatorRole,
+                                  AreaId,
+                                  ImportAsExtern,
+                                  AreaSummary):
+        obj =  { 
+                'AuthType' : AuthType,
+                'AreaNssaTranslatorStabilityInterval' : AreaNssaTranslatorStabilityInterval,
+                'AreaNssaTranslatorRole' : AreaNssaTranslatorRole,
+                'AreaId' : AreaId,
+                'ImportAsExtern' : ImportAsExtern,
+                'AreaSummary' : AreaSummary,
+                }
+        reqUrl =  self.urlBase+'OspfAreaEntryConfig'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteOspfAreaEntryConfig(self,
+                                  AuthType,
+                                  AreaNssaTranslatorStabilityInterval,
+                                  AreaNssaTranslatorRole,
+                                  AreaId,
+                                  ImportAsExtern,
+                                  AreaSummary):
+        obj =  { 
+                'AuthType' : AuthType,
+                'AreaNssaTranslatorStabilityInterval' : AreaNssaTranslatorStabilityInterval,
+                'AreaNssaTranslatorRole' : AreaNssaTranslatorRole,
+                'AreaId' : AreaId,
+                'ImportAsExtern' : ImportAsExtern,
+                'AreaSummary' : AreaSummary,
+                }
+        reqUrl =  self.urlBase+'OspfAreaEntryConfig'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteOspfAreaEntryConfigById(self, objectId ):
+        reqUrl =  self.urlBase+'OspfAreaEntryConfig'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getOspfAreaEntryConfig(self,
+                               AreaId):
+        obj =  { 
+                'AreaId' : AreaId,
+                }
+        reqUrl =  self.urlBase+'OspfAreaEntryConfig'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteOspfAreaEntryConfigById(self, objectId ):
+        reqUrl =  self.urlBase+'OspfAreaEntryConfig'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllOspfAreaEntryConfigs(self):
+        return self.getObjects( 'OspfAreaEntryConfig') 
+
+
+    def getBGPPolicyConditionState(self,
+                                   Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.urlBase+'BGPPolicyConditionState'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteBGPPolicyConditionStateById(self, objectId ):
+        reqUrl =  self.urlBase+'BGPPolicyConditionState'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllBGPPolicyConditionStates(self):
+        return self.getObjects( 'BGPPolicyConditionState') 
+
+
+    def getArpEntry(self,
+                    IpAddr):
+        obj =  { 
+                'IpAddr' : IpAddr,
+                }
+        reqUrl =  self.urlBase+'ArpEntry'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteArpEntryById(self, objectId ):
+        reqUrl =  self.urlBase+'ArpEntry'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllArpEntrys(self):
+        return self.getObjects( 'ArpEntry') 
+
+
+    def createArpConfig(self,
+                        ArpConfigKey,
+                        Timeout):
+        obj =  { 
+                'ArpConfigKey' : ArpConfigKey,
+                'Timeout' : Timeout,
+                }
+        reqUrl =  self.urlBase+'ArpConfig'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updateArpConfig(self,
+                        ArpConfigKey,
+                        Timeout):
+        obj =  { 
+                'ArpConfigKey' : ArpConfigKey,
+                'Timeout' : Timeout,
+                }
+        reqUrl =  self.urlBase+'ArpConfig'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteArpConfig(self,
+                        ArpConfigKey,
+                        Timeout):
+        obj =  { 
+                'ArpConfigKey' : ArpConfigKey,
+                'Timeout' : Timeout,
+                }
+        reqUrl =  self.urlBase+'ArpConfig'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteArpConfigById(self, objectId ):
+        reqUrl =  self.urlBase+'ArpConfig'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getArpConfig(self,
+                     ArpConfigKey):
+        obj =  { 
+                'ArpConfigKey' : ArpConfigKey,
+                }
+        reqUrl =  self.urlBase+'ArpConfig'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteArpConfigById(self, objectId ):
+        reqUrl =  self.urlBase+'ArpConfig'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllArpConfigs(self):
+        return self.getObjects( 'ArpConfig') 
+
+
+    def getOspfNbrEntryState(self,
+                             NbrIpAddr,
+                             NbrAddressLessIndex):
+        obj =  { 
+                'NbrIpAddr' : NbrIpAddr,
+                'NbrAddressLessIndex' : NbrAddressLessIndex,
+                }
+        reqUrl =  self.urlBase+'OspfNbrEntryState'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteOspfNbrEntryStateById(self, objectId ):
+        reqUrl =  self.urlBase+'OspfNbrEntryState'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllOspfNbrEntryStates(self):
+        return self.getObjects( 'OspfNbrEntryState') 
+
+
+    def getDhcpRelayIntfState(self,
+                              IntfId):
+        obj =  { 
+                'IntfId' : IntfId,
+                }
+        reqUrl =  self.urlBase+'DhcpRelayIntfState'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteDhcpRelayIntfStateById(self, objectId ):
+        reqUrl =  self.urlBase+'DhcpRelayIntfState'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllDhcpRelayIntfStates(self):
+        return self.getObjects( 'DhcpRelayIntfState') 
+
+
+    def createDhcpRelayGlobal(self,
+                              Enable,
+                              DhcpRelay):
+        obj =  { 
+                'Enable' : Enable,
+                'DhcpRelay' : DhcpRelay,
+                }
+        reqUrl =  self.urlBase+'DhcpRelayGlobal'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updateDhcpRelayGlobal(self,
+                              Enable,
+                              DhcpRelay):
+        obj =  { 
+                'Enable' : Enable,
+                'DhcpRelay' : DhcpRelay,
+                }
+        reqUrl =  self.urlBase+'DhcpRelayGlobal'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteDhcpRelayGlobal(self,
+                              Enable,
+                              DhcpRelay):
+        obj =  { 
+                'Enable' : Enable,
+                'DhcpRelay' : DhcpRelay,
+                }
+        reqUrl =  self.urlBase+'DhcpRelayGlobal'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteDhcpRelayGlobalById(self, objectId ):
+        reqUrl =  self.urlBase+'DhcpRelayGlobal'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getDhcpRelayGlobal(self,
+                           DhcpRelay):
+        obj =  { 
+                'DhcpRelay' : DhcpRelay,
+                }
+        reqUrl =  self.urlBase+'DhcpRelayGlobal'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteDhcpRelayGlobalById(self, objectId ):
+        reqUrl =  self.urlBase+'DhcpRelayGlobal'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllDhcpRelayGlobals(self):
+        return self.getObjects( 'DhcpRelayGlobal') 
+
+
+    def getOspfLsdbEntryState(self,
+                              LsdbType,
+                              LsdbAreaId,
+                              LsdbLsid,
+                              LsdbRouterId):
+        obj =  { 
+                'LsdbType' : LsdbType,
+                'LsdbAreaId' : LsdbAreaId,
+                'LsdbLsid' : LsdbLsid,
+                'LsdbRouterId' : LsdbRouterId,
+                }
+        reqUrl =  self.urlBase+'OspfLsdbEntryState'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteOspfLsdbEntryStateById(self, objectId ):
+        reqUrl =  self.urlBase+'OspfLsdbEntryState'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllOspfLsdbEntryStates(self):
+        return self.getObjects( 'OspfLsdbEntryState') 
+
+
+    def createVxlanVxlanInstanceAccessTypeVlanVlanList(self,
+                                                       VxlanId,
+                                                       VlanId):
+        obj =  { 
+                'VxlanId' : VxlanId,
+                'VlanId' : VlanId,
+                }
+        reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeVlanVlanList'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updateVxlanVxlanInstanceAccessTypeVlanVlanList(self,
+                                                       VxlanId,
+                                                       VlanId):
+        obj =  { 
+                'VxlanId' : VxlanId,
+                'VlanId' : VlanId,
+                }
+        reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeVlanVlanList'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteVxlanVxlanInstanceAccessTypeVlanVlanList(self,
+                                                       VxlanId,
+                                                       VlanId):
+        obj =  { 
+                'VxlanId' : VxlanId,
+                'VlanId' : VlanId,
+                }
+        reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeVlanVlanList'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteVxlanVxlanInstanceAccessTypeVlanVlanListById(self, objectId ):
+        reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeVlanVlanList'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getVxlanVxlanInstanceAccessTypeVlanVlanList(self,
+                                                    VxlanId,
+                                                    VlanId):
+        obj =  { 
+                'VxlanId' : VxlanId,
+                'VlanId' : VlanId,
+                }
+        reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeVlanVlanList'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteVxlanVxlanInstanceAccessTypeVlanVlanListById(self, objectId ):
+        reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeVlanVlanList'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllVxlanVxlanInstanceAccessTypeVlanVlanLists(self):
+        return self.getObjects( 'VxlanVxlanInstanceAccessTypeVlanVlanList') 
+
+
+    def createBGPPolicyCondition(self,
+                                 ConditionType,
+                                 MaskLengthRange,
+                                 Name,
+                                 IpPrefix):
+        obj =  { 
+                'ConditionType' : ConditionType,
+                'MaskLengthRange' : MaskLengthRange,
+                'Name' : Name,
+                'IpPrefix' : IpPrefix,
+                }
+        reqUrl =  self.urlBase+'BGPPolicyCondition'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updateBGPPolicyCondition(self,
+                                 ConditionType,
+                                 MaskLengthRange,
+                                 Name,
+                                 IpPrefix):
+        obj =  { 
+                'ConditionType' : ConditionType,
+                'MaskLengthRange' : MaskLengthRange,
+                'Name' : Name,
+                'IpPrefix' : IpPrefix,
+                }
+        reqUrl =  self.urlBase+'BGPPolicyCondition'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteBGPPolicyCondition(self,
+                                 ConditionType,
+                                 MaskLengthRange,
+                                 Name,
+                                 IpPrefix):
+        obj =  { 
+                'ConditionType' : ConditionType,
+                'MaskLengthRange' : MaskLengthRange,
+                'Name' : Name,
+                'IpPrefix' : IpPrefix,
+                }
+        reqUrl =  self.urlBase+'BGPPolicyCondition'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteBGPPolicyConditionById(self, objectId ):
+        reqUrl =  self.urlBase+'BGPPolicyCondition'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getBGPPolicyCondition(self,
+                              Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.urlBase+'BGPPolicyCondition'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteBGPPolicyConditionById(self, objectId ):
+        reqUrl =  self.urlBase+'BGPPolicyCondition'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllBGPPolicyConditions(self):
+        return self.getObjects( 'BGPPolicyCondition') 
+
+
+    def getDhcpRelayHostDhcpState(self,
+                                  MacAddr):
+        obj =  { 
+                'MacAddr' : MacAddr,
+                }
+        reqUrl =  self.urlBase+'DhcpRelayHostDhcpState'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteDhcpRelayHostDhcpStateById(self, objectId ):
+        reqUrl =  self.urlBase+'DhcpRelayHostDhcpState'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllDhcpRelayHostDhcpStates(self):
+        return self.getObjects( 'DhcpRelayHostDhcpState') 
+
+
+    def getDhcpRelayIntfServerState(self,
+                                    IntfId):
+        obj =  { 
+                'IntfId' : IntfId,
+                }
+        reqUrl =  self.urlBase+'DhcpRelayIntfServerState'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteDhcpRelayIntfServerStateById(self, objectId ):
+        reqUrl =  self.urlBase+'DhcpRelayIntfServerState'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllDhcpRelayIntfServerStates(self):
+        return self.getObjects( 'DhcpRelayIntfServerState') 
+
+
+    def createPolicyDefinition(self,
+                               Precedence,
+                               MatchType,
+                               Name,
+                               StatementList):
+        obj =  { 
+                'Precedence' : Precedence,
+                'MatchType' : MatchType,
+                'Name' : Name,
+                'StatementList' : StatementList,
+                }
+        reqUrl =  self.urlBase+'PolicyDefinition'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updatePolicyDefinition(self,
+                               Precedence,
+                               MatchType,
+                               Name,
+                               StatementList):
+        obj =  { 
+                'Precedence' : Precedence,
+                'MatchType' : MatchType,
+                'Name' : Name,
+                'StatementList' : StatementList,
+                }
+        reqUrl =  self.urlBase+'PolicyDefinition'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deletePolicyDefinition(self,
+                               Precedence,
+                               MatchType,
+                               Name,
+                               StatementList):
+        obj =  { 
+                'Precedence' : Precedence,
+                'MatchType' : MatchType,
+                'Name' : Name,
+                'StatementList' : StatementList,
+                }
+        reqUrl =  self.urlBase+'PolicyDefinition'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deletePolicyDefinitionById(self, objectId ):
+        reqUrl =  self.urlBase+'PolicyDefinition'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getPolicyDefinition(self,
+                            Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.urlBase+'PolicyDefinition'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deletePolicyDefinitionById(self, objectId ):
+        reqUrl =  self.urlBase+'PolicyDefinition'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllPolicyDefinitions(self):
+        return self.getObjects( 'PolicyDefinition') 
+
+
+    def getOspfVirtNbrEntryState(self,
+                                 VirtNbrRtrId,
+                                 VirtNbrArea):
+        obj =  { 
+                'VirtNbrRtrId' : VirtNbrRtrId,
+                'VirtNbrArea' : VirtNbrArea,
+                }
+        reqUrl =  self.urlBase+'OspfVirtNbrEntryState'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteOspfVirtNbrEntryStateById(self, objectId ):
+        reqUrl =  self.urlBase+'OspfVirtNbrEntryState'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllOspfVirtNbrEntryStates(self):
+        return self.getObjects( 'OspfVirtNbrEntryState') 
+
+
+    def createStpPort(self,
+                      BrgIfIndex,
+                      PathCost,
+                      Enable,
+                      ProtocolMigration,
+                      AdminEdgePort,
+                      BridgeAssurance,
+                      Priority,
+                      BpduGuardInterval,
+                      BpduGuard,
+                      AdminPointToPoint,
+                      IfIndex,
+                      AdminPathCost,
+                      PathCost32):
+        obj =  { 
+                'BrgIfIndex' : BrgIfIndex,
+                'PathCost' : PathCost,
+                'Enable' : Enable,
+                'ProtocolMigration' : ProtocolMigration,
+                'AdminEdgePort' : AdminEdgePort,
+                'BridgeAssurance' : BridgeAssurance,
+                'Priority' : Priority,
+                'BpduGuardInterval' : BpduGuardInterval,
+                'BpduGuard' : BpduGuard,
+                'AdminPointToPoint' : AdminPointToPoint,
+                'IfIndex' : IfIndex,
+                'AdminPathCost' : AdminPathCost,
+                'PathCost32' : PathCost32,
+                }
+        reqUrl =  self.urlBase+'StpPort'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updateStpPort(self,
+                      BrgIfIndex,
+                      PathCost,
+                      Enable,
+                      ProtocolMigration,
+                      AdminEdgePort,
+                      BridgeAssurance,
+                      Priority,
+                      BpduGuardInterval,
+                      BpduGuard,
+                      AdminPointToPoint,
+                      IfIndex,
+                      AdminPathCost,
+                      PathCost32):
+        obj =  { 
+                'BrgIfIndex' : BrgIfIndex,
+                'PathCost' : PathCost,
+                'Enable' : Enable,
+                'ProtocolMigration' : ProtocolMigration,
+                'AdminEdgePort' : AdminEdgePort,
+                'BridgeAssurance' : BridgeAssurance,
+                'Priority' : Priority,
+                'BpduGuardInterval' : BpduGuardInterval,
+                'BpduGuard' : BpduGuard,
+                'AdminPointToPoint' : AdminPointToPoint,
+                'IfIndex' : IfIndex,
+                'AdminPathCost' : AdminPathCost,
+                'PathCost32' : PathCost32,
+                }
+        reqUrl =  self.urlBase+'StpPort'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteStpPort(self,
+                      BrgIfIndex,
+                      PathCost,
+                      Enable,
+                      ProtocolMigration,
+                      AdminEdgePort,
+                      BridgeAssurance,
+                      Priority,
+                      BpduGuardInterval,
+                      BpduGuard,
+                      AdminPointToPoint,
+                      IfIndex,
+                      AdminPathCost,
+                      PathCost32):
+        obj =  { 
+                'BrgIfIndex' : BrgIfIndex,
+                'PathCost' : PathCost,
+                'Enable' : Enable,
+                'ProtocolMigration' : ProtocolMigration,
+                'AdminEdgePort' : AdminEdgePort,
+                'BridgeAssurance' : BridgeAssurance,
+                'Priority' : Priority,
+                'BpduGuardInterval' : BpduGuardInterval,
+                'BpduGuard' : BpduGuard,
+                'AdminPointToPoint' : AdminPointToPoint,
+                'IfIndex' : IfIndex,
+                'AdminPathCost' : AdminPathCost,
+                'PathCost32' : PathCost32,
+                }
+        reqUrl =  self.urlBase+'StpPort'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteStpPortById(self, objectId ):
+        reqUrl =  self.urlBase+'StpPort'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getStpPort(self,
+                   BrgIfIndex,
+                   IfIndex):
+        obj =  { 
+                'BrgIfIndex' : BrgIfIndex,
+                'IfIndex' : IfIndex,
+                }
+        reqUrl =  self.urlBase+'StpPort'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteStpPortById(self, objectId ):
+        reqUrl =  self.urlBase+'StpPort'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllStpPorts(self):
+        return self.getObjects( 'StpPort') 
+
+
+    def getRouteDistanceState(self,
+                              Protocol):
+        obj =  { 
+                'Protocol' : Protocol,
+                }
+        reqUrl =  self.urlBase+'RouteDistanceState'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteRouteDistanceStateById(self, objectId ):
+        reqUrl =  self.urlBase+'RouteDistanceState'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllRouteDistanceStates(self):
+        return self.getObjects( 'RouteDistanceState') 
+
+
+    def createLogicalIntf(self,
+                          Type,
+                          Name):
+        obj =  { 
+                'Type' : Type,
+                'Name' : Name,
+                }
+        reqUrl =  self.urlBase+'LogicalIntf'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updateLogicalIntf(self,
+                          Type,
+                          Name):
+        obj =  { 
+                'Type' : Type,
+                'Name' : Name,
+                }
+        reqUrl =  self.urlBase+'LogicalIntf'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteLogicalIntf(self,
+                          Type,
+                          Name):
+        obj =  { 
+                'Type' : Type,
+                'Name' : Name,
+                }
+        reqUrl =  self.urlBase+'LogicalIntf'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteLogicalIntfById(self, objectId ):
+        reqUrl =  self.urlBase+'LogicalIntf'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getLogicalIntf(self,
+                       Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.urlBase+'LogicalIntf'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteLogicalIntfById(self, objectId ):
+        reqUrl =  self.urlBase+'LogicalIntf'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllLogicalIntfs(self):
+        return self.getObjects( 'LogicalIntf') 
+
+
+    def createBGPPeerGroup(self,
+                           RouteReflectorClusterId,
+                           RouteReflectorClient,
+                           Description,
+                           MultiHopTTL,
+                           LocalAS,
+                           KeepaliveTime,
+                           AddPathsMaxTx,
+                           MultiHopEnable,
+                           AddPathsRx,
+                           ConnectRetryTime,
+                           HoldTime,
+                           AuthPassword,
+                           PeerAS,
+                           Name):
+        obj =  { 
+                'RouteReflectorClusterId' : RouteReflectorClusterId,
+                'RouteReflectorClient' : RouteReflectorClient,
+                'Description' : Description,
+                'MultiHopTTL' : MultiHopTTL,
+                'LocalAS' : LocalAS,
+                'KeepaliveTime' : KeepaliveTime,
+                'AddPathsMaxTx' : AddPathsMaxTx,
+                'MultiHopEnable' : MultiHopEnable,
+                'AddPathsRx' : AddPathsRx,
+                'ConnectRetryTime' : ConnectRetryTime,
+                'HoldTime' : HoldTime,
+                'AuthPassword' : AuthPassword,
+                'PeerAS' : PeerAS,
+                'Name' : Name,
+                }
+        reqUrl =  self.urlBase+'BGPPeerGroup'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updateBGPPeerGroup(self,
+                           RouteReflectorClusterId,
+                           RouteReflectorClient,
+                           Description,
+                           MultiHopTTL,
+                           LocalAS,
+                           KeepaliveTime,
+                           AddPathsMaxTx,
+                           MultiHopEnable,
+                           AddPathsRx,
+                           ConnectRetryTime,
+                           HoldTime,
+                           AuthPassword,
+                           PeerAS,
+                           Name):
+        obj =  { 
+                'RouteReflectorClusterId' : RouteReflectorClusterId,
+                'RouteReflectorClient' : RouteReflectorClient,
+                'Description' : Description,
+                'MultiHopTTL' : MultiHopTTL,
+                'LocalAS' : LocalAS,
+                'KeepaliveTime' : KeepaliveTime,
+                'AddPathsMaxTx' : AddPathsMaxTx,
+                'MultiHopEnable' : MultiHopEnable,
+                'AddPathsRx' : AddPathsRx,
+                'ConnectRetryTime' : ConnectRetryTime,
+                'HoldTime' : HoldTime,
+                'AuthPassword' : AuthPassword,
+                'PeerAS' : PeerAS,
+                'Name' : Name,
+                }
+        reqUrl =  self.urlBase+'BGPPeerGroup'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteBGPPeerGroup(self,
+                           RouteReflectorClusterId,
+                           RouteReflectorClient,
+                           Description,
+                           MultiHopTTL,
+                           LocalAS,
+                           KeepaliveTime,
+                           AddPathsMaxTx,
+                           MultiHopEnable,
+                           AddPathsRx,
+                           ConnectRetryTime,
+                           HoldTime,
+                           AuthPassword,
+                           PeerAS,
+                           Name):
+        obj =  { 
+                'RouteReflectorClusterId' : RouteReflectorClusterId,
+                'RouteReflectorClient' : RouteReflectorClient,
+                'Description' : Description,
+                'MultiHopTTL' : MultiHopTTL,
+                'LocalAS' : LocalAS,
+                'KeepaliveTime' : KeepaliveTime,
+                'AddPathsMaxTx' : AddPathsMaxTx,
+                'MultiHopEnable' : MultiHopEnable,
+                'AddPathsRx' : AddPathsRx,
+                'ConnectRetryTime' : ConnectRetryTime,
+                'HoldTime' : HoldTime,
+                'AuthPassword' : AuthPassword,
+                'PeerAS' : PeerAS,
+                'Name' : Name,
+                }
+        reqUrl =  self.urlBase+'BGPPeerGroup'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteBGPPeerGroupById(self, objectId ):
+        reqUrl =  self.urlBase+'BGPPeerGroup'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getBGPPeerGroup(self,
+                        Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.urlBase+'BGPPeerGroup'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteBGPPeerGroupById(self, objectId ):
+        reqUrl =  self.urlBase+'BGPPeerGroup'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllBGPPeerGroups(self):
+        return self.getObjects( 'BGPPeerGroup') 
+
+
+    def getBfdInterfaceState(self,
+                             IfIndex):
+        obj =  { 
+                'IfIndex' : IfIndex,
+                }
+        reqUrl =  self.urlBase+'BfdInterfaceState'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteBfdInterfaceStateById(self, objectId ):
+        reqUrl =  self.urlBase+'BfdInterfaceState'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllBfdInterfaceStates(self):
+        return self.getObjects( 'BfdInterfaceState') 
+
+
+    def createBfdGlobal(self,
+                        Enable,
+                        Bfd):
+        obj =  { 
+                'Enable' : Enable,
+                'Bfd' : Bfd,
+                }
+        reqUrl =  self.urlBase+'BfdGlobal'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updateBfdGlobal(self,
+                        Enable,
+                        Bfd):
+        obj =  { 
+                'Enable' : Enable,
+                'Bfd' : Bfd,
+                }
+        reqUrl =  self.urlBase+'BfdGlobal'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteBfdGlobal(self,
+                        Enable,
+                        Bfd):
+        obj =  { 
+                'Enable' : Enable,
+                'Bfd' : Bfd,
+                }
+        reqUrl =  self.urlBase+'BfdGlobal'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteBfdGlobalById(self, objectId ):
+        reqUrl =  self.urlBase+'BfdGlobal'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getBfdGlobal(self,
+                     Bfd):
+        obj =  { 
+                'Bfd' : Bfd,
+                }
+        reqUrl =  self.urlBase+'BfdGlobal'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteBfdGlobalById(self, objectId ):
+        reqUrl =  self.urlBase+'BfdGlobal'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllBfdGlobals(self):
+        return self.getObjects( 'BfdGlobal') 
+
+
+    def createVxlanVxlanInstanceVxlanEvpnVpnTargets(self,
+                                                    RouteDistinguisher,
+                                                    RtValue,
+                                                    VxlanId,
+                                                    RtType):
+        obj =  { 
+                'RouteDistinguisher' : RouteDistinguisher,
+                'RtValue' : RtValue,
+                'VxlanId' : VxlanId,
+                'RtType' : RtType,
+                }
+        reqUrl =  self.urlBase+'VxlanVxlanInstanceVxlanEvpnVpnTargets'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updateVxlanVxlanInstanceVxlanEvpnVpnTargets(self,
+                                                    RouteDistinguisher,
+                                                    RtValue,
+                                                    VxlanId,
+                                                    RtType):
+        obj =  { 
+                'RouteDistinguisher' : RouteDistinguisher,
+                'RtValue' : RtValue,
+                'VxlanId' : VxlanId,
+                'RtType' : RtType,
+                }
+        reqUrl =  self.urlBase+'VxlanVxlanInstanceVxlanEvpnVpnTargets'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteVxlanVxlanInstanceVxlanEvpnVpnTargets(self,
+                                                    RouteDistinguisher,
+                                                    RtValue,
+                                                    VxlanId,
+                                                    RtType):
+        obj =  { 
+                'RouteDistinguisher' : RouteDistinguisher,
+                'RtValue' : RtValue,
+                'VxlanId' : VxlanId,
+                'RtType' : RtType,
+                }
+        reqUrl =  self.urlBase+'VxlanVxlanInstanceVxlanEvpnVpnTargets'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteVxlanVxlanInstanceVxlanEvpnVpnTargetsById(self, objectId ):
+        reqUrl =  self.urlBase+'VxlanVxlanInstanceVxlanEvpnVpnTargets'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getVxlanVxlanInstanceVxlanEvpnVpnTargets(self,
+                                                 RtValue,
+                                                 VxlanId):
+        obj =  { 
+                'RtValue' : RtValue,
+                'VxlanId' : VxlanId,
+                }
+        reqUrl =  self.urlBase+'VxlanVxlanInstanceVxlanEvpnVpnTargets'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteVxlanVxlanInstanceVxlanEvpnVpnTargetsById(self, objectId ):
+        reqUrl =  self.urlBase+'VxlanVxlanInstanceVxlanEvpnVpnTargets'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllVxlanVxlanInstanceVxlanEvpnVpnTargetss(self):
+        return self.getObjects( 'VxlanVxlanInstanceVxlanEvpnVpnTargets') 
+
+
+    def getOspfAreaLsaCountEntryState(self,
+                                      AreaLsaCountAreaId,
+                                      AreaLsaCountLsaType):
+        obj =  { 
+                'AreaLsaCountAreaId' : AreaLsaCountAreaId,
+                'AreaLsaCountLsaType' : AreaLsaCountLsaType,
+                }
+        reqUrl =  self.urlBase+'OspfAreaLsaCountEntryState'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteOspfAreaLsaCountEntryStateById(self, objectId ):
+        reqUrl =  self.urlBase+'OspfAreaLsaCountEntryState'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllOspfAreaLsaCountEntryStates(self):
+        return self.getObjects( 'OspfAreaLsaCountEntryState') 
+
+
+    def createBGPPolicyStmt(self,
+                            Conditions,
+                            Actions,
+                            MatchConditions,
+                            Name):
+        obj =  { 
+                'Conditions' : Conditions,
+                'Actions' : Actions,
+                'MatchConditions' : MatchConditions,
+                'Name' : Name,
+                }
+        reqUrl =  self.urlBase+'BGPPolicyStmt'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updateBGPPolicyStmt(self,
+                            Conditions,
+                            Actions,
+                            MatchConditions,
+                            Name):
+        obj =  { 
+                'Conditions' : Conditions,
+                'Actions' : Actions,
+                'MatchConditions' : MatchConditions,
+                'Name' : Name,
+                }
+        reqUrl =  self.urlBase+'BGPPolicyStmt'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteBGPPolicyStmt(self,
+                            Conditions,
+                            Actions,
+                            MatchConditions,
+                            Name):
+        obj =  { 
+                'Conditions' : Conditions,
+                'Actions' : Actions,
+                'MatchConditions' : MatchConditions,
+                'Name' : Name,
+                }
+        reqUrl =  self.urlBase+'BGPPolicyStmt'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteBGPPolicyStmtById(self, objectId ):
+        reqUrl =  self.urlBase+'BGPPolicyStmt'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getBGPPolicyStmt(self,
+                         Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.urlBase+'BGPPolicyStmt'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteBGPPolicyStmtById(self, objectId ):
+        reqUrl =  self.urlBase+'BGPPolicyStmt'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllBGPPolicyStmts(self):
+        return self.getObjects( 'BGPPolicyStmt') 
+
+
+    def createOspfStubAreaEntryConfig(self,
+                                      StubTOS,
+                                      StubAreaId,
+                                      StubMetric,
+                                      StubMetricType):
+        obj =  { 
+                'StubTOS' : StubTOS,
+                'StubAreaId' : StubAreaId,
+                'StubMetric' : StubMetric,
+                'StubMetricType' : StubMetricType,
+                }
+        reqUrl =  self.urlBase+'OspfStubAreaEntryConfig'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updateOspfStubAreaEntryConfig(self,
+                                      StubTOS,
+                                      StubAreaId,
+                                      StubMetric,
+                                      StubMetricType):
+        obj =  { 
+                'StubTOS' : StubTOS,
+                'StubAreaId' : StubAreaId,
+                'StubMetric' : StubMetric,
+                'StubMetricType' : StubMetricType,
+                }
+        reqUrl =  self.urlBase+'OspfStubAreaEntryConfig'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteOspfStubAreaEntryConfig(self,
+                                      StubTOS,
+                                      StubAreaId,
+                                      StubMetric,
+                                      StubMetricType):
+        obj =  { 
+                'StubTOS' : StubTOS,
+                'StubAreaId' : StubAreaId,
+                'StubMetric' : StubMetric,
+                'StubMetricType' : StubMetricType,
+                }
+        reqUrl =  self.urlBase+'OspfStubAreaEntryConfig'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteOspfStubAreaEntryConfigById(self, objectId ):
+        reqUrl =  self.urlBase+'OspfStubAreaEntryConfig'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getOspfStubAreaEntryConfig(self,
+                                   StubTOS,
+                                   StubAreaId):
+        obj =  { 
+                'StubTOS' : StubTOS,
+                'StubAreaId' : StubAreaId,
+                }
+        reqUrl =  self.urlBase+'OspfStubAreaEntryConfig'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteOspfStubAreaEntryConfigById(self, objectId ):
+        reqUrl =  self.urlBase+'OspfStubAreaEntryConfig'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllOspfStubAreaEntryConfigs(self):
+        return self.getObjects( 'OspfStubAreaEntryConfig') 
+
+
+    def getVxlanStateVxlanInstanceAccessVlan(self,
+                                             VlanId):
+        obj =  { 
+                'VlanId' : VlanId,
+                }
+        reqUrl =  self.urlBase+'VxlanStateVxlanInstanceAccessVlan'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteVxlanStateVxlanInstanceAccessVlanById(self, objectId ):
+        reqUrl =  self.urlBase+'VxlanStateVxlanInstanceAccessVlan'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllVxlanStateVxlanInstanceAccessVlans(self):
+        return self.getObjects( 'VxlanStateVxlanInstanceAccessVlan') 
+
+
+    def getIPv4RouteState(self,
+                          DestinationNw,
+                          NextHopIp):
+        obj =  { 
+                'DestinationNw' : DestinationNw,
+                'NextHopIp' : NextHopIp,
+                }
+        reqUrl =  self.urlBase+'IPv4RouteState'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteIPv4RouteStateById(self, objectId ):
+        reqUrl =  self.urlBase+'IPv4RouteState'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllIPv4RouteStates(self):
+        return self.getObjects( 'IPv4RouteState') 
+
+
+    def getBfdGlobalState(self,
+                          Bfd):
+        obj =  { 
+                'Bfd' : Bfd,
+                }
+        reqUrl =  self.urlBase+'BfdGlobalState'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteBfdGlobalStateById(self, objectId ):
+        reqUrl =  self.urlBase+'BfdGlobalState'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllBfdGlobalStates(self):
+        return self.getObjects( 'BfdGlobalState') 
+
+
+    def getOspfVirtLocalLsdbEntryState(self,
+                                       VirtLocalLsdbLsid,
+                                       VirtLocalLsdbType,
+                                       VirtLocalLsdbNeighbor,
+                                       VirtLocalLsdbRouterId,
+                                       VirtLocalLsdbTransitArea):
+        obj =  { 
+                'VirtLocalLsdbLsid' : VirtLocalLsdbLsid,
+                'VirtLocalLsdbType' : VirtLocalLsdbType,
+                'VirtLocalLsdbNeighbor' : VirtLocalLsdbNeighbor,
+                'VirtLocalLsdbRouterId' : VirtLocalLsdbRouterId,
+                'VirtLocalLsdbTransitArea' : VirtLocalLsdbTransitArea,
+                }
+        reqUrl =  self.urlBase+'OspfVirtLocalLsdbEntryState'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteOspfVirtLocalLsdbEntryStateById(self, objectId ):
+        reqUrl =  self.urlBase+'OspfVirtLocalLsdbEntryState'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllOspfVirtLocalLsdbEntryStates(self):
+        return self.getObjects( 'OspfVirtLocalLsdbEntryState') 
+
+
+    def getVxlanStateVxlanInstanceVxlanEvpnVpnTargets(self,
+                                                      RtValue):
+        obj =  { 
+                'RtValue' : RtValue,
+                }
+        reqUrl =  self.urlBase+'VxlanStateVxlanInstanceVxlanEvpnVpnTargets'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteVxlanStateVxlanInstanceVxlanEvpnVpnTargetsById(self, objectId ):
+        reqUrl =  self.urlBase+'VxlanStateVxlanInstanceVxlanEvpnVpnTargets'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllVxlanStateVxlanInstanceVxlanEvpnVpnTargetss(self):
+        return self.getObjects( 'VxlanStateVxlanInstanceVxlanEvpnVpnTargets') 
+
+
+    def getBGPGlobalState(self,
+                          RouterId):
+        obj =  { 
+                'RouterId' : RouterId,
+                }
+        reqUrl =  self.urlBase+'BGPGlobalState'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteBGPGlobalStateById(self, objectId ):
+        reqUrl =  self.urlBase+'BGPGlobalState'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllBGPGlobalStates(self):
+        return self.getObjects( 'BGPGlobalState') 
+
+
+    def getBfdSessionState(self,
+                           SessionId):
+        obj =  { 
+                'SessionId' : SessionId,
+                }
+        reqUrl =  self.urlBase+'BfdSessionState'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteBfdSessionStateById(self, objectId ):
+        reqUrl =  self.urlBase+'BfdSessionState'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllBfdSessionStates(self):
+        return self.getObjects( 'BfdSessionState') 
+
+
+    def createOspfVirtIfEntryConfig(self,
+                                    VirtIfNeighbor,
+                                    VirtIfRtrDeadInterval,
+                                    VirtIfAreaId,
+                                    VirtIfRetransInterval,
+                                    VirtIfHelloInterval,
+                                    VirtIfAuthType,
+                                    VirtIfTransitDelay,
+                                    VirtIfAuthKey):
+        obj =  { 
+                'VirtIfNeighbor' : VirtIfNeighbor,
+                'VirtIfRtrDeadInterval' : VirtIfRtrDeadInterval,
+                'VirtIfAreaId' : VirtIfAreaId,
+                'VirtIfRetransInterval' : VirtIfRetransInterval,
+                'VirtIfHelloInterval' : VirtIfHelloInterval,
+                'VirtIfAuthType' : VirtIfAuthType,
+                'VirtIfTransitDelay' : VirtIfTransitDelay,
+                'VirtIfAuthKey' : VirtIfAuthKey,
+                }
+        reqUrl =  self.urlBase+'OspfVirtIfEntryConfig'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updateOspfVirtIfEntryConfig(self,
+                                    VirtIfNeighbor,
+                                    VirtIfRtrDeadInterval,
+                                    VirtIfAreaId,
+                                    VirtIfRetransInterval,
+                                    VirtIfHelloInterval,
+                                    VirtIfAuthType,
+                                    VirtIfTransitDelay,
+                                    VirtIfAuthKey):
+        obj =  { 
+                'VirtIfNeighbor' : VirtIfNeighbor,
+                'VirtIfRtrDeadInterval' : VirtIfRtrDeadInterval,
+                'VirtIfAreaId' : VirtIfAreaId,
+                'VirtIfRetransInterval' : VirtIfRetransInterval,
+                'VirtIfHelloInterval' : VirtIfHelloInterval,
+                'VirtIfAuthType' : VirtIfAuthType,
+                'VirtIfTransitDelay' : VirtIfTransitDelay,
+                'VirtIfAuthKey' : VirtIfAuthKey,
+                }
+        reqUrl =  self.urlBase+'OspfVirtIfEntryConfig'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteOspfVirtIfEntryConfig(self,
+                                    VirtIfNeighbor,
+                                    VirtIfRtrDeadInterval,
+                                    VirtIfAreaId,
+                                    VirtIfRetransInterval,
+                                    VirtIfHelloInterval,
+                                    VirtIfAuthType,
+                                    VirtIfTransitDelay,
+                                    VirtIfAuthKey):
+        obj =  { 
+                'VirtIfNeighbor' : VirtIfNeighbor,
+                'VirtIfRtrDeadInterval' : VirtIfRtrDeadInterval,
+                'VirtIfAreaId' : VirtIfAreaId,
+                'VirtIfRetransInterval' : VirtIfRetransInterval,
+                'VirtIfHelloInterval' : VirtIfHelloInterval,
+                'VirtIfAuthType' : VirtIfAuthType,
+                'VirtIfTransitDelay' : VirtIfTransitDelay,
+                'VirtIfAuthKey' : VirtIfAuthKey,
+                }
+        reqUrl =  self.urlBase+'OspfVirtIfEntryConfig'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteOspfVirtIfEntryConfigById(self, objectId ):
+        reqUrl =  self.urlBase+'OspfVirtIfEntryConfig'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getOspfVirtIfEntryConfig(self,
+                                 VirtIfNeighbor,
+                                 VirtIfAreaId):
+        obj =  { 
+                'VirtIfNeighbor' : VirtIfNeighbor,
+                'VirtIfAreaId' : VirtIfAreaId,
+                }
+        reqUrl =  self.urlBase+'OspfVirtIfEntryConfig'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteOspfVirtIfEntryConfigById(self, objectId ):
+        reqUrl =  self.urlBase+'OspfVirtIfEntryConfig'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllOspfVirtIfEntryConfigs(self):
+        return self.getObjects( 'OspfVirtIfEntryConfig') 
+
+
+    def createIPv4Intf(self,
+                       IfIndex,
+                       IpAddr):
+        obj =  { 
+                'IfIndex' : IfIndex,
+                'IpAddr' : IpAddr,
+                }
+        reqUrl =  self.urlBase+'IPv4Intf'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updateIPv4Intf(self,
+                       IfIndex,
+                       IpAddr):
+        obj =  { 
+                'IfIndex' : IfIndex,
+                'IpAddr' : IpAddr,
+                }
+        reqUrl =  self.urlBase+'IPv4Intf'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteIPv4Intf(self,
+                       IfIndex,
+                       IpAddr):
+        obj =  { 
+                'IfIndex' : IfIndex,
+                'IpAddr' : IpAddr,
+                }
+        reqUrl =  self.urlBase+'IPv4Intf'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteIPv4IntfById(self, objectId ):
+        reqUrl =  self.urlBase+'IPv4Intf'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getIPv4Intf(self,
+                    IpAddr):
+        obj =  { 
+                'IpAddr' : IpAddr,
+                }
+        reqUrl =  self.urlBase+'IPv4Intf'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteIPv4IntfById(self, objectId ):
+        reqUrl =  self.urlBase+'IPv4Intf'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllIPv4Intfs(self):
+        return self.getObjects( 'IPv4Intf') 
+
+
+    def getPolicyStmtState(self,
+                           Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.urlBase+'PolicyStmtState'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deletePolicyStmtStateById(self, objectId ):
+        reqUrl =  self.urlBase+'PolicyStmtState'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllPolicyStmtStates(self):
+        return self.getObjects( 'PolicyStmtState') 
+
+
+    def getStpBridgeState(self,
+                          Vlan):
+        obj =  { 
+                'Vlan' : Vlan,
+                }
+        reqUrl =  self.urlBase+'StpBridgeState'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteStpBridgeStateById(self, objectId ):
+        reqUrl =  self.urlBase+'StpBridgeState'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllStpBridgeStates(self):
+        return self.getObjects( 'StpBridgeState') 
+
+
+    def getVrrpIntfState(self,
+                         VRID,
+                         IfIndex):
+        obj =  { 
+                'VRID' : VRID,
+                'IfIndex' : IfIndex,
+                }
+        reqUrl =  self.urlBase+'VrrpIntfState'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteVrrpIntfStateById(self, objectId ):
+        reqUrl =  self.urlBase+'VrrpIntfState'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllVrrpIntfStates(self):
+        return self.getObjects( 'VrrpIntfState') 
+
+
+    def createVxlanInterfacesInterfaceVtepInstancesBindVxlanId(self,
+                                                               InnerVlanHandlingMode,
+                                                               Name,
+                                                               VxlanId,
+                                                               VtepName,
+                                                               MulticastIp,
+                                                               VtepId,
+                                                               SourceInterface):
+        obj =  { 
+                'InnerVlanHandlingMode' : InnerVlanHandlingMode,
+                'Name' : Name,
+                'VxlanId' : VxlanId,
+                'VtepName' : VtepName,
+                'MulticastIp' : MulticastIp,
+                'VtepId' : VtepId,
+                'SourceInterface' : SourceInterface,
+                }
+        reqUrl =  self.urlBase+'VxlanInterfacesInterfaceVtepInstancesBindVxlanId'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updateVxlanInterfacesInterfaceVtepInstancesBindVxlanId(self,
+                                                               InnerVlanHandlingMode,
+                                                               Name,
+                                                               VxlanId,
+                                                               VtepName,
+                                                               MulticastIp,
+                                                               VtepId,
+                                                               SourceInterface):
+        obj =  { 
+                'InnerVlanHandlingMode' : InnerVlanHandlingMode,
+                'Name' : Name,
+                'VxlanId' : VxlanId,
+                'VtepName' : VtepName,
+                'MulticastIp' : MulticastIp,
+                'VtepId' : VtepId,
+                'SourceInterface' : SourceInterface,
+                }
+        reqUrl =  self.urlBase+'VxlanInterfacesInterfaceVtepInstancesBindVxlanId'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteVxlanInterfacesInterfaceVtepInstancesBindVxlanId(self,
+                                                               InnerVlanHandlingMode,
+                                                               Name,
+                                                               VxlanId,
+                                                               VtepName,
+                                                               MulticastIp,
+                                                               VtepId,
+                                                               SourceInterface):
+        obj =  { 
+                'InnerVlanHandlingMode' : InnerVlanHandlingMode,
+                'Name' : Name,
+                'VxlanId' : VxlanId,
+                'VtepName' : VtepName,
+                'MulticastIp' : MulticastIp,
+                'VtepId' : VtepId,
+                'SourceInterface' : SourceInterface,
+                }
+        reqUrl =  self.urlBase+'VxlanInterfacesInterfaceVtepInstancesBindVxlanId'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteVxlanInterfacesInterfaceVtepInstancesBindVxlanIdById(self, objectId ):
+        reqUrl =  self.urlBase+'VxlanInterfacesInterfaceVtepInstancesBindVxlanId'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getVxlanInterfacesInterfaceVtepInstancesBindVxlanId(self,
+                                                            Name,
+                                                            VxlanId,
+                                                            VtepId):
+        obj =  { 
+                'Name' : Name,
+                'VxlanId' : VxlanId,
+                'VtepId' : VtepId,
+                }
+        reqUrl =  self.urlBase+'VxlanInterfacesInterfaceVtepInstancesBindVxlanId'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteVxlanInterfacesInterfaceVtepInstancesBindVxlanIdById(self, objectId ):
+        reqUrl =  self.urlBase+'VxlanInterfacesInterfaceVtepInstancesBindVxlanId'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllVxlanInterfacesInterfaceVtepInstancesBindVxlanIds(self):
+        return self.getObjects( 'VxlanInterfacesInterfaceVtepInstancesBindVxlanId') 
+
+
+    def getVxlanStateStaticVxlanTunnelAddressFamilyBindVxlanId(self,
+                                                               VxlanId,
+                                                               Af,
+                                                               VxlanTunnelId):
+        obj =  { 
+                'VxlanId' : VxlanId,
+                'Af' : Af,
+                'VxlanTunnelId' : VxlanTunnelId,
+                }
+        reqUrl =  self.urlBase+'VxlanStateStaticVxlanTunnelAddressFamilyBindVxlanId'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteVxlanStateStaticVxlanTunnelAddressFamilyBindVxlanIdById(self, objectId ):
+        reqUrl =  self.urlBase+'VxlanStateStaticVxlanTunnelAddressFamilyBindVxlanId'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllVxlanStateStaticVxlanTunnelAddressFamilyBindVxlanIds(self):
+        return self.getObjects( 'VxlanStateStaticVxlanTunnelAddressFamilyBindVxlanId') 
+
+
+    def createBGPGlobal(self,
+                        ASNum,
+                        EBGPMaxPaths,
+                        EBGPAllowMultipleAS,
+                        RouterId,
+                        IBGPMaxPaths,
+                        UseMultiplePaths):
+        obj =  { 
+                'ASNum' : ASNum,
+                'EBGPMaxPaths' : EBGPMaxPaths,
+                'EBGPAllowMultipleAS' : EBGPAllowMultipleAS,
+                'RouterId' : RouterId,
+                'IBGPMaxPaths' : IBGPMaxPaths,
+                'UseMultiplePaths' : UseMultiplePaths,
+                }
+        reqUrl =  self.urlBase+'BGPGlobal'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updateBGPGlobal(self,
+                        ASNum,
+                        EBGPMaxPaths,
+                        EBGPAllowMultipleAS,
+                        RouterId,
+                        IBGPMaxPaths,
+                        UseMultiplePaths):
+        obj =  { 
+                'ASNum' : ASNum,
+                'EBGPMaxPaths' : EBGPMaxPaths,
+                'EBGPAllowMultipleAS' : EBGPAllowMultipleAS,
+                'RouterId' : RouterId,
+                'IBGPMaxPaths' : IBGPMaxPaths,
+                'UseMultiplePaths' : UseMultiplePaths,
+                }
+        reqUrl =  self.urlBase+'BGPGlobal'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteBGPGlobal(self,
+                        ASNum,
+                        EBGPMaxPaths,
+                        EBGPAllowMultipleAS,
+                        RouterId,
+                        IBGPMaxPaths,
+                        UseMultiplePaths):
+        obj =  { 
+                'ASNum' : ASNum,
+                'EBGPMaxPaths' : EBGPMaxPaths,
+                'EBGPAllowMultipleAS' : EBGPAllowMultipleAS,
+                'RouterId' : RouterId,
+                'IBGPMaxPaths' : IBGPMaxPaths,
+                'UseMultiplePaths' : UseMultiplePaths,
+                }
+        reqUrl =  self.urlBase+'BGPGlobal'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteBGPGlobalById(self, objectId ):
+        reqUrl =  self.urlBase+'BGPGlobal'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getBGPGlobal(self,
+                     RouterId):
+        obj =  { 
+                'RouterId' : RouterId,
+                }
+        reqUrl =  self.urlBase+'BGPGlobal'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteBGPGlobalById(self, objectId ):
+        reqUrl =  self.urlBase+'BGPGlobal'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllBGPGlobals(self):
+        return self.getObjects( 'BGPGlobal') 
+
+
+    def createOspfIfEntryConfig(self,
+                                AddressLessIf,
+                                IfRetransInterval,
+                                IfType,
+                                IfAuthKey,
+                                IfIpAddress,
+                                IfAdminStat,
+                                IfMulticastForwarding,
+                                IfRtrPriority,
+                                IfAreaId,
+                                IfPollInterval,
+                                IfAuthType,
+                                IfHelloInterval,
+                                IfDemand,
+                                IfTransitDelay,
+                                IfRtrDeadInterval):
+        obj =  { 
+                'AddressLessIf' : AddressLessIf,
+                'IfRetransInterval' : IfRetransInterval,
+                'IfType' : IfType,
+                'IfAuthKey' : IfAuthKey,
+                'IfIpAddress' : IfIpAddress,
+                'IfAdminStat' : IfAdminStat,
+                'IfMulticastForwarding' : IfMulticastForwarding,
+                'IfRtrPriority' : IfRtrPriority,
+                'IfAreaId' : IfAreaId,
+                'IfPollInterval' : IfPollInterval,
+                'IfAuthType' : IfAuthType,
+                'IfHelloInterval' : IfHelloInterval,
+                'IfDemand' : IfDemand,
+                'IfTransitDelay' : IfTransitDelay,
+                'IfRtrDeadInterval' : IfRtrDeadInterval,
+                }
+        reqUrl =  self.urlBase+'OspfIfEntryConfig'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updateOspfIfEntryConfig(self,
+                                AddressLessIf,
+                                IfRetransInterval,
+                                IfType,
+                                IfAuthKey,
+                                IfIpAddress,
+                                IfAdminStat,
+                                IfMulticastForwarding,
+                                IfRtrPriority,
+                                IfAreaId,
+                                IfPollInterval,
+                                IfAuthType,
+                                IfHelloInterval,
+                                IfDemand,
+                                IfTransitDelay,
+                                IfRtrDeadInterval):
+        obj =  { 
+                'AddressLessIf' : AddressLessIf,
+                'IfRetransInterval' : IfRetransInterval,
+                'IfType' : IfType,
+                'IfAuthKey' : IfAuthKey,
+                'IfIpAddress' : IfIpAddress,
+                'IfAdminStat' : IfAdminStat,
+                'IfMulticastForwarding' : IfMulticastForwarding,
+                'IfRtrPriority' : IfRtrPriority,
+                'IfAreaId' : IfAreaId,
+                'IfPollInterval' : IfPollInterval,
+                'IfAuthType' : IfAuthType,
+                'IfHelloInterval' : IfHelloInterval,
+                'IfDemand' : IfDemand,
+                'IfTransitDelay' : IfTransitDelay,
+                'IfRtrDeadInterval' : IfRtrDeadInterval,
+                }
+        reqUrl =  self.urlBase+'OspfIfEntryConfig'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteOspfIfEntryConfig(self,
+                                AddressLessIf,
+                                IfRetransInterval,
+                                IfType,
+                                IfAuthKey,
+                                IfIpAddress,
+                                IfAdminStat,
+                                IfMulticastForwarding,
+                                IfRtrPriority,
+                                IfAreaId,
+                                IfPollInterval,
+                                IfAuthType,
+                                IfHelloInterval,
+                                IfDemand,
+                                IfTransitDelay,
+                                IfRtrDeadInterval):
+        obj =  { 
+                'AddressLessIf' : AddressLessIf,
+                'IfRetransInterval' : IfRetransInterval,
+                'IfType' : IfType,
+                'IfAuthKey' : IfAuthKey,
+                'IfIpAddress' : IfIpAddress,
+                'IfAdminStat' : IfAdminStat,
+                'IfMulticastForwarding' : IfMulticastForwarding,
+                'IfRtrPriority' : IfRtrPriority,
+                'IfAreaId' : IfAreaId,
+                'IfPollInterval' : IfPollInterval,
+                'IfAuthType' : IfAuthType,
+                'IfHelloInterval' : IfHelloInterval,
+                'IfDemand' : IfDemand,
+                'IfTransitDelay' : IfTransitDelay,
+                'IfRtrDeadInterval' : IfRtrDeadInterval,
+                }
+        reqUrl =  self.urlBase+'OspfIfEntryConfig'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteOspfIfEntryConfigById(self, objectId ):
+        reqUrl =  self.urlBase+'OspfIfEntryConfig'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getOspfIfEntryConfig(self,
+                             AddressLessIf,
+                             IfIpAddress):
+        obj =  { 
+                'AddressLessIf' : AddressLessIf,
+                'IfIpAddress' : IfIpAddress,
+                }
+        reqUrl =  self.urlBase+'OspfIfEntryConfig'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteOspfIfEntryConfigById(self, objectId ):
+        reqUrl =  self.urlBase+'OspfIfEntryConfig'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllOspfIfEntryConfigs(self):
+        return self.getObjects( 'OspfIfEntryConfig') 
+
+
+    def getOspfAreaEntryState(self,
+                              AreaId):
+        obj =  { 
+                'AreaId' : AreaId,
+                }
+        reqUrl =  self.urlBase+'OspfAreaEntryState'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteOspfAreaEntryStateById(self, objectId ):
+        reqUrl =  self.urlBase+'OspfAreaEntryState'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllOspfAreaEntryStates(self):
+        return self.getObjects( 'OspfAreaEntryState') 
+
+
+    def createOspfAreaAggregateEntryConfig(self,
+                                           AreaAggregateLsdbType,
+                                           AreaAggregateEffect,
+                                           AreaAggregateExtRouteTag,
+                                           AreaAggregateMask,
+                                           AreaAggregateAreaID,
+                                           AreaAggregateNet):
+        obj =  { 
+                'AreaAggregateLsdbType' : AreaAggregateLsdbType,
+                'AreaAggregateEffect' : AreaAggregateEffect,
+                'AreaAggregateExtRouteTag' : AreaAggregateExtRouteTag,
+                'AreaAggregateMask' : AreaAggregateMask,
+                'AreaAggregateAreaID' : AreaAggregateAreaID,
+                'AreaAggregateNet' : AreaAggregateNet,
+                }
+        reqUrl =  self.urlBase+'OspfAreaAggregateEntryConfig'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updateOspfAreaAggregateEntryConfig(self,
+                                           AreaAggregateLsdbType,
+                                           AreaAggregateEffect,
+                                           AreaAggregateExtRouteTag,
+                                           AreaAggregateMask,
+                                           AreaAggregateAreaID,
+                                           AreaAggregateNet):
+        obj =  { 
+                'AreaAggregateLsdbType' : AreaAggregateLsdbType,
+                'AreaAggregateEffect' : AreaAggregateEffect,
+                'AreaAggregateExtRouteTag' : AreaAggregateExtRouteTag,
+                'AreaAggregateMask' : AreaAggregateMask,
+                'AreaAggregateAreaID' : AreaAggregateAreaID,
+                'AreaAggregateNet' : AreaAggregateNet,
+                }
+        reqUrl =  self.urlBase+'OspfAreaAggregateEntryConfig'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteOspfAreaAggregateEntryConfig(self,
+                                           AreaAggregateLsdbType,
+                                           AreaAggregateEffect,
+                                           AreaAggregateExtRouteTag,
+                                           AreaAggregateMask,
+                                           AreaAggregateAreaID,
+                                           AreaAggregateNet):
+        obj =  { 
+                'AreaAggregateLsdbType' : AreaAggregateLsdbType,
+                'AreaAggregateEffect' : AreaAggregateEffect,
+                'AreaAggregateExtRouteTag' : AreaAggregateExtRouteTag,
+                'AreaAggregateMask' : AreaAggregateMask,
+                'AreaAggregateAreaID' : AreaAggregateAreaID,
+                'AreaAggregateNet' : AreaAggregateNet,
+                }
+        reqUrl =  self.urlBase+'OspfAreaAggregateEntryConfig'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteOspfAreaAggregateEntryConfigById(self, objectId ):
+        reqUrl =  self.urlBase+'OspfAreaAggregateEntryConfig'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getOspfAreaAggregateEntryConfig(self,
+                                        AreaAggregateLsdbType,
+                                        AreaAggregateMask,
+                                        AreaAggregateAreaID,
+                                        AreaAggregateNet):
+        obj =  { 
+                'AreaAggregateLsdbType' : AreaAggregateLsdbType,
+                'AreaAggregateMask' : AreaAggregateMask,
+                'AreaAggregateAreaID' : AreaAggregateAreaID,
+                'AreaAggregateNet' : AreaAggregateNet,
+                }
+        reqUrl =  self.urlBase+'OspfAreaAggregateEntryConfig'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteOspfAreaAggregateEntryConfigById(self, objectId ):
+        reqUrl =  self.urlBase+'OspfAreaAggregateEntryConfig'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllOspfAreaAggregateEntryConfigs(self):
+        return self.getObjects( 'OspfAreaAggregateEntryConfig') 
+
+
+    def createVxlanInterfacesInterfaceStaticVxlanTunnelAddressFamilyBindVxlanId(self,
+                                                                                TunnelSourceIp,
+                                                                                Name,
+                                                                                Af,
+                                                                                VxlanTunnelId,
+                                                                                VxlanId,
+                                                                                TunnelDestinationIp,
+                                                                                VxlanTunnelName):
+        obj =  { 
+                'TunnelSourceIp' : TunnelSourceIp,
+                'Name' : Name,
+                'Af' : Af,
+                'VxlanTunnelId' : VxlanTunnelId,
+                'VxlanId' : VxlanId,
+                'TunnelDestinationIp' : TunnelDestinationIp,
+                'VxlanTunnelName' : VxlanTunnelName,
+                }
+        reqUrl =  self.urlBase+'VxlanInterfacesInterfaceStaticVxlanTunnelAddressFamilyBindVxlanId'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updateVxlanInterfacesInterfaceStaticVxlanTunnelAddressFamilyBindVxlanId(self,
+                                                                                TunnelSourceIp,
+                                                                                Name,
+                                                                                Af,
+                                                                                VxlanTunnelId,
+                                                                                VxlanId,
+                                                                                TunnelDestinationIp,
+                                                                                VxlanTunnelName):
+        obj =  { 
+                'TunnelSourceIp' : TunnelSourceIp,
+                'Name' : Name,
+                'Af' : Af,
+                'VxlanTunnelId' : VxlanTunnelId,
+                'VxlanId' : VxlanId,
+                'TunnelDestinationIp' : TunnelDestinationIp,
+                'VxlanTunnelName' : VxlanTunnelName,
+                }
+        reqUrl =  self.urlBase+'VxlanInterfacesInterfaceStaticVxlanTunnelAddressFamilyBindVxlanId'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteVxlanInterfacesInterfaceStaticVxlanTunnelAddressFamilyBindVxlanId(self,
+                                                                                TunnelSourceIp,
+                                                                                Name,
+                                                                                Af,
+                                                                                VxlanTunnelId,
+                                                                                VxlanId,
+                                                                                TunnelDestinationIp,
+                                                                                VxlanTunnelName):
+        obj =  { 
+                'TunnelSourceIp' : TunnelSourceIp,
+                'Name' : Name,
+                'Af' : Af,
+                'VxlanTunnelId' : VxlanTunnelId,
+                'VxlanId' : VxlanId,
+                'TunnelDestinationIp' : TunnelDestinationIp,
+                'VxlanTunnelName' : VxlanTunnelName,
+                }
+        reqUrl =  self.urlBase+'VxlanInterfacesInterfaceStaticVxlanTunnelAddressFamilyBindVxlanId'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteVxlanInterfacesInterfaceStaticVxlanTunnelAddressFamilyBindVxlanIdById(self, objectId ):
+        reqUrl =  self.urlBase+'VxlanInterfacesInterfaceStaticVxlanTunnelAddressFamilyBindVxlanId'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getVxlanInterfacesInterfaceStaticVxlanTunnelAddressFamilyBindVxlanId(self,
+                                                                             Name,
+                                                                             Af,
+                                                                             VxlanTunnelId,
+                                                                             VxlanId):
+        obj =  { 
+                'Name' : Name,
+                'Af' : Af,
+                'VxlanTunnelId' : VxlanTunnelId,
+                'VxlanId' : VxlanId,
+                }
+        reqUrl =  self.urlBase+'VxlanInterfacesInterfaceStaticVxlanTunnelAddressFamilyBindVxlanId'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteVxlanInterfacesInterfaceStaticVxlanTunnelAddressFamilyBindVxlanIdById(self, objectId ):
+        reqUrl =  self.urlBase+'VxlanInterfacesInterfaceStaticVxlanTunnelAddressFamilyBindVxlanId'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllVxlanInterfacesInterfaceStaticVxlanTunnelAddressFamilyBindVxlanIds(self):
+        return self.getObjects( 'VxlanInterfacesInterfaceStaticVxlanTunnelAddressFamilyBindVxlanId') 
+
+
+    def createBfdSession(self,
+                         Owner,
+                         IpAddr,
+                         PerLink):
+        obj =  { 
+                'Owner' : Owner,
+                'IpAddr' : IpAddr,
+                'PerLink' : PerLink,
+                }
+        reqUrl =  self.urlBase+'BfdSession'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updateBfdSession(self,
+                         Owner,
+                         IpAddr,
+                         PerLink):
+        obj =  { 
+                'Owner' : Owner,
+                'IpAddr' : IpAddr,
+                'PerLink' : PerLink,
+                }
+        reqUrl =  self.urlBase+'BfdSession'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteBfdSession(self,
+                         Owner,
+                         IpAddr,
+                         PerLink):
+        obj =  { 
+                'Owner' : Owner,
+                'IpAddr' : IpAddr,
+                'PerLink' : PerLink,
+                }
+        reqUrl =  self.urlBase+'BfdSession'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteBfdSessionById(self, objectId ):
+        reqUrl =  self.urlBase+'BfdSession'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getBfdSession(self,
+                      IpAddr):
+        obj =  { 
+                'IpAddr' : IpAddr,
+                }
+        reqUrl =  self.urlBase+'BfdSession'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteBfdSessionById(self, objectId ):
+        reqUrl =  self.urlBase+'BfdSession'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllBfdSessions(self):
+        return self.getObjects( 'BfdSession') 
+
+
+    def getPolicyConditionState(self,
+                                Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.urlBase+'PolicyConditionState'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deletePolicyConditionStateById(self, objectId ):
+        reqUrl =  self.urlBase+'PolicyConditionState'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllPolicyConditionStates(self):
+        return self.getObjects( 'PolicyConditionState') 
+
+
+    def createVrrpIntf(self,
+                       PreemptMode,
+                       VRID,
+                       Priority,
+                       AdvertisementInterval,
+                       AcceptMode,
+                       VirtualIPv4Addr,
+                       IfIndex):
+        obj =  { 
+                'PreemptMode' : PreemptMode,
+                'VRID' : VRID,
+                'Priority' : Priority,
+                'AdvertisementInterval' : AdvertisementInterval,
+                'AcceptMode' : AcceptMode,
+                'VirtualIPv4Addr' : VirtualIPv4Addr,
+                'IfIndex' : IfIndex,
+                }
+        reqUrl =  self.urlBase+'VrrpIntf'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updateVrrpIntf(self,
+                       PreemptMode,
+                       VRID,
+                       Priority,
+                       AdvertisementInterval,
+                       AcceptMode,
+                       VirtualIPv4Addr,
+                       IfIndex):
+        obj =  { 
+                'PreemptMode' : PreemptMode,
+                'VRID' : VRID,
+                'Priority' : Priority,
+                'AdvertisementInterval' : AdvertisementInterval,
+                'AcceptMode' : AcceptMode,
+                'VirtualIPv4Addr' : VirtualIPv4Addr,
+                'IfIndex' : IfIndex,
+                }
+        reqUrl =  self.urlBase+'VrrpIntf'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteVrrpIntf(self,
+                       PreemptMode,
+                       VRID,
+                       Priority,
+                       AdvertisementInterval,
+                       AcceptMode,
+                       VirtualIPv4Addr,
+                       IfIndex):
+        obj =  { 
+                'PreemptMode' : PreemptMode,
+                'VRID' : VRID,
+                'Priority' : Priority,
+                'AdvertisementInterval' : AdvertisementInterval,
+                'AcceptMode' : AcceptMode,
+                'VirtualIPv4Addr' : VirtualIPv4Addr,
+                'IfIndex' : IfIndex,
+                }
+        reqUrl =  self.urlBase+'VrrpIntf'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteVrrpIntfById(self, objectId ):
+        reqUrl =  self.urlBase+'VrrpIntf'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getVrrpIntf(self,
+                    VRID,
+                    IfIndex):
+        obj =  { 
+                'VRID' : VRID,
+                'IfIndex' : IfIndex,
+                }
+        reqUrl =  self.urlBase+'VrrpIntf'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteVrrpIntfById(self, objectId ):
+        reqUrl =  self.urlBase+'VrrpIntf'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllVrrpIntfs(self):
+        return self.getObjects( 'VrrpIntf') 
+
+
+    def getPolicyDefinitionState(self,
+                                 Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.urlBase+'PolicyDefinitionState'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deletePolicyDefinitionStateById(self, objectId ):
+        reqUrl =  self.urlBase+'PolicyDefinitionState'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllPolicyDefinitionStates(self):
+        return self.getObjects( 'PolicyDefinitionState') 
+
+
+    def createOspfIfMetricEntryConfig(self,
+                                      IfMetricAddressLessIf,
+                                      IfMetricValue,
+                                      IfMetricTOS,
+                                      IfMetricIpAddress):
+        obj =  { 
+                'IfMetricAddressLessIf' : IfMetricAddressLessIf,
+                'IfMetricValue' : IfMetricValue,
+                'IfMetricTOS' : IfMetricTOS,
+                'IfMetricIpAddress' : IfMetricIpAddress,
+                }
+        reqUrl =  self.urlBase+'OspfIfMetricEntryConfig'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updateOspfIfMetricEntryConfig(self,
+                                      IfMetricAddressLessIf,
+                                      IfMetricValue,
+                                      IfMetricTOS,
+                                      IfMetricIpAddress):
+        obj =  { 
+                'IfMetricAddressLessIf' : IfMetricAddressLessIf,
+                'IfMetricValue' : IfMetricValue,
+                'IfMetricTOS' : IfMetricTOS,
+                'IfMetricIpAddress' : IfMetricIpAddress,
+                }
+        reqUrl =  self.urlBase+'OspfIfMetricEntryConfig'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteOspfIfMetricEntryConfig(self,
+                                      IfMetricAddressLessIf,
+                                      IfMetricValue,
+                                      IfMetricTOS,
+                                      IfMetricIpAddress):
+        obj =  { 
+                'IfMetricAddressLessIf' : IfMetricAddressLessIf,
+                'IfMetricValue' : IfMetricValue,
+                'IfMetricTOS' : IfMetricTOS,
+                'IfMetricIpAddress' : IfMetricIpAddress,
+                }
+        reqUrl =  self.urlBase+'OspfIfMetricEntryConfig'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteOspfIfMetricEntryConfigById(self, objectId ):
+        reqUrl =  self.urlBase+'OspfIfMetricEntryConfig'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getOspfIfMetricEntryConfig(self,
+                                   IfMetricAddressLessIf,
+                                   IfMetricTOS,
+                                   IfMetricIpAddress):
+        obj =  { 
+                'IfMetricAddressLessIf' : IfMetricAddressLessIf,
+                'IfMetricTOS' : IfMetricTOS,
+                'IfMetricIpAddress' : IfMetricIpAddress,
+                }
+        reqUrl =  self.urlBase+'OspfIfMetricEntryConfig'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteOspfIfMetricEntryConfigById(self, objectId ):
+        reqUrl =  self.urlBase+'OspfIfMetricEntryConfig'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllOspfIfMetricEntryConfigs(self):
+        return self.getObjects( 'OspfIfMetricEntryConfig') 
+
+
+    def getLogicalIntfState(self,
+                            Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.urlBase+'LogicalIntfState'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteLogicalIntfStateById(self, objectId ):
+        reqUrl =  self.urlBase+'LogicalIntfState'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllLogicalIntfStates(self):
+        return self.getObjects( 'LogicalIntfState') 
+
+
+    def createVxlanVxlanInstanceAccessTypeMac(self,
+                                              L2interface,
+                                              Mac,
+                                              VxlanId,
+                                              InterfaceName,
+                                              VlanId):
+        obj =  { 
+                'L2interface' : L2interface,
+                'Mac' : Mac,
+                'VxlanId' : VxlanId,
+                'InterfaceName' : InterfaceName,
+                'VlanId' : VlanId,
+                }
+        reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeMac'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updateVxlanVxlanInstanceAccessTypeMac(self,
+                                              L2interface,
+                                              Mac,
+                                              VxlanId,
+                                              InterfaceName,
+                                              VlanId):
+        obj =  { 
+                'L2interface' : L2interface,
+                'Mac' : Mac,
+                'VxlanId' : VxlanId,
+                'InterfaceName' : InterfaceName,
+                'VlanId' : VlanId,
+                }
+        reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeMac'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteVxlanVxlanInstanceAccessTypeMac(self,
+                                              L2interface,
+                                              Mac,
+                                              VxlanId,
+                                              InterfaceName,
+                                              VlanId):
+        obj =  { 
+                'L2interface' : L2interface,
+                'Mac' : Mac,
+                'VxlanId' : VxlanId,
+                'InterfaceName' : InterfaceName,
+                'VlanId' : VlanId,
+                }
+        reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeMac'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteVxlanVxlanInstanceAccessTypeMacById(self, objectId ):
+        reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeMac'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getVxlanVxlanInstanceAccessTypeMac(self,
+                                           VxlanId):
+        obj =  { 
+                'VxlanId' : VxlanId,
+                }
+        reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeMac'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteVxlanVxlanInstanceAccessTypeMacById(self, objectId ):
+        reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeMac'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllVxlanVxlanInstanceAccessTypeMacs(self):
+        return self.getObjects( 'VxlanVxlanInstanceAccessTypeMac') 
+
+
+    def createBGPNeighbor(self,
+                          BfdEnable,
+                          RouteReflectorClusterId,
+                          PeerGroup,
+                          Description,
+                          MultiHopTTL,
+                          NeighborAddress,
+                          LocalAS,
+                          KeepaliveTime,
+                          AddPathsMaxTx,
+                          MultiHopEnable,
+                          AddPathsRx,
+                          IfIndex,
+                          RouteReflectorClient,
+                          HoldTime,
+                          AuthPassword,
+                          PeerAS,
+                          ConnectRetryTime):
+        obj =  { 
+                'BfdEnable' : BfdEnable,
+                'RouteReflectorClusterId' : RouteReflectorClusterId,
+                'PeerGroup' : PeerGroup,
+                'Description' : Description,
+                'MultiHopTTL' : MultiHopTTL,
+                'NeighborAddress' : NeighborAddress,
+                'LocalAS' : LocalAS,
+                'KeepaliveTime' : KeepaliveTime,
+                'AddPathsMaxTx' : AddPathsMaxTx,
+                'MultiHopEnable' : MultiHopEnable,
+                'AddPathsRx' : AddPathsRx,
+                'IfIndex' : IfIndex,
+                'RouteReflectorClient' : RouteReflectorClient,
+                'HoldTime' : HoldTime,
+                'AuthPassword' : AuthPassword,
+                'PeerAS' : PeerAS,
+                'ConnectRetryTime' : ConnectRetryTime,
+                }
+        reqUrl =  self.urlBase+'BGPNeighbor'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updateBGPNeighbor(self,
+                          BfdEnable,
+                          RouteReflectorClusterId,
+                          PeerGroup,
+                          Description,
+                          MultiHopTTL,
+                          NeighborAddress,
+                          LocalAS,
+                          KeepaliveTime,
+                          AddPathsMaxTx,
+                          MultiHopEnable,
+                          AddPathsRx,
+                          IfIndex,
+                          RouteReflectorClient,
+                          HoldTime,
+                          AuthPassword,
+                          PeerAS,
+                          ConnectRetryTime):
+        obj =  { 
+                'BfdEnable' : BfdEnable,
+                'RouteReflectorClusterId' : RouteReflectorClusterId,
+                'PeerGroup' : PeerGroup,
+                'Description' : Description,
+                'MultiHopTTL' : MultiHopTTL,
+                'NeighborAddress' : NeighborAddress,
+                'LocalAS' : LocalAS,
+                'KeepaliveTime' : KeepaliveTime,
+                'AddPathsMaxTx' : AddPathsMaxTx,
+                'MultiHopEnable' : MultiHopEnable,
+                'AddPathsRx' : AddPathsRx,
+                'IfIndex' : IfIndex,
+                'RouteReflectorClient' : RouteReflectorClient,
+                'HoldTime' : HoldTime,
+                'AuthPassword' : AuthPassword,
+                'PeerAS' : PeerAS,
+                'ConnectRetryTime' : ConnectRetryTime,
+                }
+        reqUrl =  self.urlBase+'BGPNeighbor'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteBGPNeighbor(self,
+                          BfdEnable,
+                          RouteReflectorClusterId,
+                          PeerGroup,
+                          Description,
+                          MultiHopTTL,
+                          NeighborAddress,
+                          LocalAS,
+                          KeepaliveTime,
+                          AddPathsMaxTx,
+                          MultiHopEnable,
+                          AddPathsRx,
+                          IfIndex,
+                          RouteReflectorClient,
+                          HoldTime,
+                          AuthPassword,
+                          PeerAS,
+                          ConnectRetryTime):
+        obj =  { 
+                'BfdEnable' : BfdEnable,
+                'RouteReflectorClusterId' : RouteReflectorClusterId,
+                'PeerGroup' : PeerGroup,
+                'Description' : Description,
+                'MultiHopTTL' : MultiHopTTL,
+                'NeighborAddress' : NeighborAddress,
+                'LocalAS' : LocalAS,
+                'KeepaliveTime' : KeepaliveTime,
+                'AddPathsMaxTx' : AddPathsMaxTx,
+                'MultiHopEnable' : MultiHopEnable,
+                'AddPathsRx' : AddPathsRx,
+                'IfIndex' : IfIndex,
+                'RouteReflectorClient' : RouteReflectorClient,
+                'HoldTime' : HoldTime,
+                'AuthPassword' : AuthPassword,
+                'PeerAS' : PeerAS,
+                'ConnectRetryTime' : ConnectRetryTime,
+                }
+        reqUrl =  self.urlBase+'BGPNeighbor'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteBGPNeighborById(self, objectId ):
+        reqUrl =  self.urlBase+'BGPNeighbor'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getBGPNeighbor(self,
+                       NeighborAddress,
+                       IfIndex):
+        obj =  { 
+                'NeighborAddress' : NeighborAddress,
+                'IfIndex' : IfIndex,
+                }
+        reqUrl =  self.urlBase+'BGPNeighbor'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteBGPNeighborById(self, objectId ):
+        reqUrl =  self.urlBase+'BGPNeighbor'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllBGPNeighbors(self):
+        return self.getObjects( 'BGPNeighbor') 
+
+
+    def createVxlanVxlanInstanceAccessTypeL3interfaceL3interface(self,
+                                                                 VxlanId,
+                                                                 InterfaceName):
+        obj =  { 
+                'VxlanId' : VxlanId,
+                'InterfaceName' : InterfaceName,
+                }
+        reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeL3interfaceL3interface'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updateVxlanVxlanInstanceAccessTypeL3interfaceL3interface(self,
+                                                                 VxlanId,
+                                                                 InterfaceName):
+        obj =  { 
+                'VxlanId' : VxlanId,
+                'InterfaceName' : InterfaceName,
+                }
+        reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeL3interfaceL3interface'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteVxlanVxlanInstanceAccessTypeL3interfaceL3interface(self,
+                                                                 VxlanId,
+                                                                 InterfaceName):
+        obj =  { 
+                'VxlanId' : VxlanId,
+                'InterfaceName' : InterfaceName,
+                }
+        reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeL3interfaceL3interface'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteVxlanVxlanInstanceAccessTypeL3interfaceL3interfaceById(self, objectId ):
+        reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeL3interfaceL3interface'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getVxlanVxlanInstanceAccessTypeL3interfaceL3interface(self,
+                                                              VxlanId,
+                                                              InterfaceName):
+        obj =  { 
+                'VxlanId' : VxlanId,
+                'InterfaceName' : InterfaceName,
+                }
+        reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeL3interfaceL3interface'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteVxlanVxlanInstanceAccessTypeL3interfaceL3interfaceById(self, objectId ):
+        reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeL3interfaceL3interface'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllVxlanVxlanInstanceAccessTypeL3interfaceL3interfaces(self):
+        return self.getObjects( 'VxlanVxlanInstanceAccessTypeL3interfaceL3interface') 
+
+
+    def createStpBridgeInstance(self,
+                                HelloTime,
+                                ForceVersion,
+                                Vlan,
+                                ForwardDelay,
+                                MaxAge,
+                                Priority,
+                                TxHoldCount,
+                                Address):
+        obj =  { 
+                'HelloTime' : HelloTime,
+                'ForceVersion' : ForceVersion,
+                'Vlan' : Vlan,
+                'ForwardDelay' : ForwardDelay,
+                'MaxAge' : MaxAge,
+                'Priority' : Priority,
+                'TxHoldCount' : TxHoldCount,
+                'Address' : Address,
+                }
+        reqUrl =  self.urlBase+'StpBridgeInstance'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updateStpBridgeInstance(self,
+                                HelloTime,
+                                ForceVersion,
+                                Vlan,
+                                ForwardDelay,
+                                MaxAge,
+                                Priority,
+                                TxHoldCount,
+                                Address):
+        obj =  { 
+                'HelloTime' : HelloTime,
+                'ForceVersion' : ForceVersion,
+                'Vlan' : Vlan,
+                'ForwardDelay' : ForwardDelay,
+                'MaxAge' : MaxAge,
+                'Priority' : Priority,
+                'TxHoldCount' : TxHoldCount,
+                'Address' : Address,
+                }
+        reqUrl =  self.urlBase+'StpBridgeInstance'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteStpBridgeInstance(self,
+                                HelloTime,
+                                ForceVersion,
+                                Vlan,
+                                ForwardDelay,
+                                MaxAge,
+                                Priority,
+                                TxHoldCount,
+                                Address):
+        obj =  { 
+                'HelloTime' : HelloTime,
+                'ForceVersion' : ForceVersion,
+                'Vlan' : Vlan,
+                'ForwardDelay' : ForwardDelay,
+                'MaxAge' : MaxAge,
+                'Priority' : Priority,
+                'TxHoldCount' : TxHoldCount,
+                'Address' : Address,
+                }
+        reqUrl =  self.urlBase+'StpBridgeInstance'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteStpBridgeInstanceById(self, objectId ):
+        reqUrl =  self.urlBase+'StpBridgeInstance'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getStpBridgeInstance(self,
+                             Vlan):
+        obj =  { 
+                'Vlan' : Vlan,
+                }
+        reqUrl =  self.urlBase+'StpBridgeInstance'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteStpBridgeInstanceById(self, objectId ):
+        reqUrl =  self.urlBase+'StpBridgeInstance'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllStpBridgeInstances(self):
+        return self.getObjects( 'StpBridgeInstance') 
+
+
+    def getOspfExtLsdbEntryState(self,
+                                 ExtLsdbLsid,
+                                 ExtLsdbRouterId,
+                                 ExtLsdbType):
+        obj =  { 
+                'ExtLsdbLsid' : ExtLsdbLsid,
+                'ExtLsdbRouterId' : ExtLsdbRouterId,
+                'ExtLsdbType' : ExtLsdbType,
+                }
+        reqUrl =  self.urlBase+'OspfExtLsdbEntryState'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteOspfExtLsdbEntryStateById(self, objectId ):
+        reqUrl =  self.urlBase+'OspfExtLsdbEntryState'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllOspfExtLsdbEntryStates(self):
+        return self.getObjects( 'OspfExtLsdbEntryState') 
+
+
+    def createBfdInterface(self,
+                           RequiredMinRxInterval,
+                           AuthType,
+                           DemandEnabled,
+                           AuthKeyId,
+                           AuthData,
+                           DesiredMinTxInterval,
+                           AuthenticationEnabled,
+                           IfIndex,
+                           RequiredMinEchoRxInterval,
+                           LocalMultiplier):
+        obj =  { 
+                'RequiredMinRxInterval' : RequiredMinRxInterval,
+                'AuthType' : AuthType,
+                'DemandEnabled' : DemandEnabled,
+                'AuthKeyId' : AuthKeyId,
+                'AuthData' : AuthData,
+                'DesiredMinTxInterval' : DesiredMinTxInterval,
+                'AuthenticationEnabled' : AuthenticationEnabled,
+                'IfIndex' : IfIndex,
+                'RequiredMinEchoRxInterval' : RequiredMinEchoRxInterval,
+                'LocalMultiplier' : LocalMultiplier,
+                }
+        reqUrl =  self.urlBase+'BfdInterface'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updateBfdInterface(self,
+                           RequiredMinRxInterval,
+                           AuthType,
+                           DemandEnabled,
+                           AuthKeyId,
+                           AuthData,
+                           DesiredMinTxInterval,
+                           AuthenticationEnabled,
+                           IfIndex,
+                           RequiredMinEchoRxInterval,
+                           LocalMultiplier):
+        obj =  { 
+                'RequiredMinRxInterval' : RequiredMinRxInterval,
+                'AuthType' : AuthType,
+                'DemandEnabled' : DemandEnabled,
+                'AuthKeyId' : AuthKeyId,
+                'AuthData' : AuthData,
+                'DesiredMinTxInterval' : DesiredMinTxInterval,
+                'AuthenticationEnabled' : AuthenticationEnabled,
+                'IfIndex' : IfIndex,
+                'RequiredMinEchoRxInterval' : RequiredMinEchoRxInterval,
+                'LocalMultiplier' : LocalMultiplier,
+                }
+        reqUrl =  self.urlBase+'BfdInterface'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteBfdInterface(self,
+                           RequiredMinRxInterval,
+                           AuthType,
+                           DemandEnabled,
+                           AuthKeyId,
+                           AuthData,
+                           DesiredMinTxInterval,
+                           AuthenticationEnabled,
+                           IfIndex,
+                           RequiredMinEchoRxInterval,
+                           LocalMultiplier):
+        obj =  { 
+                'RequiredMinRxInterval' : RequiredMinRxInterval,
+                'AuthType' : AuthType,
+                'DemandEnabled' : DemandEnabled,
+                'AuthKeyId' : AuthKeyId,
+                'AuthData' : AuthData,
+                'DesiredMinTxInterval' : DesiredMinTxInterval,
+                'AuthenticationEnabled' : AuthenticationEnabled,
+                'IfIndex' : IfIndex,
+                'RequiredMinEchoRxInterval' : RequiredMinEchoRxInterval,
+                'LocalMultiplier' : LocalMultiplier,
+                }
+        reqUrl =  self.urlBase+'BfdInterface'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteBfdInterfaceById(self, objectId ):
+        reqUrl =  self.urlBase+'BfdInterface'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getBfdInterface(self,
+                        IfIndex):
+        obj =  { 
+                'IfIndex' : IfIndex,
+                }
+        reqUrl =  self.urlBase+'BfdInterface'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteBfdInterfaceById(self, objectId ):
+        reqUrl =  self.urlBase+'BfdInterface'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllBfdInterfaces(self):
+        return self.getObjects( 'BfdInterface') 
+
+
+    def createSystemLogging(self,
+                            SRLogger,
+                            SystemLogging):
+        obj =  { 
+                'SRLogger' : SRLogger,
+                'SystemLogging' : SystemLogging,
+                }
+        reqUrl =  self.urlBase+'SystemLogging'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updateSystemLogging(self,
+                            SRLogger,
+                            SystemLogging):
+        obj =  { 
+                'SRLogger' : SRLogger,
+                'SystemLogging' : SystemLogging,
+                }
+        reqUrl =  self.urlBase+'SystemLogging'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteSystemLogging(self,
+                            SRLogger,
+                            SystemLogging):
+        obj =  { 
+                'SRLogger' : SRLogger,
+                'SystemLogging' : SystemLogging,
+                }
+        reqUrl =  self.urlBase+'SystemLogging'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteSystemLoggingById(self, objectId ):
+        reqUrl =  self.urlBase+'SystemLogging'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getSystemLogging(self,
+                         SRLogger):
+        obj =  { 
+                'SRLogger' : SRLogger,
+                }
+        reqUrl =  self.urlBase+'SystemLogging'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteSystemLoggingById(self, objectId ):
+        reqUrl =  self.urlBase+'SystemLogging'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllSystemLoggings(self):
+        return self.getObjects( 'SystemLogging') 
+
+
+    def createOspfGlobalConfig(self,
+                               StubRouterAdvertisement,
+                               ExtLsdbLimit,
+                               DemandExtensions,
+                               RestartInterval,
+                               RFC1583Compatibility,
+                               ReferenceBandwidth,
+                               RouterId,
+                               RestartStrictLsaChecking,
+                               ExitOverflowInterval,
+                               AdminStat,
+                               MulticastExtensions,
+                               ASBdrRtrStatus,
+                               RestartSupport,
+                               TOSSupport):
+        obj =  { 
+                'StubRouterAdvertisement' : StubRouterAdvertisement,
+                'ExtLsdbLimit' : ExtLsdbLimit,
+                'DemandExtensions' : DemandExtensions,
+                'RestartInterval' : RestartInterval,
+                'RFC1583Compatibility' : RFC1583Compatibility,
+                'ReferenceBandwidth' : ReferenceBandwidth,
+                'RouterId' : RouterId,
+                'RestartStrictLsaChecking' : RestartStrictLsaChecking,
+                'ExitOverflowInterval' : ExitOverflowInterval,
+                'AdminStat' : AdminStat,
+                'MulticastExtensions' : MulticastExtensions,
+                'ASBdrRtrStatus' : ASBdrRtrStatus,
+                'RestartSupport' : RestartSupport,
+                'TOSSupport' : TOSSupport,
+                }
+        reqUrl =  self.urlBase+'OspfGlobalConfig'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updateOspfGlobalConfig(self,
+                               StubRouterAdvertisement,
+                               ExtLsdbLimit,
+                               DemandExtensions,
+                               RestartInterval,
+                               RFC1583Compatibility,
+                               ReferenceBandwidth,
+                               RouterId,
+                               RestartStrictLsaChecking,
+                               ExitOverflowInterval,
+                               AdminStat,
+                               MulticastExtensions,
+                               ASBdrRtrStatus,
+                               RestartSupport,
+                               TOSSupport):
+        obj =  { 
+                'StubRouterAdvertisement' : StubRouterAdvertisement,
+                'ExtLsdbLimit' : ExtLsdbLimit,
+                'DemandExtensions' : DemandExtensions,
+                'RestartInterval' : RestartInterval,
+                'RFC1583Compatibility' : RFC1583Compatibility,
+                'ReferenceBandwidth' : ReferenceBandwidth,
+                'RouterId' : RouterId,
+                'RestartStrictLsaChecking' : RestartStrictLsaChecking,
+                'ExitOverflowInterval' : ExitOverflowInterval,
+                'AdminStat' : AdminStat,
+                'MulticastExtensions' : MulticastExtensions,
+                'ASBdrRtrStatus' : ASBdrRtrStatus,
+                'RestartSupport' : RestartSupport,
+                'TOSSupport' : TOSSupport,
+                }
+        reqUrl =  self.urlBase+'OspfGlobalConfig'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteOspfGlobalConfig(self,
+                               StubRouterAdvertisement,
+                               ExtLsdbLimit,
+                               DemandExtensions,
+                               RestartInterval,
+                               RFC1583Compatibility,
+                               ReferenceBandwidth,
+                               RouterId,
+                               RestartStrictLsaChecking,
+                               ExitOverflowInterval,
+                               AdminStat,
+                               MulticastExtensions,
+                               ASBdrRtrStatus,
+                               RestartSupport,
+                               TOSSupport):
+        obj =  { 
+                'StubRouterAdvertisement' : StubRouterAdvertisement,
+                'ExtLsdbLimit' : ExtLsdbLimit,
+                'DemandExtensions' : DemandExtensions,
+                'RestartInterval' : RestartInterval,
+                'RFC1583Compatibility' : RFC1583Compatibility,
+                'ReferenceBandwidth' : ReferenceBandwidth,
+                'RouterId' : RouterId,
+                'RestartStrictLsaChecking' : RestartStrictLsaChecking,
+                'ExitOverflowInterval' : ExitOverflowInterval,
+                'AdminStat' : AdminStat,
+                'MulticastExtensions' : MulticastExtensions,
+                'ASBdrRtrStatus' : ASBdrRtrStatus,
+                'RestartSupport' : RestartSupport,
+                'TOSSupport' : TOSSupport,
+                }
+        reqUrl =  self.urlBase+'OspfGlobalConfig'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteOspfGlobalConfigById(self, objectId ):
+        reqUrl =  self.urlBase+'OspfGlobalConfig'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getOspfGlobalConfig(self,
+                            RouterId):
+        obj =  { 
+                'RouterId' : RouterId,
+                }
+        reqUrl =  self.urlBase+'OspfGlobalConfig'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteOspfGlobalConfigById(self, objectId ):
+        reqUrl =  self.urlBase+'OspfGlobalConfig'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllOspfGlobalConfigs(self):
+        return self.getObjects( 'OspfGlobalConfig') 
+
+
+    def getBGPPolicyActionState(self,
+                                Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.urlBase+'BGPPolicyActionState'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteBGPPolicyActionStateById(self, objectId ):
+        reqUrl =  self.urlBase+'BGPPolicyActionState'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllBGPPolicyActionStates(self):
+        return self.getObjects( 'BGPPolicyActionState') 
+
+
+    def getOspfAsLsdbEntryState(self,
+                                AsLsdbRouterId,
+                                AsLsdbLsid,
+                                AsLsdbType):
+        obj =  { 
+                'AsLsdbRouterId' : AsLsdbRouterId,
+                'AsLsdbLsid' : AsLsdbLsid,
+                'AsLsdbType' : AsLsdbType,
+                }
+        reqUrl =  self.urlBase+'OspfAsLsdbEntryState'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteOspfAsLsdbEntryStateById(self, objectId ):
+        reqUrl =  self.urlBase+'OspfAsLsdbEntryState'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllOspfAsLsdbEntryStates(self):
+        return self.getObjects( 'OspfAsLsdbEntryState') 
+
+
+    def getBGPPolicyDefinitionState(self,
+                                    Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.urlBase+'BGPPolicyDefinitionState'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteBGPPolicyDefinitionStateById(self, objectId ):
+        reqUrl =  self.urlBase+'BGPPolicyDefinitionState'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllBGPPolicyDefinitionStates(self):
+        return self.getObjects( 'BGPPolicyDefinitionState') 
+
+
+    def getPortState(self,
+                     PortNum):
+        obj =  { 
+                'PortNum' : PortNum,
+                }
+        reqUrl =  self.urlBase+'PortState'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deletePortStateById(self, objectId ):
+        reqUrl =  self.urlBase+'PortState'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllPortStates(self):
+        return self.getObjects( 'PortState') 
+
+
+    def createBGPPolicyAction(self,
+                              SendSummaryOnly,
+                              ActionType,
+                              Name,
+                              GenerateASSet):
+        obj =  { 
+                'SendSummaryOnly' : SendSummaryOnly,
+                'ActionType' : ActionType,
+                'Name' : Name,
+                'GenerateASSet' : GenerateASSet,
+                }
+        reqUrl =  self.urlBase+'BGPPolicyAction'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updateBGPPolicyAction(self,
+                              SendSummaryOnly,
+                              ActionType,
+                              Name,
+                              GenerateASSet):
+        obj =  { 
+                'SendSummaryOnly' : SendSummaryOnly,
+                'ActionType' : ActionType,
+                'Name' : Name,
+                'GenerateASSet' : GenerateASSet,
+                }
+        reqUrl =  self.urlBase+'BGPPolicyAction'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteBGPPolicyAction(self,
+                              SendSummaryOnly,
+                              ActionType,
+                              Name,
+                              GenerateASSet):
+        obj =  { 
+                'SendSummaryOnly' : SendSummaryOnly,
+                'ActionType' : ActionType,
+                'Name' : Name,
+                'GenerateASSet' : GenerateASSet,
+                }
+        reqUrl =  self.urlBase+'BGPPolicyAction'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteBGPPolicyActionById(self, objectId ):
+        reqUrl =  self.urlBase+'BGPPolicyAction'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getBGPPolicyAction(self,
+                           Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.urlBase+'BGPPolicyAction'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteBGPPolicyActionById(self, objectId ):
+        reqUrl =  self.urlBase+'BGPPolicyAction'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllBGPPolicyActions(self):
+        return self.getObjects( 'BGPPolicyAction') 
+
+
+    def getBGPPolicyStmtState(self,
+                              Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.urlBase+'BGPPolicyStmtState'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteBGPPolicyStmtStateById(self, objectId ):
+        reqUrl =  self.urlBase+'BGPPolicyStmtState'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllBGPPolicyStmtStates(self):
+        return self.getObjects( 'BGPPolicyStmtState') 
+
+
+    def createOspfHostEntryConfig(self,
+                                  HostMetric,
+                                  HostCfgAreaID,
+                                  HostTOS,
+                                  HostIpAddress):
+        obj =  { 
+                'HostMetric' : HostMetric,
+                'HostCfgAreaID' : HostCfgAreaID,
+                'HostTOS' : HostTOS,
+                'HostIpAddress' : HostIpAddress,
+                }
+        reqUrl =  self.urlBase+'OspfHostEntryConfig'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updateOspfHostEntryConfig(self,
+                                  HostMetric,
+                                  HostCfgAreaID,
+                                  HostTOS,
+                                  HostIpAddress):
+        obj =  { 
+                'HostMetric' : HostMetric,
+                'HostCfgAreaID' : HostCfgAreaID,
+                'HostTOS' : HostTOS,
+                'HostIpAddress' : HostIpAddress,
+                }
+        reqUrl =  self.urlBase+'OspfHostEntryConfig'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteOspfHostEntryConfig(self,
+                                  HostMetric,
+                                  HostCfgAreaID,
+                                  HostTOS,
+                                  HostIpAddress):
+        obj =  { 
+                'HostMetric' : HostMetric,
+                'HostCfgAreaID' : HostCfgAreaID,
+                'HostTOS' : HostTOS,
+                'HostIpAddress' : HostIpAddress,
+                }
+        reqUrl =  self.urlBase+'OspfHostEntryConfig'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteOspfHostEntryConfigById(self, objectId ):
+        reqUrl =  self.urlBase+'OspfHostEntryConfig'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getOspfHostEntryConfig(self,
+                               HostTOS,
+                               HostIpAddress):
+        obj =  { 
+                'HostTOS' : HostTOS,
+                'HostIpAddress' : HostIpAddress,
+                }
+        reqUrl =  self.urlBase+'OspfHostEntryConfig'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteOspfHostEntryConfigById(self, objectId ):
+        reqUrl =  self.urlBase+'OspfHostEntryConfig'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllOspfHostEntryConfigs(self):
+        return self.getObjects( 'OspfHostEntryConfig') 
+
+
+    def createIPv4Route(self,
+                        OutgoingIntfType,
+                        Protocol,
+                        OutgoingInterface,
+                        DestinationNw,
+                        Cost,
+                        NetworkMask,
+                        NextHopIp):
+        obj =  { 
+                'OutgoingIntfType' : OutgoingIntfType,
+                'Protocol' : Protocol,
+                'OutgoingInterface' : OutgoingInterface,
+                'DestinationNw' : DestinationNw,
+                'Cost' : Cost,
+                'NetworkMask' : NetworkMask,
+                'NextHopIp' : NextHopIp,
+                }
+        reqUrl =  self.urlBase+'IPv4Route'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updateIPv4Route(self,
+                        OutgoingIntfType,
+                        Protocol,
+                        OutgoingInterface,
+                        DestinationNw,
+                        Cost,
+                        NetworkMask,
+                        NextHopIp):
+        obj =  { 
+                'OutgoingIntfType' : OutgoingIntfType,
+                'Protocol' : Protocol,
+                'OutgoingInterface' : OutgoingInterface,
+                'DestinationNw' : DestinationNw,
+                'Cost' : Cost,
+                'NetworkMask' : NetworkMask,
+                'NextHopIp' : NextHopIp,
+                }
+        reqUrl =  self.urlBase+'IPv4Route'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteIPv4Route(self,
+                        OutgoingIntfType,
+                        Protocol,
+                        OutgoingInterface,
+                        DestinationNw,
+                        Cost,
+                        NetworkMask,
+                        NextHopIp):
+        obj =  { 
+                'OutgoingIntfType' : OutgoingIntfType,
+                'Protocol' : Protocol,
+                'OutgoingInterface' : OutgoingInterface,
+                'DestinationNw' : DestinationNw,
+                'Cost' : Cost,
+                'NetworkMask' : NetworkMask,
+                'NextHopIp' : NextHopIp,
+                }
+        reqUrl =  self.urlBase+'IPv4Route'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteIPv4RouteById(self, objectId ):
+        reqUrl =  self.urlBase+'IPv4Route'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getIPv4Route(self,
+                     DestinationNw,
+                     NetworkMask,
+                     NextHopIp):
+        obj =  { 
+                'DestinationNw' : DestinationNw,
+                'NetworkMask' : NetworkMask,
+                'NextHopIp' : NextHopIp,
+                }
+        reqUrl =  self.urlBase+'IPv4Route'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteIPv4RouteById(self, objectId ):
+        reqUrl =  self.urlBase+'IPv4Route'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllIPv4Routes(self):
+        return self.getObjects( 'IPv4Route') 
+
+
+    def getVxlanStateVtepInstanceBindVxlanId(self,
+                                             VxlanId):
+        obj =  { 
+                'VxlanId' : VxlanId,
+                }
+        reqUrl =  self.urlBase+'VxlanStateVtepInstanceBindVxlanId'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteVxlanStateVtepInstanceBindVxlanIdById(self, objectId ):
+        reqUrl =  self.urlBase+'VxlanStateVtepInstanceBindVxlanId'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllVxlanStateVtepInstanceBindVxlanIds(self):
+        return self.getObjects( 'VxlanStateVtepInstanceBindVxlanId') 
+
+
+    def getPolicyActionState(self,
+                             Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.urlBase+'PolicyActionState'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deletePolicyActionStateById(self, objectId ):
+        reqUrl =  self.urlBase+'PolicyActionState'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllPolicyActionStates(self):
+        return self.getObjects( 'PolicyActionState') 
+
+
+    def getOspfGlobalState(self,
+                           RouterId):
+        obj =  { 
+                'RouterId' : RouterId,
+                }
+        reqUrl =  self.urlBase+'OspfGlobalState'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteOspfGlobalStateById(self, objectId ):
+        reqUrl =  self.urlBase+'OspfGlobalState'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllOspfGlobalStates(self):
+        return self.getObjects( 'OspfGlobalState') 
+
+
+    def getBGPNeighborState(self,
+                            NeighborAddress,
+                            IfIndex):
+        obj =  { 
+                'NeighborAddress' : NeighborAddress,
+                'IfIndex' : IfIndex,
+                }
+        reqUrl =  self.urlBase+'BGPNeighborState'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteBGPNeighborStateById(self, objectId ):
+        reqUrl =  self.urlBase+'BGPNeighborState'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllBGPNeighborStates(self):
+        return self.getObjects( 'BGPNeighborState') 
+
+
+    def getBGPRoute(self,
+                    Network,
+                    NextHop,
+                    CIDRLen):
+        obj =  { 
+                'Network' : Network,
+                'NextHop' : NextHop,
+                'CIDRLen' : CIDRLen,
+                }
+        reqUrl =  self.urlBase+'BGPRoute'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteBGPRouteById(self, objectId ):
+        reqUrl =  self.urlBase+'BGPRoute'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllBGPRoutes(self):
+        return self.getObjects( 'BGPRoute') 
+
+
+    def createOspfAreaRangeEntryConfig(self,
+                                       AreaRangeMask,
+                                       AreaRangeAreaId,
+                                       AreaRangeEffect,
+                                       AreaRangeNet):
+        obj =  { 
+                'AreaRangeMask' : AreaRangeMask,
+                'AreaRangeAreaId' : AreaRangeAreaId,
+                'AreaRangeEffect' : AreaRangeEffect,
+                'AreaRangeNet' : AreaRangeNet,
+                }
+        reqUrl =  self.urlBase+'OspfAreaRangeEntryConfig'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updateOspfAreaRangeEntryConfig(self,
+                                       AreaRangeMask,
+                                       AreaRangeAreaId,
+                                       AreaRangeEffect,
+                                       AreaRangeNet):
+        obj =  { 
+                'AreaRangeMask' : AreaRangeMask,
+                'AreaRangeAreaId' : AreaRangeAreaId,
+                'AreaRangeEffect' : AreaRangeEffect,
+                'AreaRangeNet' : AreaRangeNet,
+                }
+        reqUrl =  self.urlBase+'OspfAreaRangeEntryConfig'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteOspfAreaRangeEntryConfig(self,
+                                       AreaRangeMask,
+                                       AreaRangeAreaId,
+                                       AreaRangeEffect,
+                                       AreaRangeNet):
+        obj =  { 
+                'AreaRangeMask' : AreaRangeMask,
+                'AreaRangeAreaId' : AreaRangeAreaId,
+                'AreaRangeEffect' : AreaRangeEffect,
+                'AreaRangeNet' : AreaRangeNet,
+                }
+        reqUrl =  self.urlBase+'OspfAreaRangeEntryConfig'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteOspfAreaRangeEntryConfigById(self, objectId ):
+        reqUrl =  self.urlBase+'OspfAreaRangeEntryConfig'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getOspfAreaRangeEntryConfig(self,
+                                    AreaRangeAreaId,
+                                    AreaRangeNet):
+        obj =  { 
+                'AreaRangeAreaId' : AreaRangeAreaId,
+                'AreaRangeNet' : AreaRangeNet,
+                }
+        reqUrl =  self.urlBase+'OspfAreaRangeEntryConfig'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteOspfAreaRangeEntryConfigById(self, objectId ):
+        reqUrl =  self.urlBase+'OspfAreaRangeEntryConfig'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllOspfAreaRangeEntryConfigs(self):
+        return self.getObjects( 'OspfAreaRangeEntryConfig') 
+
+
+    def createBGPPolicyDefinition(self,
+                                  Precedence,
+                                  MatchType,
+                                  Name,
+                                  StatementList):
+        obj =  { 
+                'Precedence' : Precedence,
+                'MatchType' : MatchType,
+                'Name' : Name,
+                'StatementList' : StatementList,
+                }
+        reqUrl =  self.urlBase+'BGPPolicyDefinition'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updateBGPPolicyDefinition(self,
+                                  Precedence,
+                                  MatchType,
+                                  Name,
+                                  StatementList):
+        obj =  { 
+                'Precedence' : Precedence,
+                'MatchType' : MatchType,
+                'Name' : Name,
+                'StatementList' : StatementList,
+                }
+        reqUrl =  self.urlBase+'BGPPolicyDefinition'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteBGPPolicyDefinition(self,
+                                  Precedence,
+                                  MatchType,
+                                  Name,
+                                  StatementList):
+        obj =  { 
+                'Precedence' : Precedence,
+                'MatchType' : MatchType,
+                'Name' : Name,
+                'StatementList' : StatementList,
+                }
+        reqUrl =  self.urlBase+'BGPPolicyDefinition'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteBGPPolicyDefinitionById(self, objectId ):
+        reqUrl =  self.urlBase+'BGPPolicyDefinition'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getBGPPolicyDefinition(self,
+                               Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.urlBase+'BGPPolicyDefinition'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteBGPPolicyDefinitionById(self, objectId ):
+        reqUrl =  self.urlBase+'BGPPolicyDefinition'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllBGPPolicyDefinitions(self):
+        return self.getObjects( 'BGPPolicyDefinition') 
+
+
+    def createPolicyCondition(self,
+                              ConditionType,
+                              MaskLengthRange,
+                              Name,
+                              MatchProtocol,
+                              IpPrefix):
+        obj =  { 
+                'ConditionType' : ConditionType,
+                'MaskLengthRange' : MaskLengthRange,
+                'Name' : Name,
+                'MatchProtocol' : MatchProtocol,
+                'IpPrefix' : IpPrefix,
+                }
+        reqUrl =  self.urlBase+'PolicyCondition'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updatePolicyCondition(self,
+                              ConditionType,
+                              MaskLengthRange,
+                              Name,
+                              MatchProtocol,
+                              IpPrefix):
+        obj =  { 
+                'ConditionType' : ConditionType,
+                'MaskLengthRange' : MaskLengthRange,
+                'Name' : Name,
+                'MatchProtocol' : MatchProtocol,
+                'IpPrefix' : IpPrefix,
+                }
+        reqUrl =  self.urlBase+'PolicyCondition'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deletePolicyCondition(self,
+                              ConditionType,
+                              MaskLengthRange,
+                              Name,
+                              MatchProtocol,
+                              IpPrefix):
+        obj =  { 
+                'ConditionType' : ConditionType,
+                'MaskLengthRange' : MaskLengthRange,
+                'Name' : Name,
+                'MatchProtocol' : MatchProtocol,
+                'IpPrefix' : IpPrefix,
+                }
+        reqUrl =  self.urlBase+'PolicyCondition'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deletePolicyConditionById(self, objectId ):
+        reqUrl =  self.urlBase+'PolicyCondition'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getPolicyCondition(self,
+                           Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.urlBase+'PolicyCondition'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deletePolicyConditionById(self, objectId ):
+        reqUrl =  self.urlBase+'PolicyCondition'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllPolicyConditions(self):
+        return self.getObjects( 'PolicyCondition') 
+
+
+    def createPort(self,
+                   MacAddr,
+                   PortNum,
+                   Description,
+                   Duplex,
+                   MediaType,
+                   Mtu,
+                   PhyIntfType,
+                   AdminState,
+                   Autoneg,
+                   Speed):
+        obj =  { 
+                'MacAddr' : MacAddr,
+                'PortNum' : PortNum,
+                'Description' : Description,
+                'Duplex' : Duplex,
+                'MediaType' : MediaType,
+                'Mtu' : Mtu,
+                'PhyIntfType' : PhyIntfType,
+                'AdminState' : AdminState,
+                'Autoneg' : Autoneg,
+                'Speed' : Speed,
+                }
+        reqUrl =  self.urlBase+'Port'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def updatePort(self,
+                   MacAddr,
+                   PortNum,
+                   Description,
+                   Duplex,
+                   MediaType,
+                   Mtu,
+                   PhyIntfType,
+                   AdminState,
+                   Autoneg,
+                   Speed):
+        obj =  { 
+                'MacAddr' : MacAddr,
+                'PortNum' : PortNum,
+                'Description' : Description,
+                'Duplex' : Duplex,
+                'MediaType' : MediaType,
+                'Mtu' : Mtu,
+                'PhyIntfType' : PhyIntfType,
+                'AdminState' : AdminState,
+                'Autoneg' : Autoneg,
+                'Speed' : Speed,
+                }
+        reqUrl =  self.urlBase+'Port'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deletePort(self,
+                   MacAddr,
+                   PortNum,
+                   Description,
+                   Duplex,
+                   MediaType,
+                   Mtu,
+                   PhyIntfType,
+                   AdminState,
+                   Autoneg,
+                   Speed):
+        obj =  { 
+                'MacAddr' : MacAddr,
+                'PortNum' : PortNum,
+                'Description' : Description,
+                'Duplex' : Duplex,
+                'MediaType' : MediaType,
+                'Mtu' : Mtu,
+                'PhyIntfType' : PhyIntfType,
+                'AdminState' : AdminState,
+                'Autoneg' : Autoneg,
+                'Speed' : Speed,
+                }
+        reqUrl =  self.urlBase+'Port'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deletePortById(self, objectId ):
+        reqUrl =  self.urlBase+'Port'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getPort(self,
+                PortNum):
+        obj =  { 
+                'PortNum' : PortNum,
+                }
+        reqUrl =  self.urlBase+'Port'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers)
+        print r.__dict__ 
+        return r.json() 
+
+
+    def deletePortById(self, objectId ):
+        reqUrl =  self.urlBase+'Port'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllPorts(self):
+        return self.getObjects( 'Port') 
+
+
+    def getOspfIfEntryState(self,
+                            IfIpAddress,
+                            AddressLessIf):
+        obj =  { 
+                'IfIpAddress' : IfIpAddress,
+                'AddressLessIf' : AddressLessIf,
+                }
+        reqUrl =  self.urlBase+'OspfIfEntryState'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r.json() 
+
+
+    def deleteOspfIfEntryStateById(self, objectId ):
+        reqUrl =  self.urlBase+'OspfIfEntryState'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r.json() 
+
+
+    def getAllOspfIfEntryStates(self):
+        return self.getObjects( 'OspfIfEntryState') 
+

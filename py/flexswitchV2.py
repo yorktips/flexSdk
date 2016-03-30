@@ -1214,7 +1214,7 @@ class FlexSwitch( object):
                 'SystemPriority' : SystemPriority,
                 'LagHash' : int(LagHash),
                 'AdminState' : AdminState,
-                'Members' : int(Members),
+                'Members' : Members,
                 }
         reqUrl =  self.urlBase+'LaPortChannel'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
