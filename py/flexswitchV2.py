@@ -469,6 +469,26 @@ class FlexSwitch( object):
 
 
     @processReturnCode
+    def getLaPortChannelState(self,
+                              LagId):
+        obj =  { 
+                'LagId' : LagId,
+                }
+        reqUrl =  self.urlBase+'LaPortChannelState'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def getLaPortChannelStateById(self, objectId ):
+        reqUrl =  self.urlBase+'LaPortChannelState'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllLaPortChannelStates(self):
+        return self.getObjects( 'LaPortChannelState') 
+
+
+    @processReturnCode
     def createDhcpRelayIntf(self,
                             IfIndex,
                             Enable,
@@ -1170,6 +1190,161 @@ class FlexSwitch( object):
 
     def getAllDhcpRelayGlobals(self):
         return self.getObjects( 'DhcpRelayGlobal') 
+
+
+    @processReturnCode
+    def createLaPortChannel(self,
+                            LagId,
+                            LagType,
+                            MinLinks,
+                            Interval,
+                            LacpMode,
+                            SystemIdMac,
+                            SystemPriority,
+                            LagHash,
+                            AdminState,
+                            Members):
+        obj =  { 
+                'LagId' : int(LagId),
+                'LagType' : int(LagType),
+                'MinLinks' : MinLinks,
+                'Interval' : int(Interval),
+                'LacpMode' : int(LacpMode),
+                'SystemIdMac' : SystemIdMac,
+                'SystemPriority' : SystemPriority,
+                'LagHash' : int(LagHash),
+                'AdminState' : AdminState,
+                'Members' : Members,
+                }
+        reqUrl =  self.urlBase+'LaPortChannel'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def updateLaPortChannel(self,
+                            LagId,
+                            LagType = None,
+                            MinLinks = None,
+                            Interval = None,
+                            LacpMode = None,
+                            SystemIdMac = None,
+                            SystemPriority = None,
+                            LagHash = None,
+                            AdminState = None,
+                            Members = None):
+        obj =  {}
+        if LagId != None :
+            obj['LagId'] = int(LagId)
+
+        if LagType != None :
+            obj['LagType'] = int(LagType)
+
+        if MinLinks != None :
+            obj['MinLinks'] = MinLinks
+
+        if Interval != None :
+            obj['Interval'] = int(Interval)
+
+        if LacpMode != None :
+            obj['LacpMode'] = int(LacpMode)
+
+        if SystemIdMac != None :
+            obj['SystemIdMac'] = SystemIdMac
+
+        if SystemPriority != None :
+            obj['SystemPriority'] = SystemPriority
+
+        if LagHash != None :
+            obj['LagHash'] = int(LagHash)
+
+        if AdminState != None :
+            obj['AdminState'] = AdminState
+
+        if Members != None :
+            obj['Members'] = int(Members)
+
+        reqUrl =  self.urlBase+'LaPortChannel'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def updateLaPortChannelById(self,
+                                 objectId,
+                                 LagType = None,
+                                 MinLinks = None,
+                                 Interval = None,
+                                 LacpMode = None,
+                                 SystemIdMac = None,
+                                 SystemPriority = None,
+                                 LagHash = None,
+                                 AdminState = None,
+                                 Members = None):
+        obj =  {'objectId': objectId }
+        if LagType !=  None:
+            obj['LagType'] = LagType
+
+        if MinLinks !=  None:
+            obj['MinLinks'] = MinLinks
+
+        if Interval !=  None:
+            obj['Interval'] = Interval
+
+        if LacpMode !=  None:
+            obj['LacpMode'] = LacpMode
+
+        if SystemIdMac !=  None:
+            obj['SystemIdMac'] = SystemIdMac
+
+        if SystemPriority !=  None:
+            obj['SystemPriority'] = SystemPriority
+
+        if LagHash !=  None:
+            obj['LagHash'] = LagHash
+
+        if AdminState !=  None:
+            obj['AdminState'] = AdminState
+
+        if Members !=  None:
+            obj['Members'] = Members
+
+        reqUrl =  self.urlBase+'LaPortChannel'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def deleteLaPortChannel(self,
+                            LagId):
+        obj =  { 
+                'LagId' : LagId,
+                }
+        reqUrl =  self.urlBase+'LaPortChannel'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def deleteLaPortChannelById(self, objectId ):
+        reqUrl =  self.urlBase+'LaPortChannel'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    @processReturnCode
+    def getLaPortChannel(self,
+                         LagId):
+        obj =  { 
+                'LagId' : LagId,
+                }
+        reqUrl =  self.urlBase+'LaPortChannel'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def getLaPortChannelById(self, objectId ):
+        reqUrl =  self.urlBase+'LaPortChannel'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllLaPortChannels(self):
+        return self.getObjects( 'LaPortChannel') 
 
 
     @processReturnCode
@@ -2550,6 +2725,81 @@ class FlexSwitch( object):
 
     def getAllBfdSessionStates(self):
         return self.getObjects( 'BfdSessionState') 
+
+
+    @processReturnCode
+    def createLLDPIntf(self,
+                       IfIndex,
+                       Enable):
+        obj =  { 
+                'IfIndex' : int(IfIndex),
+                'Enable' : True if Enable else False,
+                }
+        reqUrl =  self.urlBase+'LLDPIntf'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def updateLLDPIntf(self,
+                       IfIndex,
+                       Enable = None):
+        obj =  {}
+        if IfIndex != None :
+            obj['IfIndex'] = int(IfIndex)
+
+        if Enable != None :
+            obj['Enable'] = True if Enable else False
+
+        reqUrl =  self.urlBase+'LLDPIntf'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def updateLLDPIntfById(self,
+                            objectId,
+                            Enable = None):
+        obj =  {'objectId': objectId }
+        if Enable !=  None:
+            obj['Enable'] = Enable
+
+        reqUrl =  self.urlBase+'LLDPIntf'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def deleteLLDPIntf(self,
+                       IfIndex):
+        obj =  { 
+                'IfIndex' : IfIndex,
+                }
+        reqUrl =  self.urlBase+'LLDPIntf'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def deleteLLDPIntfById(self, objectId ):
+        reqUrl =  self.urlBase+'LLDPIntf'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    @processReturnCode
+    def getLLDPIntf(self,
+                    IfIndex):
+        obj =  { 
+                'IfIndex' : IfIndex,
+                }
+        reqUrl =  self.urlBase+'LLDPIntf'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def getLLDPIntfById(self, objectId ):
+        reqUrl =  self.urlBase+'LLDPIntf'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllLLDPIntfs(self):
+        return self.getObjects( 'LLDPIntf') 
 
 
     @processReturnCode
@@ -4581,6 +4831,28 @@ class FlexSwitch( object):
 
     def getAllStpBridgeInstances(self):
         return self.getObjects( 'StpBridgeInstance') 
+
+
+    @processReturnCode
+    def getLaPortChannelMemberState(self,
+                                    LagId,
+                                    IfIndex):
+        obj =  { 
+                'LagId' : LagId,
+                'IfIndex' : IfIndex,
+                }
+        reqUrl =  self.urlBase+'LaPortChannelMemberState'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def getLaPortChannelMemberStateById(self, objectId ):
+        reqUrl =  self.urlBase+'LaPortChannelMemberState'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllLaPortChannelMemberStates(self):
+        return self.getObjects( 'LaPortChannelMemberState') 
 
 
     @processReturnCode
