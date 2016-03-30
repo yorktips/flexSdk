@@ -91,7 +91,7 @@ class FlexPrint( object):
             print 'IfIndex   VRID    Vip     Priority   State     ViMac              IntfIp      Preempt  Advertise    Skew  Master_Down'
             print '================================================================================================================'
             for fObject in vrids:
-                entry = fObject['ConfigObj']
+                entry = fObject['Object']
                 print '%s   %s  %s     %s   %s   %s      %s   %s    %s            %s      %s' %(entry ['IfIndex'],
                                                                    entry ['VRID'],
                                                                    entry ['VirtualIPv4Addr'],
@@ -196,7 +196,7 @@ class FlexPrint( object):
 
             count = 0
             for data in brgs:
-                obj = data['ConfigObj']
+                obj = data['Object']
                 print "BrgIfIndex: ", obj["IfIndex"]
                 #print "Version: ", obj["ForceVersion"]
                 print "Bridge Id: ", obj["Address"]
@@ -236,7 +236,7 @@ class FlexPrint( object):
         if len(ports):
             print '\n\n---- STP PORT DB----'
             for data in ports:
-                obj = data['ConfigObj']
+                obj = data['Object']
                 bainconsistant = "(inconsistant)" if obj["BridgeAssuranceInconsistant"] else ""
                 print "IfIndex %s of BrgIfIndex %s is %s %s" %(obj["IfIndex"], obj["BrgIfIndex"], stateDict[obj["State"]], bainconsistant)
                 #print "Enabled %s, Protocol Migration %s" %(obj["Enable"], obj["ProtocolMigration"])
