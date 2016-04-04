@@ -3,26 +3,13 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-API reference!
+Instructions to install FlexSwitch
 =========================================
-
-Contents:
 
 .. toctree::
    :maxdepth: 2
 
-.. automodule:: flexswitchV2
-    :members:
-    :undoc-members:
-    :inherited-members:
-    :show-inheritance:
-
-.. autoclass:: FlexSwitch
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+    Hardware Supporting FlexSwitch <hardwareflexswitch>
+    FlexSwitch Software Installation <softwareflexswitch>
+    FlexSwitch Docker Image         <dockerflexswitch>
 
