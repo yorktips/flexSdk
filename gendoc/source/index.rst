@@ -3,15 +3,14 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Instructions to install FlexSwitch
+Welcome to FlexSwitchSDK's documentation!
 =========================================
-
-Contents:
 
 .. toctree::
    :maxdepth: 2
 
-    Hardware Supporting FlexSwitch <hardwareflexswitch>
-    FlexSwitch Software Installation <softwareflexswitch>
-    FlexSwitch Docker Image         <dockerflexswitch>
+    Installing FlexSwitch <install>
+    Example Configurations <example>
+    Network Topologies    <topology>
+    API Reference         <apis>
 
