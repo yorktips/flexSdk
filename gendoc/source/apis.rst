@@ -3,16 +3,24 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to FlexSwitchSDK's documentation!
+API reference!
 =========================================
-
-Contents:
 
 .. toctree::
    :maxdepth: 2
 
-    Installing FlexSwitch <install>
-    Example Configurations <example>
-    Network Topologies    <topology>
-    API Reference         <apis>
+.. automodule:: flexswitchV2
+    :members:
+    :undoc-members:
+    :inherited-members:
+    :show-inheritance:
+
+.. autoclass:: FlexSwitch
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
 
