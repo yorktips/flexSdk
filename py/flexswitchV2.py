@@ -11,7 +11,8 @@ def processReturnCode (method) :
         if r.status_code in self.httpSuccessCodes:
             return (r.json(), None)
         else:
-            return ({}, "Error")
+            print 'Error in executing request. Error code %s, Error Message: %s' %(r.status_code, r.json()['Error']) 
+            return (r.json(), "Error")
     return returnDetails
 
 class FlexSwitch( object):                                                                                              
@@ -58,26 +59,6 @@ class FlexSwitch( object):
 
     def getAllOspfHostEntryStates(self):
         return self.getObjects( 'OspfHostEntryState') 
-
-
-    @processReturnCode
-    def getVxlanStateVxlanInstanceMapL3interface(self,
-                                                 InterfaceName):
-        obj =  { 
-                'InterfaceName' : InterfaceName,
-                }
-        reqUrl =  self.urlBase+'VxlanStateVxlanInstanceMapL3interface'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def getVxlanStateVxlanInstanceMapL3interfaceById(self, objectId ):
-        reqUrl =  self.urlBase+'VxlanStateVxlanInstanceMapL3interface'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllVxlanStateVxlanInstanceMapL3interfaces(self):
-        return self.getObjects( 'VxlanStateVxlanInstanceMapL3interface') 
 
 
     @processReturnCode
@@ -709,140 +690,128 @@ class FlexSwitch( object):
 
 
     @processReturnCode
-    def createIpTableAcl(self,
-                         Name,
-                         Action,
-                         IpAddr,
-                         Protocol,
-                         Port='all',
-                         PhysicalPort='all'):
+    def createVrrpIntf(self,
+                       VRID,
+                       IfIndex,
+                       VirtualIPv4Addr,
+                       PreemptMode=True,
+                       Priority=100,
+                       AdvertisementInterval=1,
+                       AcceptMode=False):
         obj =  { 
-                'Name' : Name,
-                'Action' : Action,
-                'IpAddr' : IpAddr,
-                'Protocol' : Protocol,
-                'Port' : Port,
-                'PhysicalPort' : PhysicalPort,
+                'VRID' : int(VRID),
+                'IfIndex' : int(IfIndex),
+                'VirtualIPv4Addr' : VirtualIPv4Addr,
+                'PreemptMode' : True if PreemptMode else False,
+                'Priority' : int(Priority),
+                'AdvertisementInterval' : int(AdvertisementInterval),
+                'AcceptMode' : True if AcceptMode else False,
                 }
-        reqUrl =  self.urlBase+'IpTableAcl'
+        reqUrl =  self.urlBase+'VrrpIntf'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
-    def updateIpTableAcl(self,
-                         Name,
-                         Action = None,
-                         IpAddr = None,
-                         Protocol = None,
-                         Port = None,
-                         PhysicalPort = None):
+    def updateVrrpIntf(self,
+                       VRID,
+                       IfIndex,
+                       VirtualIPv4Addr = None,
+                       PreemptMode = None,
+                       Priority = None,
+                       AdvertisementInterval = None,
+                       AcceptMode = None):
         obj =  {}
-        if Name != None :
-            obj['Name'] = Name
+        if VRID != None :
+            obj['VRID'] = int(VRID)
 
-        if Action != None :
-            obj['Action'] = Action
+        if IfIndex != None :
+            obj['IfIndex'] = int(IfIndex)
 
-        if IpAddr != None :
-            obj['IpAddr'] = IpAddr
+        if VirtualIPv4Addr != None :
+            obj['VirtualIPv4Addr'] = VirtualIPv4Addr
 
-        if Protocol != None :
-            obj['Protocol'] = Protocol
+        if PreemptMode != None :
+            obj['PreemptMode'] = True if PreemptMode else False
 
-        if Port != None :
-            obj['Port'] = Port
+        if Priority != None :
+            obj['Priority'] = int(Priority)
 
-        if PhysicalPort != None :
-            obj['PhysicalPort'] = PhysicalPort
+        if AdvertisementInterval != None :
+            obj['AdvertisementInterval'] = int(AdvertisementInterval)
 
-        reqUrl =  self.urlBase+'IpTableAcl'
+        if AcceptMode != None :
+            obj['AcceptMode'] = True if AcceptMode else False
+
+        reqUrl =  self.urlBase+'VrrpIntf'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
-    def updateIpTableAclById(self,
-                              objectId,
-                              Action = None,
-                              IpAddr = None,
-                              Protocol = None,
-                              Port = None,
-                              PhysicalPort = None):
+    def updateVrrpIntfById(self,
+                            objectId,
+                            VirtualIPv4Addr = None,
+                            PreemptMode = None,
+                            Priority = None,
+                            AdvertisementInterval = None,
+                            AcceptMode = None):
         obj =  {'objectId': objectId }
-        if Action !=  None:
-            obj['Action'] = Action
+        if VirtualIPv4Addr !=  None:
+            obj['VirtualIPv4Addr'] = VirtualIPv4Addr
 
-        if IpAddr !=  None:
-            obj['IpAddr'] = IpAddr
+        if PreemptMode !=  None:
+            obj['PreemptMode'] = PreemptMode
 
-        if Protocol !=  None:
-            obj['Protocol'] = Protocol
+        if Priority !=  None:
+            obj['Priority'] = Priority
 
-        if Port !=  None:
-            obj['Port'] = Port
+        if AdvertisementInterval !=  None:
+            obj['AdvertisementInterval'] = AdvertisementInterval
 
-        if PhysicalPort !=  None:
-            obj['PhysicalPort'] = PhysicalPort
+        if AcceptMode !=  None:
+            obj['AcceptMode'] = AcceptMode
 
-        reqUrl =  self.urlBase+'IpTableAcl'
+        reqUrl =  self.urlBase+'VrrpIntf'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
-    def deleteIpTableAcl(self,
-                         Name):
+    def deleteVrrpIntf(self,
+                       VRID,
+                       IfIndex):
         obj =  { 
-                'Name' : Name,
+                'VRID' : VRID,
+                'IfIndex' : IfIndex,
                 }
-        reqUrl =  self.urlBase+'IpTableAcl'
+        reqUrl =  self.urlBase+'VrrpIntf'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
-    def deleteIpTableAclById(self, objectId ):
-        reqUrl =  self.urlBase+'IpTableAcl'+"/%s"%(objectId)
+    def deleteVrrpIntfById(self, objectId ):
+        reqUrl =  self.urlBase+'VrrpIntf'+"/%s"%(objectId)
         r = requests.delete(reqUrl, data=None, headers=headers) 
         return r
 
     @processReturnCode
-    def getIpTableAcl(self,
-                      Name):
+    def getVrrpIntf(self,
+                    VRID,
+                    IfIndex):
         obj =  { 
-                'Name' : Name,
-                }
-        reqUrl =  self.urlBase+'IpTableAcl'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def getIpTableAclById(self, objectId ):
-        reqUrl =  self.urlBase+'IpTableAcl'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllIpTableAcls(self):
-        return self.getObjects( 'IpTableAcl') 
-
-
-    @processReturnCode
-    def getStpPortState(self,
-                        BrgIfIndex,
-                        IfIndex):
-        obj =  { 
-                'BrgIfIndex' : BrgIfIndex,
+                'VRID' : VRID,
                 'IfIndex' : IfIndex,
                 }
-        reqUrl =  self.urlBase+'StpPortState'
+        reqUrl =  self.urlBase+'VrrpIntf'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
-    def getStpPortStateById(self, objectId ):
-        reqUrl =  self.urlBase+'StpPortState'+"/%s"%(objectId)
+    def getVrrpIntfById(self, objectId ):
+        reqUrl =  self.urlBase+'VrrpIntf'+"/%s"%(objectId)
         r = requests.get(reqUrl, data=None, headers=headers) 
         return r
 
-    def getAllStpPortStates(self):
-        return self.getObjects( 'StpPortState') 
+    def getAllVrrpIntfs(self):
+        return self.getObjects( 'VrrpIntf') 
 
 
     @processReturnCode
@@ -1197,24 +1166,24 @@ class FlexSwitch( object):
                             LagId,
                             LagType,
                             MinLinks,
-                            Interval,
-                            LacpMode,
                             SystemIdMac,
                             SystemPriority,
-                            LagHash,
                             AdminState,
-                            Members):
+                            Members,
+                            Interval=1,
+                            LagHash=0,
+                            LacpMode=0):
         obj =  { 
                 'LagId' : int(LagId),
                 'LagType' : int(LagType),
                 'MinLinks' : MinLinks,
-                'Interval' : int(Interval),
-                'LacpMode' : int(LacpMode),
                 'SystemIdMac' : SystemIdMac,
                 'SystemPriority' : SystemPriority,
-                'LagHash' : int(LagHash),
                 'AdminState' : AdminState,
                 'Members' : Members,
+                'Interval' : int(Interval),
+                'LagHash' : int(LagHash),
+                'LacpMode' : int(LacpMode),
                 }
         reqUrl =  self.urlBase+'LaPortChannel'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -1225,13 +1194,13 @@ class FlexSwitch( object):
                             LagId,
                             LagType = None,
                             MinLinks = None,
-                            Interval = None,
-                            LacpMode = None,
                             SystemIdMac = None,
                             SystemPriority = None,
-                            LagHash = None,
                             AdminState = None,
-                            Members = None):
+                            Members = None,
+                            Interval = None,
+                            LagHash = None,
+                            LacpMode = None):
         obj =  {}
         if LagId != None :
             obj['LagId'] = int(LagId)
@@ -1242,26 +1211,26 @@ class FlexSwitch( object):
         if MinLinks != None :
             obj['MinLinks'] = MinLinks
 
-        if Interval != None :
-            obj['Interval'] = int(Interval)
-
-        if LacpMode != None :
-            obj['LacpMode'] = int(LacpMode)
-
         if SystemIdMac != None :
             obj['SystemIdMac'] = SystemIdMac
 
         if SystemPriority != None :
             obj['SystemPriority'] = SystemPriority
 
-        if LagHash != None :
-            obj['LagHash'] = int(LagHash)
-
         if AdminState != None :
             obj['AdminState'] = AdminState
 
         if Members != None :
-            obj['Members'] = int(Members)
+            obj['Members'] = Members
+
+        if Interval != None :
+            obj['Interval'] = int(Interval)
+
+        if LagHash != None :
+            obj['LagHash'] = int(LagHash)
+
+        if LacpMode != None :
+            obj['LacpMode'] = int(LacpMode)
 
         reqUrl =  self.urlBase+'LaPortChannel'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -1272,13 +1241,13 @@ class FlexSwitch( object):
                                  objectId,
                                  LagType = None,
                                  MinLinks = None,
-                                 Interval = None,
-                                 LacpMode = None,
                                  SystemIdMac = None,
                                  SystemPriority = None,
-                                 LagHash = None,
                                  AdminState = None,
-                                 Members = None):
+                                 Members = None,
+                                 Interval = None,
+                                 LagHash = None,
+                                 LacpMode = None):
         obj =  {'objectId': objectId }
         if LagType !=  None:
             obj['LagType'] = LagType
@@ -1286,26 +1255,26 @@ class FlexSwitch( object):
         if MinLinks !=  None:
             obj['MinLinks'] = MinLinks
 
-        if Interval !=  None:
-            obj['Interval'] = Interval
-
-        if LacpMode !=  None:
-            obj['LacpMode'] = LacpMode
-
         if SystemIdMac !=  None:
             obj['SystemIdMac'] = SystemIdMac
 
         if SystemPriority !=  None:
             obj['SystemPriority'] = SystemPriority
 
-        if LagHash !=  None:
-            obj['LagHash'] = LagHash
-
         if AdminState !=  None:
             obj['AdminState'] = AdminState
 
         if Members !=  None:
             obj['Members'] = Members
+
+        if Interval !=  None:
+            obj['Interval'] = Interval
+
+        if LagHash !=  None:
+            obj['LagHash'] = LagHash
+
+        if LacpMode !=  None:
+            obj['LacpMode'] = LacpMode
 
         reqUrl =  self.urlBase+'LaPortChannel'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -1371,81 +1340,6 @@ class FlexSwitch( object):
 
     def getAllOspfLsdbEntryStates(self):
         return self.getObjects( 'OspfLsdbEntryState') 
-
-
-    @processReturnCode
-    def createVxlanVxlanInstanceAccessTypeVlanVlanList(self,
-                                                       VxlanId,
-                                                       VlanId):
-        obj =  { 
-                'VxlanId' : int(VxlanId),
-                'VlanId' : VlanId,
-                }
-        reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeVlanVlanList'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def updateVxlanVxlanInstanceAccessTypeVlanVlanList(self,
-                                                       VxlanId,
-                                                       VlanId):
-        obj =  {}
-        if VxlanId != None :
-            obj['VxlanId'] = int(VxlanId)
-
-        if VlanId != None :
-            obj['VlanId'] = VlanId
-
-        reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeVlanVlanList'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def updateVxlanVxlanInstanceAccessTypeVlanVlanListById(self,
-                                                            objectId):
-        obj =  {'objectId': objectId }
-        reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeVlanVlanList'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def deleteVxlanVxlanInstanceAccessTypeVlanVlanList(self,
-                                                       VxlanId,
-                                                       VlanId):
-        obj =  { 
-                'VxlanId' : VxlanId,
-                'VlanId' : VlanId,
-                }
-        reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeVlanVlanList'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def deleteVxlanVxlanInstanceAccessTypeVlanVlanListById(self, objectId ):
-        reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeVlanVlanList'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
-        return r
-
-    @processReturnCode
-    def getVxlanVxlanInstanceAccessTypeVlanVlanList(self,
-                                                    VxlanId,
-                                                    VlanId):
-        obj =  { 
-                'VxlanId' : VxlanId,
-                'VlanId' : VlanId,
-                }
-        reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeVlanVlanList'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def getVxlanVxlanInstanceAccessTypeVlanVlanListById(self, objectId ):
-        reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeVlanVlanList'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllVxlanVxlanInstanceAccessTypeVlanVlanLists(self):
-        return self.getObjects( 'VxlanVxlanInstanceAccessTypeVlanVlanList') 
 
 
     @processReturnCode
@@ -2271,101 +2165,6 @@ class FlexSwitch( object):
 
 
     @processReturnCode
-    def createVxlanVxlanInstanceVxlanEvpnVpnTargets(self,
-                                                    RtValue,
-                                                    VxlanId,
-                                                    RouteDistinguisher,
-                                                    RtType):
-        obj =  { 
-                'RtValue' : RtValue,
-                'VxlanId' : int(VxlanId),
-                'RouteDistinguisher' : RouteDistinguisher,
-                'RtType' : int(RtType),
-                }
-        reqUrl =  self.urlBase+'VxlanVxlanInstanceVxlanEvpnVpnTargets'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def updateVxlanVxlanInstanceVxlanEvpnVpnTargets(self,
-                                                    RtValue,
-                                                    VxlanId,
-                                                    RouteDistinguisher = None,
-                                                    RtType = None):
-        obj =  {}
-        if RtValue != None :
-            obj['RtValue'] = RtValue
-
-        if VxlanId != None :
-            obj['VxlanId'] = int(VxlanId)
-
-        if RouteDistinguisher != None :
-            obj['RouteDistinguisher'] = RouteDistinguisher
-
-        if RtType != None :
-            obj['RtType'] = int(RtType)
-
-        reqUrl =  self.urlBase+'VxlanVxlanInstanceVxlanEvpnVpnTargets'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def updateVxlanVxlanInstanceVxlanEvpnVpnTargetsById(self,
-                                                         objectId,
-                                                         RouteDistinguisher = None,
-                                                         RtType = None):
-        obj =  {'objectId': objectId }
-        if RouteDistinguisher !=  None:
-            obj['RouteDistinguisher'] = RouteDistinguisher
-
-        if RtType !=  None:
-            obj['RtType'] = RtType
-
-        reqUrl =  self.urlBase+'VxlanVxlanInstanceVxlanEvpnVpnTargets'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def deleteVxlanVxlanInstanceVxlanEvpnVpnTargets(self,
-                                                    RtValue,
-                                                    VxlanId):
-        obj =  { 
-                'RtValue' : RtValue,
-                'VxlanId' : VxlanId,
-                }
-        reqUrl =  self.urlBase+'VxlanVxlanInstanceVxlanEvpnVpnTargets'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def deleteVxlanVxlanInstanceVxlanEvpnVpnTargetsById(self, objectId ):
-        reqUrl =  self.urlBase+'VxlanVxlanInstanceVxlanEvpnVpnTargets'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
-        return r
-
-    @processReturnCode
-    def getVxlanVxlanInstanceVxlanEvpnVpnTargets(self,
-                                                 RtValue,
-                                                 VxlanId):
-        obj =  { 
-                'RtValue' : RtValue,
-                'VxlanId' : VxlanId,
-                }
-        reqUrl =  self.urlBase+'VxlanVxlanInstanceVxlanEvpnVpnTargets'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def getVxlanVxlanInstanceVxlanEvpnVpnTargetsById(self, objectId ):
-        reqUrl =  self.urlBase+'VxlanVxlanInstanceVxlanEvpnVpnTargets'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllVxlanVxlanInstanceVxlanEvpnVpnTargetss(self):
-        return self.getObjects( 'VxlanVxlanInstanceVxlanEvpnVpnTargets') 
-
-
-    @processReturnCode
     def getOspfAreaLsaCountEntryState(self,
                                       AreaLsaCountAreaId,
                                       AreaLsaCountLsaType):
@@ -2578,26 +2377,6 @@ class FlexSwitch( object):
 
 
     @processReturnCode
-    def getVxlanStateVxlanInstanceAccessVlan(self,
-                                             VlanId):
-        obj =  { 
-                'VlanId' : VlanId,
-                }
-        reqUrl =  self.urlBase+'VxlanStateVxlanInstanceAccessVlan'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def getVxlanStateVxlanInstanceAccessVlanById(self, objectId ):
-        reqUrl =  self.urlBase+'VxlanStateVxlanInstanceAccessVlan'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllVxlanStateVxlanInstanceAccessVlans(self):
-        return self.getObjects( 'VxlanStateVxlanInstanceAccessVlan') 
-
-
-    @processReturnCode
     def getIPv4RouteState(self,
                           DestinationNw,
                           NextHopIp):
@@ -2668,26 +2447,6 @@ class FlexSwitch( object):
 
 
     @processReturnCode
-    def getVxlanStateVxlanInstanceVxlanEvpnVpnTargets(self,
-                                                      RtValue):
-        obj =  { 
-                'RtValue' : RtValue,
-                }
-        reqUrl =  self.urlBase+'VxlanStateVxlanInstanceVxlanEvpnVpnTargets'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def getVxlanStateVxlanInstanceVxlanEvpnVpnTargetsById(self, objectId ):
-        reqUrl =  self.urlBase+'VxlanStateVxlanInstanceVxlanEvpnVpnTargets'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllVxlanStateVxlanInstanceVxlanEvpnVpnTargetss(self):
-        return self.getObjects( 'VxlanStateVxlanInstanceVxlanEvpnVpnTargets') 
-
-
-    @processReturnCode
     def getBGPGlobalState(self,
                           RouterId):
         obj =  { 
@@ -2709,9 +2468,9 @@ class FlexSwitch( object):
 
     @processReturnCode
     def getBfdSessionState(self,
-                           SessionId):
+                           IpAddr):
         obj =  { 
-                'SessionId' : SessionId,
+                'IpAddr' : IpAddr,
                 }
         reqUrl =  self.urlBase+'BfdSessionState'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3075,152 +2834,138 @@ class FlexSwitch( object):
 
 
     @processReturnCode
-    def createVxlanInterfacesInterfaceVtepInstancesBindVxlanId(self,
-                                                               VtepId,
-                                                               Name,
-                                                               VxlanId,
-                                                               InnerVlanHandlingMode,
-                                                               SourceInterface,
-                                                               MulticastIp,
-                                                               VtepName):
+    def getMacTableEntry(self,
+                         MacAddr):
         obj =  { 
-                'VtepId' : int(VtepId),
-                'Name' : Name,
-                'VxlanId' : int(VxlanId),
-                'InnerVlanHandlingMode' : int(InnerVlanHandlingMode),
-                'SourceInterface' : SourceInterface,
-                'MulticastIp' : MulticastIp,
-                'VtepName' : VtepName,
+                'MacAddr' : MacAddr,
                 }
-        reqUrl =  self.urlBase+'VxlanInterfacesInterfaceVtepInstancesBindVxlanId'
+        reqUrl =  self.urlBase+'MacTableEntry'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def getMacTableEntryById(self, objectId ):
+        reqUrl =  self.urlBase+'MacTableEntry'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllMacTableEntrys(self):
+        return self.getObjects( 'MacTableEntry') 
+
+
+    @processReturnCode
+    def createIpTableAcl(self,
+                         Name,
+                         Action,
+                         IpAddr,
+                         Protocol,
+                         Port='all',
+                         PhysicalPort='all'):
+        obj =  { 
+                'Name' : Name,
+                'Action' : Action,
+                'IpAddr' : IpAddr,
+                'Protocol' : Protocol,
+                'Port' : Port,
+                'PhysicalPort' : PhysicalPort,
+                }
+        reqUrl =  self.urlBase+'IpTableAcl'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
-    def updateVxlanInterfacesInterfaceVtepInstancesBindVxlanId(self,
-                                                               VtepId,
-                                                               Name,
-                                                               VxlanId,
-                                                               InnerVlanHandlingMode = None,
-                                                               SourceInterface = None,
-                                                               MulticastIp = None,
-                                                               VtepName = None):
+    def updateIpTableAcl(self,
+                         Name,
+                         Action = None,
+                         IpAddr = None,
+                         Protocol = None,
+                         Port = None,
+                         PhysicalPort = None):
         obj =  {}
-        if VtepId != None :
-            obj['VtepId'] = int(VtepId)
-
         if Name != None :
             obj['Name'] = Name
 
-        if VxlanId != None :
-            obj['VxlanId'] = int(VxlanId)
+        if Action != None :
+            obj['Action'] = Action
 
-        if InnerVlanHandlingMode != None :
-            obj['InnerVlanHandlingMode'] = int(InnerVlanHandlingMode)
+        if IpAddr != None :
+            obj['IpAddr'] = IpAddr
 
-        if SourceInterface != None :
-            obj['SourceInterface'] = SourceInterface
+        if Protocol != None :
+            obj['Protocol'] = Protocol
 
-        if MulticastIp != None :
-            obj['MulticastIp'] = MulticastIp
+        if Port != None :
+            obj['Port'] = Port
 
-        if VtepName != None :
-            obj['VtepName'] = VtepName
+        if PhysicalPort != None :
+            obj['PhysicalPort'] = PhysicalPort
 
-        reqUrl =  self.urlBase+'VxlanInterfacesInterfaceVtepInstancesBindVxlanId'
+        reqUrl =  self.urlBase+'IpTableAcl'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
-    def updateVxlanInterfacesInterfaceVtepInstancesBindVxlanIdById(self,
-                                                                    objectId,
-                                                                    InnerVlanHandlingMode = None,
-                                                                    SourceInterface = None,
-                                                                    MulticastIp = None,
-                                                                    VtepName = None):
+    def updateIpTableAclById(self,
+                              objectId,
+                              Action = None,
+                              IpAddr = None,
+                              Protocol = None,
+                              Port = None,
+                              PhysicalPort = None):
         obj =  {'objectId': objectId }
-        if InnerVlanHandlingMode !=  None:
-            obj['InnerVlanHandlingMode'] = InnerVlanHandlingMode
+        if Action !=  None:
+            obj['Action'] = Action
 
-        if SourceInterface !=  None:
-            obj['SourceInterface'] = SourceInterface
+        if IpAddr !=  None:
+            obj['IpAddr'] = IpAddr
 
-        if MulticastIp !=  None:
-            obj['MulticastIp'] = MulticastIp
+        if Protocol !=  None:
+            obj['Protocol'] = Protocol
 
-        if VtepName !=  None:
-            obj['VtepName'] = VtepName
+        if Port !=  None:
+            obj['Port'] = Port
 
-        reqUrl =  self.urlBase+'VxlanInterfacesInterfaceVtepInstancesBindVxlanId'
+        if PhysicalPort !=  None:
+            obj['PhysicalPort'] = PhysicalPort
+
+        reqUrl =  self.urlBase+'IpTableAcl'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
-    def deleteVxlanInterfacesInterfaceVtepInstancesBindVxlanId(self,
-                                                               VtepId,
-                                                               Name,
-                                                               VxlanId):
+    def deleteIpTableAcl(self,
+                         Name):
         obj =  { 
-                'VtepId' : VtepId,
                 'Name' : Name,
-                'VxlanId' : VxlanId,
                 }
-        reqUrl =  self.urlBase+'VxlanInterfacesInterfaceVtepInstancesBindVxlanId'
+        reqUrl =  self.urlBase+'IpTableAcl'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
-    def deleteVxlanInterfacesInterfaceVtepInstancesBindVxlanIdById(self, objectId ):
-        reqUrl =  self.urlBase+'VxlanInterfacesInterfaceVtepInstancesBindVxlanId'+"/%s"%(objectId)
+    def deleteIpTableAclById(self, objectId ):
+        reqUrl =  self.urlBase+'IpTableAcl'+"/%s"%(objectId)
         r = requests.delete(reqUrl, data=None, headers=headers) 
         return r
 
     @processReturnCode
-    def getVxlanInterfacesInterfaceVtepInstancesBindVxlanId(self,
-                                                            VtepId,
-                                                            Name,
-                                                            VxlanId):
+    def getIpTableAcl(self,
+                      Name):
         obj =  { 
-                'VtepId' : VtepId,
                 'Name' : Name,
-                'VxlanId' : VxlanId,
                 }
-        reqUrl =  self.urlBase+'VxlanInterfacesInterfaceVtepInstancesBindVxlanId'
+        reqUrl =  self.urlBase+'IpTableAcl'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
-    def getVxlanInterfacesInterfaceVtepInstancesBindVxlanIdById(self, objectId ):
-        reqUrl =  self.urlBase+'VxlanInterfacesInterfaceVtepInstancesBindVxlanId'+"/%s"%(objectId)
+    def getIpTableAclById(self, objectId ):
+        reqUrl =  self.urlBase+'IpTableAcl'+"/%s"%(objectId)
         r = requests.get(reqUrl, data=None, headers=headers) 
         return r
 
-    def getAllVxlanInterfacesInterfaceVtepInstancesBindVxlanIds(self):
-        return self.getObjects( 'VxlanInterfacesInterfaceVtepInstancesBindVxlanId') 
-
-
-    @processReturnCode
-    def getVxlanStateStaticVxlanTunnelAddressFamilyBindVxlanId(self,
-                                                               VxlanId,
-                                                               Af,
-                                                               VxlanTunnelId):
-        obj =  { 
-                'VxlanId' : VxlanId,
-                'Af' : Af,
-                'VxlanTunnelId' : VxlanTunnelId,
-                }
-        reqUrl =  self.urlBase+'VxlanStateStaticVxlanTunnelAddressFamilyBindVxlanId'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def getVxlanStateStaticVxlanTunnelAddressFamilyBindVxlanIdById(self, objectId ):
-        reqUrl =  self.urlBase+'VxlanStateStaticVxlanTunnelAddressFamilyBindVxlanId'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllVxlanStateStaticVxlanTunnelAddressFamilyBindVxlanIds(self):
-        return self.getObjects( 'VxlanStateStaticVxlanTunnelAddressFamilyBindVxlanId') 
+    def getAllIpTableAcls(self):
+        return self.getObjects( 'IpTableAcl') 
 
 
     @processReturnCode
@@ -3679,131 +3424,6 @@ class FlexSwitch( object):
 
 
     @processReturnCode
-    def createVxlanInterfacesInterfaceStaticVxlanTunnelAddressFamilyBindVxlanId(self,
-                                                                                Name,
-                                                                                Af,
-                                                                                VxlanId,
-                                                                                VxlanTunnelId,
-                                                                                TunnelSourceIp,
-                                                                                TunnelDestinationIp,
-                                                                                VxlanTunnelName):
-        obj =  { 
-                'Name' : Name,
-                'Af' : int(Af),
-                'VxlanId' : int(VxlanId),
-                'VxlanTunnelId' : int(VxlanTunnelId),
-                'TunnelSourceIp' : int(TunnelSourceIp),
-                'TunnelDestinationIp' : int(TunnelDestinationIp),
-                'VxlanTunnelName' : VxlanTunnelName,
-                }
-        reqUrl =  self.urlBase+'VxlanInterfacesInterfaceStaticVxlanTunnelAddressFamilyBindVxlanId'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def updateVxlanInterfacesInterfaceStaticVxlanTunnelAddressFamilyBindVxlanId(self,
-                                                                                Name,
-                                                                                Af,
-                                                                                VxlanId,
-                                                                                VxlanTunnelId,
-                                                                                TunnelSourceIp = None,
-                                                                                TunnelDestinationIp = None,
-                                                                                VxlanTunnelName = None):
-        obj =  {}
-        if Name != None :
-            obj['Name'] = Name
-
-        if Af != None :
-            obj['Af'] = int(Af)
-
-        if VxlanId != None :
-            obj['VxlanId'] = int(VxlanId)
-
-        if VxlanTunnelId != None :
-            obj['VxlanTunnelId'] = int(VxlanTunnelId)
-
-        if TunnelSourceIp != None :
-            obj['TunnelSourceIp'] = int(TunnelSourceIp)
-
-        if TunnelDestinationIp != None :
-            obj['TunnelDestinationIp'] = int(TunnelDestinationIp)
-
-        if VxlanTunnelName != None :
-            obj['VxlanTunnelName'] = VxlanTunnelName
-
-        reqUrl =  self.urlBase+'VxlanInterfacesInterfaceStaticVxlanTunnelAddressFamilyBindVxlanId'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def updateVxlanInterfacesInterfaceStaticVxlanTunnelAddressFamilyBindVxlanIdById(self,
-                                                                                     objectId,
-                                                                                     TunnelSourceIp = None,
-                                                                                     TunnelDestinationIp = None,
-                                                                                     VxlanTunnelName = None):
-        obj =  {'objectId': objectId }
-        if TunnelSourceIp !=  None:
-            obj['TunnelSourceIp'] = TunnelSourceIp
-
-        if TunnelDestinationIp !=  None:
-            obj['TunnelDestinationIp'] = TunnelDestinationIp
-
-        if VxlanTunnelName !=  None:
-            obj['VxlanTunnelName'] = VxlanTunnelName
-
-        reqUrl =  self.urlBase+'VxlanInterfacesInterfaceStaticVxlanTunnelAddressFamilyBindVxlanId'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def deleteVxlanInterfacesInterfaceStaticVxlanTunnelAddressFamilyBindVxlanId(self,
-                                                                                Name,
-                                                                                Af,
-                                                                                VxlanId,
-                                                                                VxlanTunnelId):
-        obj =  { 
-                'Name' : Name,
-                'Af' : Af,
-                'VxlanId' : VxlanId,
-                'VxlanTunnelId' : VxlanTunnelId,
-                }
-        reqUrl =  self.urlBase+'VxlanInterfacesInterfaceStaticVxlanTunnelAddressFamilyBindVxlanId'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def deleteVxlanInterfacesInterfaceStaticVxlanTunnelAddressFamilyBindVxlanIdById(self, objectId ):
-        reqUrl =  self.urlBase+'VxlanInterfacesInterfaceStaticVxlanTunnelAddressFamilyBindVxlanId'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
-        return r
-
-    @processReturnCode
-    def getVxlanInterfacesInterfaceStaticVxlanTunnelAddressFamilyBindVxlanId(self,
-                                                                             Name,
-                                                                             Af,
-                                                                             VxlanId,
-                                                                             VxlanTunnelId):
-        obj =  { 
-                'Name' : Name,
-                'Af' : Af,
-                'VxlanId' : VxlanId,
-                'VxlanTunnelId' : VxlanTunnelId,
-                }
-        reqUrl =  self.urlBase+'VxlanInterfacesInterfaceStaticVxlanTunnelAddressFamilyBindVxlanId'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def getVxlanInterfacesInterfaceStaticVxlanTunnelAddressFamilyBindVxlanIdById(self, objectId ):
-        reqUrl =  self.urlBase+'VxlanInterfacesInterfaceStaticVxlanTunnelAddressFamilyBindVxlanId'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllVxlanInterfacesInterfaceStaticVxlanTunnelAddressFamilyBindVxlanIds(self):
-        return self.getObjects( 'VxlanInterfacesInterfaceStaticVxlanTunnelAddressFamilyBindVxlanId') 
-
-
-    @processReturnCode
     def createBfdSession(self,
                          IpAddr,
                          Owner='user',
@@ -3909,128 +3529,25 @@ class FlexSwitch( object):
 
 
     @processReturnCode
-    def createVrrpIntf(self,
-                       VRID,
-                       IfIndex,
-                       VirtualIPv4Addr,
-                       PreemptMode=True,
-                       Priority=100,
-                       AdvertisementInterval=1,
-                       AcceptMode=False):
+    def getStpPortState(self,
+                        BrgIfIndex,
+                        IfIndex):
         obj =  { 
-                'VRID' : int(VRID),
-                'IfIndex' : int(IfIndex),
-                'VirtualIPv4Addr' : VirtualIPv4Addr,
-                'PreemptMode' : True if PreemptMode else False,
-                'Priority' : int(Priority),
-                'AdvertisementInterval' : int(AdvertisementInterval),
-                'AcceptMode' : True if AcceptMode else False,
-                }
-        reqUrl =  self.urlBase+'VrrpIntf'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def updateVrrpIntf(self,
-                       VRID,
-                       IfIndex,
-                       VirtualIPv4Addr = None,
-                       PreemptMode = None,
-                       Priority = None,
-                       AdvertisementInterval = None,
-                       AcceptMode = None):
-        obj =  {}
-        if VRID != None :
-            obj['VRID'] = int(VRID)
-
-        if IfIndex != None :
-            obj['IfIndex'] = int(IfIndex)
-
-        if VirtualIPv4Addr != None :
-            obj['VirtualIPv4Addr'] = VirtualIPv4Addr
-
-        if PreemptMode != None :
-            obj['PreemptMode'] = True if PreemptMode else False
-
-        if Priority != None :
-            obj['Priority'] = int(Priority)
-
-        if AdvertisementInterval != None :
-            obj['AdvertisementInterval'] = int(AdvertisementInterval)
-
-        if AcceptMode != None :
-            obj['AcceptMode'] = True if AcceptMode else False
-
-        reqUrl =  self.urlBase+'VrrpIntf'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def updateVrrpIntfById(self,
-                            objectId,
-                            VirtualIPv4Addr = None,
-                            PreemptMode = None,
-                            Priority = None,
-                            AdvertisementInterval = None,
-                            AcceptMode = None):
-        obj =  {'objectId': objectId }
-        if VirtualIPv4Addr !=  None:
-            obj['VirtualIPv4Addr'] = VirtualIPv4Addr
-
-        if PreemptMode !=  None:
-            obj['PreemptMode'] = PreemptMode
-
-        if Priority !=  None:
-            obj['Priority'] = Priority
-
-        if AdvertisementInterval !=  None:
-            obj['AdvertisementInterval'] = AdvertisementInterval
-
-        if AcceptMode !=  None:
-            obj['AcceptMode'] = AcceptMode
-
-        reqUrl =  self.urlBase+'VrrpIntf'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def deleteVrrpIntf(self,
-                       VRID,
-                       IfIndex):
-        obj =  { 
-                'VRID' : VRID,
+                'BrgIfIndex' : BrgIfIndex,
                 'IfIndex' : IfIndex,
                 }
-        reqUrl =  self.urlBase+'VrrpIntf'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def deleteVrrpIntfById(self, objectId ):
-        reqUrl =  self.urlBase+'VrrpIntf'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
-        return r
-
-    @processReturnCode
-    def getVrrpIntf(self,
-                    VRID,
-                    IfIndex):
-        obj =  { 
-                'VRID' : VRID,
-                'IfIndex' : IfIndex,
-                }
-        reqUrl =  self.urlBase+'VrrpIntf'
+        reqUrl =  self.urlBase+'StpPortState'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
-    def getVrrpIntfById(self, objectId ):
-        reqUrl =  self.urlBase+'VrrpIntf'+"/%s"%(objectId)
+    def getStpPortStateById(self, objectId ):
+        reqUrl =  self.urlBase+'StpPortState'+"/%s"%(objectId)
         r = requests.get(reqUrl, data=None, headers=headers) 
         return r
 
-    def getAllVrrpIntfs(self):
-        return self.getObjects( 'VrrpIntf') 
+    def getAllStpPortStates(self):
+        return self.getObjects( 'StpPortState') 
 
 
     @processReturnCode
@@ -4294,111 +3811,6 @@ class FlexSwitch( object):
 
 
     @processReturnCode
-    def createVxlanVxlanInstanceAccessTypeMac(self,
-                                              VxlanId,
-                                              Mac,
-                                              L2interface,
-                                              VlanId,
-                                              InterfaceName):
-        obj =  { 
-                'VxlanId' : int(VxlanId),
-                'Mac' : Mac,
-                'L2interface' : True if L2interface else False,
-                'VlanId' : VlanId,
-                'InterfaceName' : InterfaceName,
-                }
-        reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeMac'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def updateVxlanVxlanInstanceAccessTypeMac(self,
-                                              VxlanId,
-                                              Mac = None,
-                                              L2interface = None,
-                                              VlanId = None,
-                                              InterfaceName = None):
-        obj =  {}
-        if VxlanId != None :
-            obj['VxlanId'] = int(VxlanId)
-
-        if Mac != None :
-            obj['Mac'] = Mac
-
-        if L2interface != None :
-            obj['L2interface'] = True if L2interface else False
-
-        if VlanId != None :
-            obj['VlanId'] = VlanId
-
-        if InterfaceName != None :
-            obj['InterfaceName'] = InterfaceName
-
-        reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeMac'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def updateVxlanVxlanInstanceAccessTypeMacById(self,
-                                                   objectId,
-                                                   Mac = None,
-                                                   L2interface = None,
-                                                   VlanId = None,
-                                                   InterfaceName = None):
-        obj =  {'objectId': objectId }
-        if Mac !=  None:
-            obj['Mac'] = Mac
-
-        if L2interface !=  None:
-            obj['L2interface'] = L2interface
-
-        if VlanId !=  None:
-            obj['VlanId'] = VlanId
-
-        if InterfaceName !=  None:
-            obj['InterfaceName'] = InterfaceName
-
-        reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeMac'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def deleteVxlanVxlanInstanceAccessTypeMac(self,
-                                              VxlanId):
-        obj =  { 
-                'VxlanId' : VxlanId,
-                }
-        reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeMac'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def deleteVxlanVxlanInstanceAccessTypeMacById(self, objectId ):
-        reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeMac'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
-        return r
-
-    @processReturnCode
-    def getVxlanVxlanInstanceAccessTypeMac(self,
-                                           VxlanId):
-        obj =  { 
-                'VxlanId' : VxlanId,
-                }
-        reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeMac'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def getVxlanVxlanInstanceAccessTypeMacById(self, objectId ):
-        reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeMac'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllVxlanVxlanInstanceAccessTypeMacs(self):
-        return self.getObjects( 'VxlanVxlanInstanceAccessTypeMac') 
-
-
-    @processReturnCode
     def createBGPNeighbor(self,
                           IfIndex,
                           NeighborAddress,
@@ -4624,81 +4036,6 @@ class FlexSwitch( object):
 
 
     @processReturnCode
-    def createVxlanVxlanInstanceAccessTypeL3interfaceL3interface(self,
-                                                                 VxlanId,
-                                                                 InterfaceName):
-        obj =  { 
-                'VxlanId' : int(VxlanId),
-                'InterfaceName' : InterfaceName,
-                }
-        reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeL3interfaceL3interface'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def updateVxlanVxlanInstanceAccessTypeL3interfaceL3interface(self,
-                                                                 VxlanId,
-                                                                 InterfaceName):
-        obj =  {}
-        if VxlanId != None :
-            obj['VxlanId'] = int(VxlanId)
-
-        if InterfaceName != None :
-            obj['InterfaceName'] = InterfaceName
-
-        reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeL3interfaceL3interface'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def updateVxlanVxlanInstanceAccessTypeL3interfaceL3interfaceById(self,
-                                                                      objectId):
-        obj =  {'objectId': objectId }
-        reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeL3interfaceL3interface'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def deleteVxlanVxlanInstanceAccessTypeL3interfaceL3interface(self,
-                                                                 VxlanId,
-                                                                 InterfaceName):
-        obj =  { 
-                'VxlanId' : VxlanId,
-                'InterfaceName' : InterfaceName,
-                }
-        reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeL3interfaceL3interface'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def deleteVxlanVxlanInstanceAccessTypeL3interfaceL3interfaceById(self, objectId ):
-        reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeL3interfaceL3interface'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
-        return r
-
-    @processReturnCode
-    def getVxlanVxlanInstanceAccessTypeL3interfaceL3interface(self,
-                                                              VxlanId,
-                                                              InterfaceName):
-        obj =  { 
-                'VxlanId' : VxlanId,
-                'InterfaceName' : InterfaceName,
-                }
-        reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeL3interfaceL3interface'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def getVxlanVxlanInstanceAccessTypeL3interfaceL3interfaceById(self, objectId ):
-        reqUrl =  self.urlBase+'VxlanVxlanInstanceAccessTypeL3interfaceL3interface'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllVxlanVxlanInstanceAccessTypeL3interfaceL3interfaces(self):
-        return self.getObjects( 'VxlanVxlanInstanceAccessTypeL3interfaceL3interface') 
-
-
-    @processReturnCode
     def createStpBridgeInstance(self,
                                 Vlan,
                                 Address,
@@ -4835,10 +4172,8 @@ class FlexSwitch( object):
 
     @processReturnCode
     def getLaPortChannelMemberState(self,
-                                    LagId,
                                     IfIndex):
         obj =  { 
-                'LagId' : LagId,
                 'IfIndex' : IfIndex,
                 }
         reqUrl =  self.urlBase+'LaPortChannelMemberState'
@@ -5349,6 +4684,101 @@ class FlexSwitch( object):
 
 
     @processReturnCode
+    def createVxlanInstance(self,
+                            VxlanId,
+                            McDestIp,
+                            VlanId,
+                            Mtu=1550):
+        obj =  { 
+                'VxlanId' : int(VxlanId),
+                'McDestIp' : McDestIp,
+                'VlanId' : VlanId,
+                'Mtu' : int(Mtu),
+                }
+        reqUrl =  self.urlBase+'VxlanInstance'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def updateVxlanInstance(self,
+                            VxlanId,
+                            McDestIp = None,
+                            VlanId = None,
+                            Mtu = None):
+        obj =  {}
+        if VxlanId != None :
+            obj['VxlanId'] = int(VxlanId)
+
+        if McDestIp != None :
+            obj['McDestIp'] = McDestIp
+
+        if VlanId != None :
+            obj['VlanId'] = VlanId
+
+        if Mtu != None :
+            obj['Mtu'] = int(Mtu)
+
+        reqUrl =  self.urlBase+'VxlanInstance'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def updateVxlanInstanceById(self,
+                                 objectId,
+                                 McDestIp = None,
+                                 VlanId = None,
+                                 Mtu = None):
+        obj =  {'objectId': objectId }
+        if McDestIp !=  None:
+            obj['McDestIp'] = McDestIp
+
+        if VlanId !=  None:
+            obj['VlanId'] = VlanId
+
+        if Mtu !=  None:
+            obj['Mtu'] = Mtu
+
+        reqUrl =  self.urlBase+'VxlanInstance'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def deleteVxlanInstance(self,
+                            VxlanId):
+        obj =  { 
+                'VxlanId' : VxlanId,
+                }
+        reqUrl =  self.urlBase+'VxlanInstance'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def deleteVxlanInstanceById(self, objectId ):
+        reqUrl =  self.urlBase+'VxlanInstance'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    @processReturnCode
+    def getVxlanInstance(self,
+                         VxlanId):
+        obj =  { 
+                'VxlanId' : VxlanId,
+                }
+        reqUrl =  self.urlBase+'VxlanInstance'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def getVxlanInstanceById(self, objectId ):
+        reqUrl =  self.urlBase+'VxlanInstance'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllVxlanInstances(self):
+        return self.getObjects( 'VxlanInstance') 
+
+
+    @processReturnCode
     def getBGPPolicyDefinitionState(self,
                                     Name):
         obj =  { 
@@ -5386,6 +4816,231 @@ class FlexSwitch( object):
 
     def getAllPortStates(self):
         return self.getObjects( 'PortState') 
+
+
+    @processReturnCode
+    def createVxlanVtepInstances(self,
+                                 VtepId,
+                                 VxlanId,
+                                 VtepName,
+                                 SrcIfIndex,
+                                 L2miss,
+                                 L3miss,
+                                 DstIp,
+                                 SrcIp,
+                                 SrcMac,
+                                 DstMac,
+                                 VlanId,
+                                 UDP='4789',
+                                 TOS='0',
+                                 TTL='255',
+                                 Rsc=False,
+                                 InnerVlanHandlingMode=0,
+                                 Learning=True):
+        obj =  { 
+                'VtepId' : int(VtepId),
+                'VxlanId' : int(VxlanId),
+                'VtepName' : VtepName,
+                'SrcIfIndex' : int(SrcIfIndex),
+                'L2miss' : True if L2miss else False,
+                'L3miss' : True if L3miss else False,
+                'DstIp' : DstIp,
+                'SrcIp' : SrcIp,
+                'SrcMac' : SrcMac,
+                'DstMac' : DstMac,
+                'VlanId' : VlanId,
+                'UDP' : UDP,
+                'TOS' : TOS,
+                'TTL' : TTL,
+                'Rsc' : True if Rsc else False,
+                'InnerVlanHandlingMode' : int(InnerVlanHandlingMode),
+                'Learning' : True if Learning else False,
+                }
+        reqUrl =  self.urlBase+'VxlanVtepInstances'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def updateVxlanVtepInstances(self,
+                                 VtepId,
+                                 VxlanId,
+                                 VtepName = None,
+                                 SrcIfIndex = None,
+                                 L2miss = None,
+                                 L3miss = None,
+                                 DstIp = None,
+                                 SrcIp = None,
+                                 SrcMac = None,
+                                 DstMac = None,
+                                 VlanId = None,
+                                 UDP = None,
+                                 TOS = None,
+                                 TTL = None,
+                                 Rsc = None,
+                                 InnerVlanHandlingMode = None,
+                                 Learning = None):
+        obj =  {}
+        if VtepId != None :
+            obj['VtepId'] = int(VtepId)
+
+        if VxlanId != None :
+            obj['VxlanId'] = int(VxlanId)
+
+        if VtepName != None :
+            obj['VtepName'] = VtepName
+
+        if SrcIfIndex != None :
+            obj['SrcIfIndex'] = int(SrcIfIndex)
+
+        if L2miss != None :
+            obj['L2miss'] = True if L2miss else False
+
+        if L3miss != None :
+            obj['L3miss'] = True if L3miss else False
+
+        if DstIp != None :
+            obj['DstIp'] = DstIp
+
+        if SrcIp != None :
+            obj['SrcIp'] = SrcIp
+
+        if SrcMac != None :
+            obj['SrcMac'] = SrcMac
+
+        if DstMac != None :
+            obj['DstMac'] = DstMac
+
+        if VlanId != None :
+            obj['VlanId'] = VlanId
+
+        if UDP != None :
+            obj['UDP'] = UDP
+
+        if TOS != None :
+            obj['TOS'] = TOS
+
+        if TTL != None :
+            obj['TTL'] = TTL
+
+        if Rsc != None :
+            obj['Rsc'] = True if Rsc else False
+
+        if InnerVlanHandlingMode != None :
+            obj['InnerVlanHandlingMode'] = int(InnerVlanHandlingMode)
+
+        if Learning != None :
+            obj['Learning'] = True if Learning else False
+
+        reqUrl =  self.urlBase+'VxlanVtepInstances'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def updateVxlanVtepInstancesById(self,
+                                      objectId,
+                                      VtepName = None,
+                                      SrcIfIndex = None,
+                                      L2miss = None,
+                                      L3miss = None,
+                                      DstIp = None,
+                                      SrcIp = None,
+                                      SrcMac = None,
+                                      DstMac = None,
+                                      VlanId = None,
+                                      UDP = None,
+                                      TOS = None,
+                                      TTL = None,
+                                      Rsc = None,
+                                      InnerVlanHandlingMode = None,
+                                      Learning = None):
+        obj =  {'objectId': objectId }
+        if VtepName !=  None:
+            obj['VtepName'] = VtepName
+
+        if SrcIfIndex !=  None:
+            obj['SrcIfIndex'] = SrcIfIndex
+
+        if L2miss !=  None:
+            obj['L2miss'] = L2miss
+
+        if L3miss !=  None:
+            obj['L3miss'] = L3miss
+
+        if DstIp !=  None:
+            obj['DstIp'] = DstIp
+
+        if SrcIp !=  None:
+            obj['SrcIp'] = SrcIp
+
+        if SrcMac !=  None:
+            obj['SrcMac'] = SrcMac
+
+        if DstMac !=  None:
+            obj['DstMac'] = DstMac
+
+        if VlanId !=  None:
+            obj['VlanId'] = VlanId
+
+        if UDP !=  None:
+            obj['UDP'] = UDP
+
+        if TOS !=  None:
+            obj['TOS'] = TOS
+
+        if TTL !=  None:
+            obj['TTL'] = TTL
+
+        if Rsc !=  None:
+            obj['Rsc'] = Rsc
+
+        if InnerVlanHandlingMode !=  None:
+            obj['InnerVlanHandlingMode'] = InnerVlanHandlingMode
+
+        if Learning !=  None:
+            obj['Learning'] = Learning
+
+        reqUrl =  self.urlBase+'VxlanVtepInstances'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def deleteVxlanVtepInstances(self,
+                                 VtepId,
+                                 VxlanId):
+        obj =  { 
+                'VtepId' : VtepId,
+                'VxlanId' : VxlanId,
+                }
+        reqUrl =  self.urlBase+'VxlanVtepInstances'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def deleteVxlanVtepInstancesById(self, objectId ):
+        reqUrl =  self.urlBase+'VxlanVtepInstances'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    @processReturnCode
+    def getVxlanVtepInstances(self,
+                              VtepId,
+                              VxlanId):
+        obj =  { 
+                'VtepId' : VtepId,
+                'VxlanId' : VxlanId,
+                }
+        reqUrl =  self.urlBase+'VxlanVtepInstances'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def getVxlanVtepInstancesById(self, objectId ):
+        reqUrl =  self.urlBase+'VxlanVtepInstances'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllVxlanVtepInstancess(self):
+        return self.getObjects( 'VxlanVtepInstances') 
 
 
     @processReturnCode
@@ -5721,26 +5376,6 @@ class FlexSwitch( object):
 
     def getAllIPv4Routes(self):
         return self.getObjects( 'IPv4Route') 
-
-
-    @processReturnCode
-    def getVxlanStateVtepInstanceBindVxlanId(self,
-                                             VxlanId):
-        obj =  { 
-                'VxlanId' : VxlanId,
-                }
-        reqUrl =  self.urlBase+'VxlanStateVtepInstanceBindVxlanId'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def getVxlanStateVtepInstanceBindVxlanIdById(self, objectId ):
-        reqUrl =  self.urlBase+'VxlanStateVtepInstanceBindVxlanId'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllVxlanStateVtepInstanceBindVxlanIds(self):
-        return self.getObjects( 'VxlanStateVtepInstanceBindVxlanId') 
 
 
     @processReturnCode
