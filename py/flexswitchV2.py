@@ -2892,7 +2892,7 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createIPv4Intf(self,
-        :param string IpAddr :  Interface IP/Net mask to provision on switch interface  Interface IP/Net mask to provision on switch interface
+        :param string IpAddr :  Interface IP/Net mask in CIDR format to provision on switch interface  Interface IP/Net mask in CIDR format to provision on switch interface
         :param int32 IfIndex :  System assigned interface id of L2 interface (port/lag/vlan) to which this IPv4 object is linked  System assigned interface id of L2 interface (port/lag/vlan) to which this IPv4 object is linked
 
 	"""
@@ -5148,6 +5148,26 @@ class FlexSwitch( object):
 
     def getAllBGPPolicyDefinitionStates(self):
         return self.getObjects( 'BGPPolicyDefinitionState') 
+
+
+    @processReturnCode
+    def getIPv4IntfState(self,
+                         IpAddr):
+        obj =  { 
+                'IpAddr' : IpAddr,
+                }
+        reqUrl =  self.stateUrlBase+'IPv4IntfState'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def getIPv4IntfStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'IPv4IntfState'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllIPv4IntfStates(self):
+        return self.getObjects( 'IPv4IntfState') 
 
 
     @processReturnCode
