@@ -36,8 +36,8 @@ class FlexSwitch( object):
             more =  data['MoreExist']                                                                                      
             currentMarker =  data['NextMarker']                                                                            
             NextMarker    =  data['NextMarker']                                                                            
-            if data['StateObjects'] != None:                                                                               
-                entries.extend(data['StateObjects'])                                                                       
+            if data['Objects'] != None:                                                                               
+                entries.extend(data['Objects'])                                                                       
         return entries
 
     @processReturnCode
