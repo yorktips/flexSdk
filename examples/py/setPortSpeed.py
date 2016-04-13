@@ -13,7 +13,7 @@ from flexswitchV2 import FlexSwitch
 
 if __name__ == '__main__':
     swtch = FlexSwitch ('10.1.10.240', 8080)  # Instantiate object to talk to flexSwitch
-    response, error = swtch.updatePort(1, Speed=1000) 
+    response, error = swtch.updatePort(1, Speed=1003) 
     if error != None: #Error not being None implies there is some problem
         print error
     else :
