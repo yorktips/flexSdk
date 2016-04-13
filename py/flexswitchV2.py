@@ -29,14 +29,14 @@ class FlexSwitch( object):
         self.cfgUrlBase = 'http://%s:%s/public/v1/config/'%(ip,str(port))                                                         
         self.stateUrlBase = 'http://%s:%s/public/v1/state/'%(ip,str(port))                                                         
 
-    def getObjects(self, objName):                                                                                         
+    def getObjects(self, objName, urlPath):
         currentMarker = 0                                                                                                  
         nextMarker = 0                                                                                                     
         count = 10                                                                                                         
         more = True                                                                                                        
         entries = []                                                                                                       
         while more == True:                                                                                                
-            qry = 'http://%s:8080/public/v1/state/%s?CurrentMarker=%d&NextMarker=%d&Count=%d' %(self.ip, objName, currentMarker, nextMarker, count)
+            qry = '%s/%ss?CurrentMarker=%d&NextMarker=%d&Count=%d' %(urlPath, objName, currentMarker, nextMarker, count)
             response = requests.get(qry)                                                                                   
             data = response.json()                                                                                         
             more =  data['MoreExist']                                                                                      
@@ -63,7 +63,7 @@ class FlexSwitch( object):
         return r
 
     def getAllArpEntryStates(self):
-        return self.getObjects( 'ArpEntryState') 
+        return self.getObjects( 'ArpEntryState', self.stateUrlBase) 
 
 
     @processReturnCode
@@ -85,7 +85,7 @@ class FlexSwitch( object):
         return r
 
     def getAllOspfHostEntryStates(self):
-        return self.getObjects( 'OspfHostEntryState') 
+        return self.getObjects( 'OspfHostEntryState', self.stateUrlBase) 
 
 
     """
@@ -188,7 +188,7 @@ class FlexSwitch( object):
         return r
 
     def getAllPolicyStmts(self):
-        return self.getObjects( 'PolicyStmt') 
+        return self.getObjects( 'PolicyStmt', self.cfgUrlBase) 
 
 
     """
@@ -280,7 +280,7 @@ class FlexSwitch( object):
         return r
 
     def getAllOspfNbrEntryConfigs(self):
-        return self.getObjects( 'OspfNbrEntryConfig') 
+        return self.getObjects( 'OspfNbrEntryConfig', self.cfgUrlBase) 
 
 
     """
@@ -372,7 +372,7 @@ class FlexSwitch( object):
         return r
 
     def getAllVlans(self):
-        return self.getObjects( 'Vlan') 
+        return self.getObjects( 'Vlan', self.cfgUrlBase) 
 
 
     @processReturnCode
@@ -400,7 +400,7 @@ class FlexSwitch( object):
         return r
 
     def getAllOspfLocalLsdbEntryStates(self):
-        return self.getObjects( 'OspfLocalLsdbEntryState') 
+        return self.getObjects( 'OspfLocalLsdbEntryState', self.stateUrlBase) 
 
 
     """
@@ -481,7 +481,7 @@ class FlexSwitch( object):
         return r
 
     def getAllComponentLoggings(self):
-        return self.getObjects( 'ComponentLogging') 
+        return self.getObjects( 'ComponentLogging', self.cfgUrlBase) 
 
 
     @processReturnCode
@@ -501,7 +501,7 @@ class FlexSwitch( object):
         return r
 
     def getAllIPv4EventStates(self):
-        return self.getObjects( 'IPv4EventState') 
+        return self.getObjects( 'IPv4EventState', self.stateUrlBase) 
 
 
     @processReturnCode
@@ -521,7 +521,7 @@ class FlexSwitch( object):
         return r
 
     def getAllLaPortChannelStates(self):
-        return self.getObjects( 'LaPortChannelState') 
+        return self.getObjects( 'LaPortChannelState', self.stateUrlBase) 
 
 
     """
@@ -613,7 +613,7 @@ class FlexSwitch( object):
         return r
 
     def getAllDhcpRelayIntfs(self):
-        return self.getObjects( 'DhcpRelayIntf') 
+        return self.getObjects( 'DhcpRelayIntf', self.cfgUrlBase) 
 
 
     """
@@ -760,7 +760,7 @@ class FlexSwitch( object):
         return r
 
     def getAllPolicyActions(self):
-        return self.getObjects( 'PolicyAction') 
+        return self.getObjects( 'PolicyAction', self.cfgUrlBase) 
 
 
     """
@@ -898,7 +898,7 @@ class FlexSwitch( object):
         return r
 
     def getAllVrrpIntfs(self):
-        return self.getObjects( 'VrrpIntf') 
+        return self.getObjects( 'VrrpIntf', self.cfgUrlBase) 
 
 
     """
@@ -1023,7 +1023,7 @@ class FlexSwitch( object):
         return r
 
     def getAllOspfAreaEntryConfigs(self):
-        return self.getObjects( 'OspfAreaEntryConfig') 
+        return self.getObjects( 'OspfAreaEntryConfig', self.cfgUrlBase) 
 
 
     @processReturnCode
@@ -1043,7 +1043,7 @@ class FlexSwitch( object):
         return r
 
     def getAllBGPPolicyConditionStates(self):
-        return self.getObjects( 'BGPPolicyConditionState') 
+        return self.getObjects( 'BGPPolicyConditionState', self.stateUrlBase) 
 
 
     @processReturnCode
@@ -1063,7 +1063,7 @@ class FlexSwitch( object):
         return r
 
     def getAllIPv4RouteHwStates(self):
-        return self.getObjects( 'IPv4RouteHwState') 
+        return self.getObjects( 'IPv4RouteHwState', self.stateUrlBase) 
 
 
     """
@@ -1144,7 +1144,7 @@ class FlexSwitch( object):
         return r
 
     def getAllArpConfigs(self):
-        return self.getObjects( 'ArpConfig') 
+        return self.getObjects( 'ArpConfig', self.cfgUrlBase) 
 
 
     @processReturnCode
@@ -1166,7 +1166,7 @@ class FlexSwitch( object):
         return r
 
     def getAllOspfNbrEntryStates(self):
-        return self.getObjects( 'OspfNbrEntryState') 
+        return self.getObjects( 'OspfNbrEntryState', self.stateUrlBase) 
 
 
     @processReturnCode
@@ -1186,7 +1186,7 @@ class FlexSwitch( object):
         return r
 
     def getAllDhcpRelayIntfStates(self):
-        return self.getObjects( 'DhcpRelayIntfState') 
+        return self.getObjects( 'DhcpRelayIntfState', self.stateUrlBase) 
 
 
     """
@@ -1267,7 +1267,7 @@ class FlexSwitch( object):
         return r
 
     def getAllDhcpRelayGlobals(self):
-        return self.getObjects( 'DhcpRelayGlobal') 
+        return self.getObjects( 'DhcpRelayGlobal', self.cfgUrlBase) 
 
 
     """
@@ -1436,7 +1436,7 @@ class FlexSwitch( object):
         return r
 
     def getAllLaPortChannels(self):
-        return self.getObjects( 'LaPortChannel') 
+        return self.getObjects( 'LaPortChannel', self.cfgUrlBase) 
 
 
     @processReturnCode
@@ -1462,7 +1462,7 @@ class FlexSwitch( object):
         return r
 
     def getAllOspfLsdbEntryStates(self):
-        return self.getObjects( 'OspfLsdbEntryState') 
+        return self.getObjects( 'OspfLsdbEntryState', self.stateUrlBase) 
 
 
     """
@@ -1565,7 +1565,7 @@ class FlexSwitch( object):
         return r
 
     def getAllBGPPolicyConditions(self):
-        return self.getObjects( 'BGPPolicyCondition') 
+        return self.getObjects( 'BGPPolicyCondition', self.cfgUrlBase) 
 
 
     @processReturnCode
@@ -1585,7 +1585,7 @@ class FlexSwitch( object):
         return r
 
     def getAllDhcpRelayHostDhcpStates(self):
-        return self.getObjects( 'DhcpRelayHostDhcpState') 
+        return self.getObjects( 'DhcpRelayHostDhcpState', self.stateUrlBase) 
 
 
     @processReturnCode
@@ -1605,7 +1605,7 @@ class FlexSwitch( object):
         return r
 
     def getAllDhcpRelayIntfServerStates(self):
-        return self.getObjects( 'DhcpRelayIntfServerState') 
+        return self.getObjects( 'DhcpRelayIntfServerState', self.stateUrlBase) 
 
 
     """
@@ -1708,7 +1708,7 @@ class FlexSwitch( object):
         return r
 
     def getAllPolicyDefinitions(self):
-        return self.getObjects( 'PolicyDefinition') 
+        return self.getObjects( 'PolicyDefinition', self.cfgUrlBase) 
 
 
     @processReturnCode
@@ -1730,7 +1730,7 @@ class FlexSwitch( object):
         return r
 
     def getAllOspfVirtNbrEntryStates(self):
-        return self.getObjects( 'OspfVirtNbrEntryState') 
+        return self.getObjects( 'OspfVirtNbrEntryState', self.stateUrlBase) 
 
 
     """
@@ -1932,7 +1932,7 @@ class FlexSwitch( object):
         return r
 
     def getAllStpPorts(self):
-        return self.getObjects( 'StpPort') 
+        return self.getObjects( 'StpPort', self.cfgUrlBase) 
 
 
     @processReturnCode
@@ -1952,7 +1952,7 @@ class FlexSwitch( object):
         return r
 
     def getAllRouteDistanceStates(self):
-        return self.getObjects( 'RouteDistanceState') 
+        return self.getObjects( 'RouteDistanceState', self.stateUrlBase) 
 
 
     """
@@ -2033,7 +2033,7 @@ class FlexSwitch( object):
         return r
 
     def getAllLogicalIntfs(self):
-        return self.getObjects( 'LogicalIntf') 
+        return self.getObjects( 'LogicalIntf', self.cfgUrlBase) 
 
 
     @processReturnCode
@@ -2053,7 +2053,7 @@ class FlexSwitch( object):
         return r
 
     def getAllMacTableEntryStates(self):
-        return self.getObjects( 'MacTableEntryState') 
+        return self.getObjects( 'MacTableEntryState', self.stateUrlBase) 
 
 
     """
@@ -2266,7 +2266,7 @@ class FlexSwitch( object):
         return r
 
     def getAllBGPPeerGroups(self):
-        return self.getObjects( 'BGPPeerGroup') 
+        return self.getObjects( 'BGPPeerGroup', self.cfgUrlBase) 
 
 
     @processReturnCode
@@ -2286,7 +2286,7 @@ class FlexSwitch( object):
         return r
 
     def getAllBfdInterfaceStates(self):
-        return self.getObjects( 'BfdInterfaceState') 
+        return self.getObjects( 'BfdInterfaceState', self.stateUrlBase) 
 
 
     """
@@ -2367,7 +2367,7 @@ class FlexSwitch( object):
         return r
 
     def getAllBfdGlobals(self):
-        return self.getObjects( 'BfdGlobal') 
+        return self.getObjects( 'BfdGlobal', self.cfgUrlBase) 
 
 
     @processReturnCode
@@ -2389,7 +2389,7 @@ class FlexSwitch( object):
         return r
 
     def getAllOspfAreaLsaCountEntryStates(self):
-        return self.getObjects( 'OspfAreaLsaCountEntryState') 
+        return self.getObjects( 'OspfAreaLsaCountEntryState', self.stateUrlBase) 
 
 
     """
@@ -2492,7 +2492,7 @@ class FlexSwitch( object):
         return r
 
     def getAllBGPPolicyStmts(self):
-        return self.getObjects( 'BGPPolicyStmt') 
+        return self.getObjects( 'BGPPolicyStmt', self.cfgUrlBase) 
 
 
     """
@@ -2595,7 +2595,7 @@ class FlexSwitch( object):
         return r
 
     def getAllOspfStubAreaEntryConfigs(self):
-        return self.getObjects( 'OspfStubAreaEntryConfig') 
+        return self.getObjects( 'OspfStubAreaEntryConfig', self.cfgUrlBase) 
 
 
     @processReturnCode
@@ -2617,7 +2617,7 @@ class FlexSwitch( object):
         return r
 
     def getAllIPv4RouteStates(self):
-        return self.getObjects( 'IPv4RouteState') 
+        return self.getObjects( 'IPv4RouteState', self.stateUrlBase) 
 
 
     @processReturnCode
@@ -2637,7 +2637,7 @@ class FlexSwitch( object):
         return r
 
     def getAllBfdGlobalStates(self):
-        return self.getObjects( 'BfdGlobalState') 
+        return self.getObjects( 'BfdGlobalState', self.stateUrlBase) 
 
 
     @processReturnCode
@@ -2665,7 +2665,7 @@ class FlexSwitch( object):
         return r
 
     def getAllOspfVirtLocalLsdbEntryStates(self):
-        return self.getObjects( 'OspfVirtLocalLsdbEntryState') 
+        return self.getObjects( 'OspfVirtLocalLsdbEntryState', self.stateUrlBase) 
 
 
     @processReturnCode
@@ -2685,7 +2685,7 @@ class FlexSwitch( object):
         return r
 
     def getAllBGPGlobalStates(self):
-        return self.getObjects( 'BGPGlobalState') 
+        return self.getObjects( 'BGPGlobalState', self.stateUrlBase) 
 
 
     @processReturnCode
@@ -2705,7 +2705,7 @@ class FlexSwitch( object):
         return r
 
     def getAllBfdSessionStates(self):
-        return self.getObjects( 'BfdSessionState') 
+        return self.getObjects( 'BfdSessionState', self.stateUrlBase) 
 
 
     """
@@ -2786,7 +2786,7 @@ class FlexSwitch( object):
         return r
 
     def getAllLLDPIntfs(self):
-        return self.getObjects( 'LLDPIntf') 
+        return self.getObjects( 'LLDPIntf', self.cfgUrlBase) 
 
 
     """
@@ -2933,7 +2933,7 @@ class FlexSwitch( object):
         return r
 
     def getAllOspfVirtIfEntryConfigs(self):
-        return self.getObjects( 'OspfVirtIfEntryConfig') 
+        return self.getObjects( 'OspfVirtIfEntryConfig', self.cfgUrlBase) 
 
 
     """
@@ -3014,7 +3014,7 @@ class FlexSwitch( object):
         return r
 
     def getAllIPv4Intfs(self):
-        return self.getObjects( 'IPv4Intf') 
+        return self.getObjects( 'IPv4Intf', self.cfgUrlBase) 
 
 
     @processReturnCode
@@ -3034,7 +3034,7 @@ class FlexSwitch( object):
         return r
 
     def getAllPolicyStmtStates(self):
-        return self.getObjects( 'PolicyStmtState') 
+        return self.getObjects( 'PolicyStmtState', self.stateUrlBase) 
 
 
     @processReturnCode
@@ -3054,7 +3054,7 @@ class FlexSwitch( object):
         return r
 
     def getAllStpBridgeStates(self):
-        return self.getObjects( 'StpBridgeState') 
+        return self.getObjects( 'StpBridgeState', self.stateUrlBase) 
 
 
     @processReturnCode
@@ -3076,7 +3076,7 @@ class FlexSwitch( object):
         return r
 
     def getAllVrrpIntfStates(self):
-        return self.getObjects( 'VrrpIntfState') 
+        return self.getObjects( 'VrrpIntfState', self.stateUrlBase) 
 
 
     """
@@ -3201,7 +3201,7 @@ class FlexSwitch( object):
         return r
 
     def getAllIpTableAcls(self):
-        return self.getObjects( 'IpTableAcl') 
+        return self.getObjects( 'IpTableAcl', self.cfgUrlBase) 
 
 
     """
@@ -3326,7 +3326,7 @@ class FlexSwitch( object):
         return r
 
     def getAllBGPGlobals(self):
-        return self.getObjects( 'BGPGlobal') 
+        return self.getObjects( 'BGPGlobal', self.cfgUrlBase) 
 
 
     """
@@ -3550,7 +3550,7 @@ class FlexSwitch( object):
         return r
 
     def getAllOspfIfEntryConfigs(self):
-        return self.getObjects( 'OspfIfEntryConfig') 
+        return self.getObjects( 'OspfIfEntryConfig', self.cfgUrlBase) 
 
 
     @processReturnCode
@@ -3570,7 +3570,7 @@ class FlexSwitch( object):
         return r
 
     def getAllOspfAreaEntryStates(self):
-        return self.getObjects( 'OspfAreaEntryState') 
+        return self.getObjects( 'OspfAreaEntryState', self.stateUrlBase) 
 
 
     """
@@ -3695,7 +3695,7 @@ class FlexSwitch( object):
         return r
 
     def getAllOspfAreaAggregateEntryConfigs(self):
-        return self.getObjects( 'OspfAreaAggregateEntryConfig') 
+        return self.getObjects( 'OspfAreaAggregateEntryConfig', self.cfgUrlBase) 
 
 
     """
@@ -3787,7 +3787,7 @@ class FlexSwitch( object):
         return r
 
     def getAllBfdSessions(self):
-        return self.getObjects( 'BfdSession') 
+        return self.getObjects( 'BfdSession', self.cfgUrlBase) 
 
 
     @processReturnCode
@@ -3807,7 +3807,7 @@ class FlexSwitch( object):
         return r
 
     def getAllPolicyConditionStates(self):
-        return self.getObjects( 'PolicyConditionState') 
+        return self.getObjects( 'PolicyConditionState', self.stateUrlBase) 
 
 
     @processReturnCode
@@ -3829,7 +3829,7 @@ class FlexSwitch( object):
         return r
 
     def getAllStpPortStates(self):
-        return self.getObjects( 'StpPortState') 
+        return self.getObjects( 'StpPortState', self.stateUrlBase) 
 
 
     """
@@ -3943,7 +3943,7 @@ class FlexSwitch( object):
         return r
 
     def getAllSubIPv4Intfs(self):
-        return self.getObjects( 'SubIPv4Intf') 
+        return self.getObjects( 'SubIPv4Intf', self.cfgUrlBase) 
 
 
     @processReturnCode
@@ -3963,7 +3963,7 @@ class FlexSwitch( object):
         return r
 
     def getAllPolicyDefinitionStates(self):
-        return self.getObjects( 'PolicyDefinitionState') 
+        return self.getObjects( 'PolicyDefinitionState', self.stateUrlBase) 
 
 
     """
@@ -4066,7 +4066,7 @@ class FlexSwitch( object):
         return r
 
     def getAllOspfIfMetricEntryConfigs(self):
-        return self.getObjects( 'OspfIfMetricEntryConfig') 
+        return self.getObjects( 'OspfIfMetricEntryConfig', self.cfgUrlBase) 
 
 
     @processReturnCode
@@ -4086,7 +4086,7 @@ class FlexSwitch( object):
         return r
 
     def getAllVlanStates(self):
-        return self.getObjects( 'VlanState') 
+        return self.getObjects( 'VlanState', self.stateUrlBase) 
 
 
     @processReturnCode
@@ -4106,7 +4106,7 @@ class FlexSwitch( object):
         return r
 
     def getAllLogicalIntfStates(self):
-        return self.getObjects( 'LogicalIntfState') 
+        return self.getObjects( 'LogicalIntfState', self.stateUrlBase) 
 
 
     """
@@ -4352,7 +4352,7 @@ class FlexSwitch( object):
         return r
 
     def getAllBGPNeighbors(self):
-        return self.getObjects( 'BGPNeighbor') 
+        return self.getObjects( 'BGPNeighbor', self.cfgUrlBase) 
 
 
     """
@@ -4499,7 +4499,7 @@ class FlexSwitch( object):
         return r
 
     def getAllStpBridgeInstances(self):
-        return self.getObjects( 'StpBridgeInstance') 
+        return self.getObjects( 'StpBridgeInstance', self.cfgUrlBase) 
 
 
     @processReturnCode
@@ -4519,7 +4519,7 @@ class FlexSwitch( object):
         return r
 
     def getAllLaPortChannelMemberStates(self):
-        return self.getObjects( 'LaPortChannelMemberState') 
+        return self.getObjects( 'LaPortChannelMemberState', self.stateUrlBase) 
 
 
     @processReturnCode
@@ -4543,7 +4543,7 @@ class FlexSwitch( object):
         return r
 
     def getAllOspfExtLsdbEntryStates(self):
-        return self.getObjects( 'OspfExtLsdbEntryState') 
+        return self.getObjects( 'OspfExtLsdbEntryState', self.stateUrlBase) 
 
 
     """
@@ -4712,7 +4712,7 @@ class FlexSwitch( object):
         return r
 
     def getAllBfdInterfaces(self):
-        return self.getObjects( 'BfdInterface') 
+        return self.getObjects( 'BfdInterface', self.cfgUrlBase) 
 
 
     """
@@ -4793,7 +4793,7 @@ class FlexSwitch( object):
         return r
 
     def getAllSystemLoggings(self):
-        return self.getObjects( 'SystemLogging') 
+        return self.getObjects( 'SystemLogging', self.cfgUrlBase) 
 
 
     """
@@ -5006,7 +5006,7 @@ class FlexSwitch( object):
         return r
 
     def getAllOspfGlobalConfigs(self):
-        return self.getObjects( 'OspfGlobalConfig') 
+        return self.getObjects( 'OspfGlobalConfig', self.cfgUrlBase) 
 
 
     @processReturnCode
@@ -5026,7 +5026,7 @@ class FlexSwitch( object):
         return r
 
     def getAllBGPPolicyActionStates(self):
-        return self.getObjects( 'BGPPolicyActionState') 
+        return self.getObjects( 'BGPPolicyActionState', self.stateUrlBase) 
 
 
     @processReturnCode
@@ -5050,7 +5050,7 @@ class FlexSwitch( object):
         return r
 
     def getAllOspfAsLsdbEntryStates(self):
-        return self.getObjects( 'OspfAsLsdbEntryState') 
+        return self.getObjects( 'OspfAsLsdbEntryState', self.stateUrlBase) 
 
 
     """
@@ -5153,7 +5153,7 @@ class FlexSwitch( object):
         return r
 
     def getAllVxlanInstances(self):
-        return self.getObjects( 'VxlanInstance') 
+        return self.getObjects( 'VxlanInstance', self.cfgUrlBase) 
 
 
     @processReturnCode
@@ -5173,7 +5173,7 @@ class FlexSwitch( object):
         return r
 
     def getAllBGPPolicyDefinitionStates(self):
-        return self.getObjects( 'BGPPolicyDefinitionState') 
+        return self.getObjects( 'BGPPolicyDefinitionState', self.stateUrlBase) 
 
 
     @processReturnCode
@@ -5193,7 +5193,7 @@ class FlexSwitch( object):
         return r
 
     def getAllIPv4IntfStates(self):
-        return self.getObjects( 'IPv4IntfState') 
+        return self.getObjects( 'IPv4IntfState', self.stateUrlBase) 
 
 
     @processReturnCode
@@ -5213,7 +5213,7 @@ class FlexSwitch( object):
         return r
 
     def getAllPortStates(self):
-        return self.getObjects( 'PortState') 
+        return self.getObjects( 'PortState', self.stateUrlBase) 
 
 
     """
@@ -5437,7 +5437,7 @@ class FlexSwitch( object):
         return r
 
     def getAllVxlanVtepInstancess(self):
-        return self.getObjects( 'VxlanVtepInstances') 
+        return self.getObjects( 'VxlanVtepInstances', self.cfgUrlBase) 
 
 
     """
@@ -5540,7 +5540,7 @@ class FlexSwitch( object):
         return r
 
     def getAllBGPPolicyActions(self):
-        return self.getObjects( 'BGPPolicyAction') 
+        return self.getObjects( 'BGPPolicyAction', self.cfgUrlBase) 
 
 
     @processReturnCode
@@ -5560,7 +5560,7 @@ class FlexSwitch( object):
         return r
 
     def getAllArpEntryHwStates(self):
-        return self.getObjects( 'ArpEntryHwState') 
+        return self.getObjects( 'ArpEntryHwState', self.stateUrlBase) 
 
 
     @processReturnCode
@@ -5580,7 +5580,7 @@ class FlexSwitch( object):
         return r
 
     def getAllBGPPolicyStmtStates(self):
-        return self.getObjects( 'BGPPolicyStmtState') 
+        return self.getObjects( 'BGPPolicyStmtState', self.stateUrlBase) 
 
 
     """
@@ -5683,7 +5683,7 @@ class FlexSwitch( object):
         return r
 
     def getAllOspfHostEntryConfigs(self):
-        return self.getObjects( 'OspfHostEntryConfig') 
+        return self.getObjects( 'OspfHostEntryConfig', self.cfgUrlBase) 
 
 
     """
@@ -5819,7 +5819,7 @@ class FlexSwitch( object):
         return r
 
     def getAllIPv4Routes(self):
-        return self.getObjects( 'IPv4Route') 
+        return self.getObjects( 'IPv4Route', self.cfgUrlBase) 
 
 
     @processReturnCode
@@ -5839,7 +5839,7 @@ class FlexSwitch( object):
         return r
 
     def getAllPolicyActionStates(self):
-        return self.getObjects( 'PolicyActionState') 
+        return self.getObjects( 'PolicyActionState', self.stateUrlBase) 
 
 
     @processReturnCode
@@ -5859,7 +5859,7 @@ class FlexSwitch( object):
         return r
 
     def getAllOspfGlobalStates(self):
-        return self.getObjects( 'OspfGlobalState') 
+        return self.getObjects( 'OspfGlobalState', self.stateUrlBase) 
 
 
     @processReturnCode
@@ -5881,7 +5881,7 @@ class FlexSwitch( object):
         return r
 
     def getAllBGPNeighborStates(self):
-        return self.getObjects( 'BGPNeighborState') 
+        return self.getObjects( 'BGPNeighborState', self.stateUrlBase) 
 
 
     @processReturnCode
@@ -5903,7 +5903,7 @@ class FlexSwitch( object):
         return r
 
     def getAllVrrpVridStates(self):
-        return self.getObjects( 'VrrpVridState') 
+        return self.getObjects( 'VrrpVridState', self.stateUrlBase) 
 
 
     @processReturnCode
@@ -5927,7 +5927,7 @@ class FlexSwitch( object):
         return r
 
     def getAllBGPRoutes(self):
-        return self.getObjects( 'BGPRoute') 
+        return self.getObjects( 'BGPRoute', self.stateUrlBase) 
 
 
     """
@@ -6030,7 +6030,7 @@ class FlexSwitch( object):
         return r
 
     def getAllOspfAreaRangeEntryConfigs(self):
-        return self.getObjects( 'OspfAreaRangeEntryConfig') 
+        return self.getObjects( 'OspfAreaRangeEntryConfig', self.cfgUrlBase) 
 
 
     """
@@ -6133,7 +6133,7 @@ class FlexSwitch( object):
         return r
 
     def getAllBGPPolicyDefinitions(self):
-        return self.getObjects( 'BGPPolicyDefinition') 
+        return self.getObjects( 'BGPPolicyDefinition', self.cfgUrlBase) 
 
 
     """
@@ -6247,7 +6247,7 @@ class FlexSwitch( object):
         return r
 
     def getAllPolicyConditions(self):
-        return self.getObjects( 'PolicyCondition') 
+        return self.getObjects( 'PolicyCondition', self.cfgUrlBase) 
 
 
     """
@@ -6416,7 +6416,7 @@ class FlexSwitch( object):
         return r
 
     def getAllPorts(self):
-        return self.getObjects( 'Port') 
+        return self.getObjects( 'Port', self.cfgUrlBase) 
 
 
     @processReturnCode
@@ -6438,5 +6438,5 @@ class FlexSwitch( object):
         return r
 
     def getAllOspfIfEntryStates(self):
-        return self.getObjects( 'OspfIfEntryState') 
+        return self.getObjects( 'OspfIfEntryState', self.stateUrlBase) 
 
