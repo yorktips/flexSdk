@@ -12,8 +12,8 @@ Ubuntu/Debian Installation via Linux
 
 1. SCP flexswitch debian package to the whitebox switch:
    *Default username: admin, default password: snaproute*
-:: 
 
+:: 
 	Adams-MacBook-Pro:Apps acasella$ scp flexswitch_0.0.80_amd64.deb admin@10.1.10.240:./
 	admin@10.1.10.240's password: 
 	flexswitch_0.0.80_amd64.deb                                                                                                                                                    100%   59MB   9.9MB/s   00:06 ``
@@ -21,7 +21,6 @@ Ubuntu/Debian Installation via Linux
 2. Once complete login to the whitebox switch and utilize dpkg to install package on the system:
 
 :: 
-
 	admin@localhost:~$ sudo dpkg -i flexswitch_0.0.80_amd64_wedge.deb 
 	(Reading database ... 20599 files and directories currently installed.)
 	Preparing to unpack flexswitch_0.0.80_amd64_wedge.deb ...
@@ -82,7 +81,7 @@ Ubuntu/Debian Installation via Linux
 	[OK] Daemon vxland ... success!
 	[OK] Daemon confd ... success!
 	 
-4. To change the daemons that start on restart edit the file /opt/flexswitch/params/clients.json and remove or add daemon specific JSON *{"Name": "<daemon>", "Port": <port-number>}*
+4. To change the daemons that start on restart edit the file /opt/flexswitch/params/clients.json and remove or add daemon specific JSON, I.E. *{"Name": "<daemon>", "Port": <port-number>}*
 
 ::
 	[
@@ -127,8 +126,7 @@ Ubuntu/Debian Installation via Linux
 	
 		{"Name":"local",
 		  "Port":0}
-	]
-	 
+	] 
 		
 Ubuntu/Debian Installation via FlexSwitch API
 ---------------------------------------------
