@@ -11,6 +11,7 @@ Welcome to FlexSwitchSDK's documentation!
 
     Installing FlexSwitch <install>
     Example Configurations <example>
+    Example Use Cases	   <usecase>
     Network Topologies    <topology>
     API Reference         <apis>
 
