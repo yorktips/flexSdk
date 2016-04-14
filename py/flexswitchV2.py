@@ -32,7 +32,7 @@ class FlexSwitch( object):
     def getObjects(self, objName, urlPath):
         currentMarker = 0                                                                                                  
         nextMarker = 0                                                                                                     
-        count = 10                                                                                                         
+        count = 10
         more = True                                                                                                        
         entries = []                                                                                                       
         while more == True:                                                                                                
@@ -63,7 +63,7 @@ class FlexSwitch( object):
         return r
 
     def getAllArpEntryStates(self):
-        return self.getObjects( 'ArpEntryState', self.stateUrlBase) 
+        return self.getObjects( 'ArpEntry', self.stateUrlBase)
 
 
     @processReturnCode
@@ -85,7 +85,7 @@ class FlexSwitch( object):
         return r
 
     def getAllOspfHostEntryStates(self):
-        return self.getObjects( 'OspfHostEntryState', self.stateUrlBase) 
+        return self.getObjects( 'OspfHostEntry', self.stateUrlBase)
 
 
     """
@@ -177,110 +177,18 @@ class FlexSwitch( object):
         obj =  { 
                 'Name' : Name,
                 }
-        reqUrl =  self.stateUrlBase+'PolicyStm'
+        reqUrl =  self.stateUrlBase+'PolicyStmt'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
     def getPolicyStmtById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'PolicyStm'+"/%s"%(objectId)
+        reqUrl =  self.stateUrlBase+'PolicyStmt'+"/%s"%(objectId)
         r = requests.get(reqUrl, data=None, headers=headers) 
         return r
 
     def getAllPolicyStmts(self):
-        return self.getObjects( 'PolicyStmt', self.cfgUrlBase) 
-
-
-    """
-    .. automethod :: createOspfNbrEntryConfig(self,
-        :param string NbrIpAddr :  The IP address this neighbor is using in its IP source address.  Note that  The IP address this neighbor is using in its IP source address.  Note that
-        :param int32 NbrAddressLessIndex :  On an interface having an IP address  On an interface having an IP address
-        :param int32 NbrPriority :  The priority of this neighbor in the designated router election algorithm.  The value 0 signifies that the neighbor is not eligible to become the designated router on this particular network.  The priority of this neighbor in the designated router election algorithm.  The value 0 signifies that the neighbor is not eligible to become the designated router on this particular network.
-
-	"""
-    @processReturnCode
-    def createOspfNbrEntryConfig(self,
-                                 NbrIpAddr,
-                                 NbrAddressLessIndex,
-                                 NbrPriority):
-        obj =  { 
-                'NbrIpAddr' : NbrIpAddr,
-                'NbrAddressLessIndex' : int(NbrAddressLessIndex),
-                'NbrPriority' : int(NbrPriority),
-                }
-        reqUrl =  self.cfgUrlBase+'OspfNbrEntryConfig'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def updateOspfNbrEntryConfig(self,
-                                 NbrIpAddr,
-                                 NbrAddressLessIndex,
-                                 NbrPriority = None):
-        obj =  {}
-        if NbrIpAddr != None :
-            obj['NbrIpAddr'] = NbrIpAddr
-
-        if NbrAddressLessIndex != None :
-            obj['NbrAddressLessIndex'] = int(NbrAddressLessIndex)
-
-        if NbrPriority != None :
-            obj['NbrPriority'] = int(NbrPriority)
-
-        reqUrl =  self.cfgUrlBase+'OspfNbrEntryConfig'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def updateOspfNbrEntryConfigById(self,
-                                      objectId,
-                                      NbrPriority = None):
-        obj =  {'objectId': objectId }
-        if NbrPriority !=  None:
-            obj['NbrPriority'] = NbrPriority
-
-        reqUrl =  self.cfgUrlBase+'OspfNbrEntryConfig'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def deleteOspfNbrEntryConfig(self,
-                                 NbrIpAddr,
-                                 NbrAddressLessIndex):
-        obj =  { 
-                'NbrIpAddr' : NbrIpAddr,
-                'NbrAddressLessIndex' : NbrAddressLessIndex,
-                }
-        reqUrl =  self.cfgUrlBase+'OspfNbrEntryConfig'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def deleteOspfNbrEntryConfigById(self, objectId ):
-        reqUrl =  self.cfgUrlBase+'OspfNbrEntryConfig'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
-        return r
-
-    @processReturnCode
-    def getOspfNbrEntryConfig(self,
-                              NbrIpAddr,
-                              NbrAddressLessIndex):
-        obj =  { 
-                'NbrIpAddr' : NbrIpAddr,
-                'NbrAddressLessIndex' : NbrAddressLessIndex,
-                }
-        reqUrl =  self.stateUrlBase+'OspfNbrEntryConfig'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def getOspfNbrEntryConfigById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'OspfNbrEntryConfig'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllOspfNbrEntryConfigs(self):
-        return self.getObjects( 'OspfNbrEntryConfig', self.cfgUrlBase) 
+        return self.getObjects( 'PolicyStmt', self.cfgUrlBase)
 
 
     """
@@ -372,7 +280,7 @@ class FlexSwitch( object):
         return r
 
     def getAllVlans(self):
-        return self.getObjects( 'Vlan', self.cfgUrlBase) 
+        return self.getObjects( 'Vlan', self.cfgUrlBase)
 
 
     @processReturnCode
@@ -400,7 +308,7 @@ class FlexSwitch( object):
         return r
 
     def getAllOspfLocalLsdbEntryStates(self):
-        return self.getObjects( 'OspfLocalLsdbEntryState', self.stateUrlBase) 
+        return self.getObjects( 'OspfLocalLsdbEntry', self.stateUrlBase)
 
 
     """
@@ -481,7 +389,7 @@ class FlexSwitch( object):
         return r
 
     def getAllComponentLoggings(self):
-        return self.getObjects( 'ComponentLogging', self.cfgUrlBase) 
+        return self.getObjects( 'ComponentLogging', self.cfgUrlBase)
 
 
     @processReturnCode
@@ -490,18 +398,143 @@ class FlexSwitch( object):
         obj =  { 
                 'Index' : Index,
                 }
-        reqUrl =  self.stateUrlBase+'IPv4Even'
+        reqUrl =  self.stateUrlBase+'IPv4Event'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
     def getIPv4EventStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'IPv4Even'+"/%s"%(objectId)
+        reqUrl =  self.stateUrlBase+'IPv4Event'+"/%s"%(objectId)
         r = requests.get(reqUrl, data=None, headers=headers) 
         return r
 
     def getAllIPv4EventStates(self):
-        return self.getObjects( 'IPv4EventState', self.stateUrlBase) 
+        return self.getObjects( 'IPv4Event', self.stateUrlBase)
+
+
+    """
+    .. automethod :: createOspfAreaEntry(self,
+        :param string AreaId :  A 32-bit integer uniquely identifying an area. Area ID 0.0.0.0 is used for the OSPF backbone.  A 32-bit integer uniquely identifying an area. Area ID 0.0.0.0 is used for the OSPF backbone.
+        :param int32 AuthType :  The authentication type specified for an area.  The authentication type specified for an area.
+        :param int32 ImportAsExtern :  Indicates if an area is a stub area  Indicates if an area is a stub area
+        :param int32 AreaSummary :  The variable ospfAreaSummary controls the import of summary LSAs into stub and NSSA areas. It has no effect on other areas.  If it is noAreaSummary  The variable ospfAreaSummary controls the import of summary LSAs into stub and NSSA areas. It has no effect on other areas.  If it is noAreaSummary
+        :param int32 AreaNssaTranslatorRole :  Indicates an NSSA border router's ability to perform NSSA translation of type-7 LSAs into type-5 LSAs.  Indicates an NSSA border router's ability to perform NSSA translation of type-7 LSAs into type-5 LSAs.
+        :param int32 AreaNssaTranslatorStabilityInterval :  The number of seconds after an elected translator determines its services are no longer required  The number of seconds after an elected translator determines its services are no longer required
+
+	"""
+    @processReturnCode
+    def createOspfAreaEntry(self,
+                            AreaId,
+                            AuthType,
+                            ImportAsExtern,
+                            AreaSummary,
+                            AreaNssaTranslatorRole,
+                            AreaNssaTranslatorStabilityInterval):
+        obj =  { 
+                'AreaId' : AreaId,
+                'AuthType' : int(AuthType),
+                'ImportAsExtern' : int(ImportAsExtern),
+                'AreaSummary' : int(AreaSummary),
+                'AreaNssaTranslatorRole' : int(AreaNssaTranslatorRole),
+                'AreaNssaTranslatorStabilityInterval' : int(AreaNssaTranslatorStabilityInterval),
+                }
+        reqUrl =  self.cfgUrlBase+'OspfAreaEntry'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def updateOspfAreaEntry(self,
+                            AreaId,
+                            AuthType = None,
+                            ImportAsExtern = None,
+                            AreaSummary = None,
+                            AreaNssaTranslatorRole = None,
+                            AreaNssaTranslatorStabilityInterval = None):
+        obj =  {}
+        if AreaId != None :
+            obj['AreaId'] = AreaId
+
+        if AuthType != None :
+            obj['AuthType'] = int(AuthType)
+
+        if ImportAsExtern != None :
+            obj['ImportAsExtern'] = int(ImportAsExtern)
+
+        if AreaSummary != None :
+            obj['AreaSummary'] = int(AreaSummary)
+
+        if AreaNssaTranslatorRole != None :
+            obj['AreaNssaTranslatorRole'] = int(AreaNssaTranslatorRole)
+
+        if AreaNssaTranslatorStabilityInterval != None :
+            obj['AreaNssaTranslatorStabilityInterval'] = int(AreaNssaTranslatorStabilityInterval)
+
+        reqUrl =  self.cfgUrlBase+'OspfAreaEntry'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def updateOspfAreaEntryById(self,
+                                 objectId,
+                                 AuthType = None,
+                                 ImportAsExtern = None,
+                                 AreaSummary = None,
+                                 AreaNssaTranslatorRole = None,
+                                 AreaNssaTranslatorStabilityInterval = None):
+        obj =  {'objectId': objectId }
+        if AuthType !=  None:
+            obj['AuthType'] = AuthType
+
+        if ImportAsExtern !=  None:
+            obj['ImportAsExtern'] = ImportAsExtern
+
+        if AreaSummary !=  None:
+            obj['AreaSummary'] = AreaSummary
+
+        if AreaNssaTranslatorRole !=  None:
+            obj['AreaNssaTranslatorRole'] = AreaNssaTranslatorRole
+
+        if AreaNssaTranslatorStabilityInterval !=  None:
+            obj['AreaNssaTranslatorStabilityInterval'] = AreaNssaTranslatorStabilityInterval
+
+        reqUrl =  self.cfgUrlBase+'OspfAreaEntry'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def deleteOspfAreaEntry(self,
+                            AreaId):
+        obj =  { 
+                'AreaId' : AreaId,
+                }
+        reqUrl =  self.cfgUrlBase+'OspfAreaEntry'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def deleteOspfAreaEntryById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'OspfAreaEntry'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    @processReturnCode
+    def getOspfAreaEntry(self,
+                         AreaId):
+        obj =  { 
+                'AreaId' : AreaId,
+                }
+        reqUrl =  self.stateUrlBase+'OspfAreaEntry'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def getOspfAreaEntryById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'OspfAreaEntry'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllOspfAreaEntrys(self):
+        return self.getObjects( 'OspfAreaEntry', self.cfgUrlBase)
 
 
     @processReturnCode
@@ -521,7 +554,7 @@ class FlexSwitch( object):
         return r
 
     def getAllLaPortChannelStates(self):
-        return self.getObjects( 'LaPortChannelState', self.stateUrlBase) 
+        return self.getObjects( 'LaPortChannel', self.stateUrlBase)
 
 
     """
@@ -613,7 +646,7 @@ class FlexSwitch( object):
         return r
 
     def getAllDhcpRelayIntfs(self):
-        return self.getObjects( 'DhcpRelayIntf', self.cfgUrlBase) 
+        return self.getObjects( 'DhcpRelayIntf', self.cfgUrlBase)
 
 
     """
@@ -760,7 +793,110 @@ class FlexSwitch( object):
         return r
 
     def getAllPolicyActions(self):
-        return self.getObjects( 'PolicyAction', self.cfgUrlBase) 
+        return self.getObjects( 'PolicyAction', self.cfgUrlBase)
+
+
+    """
+    .. automethod :: createOspfHostEntry(self,
+        :param int32 HostTOS :  The Type of Service of the route being configured.  The Type of Service of the route being configured.
+        :param string HostIpAddress :  The IP address of the host.  The IP address of the host.
+        :param int32 HostMetric :  The metric to be advertised.  The metric to be advertised.
+        :param string HostCfgAreaID :  To configure the OSPF area to which the host belongs.  To configure the OSPF area to which the host belongs.
+
+	"""
+    @processReturnCode
+    def createOspfHostEntry(self,
+                            HostTOS,
+                            HostIpAddress,
+                            HostMetric,
+                            HostCfgAreaID):
+        obj =  { 
+                'HostTOS' : int(HostTOS),
+                'HostIpAddress' : HostIpAddress,
+                'HostMetric' : int(HostMetric),
+                'HostCfgAreaID' : HostCfgAreaID,
+                }
+        reqUrl =  self.cfgUrlBase+'OspfHostEntry'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def updateOspfHostEntry(self,
+                            HostTOS,
+                            HostIpAddress,
+                            HostMetric = None,
+                            HostCfgAreaID = None):
+        obj =  {}
+        if HostTOS != None :
+            obj['HostTOS'] = int(HostTOS)
+
+        if HostIpAddress != None :
+            obj['HostIpAddress'] = HostIpAddress
+
+        if HostMetric != None :
+            obj['HostMetric'] = int(HostMetric)
+
+        if HostCfgAreaID != None :
+            obj['HostCfgAreaID'] = HostCfgAreaID
+
+        reqUrl =  self.cfgUrlBase+'OspfHostEntry'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def updateOspfHostEntryById(self,
+                                 objectId,
+                                 HostMetric = None,
+                                 HostCfgAreaID = None):
+        obj =  {'objectId': objectId }
+        if HostMetric !=  None:
+            obj['HostMetric'] = HostMetric
+
+        if HostCfgAreaID !=  None:
+            obj['HostCfgAreaID'] = HostCfgAreaID
+
+        reqUrl =  self.cfgUrlBase+'OspfHostEntry'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def deleteOspfHostEntry(self,
+                            HostTOS,
+                            HostIpAddress):
+        obj =  { 
+                'HostTOS' : HostTOS,
+                'HostIpAddress' : HostIpAddress,
+                }
+        reqUrl =  self.cfgUrlBase+'OspfHostEntry'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def deleteOspfHostEntryById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'OspfHostEntry'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    @processReturnCode
+    def getOspfHostEntry(self,
+                         HostTOS,
+                         HostIpAddress):
+        obj =  { 
+                'HostTOS' : HostTOS,
+                'HostIpAddress' : HostIpAddress,
+                }
+        reqUrl =  self.stateUrlBase+'OspfHostEntry'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def getOspfHostEntryById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'OspfHostEntry'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllOspfHostEntrys(self):
+        return self.getObjects( 'OspfHostEntry', self.cfgUrlBase)
 
 
     """
@@ -898,376 +1034,7 @@ class FlexSwitch( object):
         return r
 
     def getAllVrrpIntfs(self):
-        return self.getObjects( 'VrrpIntf', self.cfgUrlBase) 
-
-
-    """
-    .. automethod :: createOspfAreaEntryConfig(self,
-        :param string AreaId :  A 32-bit integer uniquely identifying an area. Area ID 0.0.0.0 is used for the OSPF backbone.  A 32-bit integer uniquely identifying an area. Area ID 0.0.0.0 is used for the OSPF backbone.
-        :param int32 AuthType :  The authentication type specified for an area.  The authentication type specified for an area.
-        :param int32 ImportAsExtern :  Indicates if an area is a stub area  Indicates if an area is a stub area
-        :param int32 AreaSummary :  The variable ospfAreaSummary controls the import of summary LSAs into stub and NSSA areas. It has no effect on other areas.  If it is noAreaSummary  The variable ospfAreaSummary controls the import of summary LSAs into stub and NSSA areas. It has no effect on other areas.  If it is noAreaSummary
-        :param int32 AreaNssaTranslatorRole :  Indicates an NSSA border router's ability to perform NSSA translation of type-7 LSAs into type-5 LSAs.  Indicates an NSSA border router's ability to perform NSSA translation of type-7 LSAs into type-5 LSAs.
-        :param int32 AreaNssaTranslatorStabilityInterval :  The number of seconds after an elected translator determines its services are no longer required  The number of seconds after an elected translator determines its services are no longer required
-
-	"""
-    @processReturnCode
-    def createOspfAreaEntryConfig(self,
-                                  AreaId,
-                                  AuthType,
-                                  ImportAsExtern,
-                                  AreaSummary,
-                                  AreaNssaTranslatorRole,
-                                  AreaNssaTranslatorStabilityInterval):
-        obj =  { 
-                'AreaId' : AreaId,
-                'AuthType' : int(AuthType),
-                'ImportAsExtern' : int(ImportAsExtern),
-                'AreaSummary' : int(AreaSummary),
-                'AreaNssaTranslatorRole' : int(AreaNssaTranslatorRole),
-                'AreaNssaTranslatorStabilityInterval' : int(AreaNssaTranslatorStabilityInterval),
-                }
-        reqUrl =  self.cfgUrlBase+'OspfAreaEntryConfig'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def updateOspfAreaEntryConfig(self,
-                                  AreaId,
-                                  AuthType = None,
-                                  ImportAsExtern = None,
-                                  AreaSummary = None,
-                                  AreaNssaTranslatorRole = None,
-                                  AreaNssaTranslatorStabilityInterval = None):
-        obj =  {}
-        if AreaId != None :
-            obj['AreaId'] = AreaId
-
-        if AuthType != None :
-            obj['AuthType'] = int(AuthType)
-
-        if ImportAsExtern != None :
-            obj['ImportAsExtern'] = int(ImportAsExtern)
-
-        if AreaSummary != None :
-            obj['AreaSummary'] = int(AreaSummary)
-
-        if AreaNssaTranslatorRole != None :
-            obj['AreaNssaTranslatorRole'] = int(AreaNssaTranslatorRole)
-
-        if AreaNssaTranslatorStabilityInterval != None :
-            obj['AreaNssaTranslatorStabilityInterval'] = int(AreaNssaTranslatorStabilityInterval)
-
-        reqUrl =  self.cfgUrlBase+'OspfAreaEntryConfig'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def updateOspfAreaEntryConfigById(self,
-                                       objectId,
-                                       AuthType = None,
-                                       ImportAsExtern = None,
-                                       AreaSummary = None,
-                                       AreaNssaTranslatorRole = None,
-                                       AreaNssaTranslatorStabilityInterval = None):
-        obj =  {'objectId': objectId }
-        if AuthType !=  None:
-            obj['AuthType'] = AuthType
-
-        if ImportAsExtern !=  None:
-            obj['ImportAsExtern'] = ImportAsExtern
-
-        if AreaSummary !=  None:
-            obj['AreaSummary'] = AreaSummary
-
-        if AreaNssaTranslatorRole !=  None:
-            obj['AreaNssaTranslatorRole'] = AreaNssaTranslatorRole
-
-        if AreaNssaTranslatorStabilityInterval !=  None:
-            obj['AreaNssaTranslatorStabilityInterval'] = AreaNssaTranslatorStabilityInterval
-
-        reqUrl =  self.cfgUrlBase+'OspfAreaEntryConfig'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def deleteOspfAreaEntryConfig(self,
-                                  AreaId):
-        obj =  { 
-                'AreaId' : AreaId,
-                }
-        reqUrl =  self.cfgUrlBase+'OspfAreaEntryConfig'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def deleteOspfAreaEntryConfigById(self, objectId ):
-        reqUrl =  self.cfgUrlBase+'OspfAreaEntryConfig'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
-        return r
-
-    @processReturnCode
-    def getOspfAreaEntryConfig(self,
-                               AreaId):
-        obj =  { 
-                'AreaId' : AreaId,
-                }
-        reqUrl =  self.stateUrlBase+'OspfAreaEntryConfig'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def getOspfAreaEntryConfigById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'OspfAreaEntryConfig'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllOspfAreaEntryConfigs(self):
-        return self.getObjects( 'OspfAreaEntryConfig', self.cfgUrlBase) 
-
-
-    @processReturnCode
-    def getBGPPolicyConditionState(self,
-                                   Name):
-        obj =  { 
-                'Name' : Name,
-                }
-        reqUrl =  self.stateUrlBase+'BGPPolicyCondition'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def getBGPPolicyConditionStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BGPPolicyCondition'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllBGPPolicyConditionStates(self):
-        return self.getObjects( 'BGPPolicyConditionState', self.stateUrlBase) 
-
-
-    @processReturnCode
-    def getIPv4RouteHwState(self,
-                            DestinationNw):
-        obj =  { 
-                'DestinationNw' : DestinationNw,
-                }
-        reqUrl =  self.stateUrlBase+'IPv4RouteHw'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def getIPv4RouteHwStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'IPv4RouteHw'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllIPv4RouteHwStates(self):
-        return self.getObjects( 'IPv4RouteHwState', self.stateUrlBase) 
-
-
-    """
-    .. automethod :: createArpConfig(self,
-        :param string ArpConfigKey :  Arp config  Arp config
-        :param int32 Timeout :  Global Arp entry timeout value. Default value  Global Arp entry timeout value. Default value
-
-	"""
-    @processReturnCode
-    def createArpConfig(self,
-                        ArpConfigKey,
-                        Timeout):
-        obj =  { 
-                'ArpConfigKey' : ArpConfigKey,
-                'Timeout' : int(Timeout),
-                }
-        reqUrl =  self.cfgUrlBase+'ArpConfig'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def updateArpConfig(self,
-                        ArpConfigKey,
-                        Timeout = None):
-        obj =  {}
-        if ArpConfigKey != None :
-            obj['ArpConfigKey'] = ArpConfigKey
-
-        if Timeout != None :
-            obj['Timeout'] = int(Timeout)
-
-        reqUrl =  self.cfgUrlBase+'ArpConfig'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def updateArpConfigById(self,
-                             objectId,
-                             Timeout = None):
-        obj =  {'objectId': objectId }
-        if Timeout !=  None:
-            obj['Timeout'] = Timeout
-
-        reqUrl =  self.cfgUrlBase+'ArpConfig'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def deleteArpConfig(self,
-                        ArpConfigKey):
-        obj =  { 
-                'ArpConfigKey' : ArpConfigKey,
-                }
-        reqUrl =  self.cfgUrlBase+'ArpConfig'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def deleteArpConfigById(self, objectId ):
-        reqUrl =  self.cfgUrlBase+'ArpConfig'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
-        return r
-
-    @processReturnCode
-    def getArpConfig(self,
-                     ArpConfigKey):
-        obj =  { 
-                'ArpConfigKey' : ArpConfigKey,
-                }
-        reqUrl =  self.stateUrlBase+'ArpConfig'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def getArpConfigById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'ArpConfig'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllArpConfigs(self):
-        return self.getObjects( 'ArpConfig', self.cfgUrlBase) 
-
-
-    @processReturnCode
-    def getOspfNbrEntryState(self,
-                             NbrIpAddr,
-                             NbrAddressLessIndex):
-        obj =  { 
-                'NbrIpAddr' : NbrIpAddr,
-                'NbrAddressLessIndex' : NbrAddressLessIndex,
-                }
-        reqUrl =  self.stateUrlBase+'OspfNbrEntry'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def getOspfNbrEntryStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'OspfNbrEntry'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllOspfNbrEntryStates(self):
-        return self.getObjects( 'OspfNbrEntryState', self.stateUrlBase) 
-
-
-    @processReturnCode
-    def getDhcpRelayIntfState(self,
-                              IntfId):
-        obj =  { 
-                'IntfId' : IntfId,
-                }
-        reqUrl =  self.stateUrlBase+'DhcpRelayIntf'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def getDhcpRelayIntfStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'DhcpRelayIntf'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllDhcpRelayIntfStates(self):
-        return self.getObjects( 'DhcpRelayIntfState', self.stateUrlBase) 
-
-
-    """
-    .. automethod :: createDhcpRelayGlobal(self,
-        :param string DhcpRelay :  Global Dhcp Relay Agent Information  Global Dhcp Relay Agent Information
-        :param bool Enable :  Global Config stating whether DHCP Relay Agent is enabled on the box or not  Global Config stating whether DHCP Relay Agent is enabled on the box or not
-
-	"""
-    @processReturnCode
-    def createDhcpRelayGlobal(self,
-                              DhcpRelay,
-                              Enable):
-        obj =  { 
-                'DhcpRelay' : DhcpRelay,
-                'Enable' : True if Enable else False,
-                }
-        reqUrl =  self.cfgUrlBase+'DhcpRelayGlobal'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def updateDhcpRelayGlobal(self,
-                              DhcpRelay,
-                              Enable = None):
-        obj =  {}
-        if DhcpRelay != None :
-            obj['DhcpRelay'] = DhcpRelay
-
-        if Enable != None :
-            obj['Enable'] = True if Enable else False
-
-        reqUrl =  self.cfgUrlBase+'DhcpRelayGlobal'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def updateDhcpRelayGlobalById(self,
-                                   objectId,
-                                   Enable = None):
-        obj =  {'objectId': objectId }
-        if Enable !=  None:
-            obj['Enable'] = Enable
-
-        reqUrl =  self.cfgUrlBase+'DhcpRelayGlobal'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def deleteDhcpRelayGlobal(self,
-                              DhcpRelay):
-        obj =  { 
-                'DhcpRelay' : DhcpRelay,
-                }
-        reqUrl =  self.cfgUrlBase+'DhcpRelayGlobal'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def deleteDhcpRelayGlobalById(self, objectId ):
-        reqUrl =  self.cfgUrlBase+'DhcpRelayGlobal'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
-        return r
-
-    @processReturnCode
-    def getDhcpRelayGlobal(self,
-                           DhcpRelay):
-        obj =  { 
-                'DhcpRelay' : DhcpRelay,
-                }
-        reqUrl =  self.stateUrlBase+'DhcpRelayGlobal'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def getDhcpRelayGlobalById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'DhcpRelayGlobal'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllDhcpRelayGlobals(self):
-        return self.getObjects( 'DhcpRelayGlobal', self.cfgUrlBase) 
+        return self.getObjects( 'VrrpIntf', self.cfgUrlBase)
 
 
     """
@@ -1436,7 +1203,251 @@ class FlexSwitch( object):
         return r
 
     def getAllLaPortChannels(self):
-        return self.getObjects( 'LaPortChannel', self.cfgUrlBase) 
+        return self.getObjects( 'LaPortChannel', self.cfgUrlBase)
+
+
+    @processReturnCode
+    def getBGPPolicyConditionState(self,
+                                   Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.stateUrlBase+'BGPPolicyCondition'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def getBGPPolicyConditionStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'BGPPolicyCondition'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllBGPPolicyConditionStates(self):
+        return self.getObjects( 'BGPPolicyCondition', self.stateUrlBase)
+
+
+    @processReturnCode
+    def getIPv4RouteHwState(self,
+                            DestinationNw):
+        obj =  { 
+                'DestinationNw' : DestinationNw,
+                }
+        reqUrl =  self.stateUrlBase+'IPv4RouteHw'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def getIPv4RouteHwStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'IPv4RouteHw'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllIPv4RouteHwStates(self):
+        return self.getObjects( 'IPv4RouteHw', self.stateUrlBase)
+
+
+    """
+    .. automethod :: createArpConfig(self,
+        :param string ArpConfigKey :  Arp config  Arp config
+        :param int32 Timeout :  Global Arp entry timeout value. Default value  Global Arp entry timeout value. Default value
+
+	"""
+    @processReturnCode
+    def createArpConfig(self,
+                        ArpConfigKey,
+                        Timeout):
+        obj =  { 
+                'ArpConfigKey' : ArpConfigKey,
+                'Timeout' : int(Timeout),
+                }
+        reqUrl =  self.cfgUrlBase+'ArpConfig'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def updateArpConfig(self,
+                        ArpConfigKey,
+                        Timeout = None):
+        obj =  {}
+        if ArpConfigKey != None :
+            obj['ArpConfigKey'] = ArpConfigKey
+
+        if Timeout != None :
+            obj['Timeout'] = int(Timeout)
+
+        reqUrl =  self.cfgUrlBase+'ArpConfig'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def updateArpConfigById(self,
+                             objectId,
+                             Timeout = None):
+        obj =  {'objectId': objectId }
+        if Timeout !=  None:
+            obj['Timeout'] = Timeout
+
+        reqUrl =  self.cfgUrlBase+'ArpConfig'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def deleteArpConfig(self,
+                        ArpConfigKey):
+        obj =  { 
+                'ArpConfigKey' : ArpConfigKey,
+                }
+        reqUrl =  self.cfgUrlBase+'ArpConfig'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def deleteArpConfigById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'ArpConfig'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    @processReturnCode
+    def getArpConfig(self,
+                     ArpConfigKey):
+        obj =  { 
+                'ArpConfigKey' : ArpConfigKey,
+                }
+        reqUrl =  self.stateUrlBase+'ArpConfig'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def getArpConfigById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'ArpConfig'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllArpConfigs(self):
+        return self.getObjects( 'ArpConfig', self.cfgUrlBase)
+
+
+    @processReturnCode
+    def getOspfNbrEntryState(self,
+                             NbrIpAddr,
+                             NbrAddressLessIndex):
+        obj =  { 
+                'NbrIpAddr' : NbrIpAddr,
+                'NbrAddressLessIndex' : NbrAddressLessIndex,
+                }
+        reqUrl =  self.stateUrlBase+'OspfNbrEntry'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def getOspfNbrEntryStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'OspfNbrEntry'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllOspfNbrEntryStates(self):
+        return self.getObjects( 'OspfNbrEntry', self.stateUrlBase)
+
+
+    @processReturnCode
+    def getDhcpRelayIntfState(self,
+                              IntfId):
+        obj =  { 
+                'IntfId' : IntfId,
+                }
+        reqUrl =  self.stateUrlBase+'DhcpRelayIntf'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def getDhcpRelayIntfStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'DhcpRelayIntf'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllDhcpRelayIntfStates(self):
+        return self.getObjects( 'DhcpRelayIntf', self.stateUrlBase)
+
+
+    """
+    .. automethod :: createDhcpRelayGlobal(self,
+        :param string DhcpRelay :  Global Dhcp Relay Agent Information  Global Dhcp Relay Agent Information
+        :param bool Enable :  Global Config stating whether DHCP Relay Agent is enabled on the box or not  Global Config stating whether DHCP Relay Agent is enabled on the box or not
+
+	"""
+    @processReturnCode
+    def createDhcpRelayGlobal(self,
+                              DhcpRelay,
+                              Enable):
+        obj =  { 
+                'DhcpRelay' : DhcpRelay,
+                'Enable' : True if Enable else False,
+                }
+        reqUrl =  self.cfgUrlBase+'DhcpRelayGlobal'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def updateDhcpRelayGlobal(self,
+                              DhcpRelay,
+                              Enable = None):
+        obj =  {}
+        if DhcpRelay != None :
+            obj['DhcpRelay'] = DhcpRelay
+
+        if Enable != None :
+            obj['Enable'] = True if Enable else False
+
+        reqUrl =  self.cfgUrlBase+'DhcpRelayGlobal'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def updateDhcpRelayGlobalById(self,
+                                   objectId,
+                                   Enable = None):
+        obj =  {'objectId': objectId }
+        if Enable !=  None:
+            obj['Enable'] = Enable
+
+        reqUrl =  self.cfgUrlBase+'DhcpRelayGlobal'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def deleteDhcpRelayGlobal(self,
+                              DhcpRelay):
+        obj =  { 
+                'DhcpRelay' : DhcpRelay,
+                }
+        reqUrl =  self.cfgUrlBase+'DhcpRelayGlobal'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def deleteDhcpRelayGlobalById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'DhcpRelayGlobal'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    @processReturnCode
+    def getDhcpRelayGlobal(self,
+                           DhcpRelay):
+        obj =  { 
+                'DhcpRelay' : DhcpRelay,
+                }
+        reqUrl =  self.stateUrlBase+'DhcpRelayGlobal'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def getDhcpRelayGlobalById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'DhcpRelayGlobal'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllDhcpRelayGlobals(self):
+        return self.getObjects( 'DhcpRelayGlobal', self.cfgUrlBase)
 
 
     @processReturnCode
@@ -1462,7 +1473,7 @@ class FlexSwitch( object):
         return r
 
     def getAllOspfLsdbEntryStates(self):
-        return self.getObjects( 'OspfLsdbEntryState', self.stateUrlBase) 
+        return self.getObjects( 'OspfLsdbEntry', self.stateUrlBase)
 
 
     """
@@ -1565,7 +1576,220 @@ class FlexSwitch( object):
         return r
 
     def getAllBGPPolicyConditions(self):
-        return self.getObjects( 'BGPPolicyCondition', self.cfgUrlBase) 
+        return self.getObjects( 'BGPPolicyCondition', self.cfgUrlBase)
+
+
+    """
+    .. automethod :: createOspfGlobal(self,
+        :param string RouterId :  A 32-bit integer uniquely identifying the router in the Autonomous System. By convention  A 32-bit integer uniquely identifying the router in the Autonomous System. By convention
+        :param int32 AdminStat :  The administrative status of OSPF in the router.  The value 'enabled' denotes that the OSPF Process is active on at least one interface; 'disabled' disables it on all interfaces.  This object is persistent and when written the entity SHOULD save the change to non-volatile storage.  The administrative status of OSPF in the router.  The value 'enabled' denotes that the OSPF Process is active on at least one interface; 'disabled' disables it on all interfaces.  This object is persistent and when written the entity SHOULD save the change to non-volatile storage.
+        :param bool ASBdrRtrStatus :  A flag to note whether this router is configured as an Autonomous System Border Router.  This object is persistent and when written the entity SHOULD save the change to non-volatile storage.  A flag to note whether this router is configured as an Autonomous System Border Router.  This object is persistent and when written the entity SHOULD save the change to non-volatile storage.
+        :param bool TOSSupport :  The router's support for type-of-service routing.  This object is persistent and when written the entity SHOULD save the change to non-volatile storage.  The router's support for type-of-service routing.  This object is persistent and when written the entity SHOULD save the change to non-volatile storage.
+        :param int32 ExtLsdbLimit :  The maximum number of non-default AS-external LSAs entries that can be stored in the link state database.  If the value is -1  The maximum number of non-default AS-external LSAs entries that can be stored in the link state database.  If the value is -1
+        :param int32 MulticastExtensions :  A bit mask indicating whether the router is forwarding IP multicast (Class D) datagrams based on the algorithms defined in the multicast extensions to OSPF.  Bit 0  A bit mask indicating whether the router is forwarding IP multicast (Class D) datagrams based on the algorithms defined in the multicast extensions to OSPF.  Bit 0
+        :param int32 ExitOverflowInterval :  The number of seconds that  The number of seconds that
+        :param bool DemandExtensions :  The router's support for demand routing. This object is persistent and when written the entity SHOULD save the change to non-volatile storage.  The router's support for demand routing. This object is persistent and when written the entity SHOULD save the change to non-volatile storage.
+        :param bool RFC1583Compatibility :  Indicates metrics used to choose among multiple AS-external LSAs.  When RFC1583Compatibility is set to enabled  Indicates metrics used to choose among multiple AS-external LSAs.  When RFC1583Compatibility is set to enabled
+        :param uint32 ReferenceBandwidth :  Reference bandwidth in kilobits/second for  calculating default interface metrics.  The default value is 100  Reference bandwidth in kilobits/second for  calculating default interface metrics.  The default value is 100
+        :param int32 RestartSupport :  The router's support for OSPF graceful restart. Options include  The router's support for OSPF graceful restart. Options include
+        :param int32 RestartInterval :  Configured OSPF graceful restart timeout interval.  This object is persistent and when written the entity SHOULD save the change to non-volatile storage.  Configured OSPF graceful restart timeout interval.  This object is persistent and when written the entity SHOULD save the change to non-volatile storage.
+        :param bool RestartStrictLsaChecking :  Indicates if strict LSA checking is enabled for graceful restart.  This object is persistent and when written the entity SHOULD save the change to non-volatile  storage.  Indicates if strict LSA checking is enabled for graceful restart.  This object is persistent and when written the entity SHOULD save the change to non-volatile  storage.
+        :param int32 StubRouterAdvertisement :  This object controls the advertisement of stub router LSAs by the router.  The value doNotAdvertise will result in the advertisement of a standard router LSA and is the default value.  This object is persistent and when written the entity SHOULD save the change to non-volatile storage.  This object controls the advertisement of stub router LSAs by the router.  The value doNotAdvertise will result in the advertisement of a standard router LSA and is the default value.  This object is persistent and when written the entity SHOULD save the change to non-volatile storage.
+
+	"""
+    @processReturnCode
+    def createOspfGlobal(self,
+                         RouterId,
+                         AdminStat,
+                         ASBdrRtrStatus,
+                         TOSSupport,
+                         ExtLsdbLimit,
+                         MulticastExtensions,
+                         ExitOverflowInterval,
+                         DemandExtensions,
+                         RFC1583Compatibility,
+                         ReferenceBandwidth,
+                         RestartSupport,
+                         RestartInterval,
+                         RestartStrictLsaChecking,
+                         StubRouterAdvertisement):
+        obj =  { 
+                'RouterId' : RouterId,
+                'AdminStat' : int(AdminStat),
+                'ASBdrRtrStatus' : True if ASBdrRtrStatus else False,
+                'TOSSupport' : True if TOSSupport else False,
+                'ExtLsdbLimit' : int(ExtLsdbLimit),
+                'MulticastExtensions' : int(MulticastExtensions),
+                'ExitOverflowInterval' : int(ExitOverflowInterval),
+                'DemandExtensions' : True if DemandExtensions else False,
+                'RFC1583Compatibility' : True if RFC1583Compatibility else False,
+                'ReferenceBandwidth' : int(ReferenceBandwidth),
+                'RestartSupport' : int(RestartSupport),
+                'RestartInterval' : int(RestartInterval),
+                'RestartStrictLsaChecking' : True if RestartStrictLsaChecking else False,
+                'StubRouterAdvertisement' : int(StubRouterAdvertisement),
+                }
+        reqUrl =  self.cfgUrlBase+'OspfGlobal'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def updateOspfGlobal(self,
+                         RouterId,
+                         AdminStat = None,
+                         ASBdrRtrStatus = None,
+                         TOSSupport = None,
+                         ExtLsdbLimit = None,
+                         MulticastExtensions = None,
+                         ExitOverflowInterval = None,
+                         DemandExtensions = None,
+                         RFC1583Compatibility = None,
+                         ReferenceBandwidth = None,
+                         RestartSupport = None,
+                         RestartInterval = None,
+                         RestartStrictLsaChecking = None,
+                         StubRouterAdvertisement = None):
+        obj =  {}
+        if RouterId != None :
+            obj['RouterId'] = RouterId
+
+        if AdminStat != None :
+            obj['AdminStat'] = int(AdminStat)
+
+        if ASBdrRtrStatus != None :
+            obj['ASBdrRtrStatus'] = True if ASBdrRtrStatus else False
+
+        if TOSSupport != None :
+            obj['TOSSupport'] = True if TOSSupport else False
+
+        if ExtLsdbLimit != None :
+            obj['ExtLsdbLimit'] = int(ExtLsdbLimit)
+
+        if MulticastExtensions != None :
+            obj['MulticastExtensions'] = int(MulticastExtensions)
+
+        if ExitOverflowInterval != None :
+            obj['ExitOverflowInterval'] = int(ExitOverflowInterval)
+
+        if DemandExtensions != None :
+            obj['DemandExtensions'] = True if DemandExtensions else False
+
+        if RFC1583Compatibility != None :
+            obj['RFC1583Compatibility'] = True if RFC1583Compatibility else False
+
+        if ReferenceBandwidth != None :
+            obj['ReferenceBandwidth'] = int(ReferenceBandwidth)
+
+        if RestartSupport != None :
+            obj['RestartSupport'] = int(RestartSupport)
+
+        if RestartInterval != None :
+            obj['RestartInterval'] = int(RestartInterval)
+
+        if RestartStrictLsaChecking != None :
+            obj['RestartStrictLsaChecking'] = True if RestartStrictLsaChecking else False
+
+        if StubRouterAdvertisement != None :
+            obj['StubRouterAdvertisement'] = int(StubRouterAdvertisement)
+
+        reqUrl =  self.cfgUrlBase+'OspfGlobal'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def updateOspfGlobalById(self,
+                              objectId,
+                              AdminStat = None,
+                              ASBdrRtrStatus = None,
+                              TOSSupport = None,
+                              ExtLsdbLimit = None,
+                              MulticastExtensions = None,
+                              ExitOverflowInterval = None,
+                              DemandExtensions = None,
+                              RFC1583Compatibility = None,
+                              ReferenceBandwidth = None,
+                              RestartSupport = None,
+                              RestartInterval = None,
+                              RestartStrictLsaChecking = None,
+                              StubRouterAdvertisement = None):
+        obj =  {'objectId': objectId }
+        if AdminStat !=  None:
+            obj['AdminStat'] = AdminStat
+
+        if ASBdrRtrStatus !=  None:
+            obj['ASBdrRtrStatus'] = ASBdrRtrStatus
+
+        if TOSSupport !=  None:
+            obj['TOSSupport'] = TOSSupport
+
+        if ExtLsdbLimit !=  None:
+            obj['ExtLsdbLimit'] = ExtLsdbLimit
+
+        if MulticastExtensions !=  None:
+            obj['MulticastExtensions'] = MulticastExtensions
+
+        if ExitOverflowInterval !=  None:
+            obj['ExitOverflowInterval'] = ExitOverflowInterval
+
+        if DemandExtensions !=  None:
+            obj['DemandExtensions'] = DemandExtensions
+
+        if RFC1583Compatibility !=  None:
+            obj['RFC1583Compatibility'] = RFC1583Compatibility
+
+        if ReferenceBandwidth !=  None:
+            obj['ReferenceBandwidth'] = ReferenceBandwidth
+
+        if RestartSupport !=  None:
+            obj['RestartSupport'] = RestartSupport
+
+        if RestartInterval !=  None:
+            obj['RestartInterval'] = RestartInterval
+
+        if RestartStrictLsaChecking !=  None:
+            obj['RestartStrictLsaChecking'] = RestartStrictLsaChecking
+
+        if StubRouterAdvertisement !=  None:
+            obj['StubRouterAdvertisement'] = StubRouterAdvertisement
+
+        reqUrl =  self.cfgUrlBase+'OspfGlobal'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def deleteOspfGlobal(self,
+                         RouterId):
+        obj =  { 
+                'RouterId' : RouterId,
+                }
+        reqUrl =  self.cfgUrlBase+'OspfGlobal'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def deleteOspfGlobalById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'OspfGlobal'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    @processReturnCode
+    def getOspfGlobal(self,
+                      RouterId):
+        obj =  { 
+                'RouterId' : RouterId,
+                }
+        reqUrl =  self.stateUrlBase+'OspfGlobal'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def getOspfGlobalById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'OspfGlobal'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllOspfGlobals(self):
+        return self.getObjects( 'OspfGlobal', self.cfgUrlBase)
 
 
     @processReturnCode
@@ -1585,7 +1809,7 @@ class FlexSwitch( object):
         return r
 
     def getAllDhcpRelayHostDhcpStates(self):
-        return self.getObjects( 'DhcpRelayHostDhcpState', self.stateUrlBase) 
+        return self.getObjects( 'DhcpRelayHostDhcp', self.stateUrlBase)
 
 
     @processReturnCode
@@ -1605,7 +1829,7 @@ class FlexSwitch( object):
         return r
 
     def getAllDhcpRelayIntfServerStates(self):
-        return self.getObjects( 'DhcpRelayIntfServerState', self.stateUrlBase) 
+        return self.getObjects( 'DhcpRelayIntfServer', self.stateUrlBase)
 
 
     """
@@ -1708,7 +1932,7 @@ class FlexSwitch( object):
         return r
 
     def getAllPolicyDefinitions(self):
-        return self.getObjects( 'PolicyDefinition', self.cfgUrlBase) 
+        return self.getObjects( 'PolicyDefinition', self.cfgUrlBase)
 
 
     @processReturnCode
@@ -1730,7 +1954,7 @@ class FlexSwitch( object):
         return r
 
     def getAllOspfVirtNbrEntryStates(self):
-        return self.getObjects( 'OspfVirtNbrEntryState', self.stateUrlBase) 
+        return self.getObjects( 'OspfVirtNbrEntry', self.stateUrlBase)
 
 
     """
@@ -1921,18 +2145,18 @@ class FlexSwitch( object):
                 'BrgIfIndex' : BrgIfIndex,
                 'IfIndex' : IfIndex,
                 }
-        reqUrl =  self.stateUrlBase+'StpPor'
+        reqUrl =  self.stateUrlBase+'StpPort'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
     def getStpPortById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'StpPor'+"/%s"%(objectId)
+        reqUrl =  self.stateUrlBase+'StpPort'+"/%s"%(objectId)
         r = requests.get(reqUrl, data=None, headers=headers) 
         return r
 
     def getAllStpPorts(self):
-        return self.getObjects( 'StpPort', self.cfgUrlBase) 
+        return self.getObjects( 'StpPort', self.cfgUrlBase)
 
 
     @processReturnCode
@@ -1941,18 +2165,18 @@ class FlexSwitch( object):
         obj =  { 
                 'Protocol' : Protocol,
                 }
-        reqUrl =  self.stateUrlBase+'RouteDistanc'
+        reqUrl =  self.stateUrlBase+'RouteDistance'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
     def getRouteDistanceStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'RouteDistanc'+"/%s"%(objectId)
+        reqUrl =  self.stateUrlBase+'RouteDistance'+"/%s"%(objectId)
         r = requests.get(reqUrl, data=None, headers=headers) 
         return r
 
     def getAllRouteDistanceStates(self):
-        return self.getObjects( 'RouteDistanceState', self.stateUrlBase) 
+        return self.getObjects( 'RouteDistance', self.stateUrlBase)
 
 
     """
@@ -2033,7 +2257,7 @@ class FlexSwitch( object):
         return r
 
     def getAllLogicalIntfs(self):
-        return self.getObjects( 'LogicalIntf', self.cfgUrlBase) 
+        return self.getObjects( 'LogicalIntf', self.cfgUrlBase)
 
 
     @processReturnCode
@@ -2053,7 +2277,7 @@ class FlexSwitch( object):
         return r
 
     def getAllMacTableEntryStates(self):
-        return self.getObjects( 'MacTableEntryState', self.stateUrlBase) 
+        return self.getObjects( 'MacTableEntry', self.stateUrlBase)
 
 
     """
@@ -2266,7 +2490,7 @@ class FlexSwitch( object):
         return r
 
     def getAllBGPPeerGroups(self):
-        return self.getObjects( 'BGPPeerGroup', self.cfgUrlBase) 
+        return self.getObjects( 'BGPPeerGroup', self.cfgUrlBase)
 
 
     @processReturnCode
@@ -2275,18 +2499,18 @@ class FlexSwitch( object):
         obj =  { 
                 'IfIndex' : IfIndex,
                 }
-        reqUrl =  self.stateUrlBase+'BfdInterfac'
+        reqUrl =  self.stateUrlBase+'BfdInterface'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
     def getBfdInterfaceStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BfdInterfac'+"/%s"%(objectId)
+        reqUrl =  self.stateUrlBase+'BfdInterface'+"/%s"%(objectId)
         r = requests.get(reqUrl, data=None, headers=headers) 
         return r
 
     def getAllBfdInterfaceStates(self):
-        return self.getObjects( 'BfdInterfaceState', self.stateUrlBase) 
+        return self.getObjects( 'BfdInterface', self.stateUrlBase)
 
 
     """
@@ -2367,7 +2591,7 @@ class FlexSwitch( object):
         return r
 
     def getAllBfdGlobals(self):
-        return self.getObjects( 'BfdGlobal', self.cfgUrlBase) 
+        return self.getObjects( 'BfdGlobal', self.cfgUrlBase)
 
 
     @processReturnCode
@@ -2389,7 +2613,7 @@ class FlexSwitch( object):
         return r
 
     def getAllOspfAreaLsaCountEntryStates(self):
-        return self.getObjects( 'OspfAreaLsaCountEntryState', self.stateUrlBase) 
+        return self.getObjects( 'OspfAreaLsaCountEntry', self.stateUrlBase)
 
 
     """
@@ -2481,121 +2705,143 @@ class FlexSwitch( object):
         obj =  { 
                 'Name' : Name,
                 }
-        reqUrl =  self.stateUrlBase+'BGPPolicyStm'
+        reqUrl =  self.stateUrlBase+'BGPPolicyStmt'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
     def getBGPPolicyStmtById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BGPPolicyStm'+"/%s"%(objectId)
+        reqUrl =  self.stateUrlBase+'BGPPolicyStmt'+"/%s"%(objectId)
         r = requests.get(reqUrl, data=None, headers=headers) 
         return r
 
     def getAllBGPPolicyStmts(self):
-        return self.getObjects( 'BGPPolicyStmt', self.cfgUrlBase) 
+        return self.getObjects( 'BGPPolicyStmt', self.cfgUrlBase)
 
 
     """
-    .. automethod :: createOspfStubAreaEntryConfig(self,
-        :param int32 StubTOS :  The Type of Service associated with the metric.  On creation  The Type of Service associated with the metric.  On creation
-        :param string StubAreaId :  The 32-bit identifier for the stub area.  On creation  The 32-bit identifier for the stub area.  On creation
-        :param int32 StubMetric :  The metric value applied at the indicated Type of Service.  By default  The metric value applied at the indicated Type of Service.  By default
-        :param int32 StubMetricType :  This variable displays the type of metric advertised as a default route.  This variable displays the type of metric advertised as a default route.
+    .. automethod :: createOspfAreaAggregateEntry(self,
+        :param int32 AreaAggregateLsdbType :  The type of the address aggregate.  This field specifies the Lsdb type that this address aggregate applies to.  The type of the address aggregate.  This field specifies the Lsdb type that this address aggregate applies to.
+        :param string AreaAggregateMask :  The subnet mask that pertains to the net or subnet.  The subnet mask that pertains to the net or subnet.
+        :param string AreaAggregateAreaID :  The area within which the address aggregate is to be found.  The area within which the address aggregate is to be found.
+        :param string AreaAggregateNet :  The IP address of the net or subnet indicated by the range.  The IP address of the net or subnet indicated by the range.
+        :param int32 AreaAggregateEffect :  Subnets subsumed by ranges either trigger the advertisement of the indicated aggregate (advertiseMatching) or result in the subnet's not being advertised at all outside the area.  Subnets subsumed by ranges either trigger the advertisement of the indicated aggregate (advertiseMatching) or result in the subnet's not being advertised at all outside the area.
+        :param uint32 AreaAggregateExtRouteTag :  External route tag to be included in NSSA (type-7) LSAs.  External route tag to be included in NSSA (type-7) LSAs.
 
 	"""
     @processReturnCode
-    def createOspfStubAreaEntryConfig(self,
-                                      StubTOS,
-                                      StubAreaId,
-                                      StubMetric,
-                                      StubMetricType):
+    def createOspfAreaAggregateEntry(self,
+                                     AreaAggregateLsdbType,
+                                     AreaAggregateMask,
+                                     AreaAggregateAreaID,
+                                     AreaAggregateNet,
+                                     AreaAggregateEffect,
+                                     AreaAggregateExtRouteTag):
         obj =  { 
-                'StubTOS' : int(StubTOS),
-                'StubAreaId' : StubAreaId,
-                'StubMetric' : int(StubMetric),
-                'StubMetricType' : int(StubMetricType),
+                'AreaAggregateLsdbType' : int(AreaAggregateLsdbType),
+                'AreaAggregateMask' : AreaAggregateMask,
+                'AreaAggregateAreaID' : AreaAggregateAreaID,
+                'AreaAggregateNet' : AreaAggregateNet,
+                'AreaAggregateEffect' : int(AreaAggregateEffect),
+                'AreaAggregateExtRouteTag' : int(AreaAggregateExtRouteTag),
                 }
-        reqUrl =  self.cfgUrlBase+'OspfStubAreaEntryConfig'
+        reqUrl =  self.cfgUrlBase+'OspfAreaAggregateEntry'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
-    def updateOspfStubAreaEntryConfig(self,
-                                      StubTOS,
-                                      StubAreaId,
-                                      StubMetric = None,
-                                      StubMetricType = None):
+    def updateOspfAreaAggregateEntry(self,
+                                     AreaAggregateLsdbType,
+                                     AreaAggregateMask,
+                                     AreaAggregateAreaID,
+                                     AreaAggregateNet,
+                                     AreaAggregateEffect = None,
+                                     AreaAggregateExtRouteTag = None):
         obj =  {}
-        if StubTOS != None :
-            obj['StubTOS'] = int(StubTOS)
+        if AreaAggregateLsdbType != None :
+            obj['AreaAggregateLsdbType'] = int(AreaAggregateLsdbType)
 
-        if StubAreaId != None :
-            obj['StubAreaId'] = StubAreaId
+        if AreaAggregateMask != None :
+            obj['AreaAggregateMask'] = AreaAggregateMask
 
-        if StubMetric != None :
-            obj['StubMetric'] = int(StubMetric)
+        if AreaAggregateAreaID != None :
+            obj['AreaAggregateAreaID'] = AreaAggregateAreaID
 
-        if StubMetricType != None :
-            obj['StubMetricType'] = int(StubMetricType)
+        if AreaAggregateNet != None :
+            obj['AreaAggregateNet'] = AreaAggregateNet
 
-        reqUrl =  self.cfgUrlBase+'OspfStubAreaEntryConfig'
+        if AreaAggregateEffect != None :
+            obj['AreaAggregateEffect'] = int(AreaAggregateEffect)
+
+        if AreaAggregateExtRouteTag != None :
+            obj['AreaAggregateExtRouteTag'] = int(AreaAggregateExtRouteTag)
+
+        reqUrl =  self.cfgUrlBase+'OspfAreaAggregateEntry'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
-    def updateOspfStubAreaEntryConfigById(self,
-                                           objectId,
-                                           StubMetric = None,
-                                           StubMetricType = None):
+    def updateOspfAreaAggregateEntryById(self,
+                                          objectId,
+                                          AreaAggregateEffect = None,
+                                          AreaAggregateExtRouteTag = None):
         obj =  {'objectId': objectId }
-        if StubMetric !=  None:
-            obj['StubMetric'] = StubMetric
+        if AreaAggregateEffect !=  None:
+            obj['AreaAggregateEffect'] = AreaAggregateEffect
 
-        if StubMetricType !=  None:
-            obj['StubMetricType'] = StubMetricType
+        if AreaAggregateExtRouteTag !=  None:
+            obj['AreaAggregateExtRouteTag'] = AreaAggregateExtRouteTag
 
-        reqUrl =  self.cfgUrlBase+'OspfStubAreaEntryConfig'
+        reqUrl =  self.cfgUrlBase+'OspfAreaAggregateEntry'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
-    def deleteOspfStubAreaEntryConfig(self,
-                                      StubTOS,
-                                      StubAreaId):
+    def deleteOspfAreaAggregateEntry(self,
+                                     AreaAggregateLsdbType,
+                                     AreaAggregateMask,
+                                     AreaAggregateAreaID,
+                                     AreaAggregateNet):
         obj =  { 
-                'StubTOS' : StubTOS,
-                'StubAreaId' : StubAreaId,
+                'AreaAggregateLsdbType' : AreaAggregateLsdbType,
+                'AreaAggregateMask' : AreaAggregateMask,
+                'AreaAggregateAreaID' : AreaAggregateAreaID,
+                'AreaAggregateNet' : AreaAggregateNet,
                 }
-        reqUrl =  self.cfgUrlBase+'OspfStubAreaEntryConfig'
+        reqUrl =  self.cfgUrlBase+'OspfAreaAggregateEntry'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
-    def deleteOspfStubAreaEntryConfigById(self, objectId ):
-        reqUrl =  self.cfgUrlBase+'OspfStubAreaEntryConfig'+"/%s"%(objectId)
+    def deleteOspfAreaAggregateEntryById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'OspfAreaAggregateEntry'+"/%s"%(objectId)
         r = requests.delete(reqUrl, data=None, headers=headers) 
         return r
 
     @processReturnCode
-    def getOspfStubAreaEntryConfig(self,
-                                   StubTOS,
-                                   StubAreaId):
+    def getOspfAreaAggregateEntry(self,
+                                  AreaAggregateLsdbType,
+                                  AreaAggregateMask,
+                                  AreaAggregateAreaID,
+                                  AreaAggregateNet):
         obj =  { 
-                'StubTOS' : StubTOS,
-                'StubAreaId' : StubAreaId,
+                'AreaAggregateLsdbType' : AreaAggregateLsdbType,
+                'AreaAggregateMask' : AreaAggregateMask,
+                'AreaAggregateAreaID' : AreaAggregateAreaID,
+                'AreaAggregateNet' : AreaAggregateNet,
                 }
-        reqUrl =  self.stateUrlBase+'OspfStubAreaEntryConfig'
+        reqUrl =  self.stateUrlBase+'OspfAreaAggregateEntry'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
-    def getOspfStubAreaEntryConfigById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'OspfStubAreaEntryConfig'+"/%s"%(objectId)
+    def getOspfAreaAggregateEntryById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'OspfAreaAggregateEntry'+"/%s"%(objectId)
         r = requests.get(reqUrl, data=None, headers=headers) 
         return r
 
-    def getAllOspfStubAreaEntryConfigs(self):
-        return self.getObjects( 'OspfStubAreaEntryConfig', self.cfgUrlBase) 
+    def getAllOspfAreaAggregateEntrys(self):
+        return self.getObjects( 'OspfAreaAggregateEntry', self.cfgUrlBase)
 
 
     @processReturnCode
@@ -2606,18 +2852,18 @@ class FlexSwitch( object):
                 'DestinationNw' : DestinationNw,
                 'NextHopIp' : NextHopIp,
                 }
-        reqUrl =  self.stateUrlBase+'IPv4Rou'
+        reqUrl =  self.stateUrlBase+'IPv4Route'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
     def getIPv4RouteStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'IPv4Rou'+"/%s"%(objectId)
+        reqUrl =  self.stateUrlBase+'IPv4Route'+"/%s"%(objectId)
         r = requests.get(reqUrl, data=None, headers=headers) 
         return r
 
     def getAllIPv4RouteStates(self):
-        return self.getObjects( 'IPv4RouteState', self.stateUrlBase) 
+        return self.getObjects( 'IPv4Route', self.stateUrlBase)
 
 
     @processReturnCode
@@ -2637,7 +2883,7 @@ class FlexSwitch( object):
         return r
 
     def getAllBfdGlobalStates(self):
-        return self.getObjects( 'BfdGlobalState', self.stateUrlBase) 
+        return self.getObjects( 'BfdGlobal', self.stateUrlBase)
 
 
     @processReturnCode
@@ -2665,7 +2911,7 @@ class FlexSwitch( object):
         return r
 
     def getAllOspfVirtLocalLsdbEntryStates(self):
-        return self.getObjects( 'OspfVirtLocalLsdbEntryState', self.stateUrlBase) 
+        return self.getObjects( 'OspfVirtLocalLsdbEntry', self.stateUrlBase)
 
 
     @processReturnCode
@@ -2685,7 +2931,7 @@ class FlexSwitch( object):
         return r
 
     def getAllBGPGlobalStates(self):
-        return self.getObjects( 'BGPGlobalState', self.stateUrlBase) 
+        return self.getObjects( 'BGPGlobal', self.stateUrlBase)
 
 
     @processReturnCode
@@ -2705,7 +2951,7 @@ class FlexSwitch( object):
         return r
 
     def getAllBfdSessionStates(self):
-        return self.getObjects( 'BfdSessionState', self.stateUrlBase) 
+        return self.getObjects( 'BfdSession', self.stateUrlBase)
 
 
     """
@@ -2786,154 +3032,7 @@ class FlexSwitch( object):
         return r
 
     def getAllLLDPIntfs(self):
-        return self.getObjects( 'LLDPIntf', self.cfgUrlBase) 
-
-
-    """
-    .. automethod :: createOspfVirtIfEntryConfig(self,
-        :param string VirtIfNeighbor :  The Router ID of the virtual neighbor.  The Router ID of the virtual neighbor.
-        :param string VirtIfAreaId :  The transit area that the virtual link traverses.  By definition  The transit area that the virtual link traverses.  By definition
-        :param int32 VirtIfTransitDelay :  The estimated number of seconds it takes to transmit a Link State update packet over this interface.  Note that the minimal value SHOULD be 1 second.  The estimated number of seconds it takes to transmit a Link State update packet over this interface.  Note that the minimal value SHOULD be 1 second.
-        :param int32 VirtIfRetransInterval :  The number of seconds between link state avertisement retransmissions  The number of seconds between link state avertisement retransmissions
-        :param int32 VirtIfHelloInterval :  The length of time  The length of time
-        :param int32 VirtIfRtrDeadInterval :  The number of seconds that a router's Hello packets have not been seen before its neighbors declare the router down.  This should be some multiple of the Hello interval.  This value must be the same for the virtual neighbor.  The number of seconds that a router's Hello packets have not been seen before its neighbors declare the router down.  This should be some multiple of the Hello interval.  This value must be the same for the virtual neighbor.
-        :param string VirtIfAuthKey :  The cleartext password used as an OSPF authentication key when simplePassword security is enabled.  This object does not access any OSPF cryptogaphic (e.g.  The cleartext password used as an OSPF authentication key when simplePassword security is enabled.  This object does not access any OSPF cryptogaphic (e.g.
-        :param int32 VirtIfAuthType :  The authentication type specified for a virtual interface.  Note that this object can be used to engage in significant attacks against an OSPF router.  The authentication type specified for a virtual interface.  Note that this object can be used to engage in significant attacks against an OSPF router.
-
-	"""
-    @processReturnCode
-    def createOspfVirtIfEntryConfig(self,
-                                    VirtIfNeighbor,
-                                    VirtIfAreaId,
-                                    VirtIfTransitDelay,
-                                    VirtIfRetransInterval,
-                                    VirtIfHelloInterval,
-                                    VirtIfRtrDeadInterval,
-                                    VirtIfAuthKey,
-                                    VirtIfAuthType):
-        obj =  { 
-                'VirtIfNeighbor' : VirtIfNeighbor,
-                'VirtIfAreaId' : VirtIfAreaId,
-                'VirtIfTransitDelay' : int(VirtIfTransitDelay),
-                'VirtIfRetransInterval' : int(VirtIfRetransInterval),
-                'VirtIfHelloInterval' : int(VirtIfHelloInterval),
-                'VirtIfRtrDeadInterval' : int(VirtIfRtrDeadInterval),
-                'VirtIfAuthKey' : VirtIfAuthKey,
-                'VirtIfAuthType' : int(VirtIfAuthType),
-                }
-        reqUrl =  self.cfgUrlBase+'OspfVirtIfEntryConfig'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def updateOspfVirtIfEntryConfig(self,
-                                    VirtIfNeighbor,
-                                    VirtIfAreaId,
-                                    VirtIfTransitDelay = None,
-                                    VirtIfRetransInterval = None,
-                                    VirtIfHelloInterval = None,
-                                    VirtIfRtrDeadInterval = None,
-                                    VirtIfAuthKey = None,
-                                    VirtIfAuthType = None):
-        obj =  {}
-        if VirtIfNeighbor != None :
-            obj['VirtIfNeighbor'] = VirtIfNeighbor
-
-        if VirtIfAreaId != None :
-            obj['VirtIfAreaId'] = VirtIfAreaId
-
-        if VirtIfTransitDelay != None :
-            obj['VirtIfTransitDelay'] = int(VirtIfTransitDelay)
-
-        if VirtIfRetransInterval != None :
-            obj['VirtIfRetransInterval'] = int(VirtIfRetransInterval)
-
-        if VirtIfHelloInterval != None :
-            obj['VirtIfHelloInterval'] = int(VirtIfHelloInterval)
-
-        if VirtIfRtrDeadInterval != None :
-            obj['VirtIfRtrDeadInterval'] = int(VirtIfRtrDeadInterval)
-
-        if VirtIfAuthKey != None :
-            obj['VirtIfAuthKey'] = VirtIfAuthKey
-
-        if VirtIfAuthType != None :
-            obj['VirtIfAuthType'] = int(VirtIfAuthType)
-
-        reqUrl =  self.cfgUrlBase+'OspfVirtIfEntryConfig'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def updateOspfVirtIfEntryConfigById(self,
-                                         objectId,
-                                         VirtIfTransitDelay = None,
-                                         VirtIfRetransInterval = None,
-                                         VirtIfHelloInterval = None,
-                                         VirtIfRtrDeadInterval = None,
-                                         VirtIfAuthKey = None,
-                                         VirtIfAuthType = None):
-        obj =  {'objectId': objectId }
-        if VirtIfTransitDelay !=  None:
-            obj['VirtIfTransitDelay'] = VirtIfTransitDelay
-
-        if VirtIfRetransInterval !=  None:
-            obj['VirtIfRetransInterval'] = VirtIfRetransInterval
-
-        if VirtIfHelloInterval !=  None:
-            obj['VirtIfHelloInterval'] = VirtIfHelloInterval
-
-        if VirtIfRtrDeadInterval !=  None:
-            obj['VirtIfRtrDeadInterval'] = VirtIfRtrDeadInterval
-
-        if VirtIfAuthKey !=  None:
-            obj['VirtIfAuthKey'] = VirtIfAuthKey
-
-        if VirtIfAuthType !=  None:
-            obj['VirtIfAuthType'] = VirtIfAuthType
-
-        reqUrl =  self.cfgUrlBase+'OspfVirtIfEntryConfig'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def deleteOspfVirtIfEntryConfig(self,
-                                    VirtIfNeighbor,
-                                    VirtIfAreaId):
-        obj =  { 
-                'VirtIfNeighbor' : VirtIfNeighbor,
-                'VirtIfAreaId' : VirtIfAreaId,
-                }
-        reqUrl =  self.cfgUrlBase+'OspfVirtIfEntryConfig'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def deleteOspfVirtIfEntryConfigById(self, objectId ):
-        reqUrl =  self.cfgUrlBase+'OspfVirtIfEntryConfig'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
-        return r
-
-    @processReturnCode
-    def getOspfVirtIfEntryConfig(self,
-                                 VirtIfNeighbor,
-                                 VirtIfAreaId):
-        obj =  { 
-                'VirtIfNeighbor' : VirtIfNeighbor,
-                'VirtIfAreaId' : VirtIfAreaId,
-                }
-        reqUrl =  self.stateUrlBase+'OspfVirtIfEntryConfig'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def getOspfVirtIfEntryConfigById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'OspfVirtIfEntryConfig'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllOspfVirtIfEntryConfigs(self):
-        return self.getObjects( 'OspfVirtIfEntryConfig', self.cfgUrlBase) 
+        return self.getObjects( 'LLDPIntf', self.cfgUrlBase)
 
 
     """
@@ -3014,7 +3113,7 @@ class FlexSwitch( object):
         return r
 
     def getAllIPv4Intfs(self):
-        return self.getObjects( 'IPv4Intf', self.cfgUrlBase) 
+        return self.getObjects( 'IPv4Intf', self.cfgUrlBase)
 
 
     @processReturnCode
@@ -3023,18 +3122,18 @@ class FlexSwitch( object):
         obj =  { 
                 'Name' : Name,
                 }
-        reqUrl =  self.stateUrlBase+'PolicyStm'
+        reqUrl =  self.stateUrlBase+'PolicyStmt'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
     def getPolicyStmtStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'PolicyStm'+"/%s"%(objectId)
+        reqUrl =  self.stateUrlBase+'PolicyStmt'+"/%s"%(objectId)
         r = requests.get(reqUrl, data=None, headers=headers) 
         return r
 
     def getAllPolicyStmtStates(self):
-        return self.getObjects( 'PolicyStmtState', self.stateUrlBase) 
+        return self.getObjects( 'PolicyStmt', self.stateUrlBase)
 
 
     @processReturnCode
@@ -3043,18 +3142,121 @@ class FlexSwitch( object):
         obj =  { 
                 'Vlan' : Vlan,
                 }
-        reqUrl =  self.stateUrlBase+'StpBridg'
+        reqUrl =  self.stateUrlBase+'StpBridge'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
     def getStpBridgeStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'StpBridg'+"/%s"%(objectId)
+        reqUrl =  self.stateUrlBase+'StpBridge'+"/%s"%(objectId)
         r = requests.get(reqUrl, data=None, headers=headers) 
         return r
 
     def getAllStpBridgeStates(self):
-        return self.getObjects( 'StpBridgeState', self.stateUrlBase) 
+        return self.getObjects( 'StpBridge', self.stateUrlBase)
+
+
+    """
+    .. automethod :: createOspfStubAreaEntry(self,
+        :param int32 StubTOS :  The Type of Service associated with the metric.  On creation  The Type of Service associated with the metric.  On creation
+        :param string StubAreaId :  The 32-bit identifier for the stub area.  On creation  The 32-bit identifier for the stub area.  On creation
+        :param int32 StubMetric :  The metric value applied at the indicated Type of Service.  By default  The metric value applied at the indicated Type of Service.  By default
+        :param int32 StubMetricType :  This variable displays the type of metric advertised as a default route.  This variable displays the type of metric advertised as a default route.
+
+	"""
+    @processReturnCode
+    def createOspfStubAreaEntry(self,
+                                StubTOS,
+                                StubAreaId,
+                                StubMetric,
+                                StubMetricType):
+        obj =  { 
+                'StubTOS' : int(StubTOS),
+                'StubAreaId' : StubAreaId,
+                'StubMetric' : int(StubMetric),
+                'StubMetricType' : int(StubMetricType),
+                }
+        reqUrl =  self.cfgUrlBase+'OspfStubAreaEntry'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def updateOspfStubAreaEntry(self,
+                                StubTOS,
+                                StubAreaId,
+                                StubMetric = None,
+                                StubMetricType = None):
+        obj =  {}
+        if StubTOS != None :
+            obj['StubTOS'] = int(StubTOS)
+
+        if StubAreaId != None :
+            obj['StubAreaId'] = StubAreaId
+
+        if StubMetric != None :
+            obj['StubMetric'] = int(StubMetric)
+
+        if StubMetricType != None :
+            obj['StubMetricType'] = int(StubMetricType)
+
+        reqUrl =  self.cfgUrlBase+'OspfStubAreaEntry'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def updateOspfStubAreaEntryById(self,
+                                     objectId,
+                                     StubMetric = None,
+                                     StubMetricType = None):
+        obj =  {'objectId': objectId }
+        if StubMetric !=  None:
+            obj['StubMetric'] = StubMetric
+
+        if StubMetricType !=  None:
+            obj['StubMetricType'] = StubMetricType
+
+        reqUrl =  self.cfgUrlBase+'OspfStubAreaEntry'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def deleteOspfStubAreaEntry(self,
+                                StubTOS,
+                                StubAreaId):
+        obj =  { 
+                'StubTOS' : StubTOS,
+                'StubAreaId' : StubAreaId,
+                }
+        reqUrl =  self.cfgUrlBase+'OspfStubAreaEntry'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def deleteOspfStubAreaEntryById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'OspfStubAreaEntry'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    @processReturnCode
+    def getOspfStubAreaEntry(self,
+                             StubTOS,
+                             StubAreaId):
+        obj =  { 
+                'StubTOS' : StubTOS,
+                'StubAreaId' : StubAreaId,
+                }
+        reqUrl =  self.stateUrlBase+'OspfStubAreaEntry'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def getOspfStubAreaEntryById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'OspfStubAreaEntry'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllOspfStubAreaEntrys(self):
+        return self.getObjects( 'OspfStubAreaEntry', self.cfgUrlBase)
 
 
     @processReturnCode
@@ -3076,7 +3278,7 @@ class FlexSwitch( object):
         return r
 
     def getAllVrrpIntfStates(self):
-        return self.getObjects( 'VrrpIntfState', self.stateUrlBase) 
+        return self.getObjects( 'VrrpIntf', self.stateUrlBase)
 
 
     """
@@ -3201,7 +3403,231 @@ class FlexSwitch( object):
         return r
 
     def getAllIpTableAcls(self):
-        return self.getObjects( 'IpTableAcl', self.cfgUrlBase) 
+        return self.getObjects( 'IpTableAcl', self.cfgUrlBase)
+
+
+    """
+    .. automethod :: createOspfIfEntry(self,
+        :param string IfIpAddress :  The IP address of this OSPF interface.  The IP address of this OSPF interface.
+        :param int32 AddressLessIf :  For the purpose of easing the instancing of addressed and addressless interfaces; this variable takes the value 0 on interfaces with IP addresses and the corresponding value of ifIndex for interfaces having no IP address.  For the purpose of easing the instancing of addressed and addressless interfaces; this variable takes the value 0 on interfaces with IP addresses and the corresponding value of ifIndex for interfaces having no IP address.
+        :param string IfAreaId :  A 32-bit integer uniquely identifying the area to which the interface connects.  Area ID 0.0.0.0 is used for the OSPF backbone.  A 32-bit integer uniquely identifying the area to which the interface connects.  Area ID 0.0.0.0 is used for the OSPF backbone.
+        :param int32 IfType :  The OSPF interface type. By way of a default  The OSPF interface type. By way of a default
+        :param int32 IfAdminStat :  The OSPF interface's administrative status. The value formed on the interface  The OSPF interface's administrative status. The value formed on the interface
+        :param int32 IfRtrPriority :  The priority of this interface.  Used in multi-access networks  The priority of this interface.  Used in multi-access networks
+        :param int32 IfTransitDelay :  The estimated number of seconds it takes to transmit a link state update packet over this interface.  Note that the minimal value SHOULD be 1 second.  The estimated number of seconds it takes to transmit a link state update packet over this interface.  Note that the minimal value SHOULD be 1 second.
+        :param int32 IfRetransInterval :  The number of seconds between link state advertisement retransmissions  The number of seconds between link state advertisement retransmissions
+        :param int32 IfHelloInterval :  The length of time  The length of time
+        :param int32 IfRtrDeadInterval :  The number of seconds that a router's Hello packets have not been seen before its neighbors declare the router down. This should be some multiple of the Hello interval.  This value must be the same for all routers attached to a common network.  The number of seconds that a router's Hello packets have not been seen before its neighbors declare the router down. This should be some multiple of the Hello interval.  This value must be the same for all routers attached to a common network.
+        :param int32 IfPollInterval :  The larger time interval  The larger time interval
+        :param string IfAuthKey :  The cleartext password used as an OSPF authentication key when simplePassword security is enabled.  This object does not access any OSPF cryptogaphic (e.g.  The cleartext password used as an OSPF authentication key when simplePassword security is enabled.  This object does not access any OSPF cryptogaphic (e.g.
+        :param int32 IfMulticastForwarding :  The way multicasts should be forwarded on this interface  The way multicasts should be forwarded on this interface
+        :param bool IfDemand :  Indicates whether Demand OSPF procedures (hello suppression to FULL neighbors and setting the DoNotAge flag on propagated LSAs) should be performed on this interface.  Indicates whether Demand OSPF procedures (hello suppression to FULL neighbors and setting the DoNotAge flag on propagated LSAs) should be performed on this interface.
+        :param int32 IfAuthType :  The authentication type specified for an interface.  Note that this object can be used to engage in significant attacks against an OSPF router.  The authentication type specified for an interface.  Note that this object can be used to engage in significant attacks against an OSPF router.
+
+	"""
+    @processReturnCode
+    def createOspfIfEntry(self,
+                          IfIpAddress,
+                          AddressLessIf,
+                          IfAreaId,
+                          IfType,
+                          IfAdminStat,
+                          IfRtrPriority,
+                          IfTransitDelay,
+                          IfRetransInterval,
+                          IfHelloInterval,
+                          IfRtrDeadInterval,
+                          IfPollInterval,
+                          IfAuthKey,
+                          IfMulticastForwarding,
+                          IfDemand,
+                          IfAuthType):
+        obj =  { 
+                'IfIpAddress' : IfIpAddress,
+                'AddressLessIf' : int(AddressLessIf),
+                'IfAreaId' : IfAreaId,
+                'IfType' : int(IfType),
+                'IfAdminStat' : int(IfAdminStat),
+                'IfRtrPriority' : int(IfRtrPriority),
+                'IfTransitDelay' : int(IfTransitDelay),
+                'IfRetransInterval' : int(IfRetransInterval),
+                'IfHelloInterval' : int(IfHelloInterval),
+                'IfRtrDeadInterval' : int(IfRtrDeadInterval),
+                'IfPollInterval' : int(IfPollInterval),
+                'IfAuthKey' : IfAuthKey,
+                'IfMulticastForwarding' : int(IfMulticastForwarding),
+                'IfDemand' : True if IfDemand else False,
+                'IfAuthType' : int(IfAuthType),
+                }
+        reqUrl =  self.cfgUrlBase+'OspfIfEntry'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def updateOspfIfEntry(self,
+                          IfIpAddress,
+                          AddressLessIf,
+                          IfAreaId = None,
+                          IfType = None,
+                          IfAdminStat = None,
+                          IfRtrPriority = None,
+                          IfTransitDelay = None,
+                          IfRetransInterval = None,
+                          IfHelloInterval = None,
+                          IfRtrDeadInterval = None,
+                          IfPollInterval = None,
+                          IfAuthKey = None,
+                          IfMulticastForwarding = None,
+                          IfDemand = None,
+                          IfAuthType = None):
+        obj =  {}
+        if IfIpAddress != None :
+            obj['IfIpAddress'] = IfIpAddress
+
+        if AddressLessIf != None :
+            obj['AddressLessIf'] = int(AddressLessIf)
+
+        if IfAreaId != None :
+            obj['IfAreaId'] = IfAreaId
+
+        if IfType != None :
+            obj['IfType'] = int(IfType)
+
+        if IfAdminStat != None :
+            obj['IfAdminStat'] = int(IfAdminStat)
+
+        if IfRtrPriority != None :
+            obj['IfRtrPriority'] = int(IfRtrPriority)
+
+        if IfTransitDelay != None :
+            obj['IfTransitDelay'] = int(IfTransitDelay)
+
+        if IfRetransInterval != None :
+            obj['IfRetransInterval'] = int(IfRetransInterval)
+
+        if IfHelloInterval != None :
+            obj['IfHelloInterval'] = int(IfHelloInterval)
+
+        if IfRtrDeadInterval != None :
+            obj['IfRtrDeadInterval'] = int(IfRtrDeadInterval)
+
+        if IfPollInterval != None :
+            obj['IfPollInterval'] = int(IfPollInterval)
+
+        if IfAuthKey != None :
+            obj['IfAuthKey'] = IfAuthKey
+
+        if IfMulticastForwarding != None :
+            obj['IfMulticastForwarding'] = int(IfMulticastForwarding)
+
+        if IfDemand != None :
+            obj['IfDemand'] = True if IfDemand else False
+
+        if IfAuthType != None :
+            obj['IfAuthType'] = int(IfAuthType)
+
+        reqUrl =  self.cfgUrlBase+'OspfIfEntry'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def updateOspfIfEntryById(self,
+                               objectId,
+                               IfAreaId = None,
+                               IfType = None,
+                               IfAdminStat = None,
+                               IfRtrPriority = None,
+                               IfTransitDelay = None,
+                               IfRetransInterval = None,
+                               IfHelloInterval = None,
+                               IfRtrDeadInterval = None,
+                               IfPollInterval = None,
+                               IfAuthKey = None,
+                               IfMulticastForwarding = None,
+                               IfDemand = None,
+                               IfAuthType = None):
+        obj =  {'objectId': objectId }
+        if IfAreaId !=  None:
+            obj['IfAreaId'] = IfAreaId
+
+        if IfType !=  None:
+            obj['IfType'] = IfType
+
+        if IfAdminStat !=  None:
+            obj['IfAdminStat'] = IfAdminStat
+
+        if IfRtrPriority !=  None:
+            obj['IfRtrPriority'] = IfRtrPriority
+
+        if IfTransitDelay !=  None:
+            obj['IfTransitDelay'] = IfTransitDelay
+
+        if IfRetransInterval !=  None:
+            obj['IfRetransInterval'] = IfRetransInterval
+
+        if IfHelloInterval !=  None:
+            obj['IfHelloInterval'] = IfHelloInterval
+
+        if IfRtrDeadInterval !=  None:
+            obj['IfRtrDeadInterval'] = IfRtrDeadInterval
+
+        if IfPollInterval !=  None:
+            obj['IfPollInterval'] = IfPollInterval
+
+        if IfAuthKey !=  None:
+            obj['IfAuthKey'] = IfAuthKey
+
+        if IfMulticastForwarding !=  None:
+            obj['IfMulticastForwarding'] = IfMulticastForwarding
+
+        if IfDemand !=  None:
+            obj['IfDemand'] = IfDemand
+
+        if IfAuthType !=  None:
+            obj['IfAuthType'] = IfAuthType
+
+        reqUrl =  self.cfgUrlBase+'OspfIfEntry'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def deleteOspfIfEntry(self,
+                          IfIpAddress,
+                          AddressLessIf):
+        obj =  { 
+                'IfIpAddress' : IfIpAddress,
+                'AddressLessIf' : AddressLessIf,
+                }
+        reqUrl =  self.cfgUrlBase+'OspfIfEntry'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def deleteOspfIfEntryById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'OspfIfEntry'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    @processReturnCode
+    def getOspfIfEntry(self,
+                       IfIpAddress,
+                       AddressLessIf):
+        obj =  { 
+                'IfIpAddress' : IfIpAddress,
+                'AddressLessIf' : AddressLessIf,
+                }
+        reqUrl =  self.stateUrlBase+'OspfIfEntry'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def getOspfIfEntryById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'OspfIfEntry'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllOspfIfEntrys(self):
+        return self.getObjects( 'OspfIfEntry', self.cfgUrlBase)
 
 
     """
@@ -3326,231 +3752,7 @@ class FlexSwitch( object):
         return r
 
     def getAllBGPGlobals(self):
-        return self.getObjects( 'BGPGlobal', self.cfgUrlBase) 
-
-
-    """
-    .. automethod :: createOspfIfEntryConfig(self,
-        :param string IfIpAddress :  The IP address of this OSPF interface.  The IP address of this OSPF interface.
-        :param int32 AddressLessIf :  For the purpose of easing the instancing of addressed and addressless interfaces; this variable takes the value 0 on interfaces with IP addresses and the corresponding value of ifIndex for interfaces having no IP address.  For the purpose of easing the instancing of addressed and addressless interfaces; this variable takes the value 0 on interfaces with IP addresses and the corresponding value of ifIndex for interfaces having no IP address.
-        :param string IfAreaId :  A 32-bit integer uniquely identifying the area to which the interface connects.  Area ID 0.0.0.0 is used for the OSPF backbone.  A 32-bit integer uniquely identifying the area to which the interface connects.  Area ID 0.0.0.0 is used for the OSPF backbone.
-        :param int32 IfType :  The OSPF interface type. By way of a default  The OSPF interface type. By way of a default
-        :param int32 IfAdminStat :  The OSPF interface's administrative status. The value formed on the interface  The OSPF interface's administrative status. The value formed on the interface
-        :param int32 IfRtrPriority :  The priority of this interface.  Used in multi-access networks  The priority of this interface.  Used in multi-access networks
-        :param int32 IfTransitDelay :  The estimated number of seconds it takes to transmit a link state update packet over this interface.  Note that the minimal value SHOULD be 1 second.  The estimated number of seconds it takes to transmit a link state update packet over this interface.  Note that the minimal value SHOULD be 1 second.
-        :param int32 IfRetransInterval :  The number of seconds between link state advertisement retransmissions  The number of seconds between link state advertisement retransmissions
-        :param int32 IfHelloInterval :  The length of time  The length of time
-        :param int32 IfRtrDeadInterval :  The number of seconds that a router's Hello packets have not been seen before its neighbors declare the router down. This should be some multiple of the Hello interval.  This value must be the same for all routers attached to a common network.  The number of seconds that a router's Hello packets have not been seen before its neighbors declare the router down. This should be some multiple of the Hello interval.  This value must be the same for all routers attached to a common network.
-        :param int32 IfPollInterval :  The larger time interval  The larger time interval
-        :param string IfAuthKey :  The cleartext password used as an OSPF authentication key when simplePassword security is enabled.  This object does not access any OSPF cryptogaphic (e.g.  The cleartext password used as an OSPF authentication key when simplePassword security is enabled.  This object does not access any OSPF cryptogaphic (e.g.
-        :param int32 IfMulticastForwarding :  The way multicasts should be forwarded on this interface  The way multicasts should be forwarded on this interface
-        :param bool IfDemand :  Indicates whether Demand OSPF procedures (hello suppression to FULL neighbors and setting the DoNotAge flag on propagated LSAs) should be performed on this interface.  Indicates whether Demand OSPF procedures (hello suppression to FULL neighbors and setting the DoNotAge flag on propagated LSAs) should be performed on this interface.
-        :param int32 IfAuthType :  The authentication type specified for an interface.  Note that this object can be used to engage in significant attacks against an OSPF router.  The authentication type specified for an interface.  Note that this object can be used to engage in significant attacks against an OSPF router.
-
-	"""
-    @processReturnCode
-    def createOspfIfEntryConfig(self,
-                                IfIpAddress,
-                                AddressLessIf,
-                                IfAreaId,
-                                IfType,
-                                IfAdminStat,
-                                IfRtrPriority,
-                                IfTransitDelay,
-                                IfRetransInterval,
-                                IfHelloInterval,
-                                IfRtrDeadInterval,
-                                IfPollInterval,
-                                IfAuthKey,
-                                IfMulticastForwarding,
-                                IfDemand,
-                                IfAuthType):
-        obj =  { 
-                'IfIpAddress' : IfIpAddress,
-                'AddressLessIf' : int(AddressLessIf),
-                'IfAreaId' : IfAreaId,
-                'IfType' : int(IfType),
-                'IfAdminStat' : int(IfAdminStat),
-                'IfRtrPriority' : int(IfRtrPriority),
-                'IfTransitDelay' : int(IfTransitDelay),
-                'IfRetransInterval' : int(IfRetransInterval),
-                'IfHelloInterval' : int(IfHelloInterval),
-                'IfRtrDeadInterval' : int(IfRtrDeadInterval),
-                'IfPollInterval' : int(IfPollInterval),
-                'IfAuthKey' : IfAuthKey,
-                'IfMulticastForwarding' : int(IfMulticastForwarding),
-                'IfDemand' : True if IfDemand else False,
-                'IfAuthType' : int(IfAuthType),
-                }
-        reqUrl =  self.cfgUrlBase+'OspfIfEntryConfig'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def updateOspfIfEntryConfig(self,
-                                IfIpAddress,
-                                AddressLessIf,
-                                IfAreaId = None,
-                                IfType = None,
-                                IfAdminStat = None,
-                                IfRtrPriority = None,
-                                IfTransitDelay = None,
-                                IfRetransInterval = None,
-                                IfHelloInterval = None,
-                                IfRtrDeadInterval = None,
-                                IfPollInterval = None,
-                                IfAuthKey = None,
-                                IfMulticastForwarding = None,
-                                IfDemand = None,
-                                IfAuthType = None):
-        obj =  {}
-        if IfIpAddress != None :
-            obj['IfIpAddress'] = IfIpAddress
-
-        if AddressLessIf != None :
-            obj['AddressLessIf'] = int(AddressLessIf)
-
-        if IfAreaId != None :
-            obj['IfAreaId'] = IfAreaId
-
-        if IfType != None :
-            obj['IfType'] = int(IfType)
-
-        if IfAdminStat != None :
-            obj['IfAdminStat'] = int(IfAdminStat)
-
-        if IfRtrPriority != None :
-            obj['IfRtrPriority'] = int(IfRtrPriority)
-
-        if IfTransitDelay != None :
-            obj['IfTransitDelay'] = int(IfTransitDelay)
-
-        if IfRetransInterval != None :
-            obj['IfRetransInterval'] = int(IfRetransInterval)
-
-        if IfHelloInterval != None :
-            obj['IfHelloInterval'] = int(IfHelloInterval)
-
-        if IfRtrDeadInterval != None :
-            obj['IfRtrDeadInterval'] = int(IfRtrDeadInterval)
-
-        if IfPollInterval != None :
-            obj['IfPollInterval'] = int(IfPollInterval)
-
-        if IfAuthKey != None :
-            obj['IfAuthKey'] = IfAuthKey
-
-        if IfMulticastForwarding != None :
-            obj['IfMulticastForwarding'] = int(IfMulticastForwarding)
-
-        if IfDemand != None :
-            obj['IfDemand'] = True if IfDemand else False
-
-        if IfAuthType != None :
-            obj['IfAuthType'] = int(IfAuthType)
-
-        reqUrl =  self.cfgUrlBase+'OspfIfEntryConfig'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def updateOspfIfEntryConfigById(self,
-                                     objectId,
-                                     IfAreaId = None,
-                                     IfType = None,
-                                     IfAdminStat = None,
-                                     IfRtrPriority = None,
-                                     IfTransitDelay = None,
-                                     IfRetransInterval = None,
-                                     IfHelloInterval = None,
-                                     IfRtrDeadInterval = None,
-                                     IfPollInterval = None,
-                                     IfAuthKey = None,
-                                     IfMulticastForwarding = None,
-                                     IfDemand = None,
-                                     IfAuthType = None):
-        obj =  {'objectId': objectId }
-        if IfAreaId !=  None:
-            obj['IfAreaId'] = IfAreaId
-
-        if IfType !=  None:
-            obj['IfType'] = IfType
-
-        if IfAdminStat !=  None:
-            obj['IfAdminStat'] = IfAdminStat
-
-        if IfRtrPriority !=  None:
-            obj['IfRtrPriority'] = IfRtrPriority
-
-        if IfTransitDelay !=  None:
-            obj['IfTransitDelay'] = IfTransitDelay
-
-        if IfRetransInterval !=  None:
-            obj['IfRetransInterval'] = IfRetransInterval
-
-        if IfHelloInterval !=  None:
-            obj['IfHelloInterval'] = IfHelloInterval
-
-        if IfRtrDeadInterval !=  None:
-            obj['IfRtrDeadInterval'] = IfRtrDeadInterval
-
-        if IfPollInterval !=  None:
-            obj['IfPollInterval'] = IfPollInterval
-
-        if IfAuthKey !=  None:
-            obj['IfAuthKey'] = IfAuthKey
-
-        if IfMulticastForwarding !=  None:
-            obj['IfMulticastForwarding'] = IfMulticastForwarding
-
-        if IfDemand !=  None:
-            obj['IfDemand'] = IfDemand
-
-        if IfAuthType !=  None:
-            obj['IfAuthType'] = IfAuthType
-
-        reqUrl =  self.cfgUrlBase+'OspfIfEntryConfig'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def deleteOspfIfEntryConfig(self,
-                                IfIpAddress,
-                                AddressLessIf):
-        obj =  { 
-                'IfIpAddress' : IfIpAddress,
-                'AddressLessIf' : AddressLessIf,
-                }
-        reqUrl =  self.cfgUrlBase+'OspfIfEntryConfig'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def deleteOspfIfEntryConfigById(self, objectId ):
-        reqUrl =  self.cfgUrlBase+'OspfIfEntryConfig'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
-        return r
-
-    @processReturnCode
-    def getOspfIfEntryConfig(self,
-                             IfIpAddress,
-                             AddressLessIf):
-        obj =  { 
-                'IfIpAddress' : IfIpAddress,
-                'AddressLessIf' : AddressLessIf,
-                }
-        reqUrl =  self.stateUrlBase+'OspfIfEntryConfig'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def getOspfIfEntryConfigById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'OspfIfEntryConfig'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllOspfIfEntryConfigs(self):
-        return self.getObjects( 'OspfIfEntryConfig', self.cfgUrlBase) 
+        return self.getObjects( 'BGPGlobal', self.cfgUrlBase)
 
 
     @processReturnCode
@@ -3570,132 +3772,7 @@ class FlexSwitch( object):
         return r
 
     def getAllOspfAreaEntryStates(self):
-        return self.getObjects( 'OspfAreaEntryState', self.stateUrlBase) 
-
-
-    """
-    .. automethod :: createOspfAreaAggregateEntryConfig(self,
-        :param int32 AreaAggregateLsdbType :  The type of the address aggregate.  This field specifies the Lsdb type that this address aggregate applies to.  The type of the address aggregate.  This field specifies the Lsdb type that this address aggregate applies to.
-        :param string AreaAggregateMask :  The subnet mask that pertains to the net or subnet.  The subnet mask that pertains to the net or subnet.
-        :param string AreaAggregateAreaID :  The area within which the address aggregate is to be found.  The area within which the address aggregate is to be found.
-        :param string AreaAggregateNet :  The IP address of the net or subnet indicated by the range.  The IP address of the net or subnet indicated by the range.
-        :param int32 AreaAggregateEffect :  Subnets subsumed by ranges either trigger the advertisement of the indicated aggregate (advertiseMatching) or result in the subnet's not being advertised at all outside the area.  Subnets subsumed by ranges either trigger the advertisement of the indicated aggregate (advertiseMatching) or result in the subnet's not being advertised at all outside the area.
-        :param uint32 AreaAggregateExtRouteTag :  External route tag to be included in NSSA (type-7) LSAs.  External route tag to be included in NSSA (type-7) LSAs.
-
-	"""
-    @processReturnCode
-    def createOspfAreaAggregateEntryConfig(self,
-                                           AreaAggregateLsdbType,
-                                           AreaAggregateMask,
-                                           AreaAggregateAreaID,
-                                           AreaAggregateNet,
-                                           AreaAggregateEffect,
-                                           AreaAggregateExtRouteTag):
-        obj =  { 
-                'AreaAggregateLsdbType' : int(AreaAggregateLsdbType),
-                'AreaAggregateMask' : AreaAggregateMask,
-                'AreaAggregateAreaID' : AreaAggregateAreaID,
-                'AreaAggregateNet' : AreaAggregateNet,
-                'AreaAggregateEffect' : int(AreaAggregateEffect),
-                'AreaAggregateExtRouteTag' : int(AreaAggregateExtRouteTag),
-                }
-        reqUrl =  self.cfgUrlBase+'OspfAreaAggregateEntryConfig'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def updateOspfAreaAggregateEntryConfig(self,
-                                           AreaAggregateLsdbType,
-                                           AreaAggregateMask,
-                                           AreaAggregateAreaID,
-                                           AreaAggregateNet,
-                                           AreaAggregateEffect = None,
-                                           AreaAggregateExtRouteTag = None):
-        obj =  {}
-        if AreaAggregateLsdbType != None :
-            obj['AreaAggregateLsdbType'] = int(AreaAggregateLsdbType)
-
-        if AreaAggregateMask != None :
-            obj['AreaAggregateMask'] = AreaAggregateMask
-
-        if AreaAggregateAreaID != None :
-            obj['AreaAggregateAreaID'] = AreaAggregateAreaID
-
-        if AreaAggregateNet != None :
-            obj['AreaAggregateNet'] = AreaAggregateNet
-
-        if AreaAggregateEffect != None :
-            obj['AreaAggregateEffect'] = int(AreaAggregateEffect)
-
-        if AreaAggregateExtRouteTag != None :
-            obj['AreaAggregateExtRouteTag'] = int(AreaAggregateExtRouteTag)
-
-        reqUrl =  self.cfgUrlBase+'OspfAreaAggregateEntryConfig'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def updateOspfAreaAggregateEntryConfigById(self,
-                                                objectId,
-                                                AreaAggregateEffect = None,
-                                                AreaAggregateExtRouteTag = None):
-        obj =  {'objectId': objectId }
-        if AreaAggregateEffect !=  None:
-            obj['AreaAggregateEffect'] = AreaAggregateEffect
-
-        if AreaAggregateExtRouteTag !=  None:
-            obj['AreaAggregateExtRouteTag'] = AreaAggregateExtRouteTag
-
-        reqUrl =  self.cfgUrlBase+'OspfAreaAggregateEntryConfig'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def deleteOspfAreaAggregateEntryConfig(self,
-                                           AreaAggregateLsdbType,
-                                           AreaAggregateMask,
-                                           AreaAggregateAreaID,
-                                           AreaAggregateNet):
-        obj =  { 
-                'AreaAggregateLsdbType' : AreaAggregateLsdbType,
-                'AreaAggregateMask' : AreaAggregateMask,
-                'AreaAggregateAreaID' : AreaAggregateAreaID,
-                'AreaAggregateNet' : AreaAggregateNet,
-                }
-        reqUrl =  self.cfgUrlBase+'OspfAreaAggregateEntryConfig'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def deleteOspfAreaAggregateEntryConfigById(self, objectId ):
-        reqUrl =  self.cfgUrlBase+'OspfAreaAggregateEntryConfig'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
-        return r
-
-    @processReturnCode
-    def getOspfAreaAggregateEntryConfig(self,
-                                        AreaAggregateLsdbType,
-                                        AreaAggregateMask,
-                                        AreaAggregateAreaID,
-                                        AreaAggregateNet):
-        obj =  { 
-                'AreaAggregateLsdbType' : AreaAggregateLsdbType,
-                'AreaAggregateMask' : AreaAggregateMask,
-                'AreaAggregateAreaID' : AreaAggregateAreaID,
-                'AreaAggregateNet' : AreaAggregateNet,
-                }
-        reqUrl =  self.stateUrlBase+'OspfAreaAggregateEntryConfig'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def getOspfAreaAggregateEntryConfigById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'OspfAreaAggregateEntryConfig'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllOspfAreaAggregateEntryConfigs(self):
-        return self.getObjects( 'OspfAreaAggregateEntryConfig', self.cfgUrlBase) 
+        return self.getObjects( 'OspfAreaEntry', self.stateUrlBase)
 
 
     """
@@ -3787,7 +3864,7 @@ class FlexSwitch( object):
         return r
 
     def getAllBfdSessions(self):
-        return self.getObjects( 'BfdSession', self.cfgUrlBase) 
+        return self.getObjects( 'BfdSession', self.cfgUrlBase)
 
 
     @processReturnCode
@@ -3807,7 +3884,7 @@ class FlexSwitch( object):
         return r
 
     def getAllPolicyConditionStates(self):
-        return self.getObjects( 'PolicyConditionState', self.stateUrlBase) 
+        return self.getObjects( 'PolicyCondition', self.stateUrlBase)
 
 
     @processReturnCode
@@ -3818,18 +3895,18 @@ class FlexSwitch( object):
                 'BrgIfIndex' : BrgIfIndex,
                 'IfIndex' : IfIndex,
                 }
-        reqUrl =  self.stateUrlBase+'StpPor'
+        reqUrl =  self.stateUrlBase+'StpPort'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
     def getStpPortStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'StpPor'+"/%s"%(objectId)
+        reqUrl =  self.stateUrlBase+'StpPort'+"/%s"%(objectId)
         r = requests.get(reqUrl, data=None, headers=headers) 
         return r
 
     def getAllStpPortStates(self):
-        return self.getObjects( 'StpPortState', self.stateUrlBase) 
+        return self.getObjects( 'StpPort', self.stateUrlBase)
 
 
     """
@@ -3943,7 +4020,7 @@ class FlexSwitch( object):
         return r
 
     def getAllSubIPv4Intfs(self):
-        return self.getObjects( 'SubIPv4Intf', self.cfgUrlBase) 
+        return self.getObjects( 'SubIPv4Intf', self.cfgUrlBase)
 
 
     @processReturnCode
@@ -3963,110 +4040,7 @@ class FlexSwitch( object):
         return r
 
     def getAllPolicyDefinitionStates(self):
-        return self.getObjects( 'PolicyDefinitionState', self.stateUrlBase) 
-
-
-    """
-    .. automethod :: createOspfIfMetricEntryConfig(self,
-        :param int32 IfMetricAddressLessIf :  For the purpose of easing the instancing of addressed and addressless interfaces; this variable takes the value 0 on interfaces with IP addresses and the value of ifIndex for interfaces having no IP address.  On row creation  For the purpose of easing the instancing of addressed and addressless interfaces; this variable takes the value 0 on interfaces with IP addresses and the value of ifIndex for interfaces having no IP address.  On row creation
-        :param int32 IfMetricTOS :  The Type of Service metric being referenced. On row creation  The Type of Service metric being referenced. On row creation
-        :param string IfMetricIpAddress :  The IP address of this OSPF interface.  On row creation  The IP address of this OSPF interface.  On row creation
-        :param int32 IfMetricValue :  The metric of using this Type of Service on this interface.  The default value of the TOS 0 metric is 10^8 / ifSpeed.  The metric of using this Type of Service on this interface.  The default value of the TOS 0 metric is 10^8 / ifSpeed.
-
-	"""
-    @processReturnCode
-    def createOspfIfMetricEntryConfig(self,
-                                      IfMetricAddressLessIf,
-                                      IfMetricTOS,
-                                      IfMetricIpAddress,
-                                      IfMetricValue):
-        obj =  { 
-                'IfMetricAddressLessIf' : int(IfMetricAddressLessIf),
-                'IfMetricTOS' : int(IfMetricTOS),
-                'IfMetricIpAddress' : IfMetricIpAddress,
-                'IfMetricValue' : int(IfMetricValue),
-                }
-        reqUrl =  self.cfgUrlBase+'OspfIfMetricEntryConfig'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def updateOspfIfMetricEntryConfig(self,
-                                      IfMetricAddressLessIf,
-                                      IfMetricTOS,
-                                      IfMetricIpAddress,
-                                      IfMetricValue = None):
-        obj =  {}
-        if IfMetricAddressLessIf != None :
-            obj['IfMetricAddressLessIf'] = int(IfMetricAddressLessIf)
-
-        if IfMetricTOS != None :
-            obj['IfMetricTOS'] = int(IfMetricTOS)
-
-        if IfMetricIpAddress != None :
-            obj['IfMetricIpAddress'] = IfMetricIpAddress
-
-        if IfMetricValue != None :
-            obj['IfMetricValue'] = int(IfMetricValue)
-
-        reqUrl =  self.cfgUrlBase+'OspfIfMetricEntryConfig'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def updateOspfIfMetricEntryConfigById(self,
-                                           objectId,
-                                           IfMetricValue = None):
-        obj =  {'objectId': objectId }
-        if IfMetricValue !=  None:
-            obj['IfMetricValue'] = IfMetricValue
-
-        reqUrl =  self.cfgUrlBase+'OspfIfMetricEntryConfig'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def deleteOspfIfMetricEntryConfig(self,
-                                      IfMetricAddressLessIf,
-                                      IfMetricTOS,
-                                      IfMetricIpAddress):
-        obj =  { 
-                'IfMetricAddressLessIf' : IfMetricAddressLessIf,
-                'IfMetricTOS' : IfMetricTOS,
-                'IfMetricIpAddress' : IfMetricIpAddress,
-                }
-        reqUrl =  self.cfgUrlBase+'OspfIfMetricEntryConfig'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def deleteOspfIfMetricEntryConfigById(self, objectId ):
-        reqUrl =  self.cfgUrlBase+'OspfIfMetricEntryConfig'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
-        return r
-
-    @processReturnCode
-    def getOspfIfMetricEntryConfig(self,
-                                   IfMetricAddressLessIf,
-                                   IfMetricTOS,
-                                   IfMetricIpAddress):
-        obj =  { 
-                'IfMetricAddressLessIf' : IfMetricAddressLessIf,
-                'IfMetricTOS' : IfMetricTOS,
-                'IfMetricIpAddress' : IfMetricIpAddress,
-                }
-        reqUrl =  self.stateUrlBase+'OspfIfMetricEntryConfig'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def getOspfIfMetricEntryConfigById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'OspfIfMetricEntryConfig'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllOspfIfMetricEntryConfigs(self):
-        return self.getObjects( 'OspfIfMetricEntryConfig', self.cfgUrlBase) 
+        return self.getObjects( 'PolicyDefinition', self.stateUrlBase)
 
 
     @processReturnCode
@@ -4086,7 +4060,7 @@ class FlexSwitch( object):
         return r
 
     def getAllVlanStates(self):
-        return self.getObjects( 'VlanState', self.stateUrlBase) 
+        return self.getObjects( 'Vlan', self.stateUrlBase)
 
 
     @processReturnCode
@@ -4106,7 +4080,7 @@ class FlexSwitch( object):
         return r
 
     def getAllLogicalIntfStates(self):
-        return self.getObjects( 'LogicalIntfState', self.stateUrlBase) 
+        return self.getObjects( 'LogicalIntf', self.stateUrlBase)
 
 
     """
@@ -4352,7 +4326,7 @@ class FlexSwitch( object):
         return r
 
     def getAllBGPNeighbors(self):
-        return self.getObjects( 'BGPNeighbor', self.cfgUrlBase) 
+        return self.getObjects( 'BGPNeighbor', self.cfgUrlBase)
 
 
     """
@@ -4488,18 +4462,18 @@ class FlexSwitch( object):
         obj =  { 
                 'Vlan' : Vlan,
                 }
-        reqUrl =  self.stateUrlBase+'StpBridgeInstanc'
+        reqUrl =  self.stateUrlBase+'StpBridgeInstance'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
     def getStpBridgeInstanceById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'StpBridgeInstanc'+"/%s"%(objectId)
+        reqUrl =  self.stateUrlBase+'StpBridgeInstance'+"/%s"%(objectId)
         r = requests.get(reqUrl, data=None, headers=headers) 
         return r
 
     def getAllStpBridgeInstances(self):
-        return self.getObjects( 'StpBridgeInstance', self.cfgUrlBase) 
+        return self.getObjects( 'StpBridgeInstance', self.cfgUrlBase)
 
 
     @processReturnCode
@@ -4519,7 +4493,154 @@ class FlexSwitch( object):
         return r
 
     def getAllLaPortChannelMemberStates(self):
-        return self.getObjects( 'LaPortChannelMemberState', self.stateUrlBase) 
+        return self.getObjects( 'LaPortChannelMember', self.stateUrlBase)
+
+
+    """
+    .. automethod :: createOspfVirtIfEntry(self,
+        :param string VirtIfNeighbor :  The Router ID of the virtual neighbor.  The Router ID of the virtual neighbor.
+        :param string VirtIfAreaId :  The transit area that the virtual link traverses.  By definition  The transit area that the virtual link traverses.  By definition
+        :param int32 VirtIfTransitDelay :  The estimated number of seconds it takes to transmit a Link State update packet over this interface.  Note that the minimal value SHOULD be 1 second.  The estimated number of seconds it takes to transmit a Link State update packet over this interface.  Note that the minimal value SHOULD be 1 second.
+        :param int32 VirtIfRetransInterval :  The number of seconds between link state avertisement retransmissions  The number of seconds between link state avertisement retransmissions
+        :param int32 VirtIfHelloInterval :  The length of time  The length of time
+        :param int32 VirtIfRtrDeadInterval :  The number of seconds that a router's Hello packets have not been seen before its neighbors declare the router down.  This should be some multiple of the Hello interval.  This value must be the same for the virtual neighbor.  The number of seconds that a router's Hello packets have not been seen before its neighbors declare the router down.  This should be some multiple of the Hello interval.  This value must be the same for the virtual neighbor.
+        :param string VirtIfAuthKey :  The cleartext password used as an OSPF authentication key when simplePassword security is enabled.  This object does not access any OSPF cryptogaphic (e.g.  The cleartext password used as an OSPF authentication key when simplePassword security is enabled.  This object does not access any OSPF cryptogaphic (e.g.
+        :param int32 VirtIfAuthType :  The authentication type specified for a virtual interface.  Note that this object can be used to engage in significant attacks against an OSPF router.  The authentication type specified for a virtual interface.  Note that this object can be used to engage in significant attacks against an OSPF router.
+
+	"""
+    @processReturnCode
+    def createOspfVirtIfEntry(self,
+                              VirtIfNeighbor,
+                              VirtIfAreaId,
+                              VirtIfTransitDelay,
+                              VirtIfRetransInterval,
+                              VirtIfHelloInterval,
+                              VirtIfRtrDeadInterval,
+                              VirtIfAuthKey,
+                              VirtIfAuthType):
+        obj =  { 
+                'VirtIfNeighbor' : VirtIfNeighbor,
+                'VirtIfAreaId' : VirtIfAreaId,
+                'VirtIfTransitDelay' : int(VirtIfTransitDelay),
+                'VirtIfRetransInterval' : int(VirtIfRetransInterval),
+                'VirtIfHelloInterval' : int(VirtIfHelloInterval),
+                'VirtIfRtrDeadInterval' : int(VirtIfRtrDeadInterval),
+                'VirtIfAuthKey' : VirtIfAuthKey,
+                'VirtIfAuthType' : int(VirtIfAuthType),
+                }
+        reqUrl =  self.cfgUrlBase+'OspfVirtIfEntry'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def updateOspfVirtIfEntry(self,
+                              VirtIfNeighbor,
+                              VirtIfAreaId,
+                              VirtIfTransitDelay = None,
+                              VirtIfRetransInterval = None,
+                              VirtIfHelloInterval = None,
+                              VirtIfRtrDeadInterval = None,
+                              VirtIfAuthKey = None,
+                              VirtIfAuthType = None):
+        obj =  {}
+        if VirtIfNeighbor != None :
+            obj['VirtIfNeighbor'] = VirtIfNeighbor
+
+        if VirtIfAreaId != None :
+            obj['VirtIfAreaId'] = VirtIfAreaId
+
+        if VirtIfTransitDelay != None :
+            obj['VirtIfTransitDelay'] = int(VirtIfTransitDelay)
+
+        if VirtIfRetransInterval != None :
+            obj['VirtIfRetransInterval'] = int(VirtIfRetransInterval)
+
+        if VirtIfHelloInterval != None :
+            obj['VirtIfHelloInterval'] = int(VirtIfHelloInterval)
+
+        if VirtIfRtrDeadInterval != None :
+            obj['VirtIfRtrDeadInterval'] = int(VirtIfRtrDeadInterval)
+
+        if VirtIfAuthKey != None :
+            obj['VirtIfAuthKey'] = VirtIfAuthKey
+
+        if VirtIfAuthType != None :
+            obj['VirtIfAuthType'] = int(VirtIfAuthType)
+
+        reqUrl =  self.cfgUrlBase+'OspfVirtIfEntry'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def updateOspfVirtIfEntryById(self,
+                                   objectId,
+                                   VirtIfTransitDelay = None,
+                                   VirtIfRetransInterval = None,
+                                   VirtIfHelloInterval = None,
+                                   VirtIfRtrDeadInterval = None,
+                                   VirtIfAuthKey = None,
+                                   VirtIfAuthType = None):
+        obj =  {'objectId': objectId }
+        if VirtIfTransitDelay !=  None:
+            obj['VirtIfTransitDelay'] = VirtIfTransitDelay
+
+        if VirtIfRetransInterval !=  None:
+            obj['VirtIfRetransInterval'] = VirtIfRetransInterval
+
+        if VirtIfHelloInterval !=  None:
+            obj['VirtIfHelloInterval'] = VirtIfHelloInterval
+
+        if VirtIfRtrDeadInterval !=  None:
+            obj['VirtIfRtrDeadInterval'] = VirtIfRtrDeadInterval
+
+        if VirtIfAuthKey !=  None:
+            obj['VirtIfAuthKey'] = VirtIfAuthKey
+
+        if VirtIfAuthType !=  None:
+            obj['VirtIfAuthType'] = VirtIfAuthType
+
+        reqUrl =  self.cfgUrlBase+'OspfVirtIfEntry'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def deleteOspfVirtIfEntry(self,
+                              VirtIfNeighbor,
+                              VirtIfAreaId):
+        obj =  { 
+                'VirtIfNeighbor' : VirtIfNeighbor,
+                'VirtIfAreaId' : VirtIfAreaId,
+                }
+        reqUrl =  self.cfgUrlBase+'OspfVirtIfEntry'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def deleteOspfVirtIfEntryById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'OspfVirtIfEntry'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    @processReturnCode
+    def getOspfVirtIfEntry(self,
+                           VirtIfNeighbor,
+                           VirtIfAreaId):
+        obj =  { 
+                'VirtIfNeighbor' : VirtIfNeighbor,
+                'VirtIfAreaId' : VirtIfAreaId,
+                }
+        reqUrl =  self.stateUrlBase+'OspfVirtIfEntry'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def getOspfVirtIfEntryById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'OspfVirtIfEntry'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllOspfVirtIfEntrys(self):
+        return self.getObjects( 'OspfVirtIfEntry', self.cfgUrlBase)
 
 
     @processReturnCode
@@ -4543,7 +4664,7 @@ class FlexSwitch( object):
         return r
 
     def getAllOspfExtLsdbEntryStates(self):
-        return self.getObjects( 'OspfExtLsdbEntryState', self.stateUrlBase) 
+        return self.getObjects( 'OspfExtLsdbEntry', self.stateUrlBase)
 
 
     """
@@ -4701,18 +4822,18 @@ class FlexSwitch( object):
         obj =  { 
                 'IfIndex' : IfIndex,
                 }
-        reqUrl =  self.stateUrlBase+'BfdInterfac'
+        reqUrl =  self.stateUrlBase+'BfdInterface'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
     def getBfdInterfaceById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BfdInterfac'+"/%s"%(objectId)
+        reqUrl =  self.stateUrlBase+'BfdInterface'+"/%s"%(objectId)
         r = requests.get(reqUrl, data=None, headers=headers) 
         return r
 
     def getAllBfdInterfaces(self):
-        return self.getObjects( 'BfdInterface', self.cfgUrlBase) 
+        return self.getObjects( 'BfdInterface', self.cfgUrlBase)
 
 
     """
@@ -4793,220 +4914,7 @@ class FlexSwitch( object):
         return r
 
     def getAllSystemLoggings(self):
-        return self.getObjects( 'SystemLogging', self.cfgUrlBase) 
-
-
-    """
-    .. automethod :: createOspfGlobalConfig(self,
-        :param string RouterId :  A 32-bit integer uniquely identifying the router in the Autonomous System. By convention  A 32-bit integer uniquely identifying the router in the Autonomous System. By convention
-        :param int32 AdminStat :  The administrative status of OSPF in the router.  The value 'enabled' denotes that the OSPF Process is active on at least one interface; 'disabled' disables it on all interfaces.  This object is persistent and when written the entity SHOULD save the change to non-volatile storage.  The administrative status of OSPF in the router.  The value 'enabled' denotes that the OSPF Process is active on at least one interface; 'disabled' disables it on all interfaces.  This object is persistent and when written the entity SHOULD save the change to non-volatile storage.
-        :param bool ASBdrRtrStatus :  A flag to note whether this router is configured as an Autonomous System Border Router.  This object is persistent and when written the entity SHOULD save the change to non-volatile storage.  A flag to note whether this router is configured as an Autonomous System Border Router.  This object is persistent and when written the entity SHOULD save the change to non-volatile storage.
-        :param bool TOSSupport :  The router's support for type-of-service routing.  This object is persistent and when written the entity SHOULD save the change to non-volatile storage.  The router's support for type-of-service routing.  This object is persistent and when written the entity SHOULD save the change to non-volatile storage.
-        :param int32 ExtLsdbLimit :  The maximum number of non-default AS-external LSAs entries that can be stored in the link state database.  If the value is -1  The maximum number of non-default AS-external LSAs entries that can be stored in the link state database.  If the value is -1
-        :param int32 MulticastExtensions :  A bit mask indicating whether the router is forwarding IP multicast (Class D) datagrams based on the algorithms defined in the multicast extensions to OSPF.  Bit 0  A bit mask indicating whether the router is forwarding IP multicast (Class D) datagrams based on the algorithms defined in the multicast extensions to OSPF.  Bit 0
-        :param int32 ExitOverflowInterval :  The number of seconds that  The number of seconds that
-        :param bool DemandExtensions :  The router's support for demand routing. This object is persistent and when written the entity SHOULD save the change to non-volatile storage.  The router's support for demand routing. This object is persistent and when written the entity SHOULD save the change to non-volatile storage.
-        :param bool RFC1583Compatibility :  Indicates metrics used to choose among multiple AS-external LSAs.  When RFC1583Compatibility is set to enabled  Indicates metrics used to choose among multiple AS-external LSAs.  When RFC1583Compatibility is set to enabled
-        :param uint32 ReferenceBandwidth :  Reference bandwidth in kilobits/second for  calculating default interface metrics.  The default value is 100  Reference bandwidth in kilobits/second for  calculating default interface metrics.  The default value is 100
-        :param int32 RestartSupport :  The router's support for OSPF graceful restart. Options include  The router's support for OSPF graceful restart. Options include
-        :param int32 RestartInterval :  Configured OSPF graceful restart timeout interval.  This object is persistent and when written the entity SHOULD save the change to non-volatile storage.  Configured OSPF graceful restart timeout interval.  This object is persistent and when written the entity SHOULD save the change to non-volatile storage.
-        :param bool RestartStrictLsaChecking :  Indicates if strict LSA checking is enabled for graceful restart.  This object is persistent and when written the entity SHOULD save the change to non-volatile  storage.  Indicates if strict LSA checking is enabled for graceful restart.  This object is persistent and when written the entity SHOULD save the change to non-volatile  storage.
-        :param int32 StubRouterAdvertisement :  This object controls the advertisement of stub router LSAs by the router.  The value doNotAdvertise will result in the advertisement of a standard router LSA and is the default value.  This object is persistent and when written the entity SHOULD save the change to non-volatile storage.  This object controls the advertisement of stub router LSAs by the router.  The value doNotAdvertise will result in the advertisement of a standard router LSA and is the default value.  This object is persistent and when written the entity SHOULD save the change to non-volatile storage.
-
-	"""
-    @processReturnCode
-    def createOspfGlobalConfig(self,
-                               RouterId,
-                               AdminStat,
-                               ASBdrRtrStatus,
-                               TOSSupport,
-                               ExtLsdbLimit,
-                               MulticastExtensions,
-                               ExitOverflowInterval,
-                               DemandExtensions,
-                               RFC1583Compatibility,
-                               ReferenceBandwidth,
-                               RestartSupport,
-                               RestartInterval,
-                               RestartStrictLsaChecking,
-                               StubRouterAdvertisement):
-        obj =  { 
-                'RouterId' : RouterId,
-                'AdminStat' : int(AdminStat),
-                'ASBdrRtrStatus' : True if ASBdrRtrStatus else False,
-                'TOSSupport' : True if TOSSupport else False,
-                'ExtLsdbLimit' : int(ExtLsdbLimit),
-                'MulticastExtensions' : int(MulticastExtensions),
-                'ExitOverflowInterval' : int(ExitOverflowInterval),
-                'DemandExtensions' : True if DemandExtensions else False,
-                'RFC1583Compatibility' : True if RFC1583Compatibility else False,
-                'ReferenceBandwidth' : int(ReferenceBandwidth),
-                'RestartSupport' : int(RestartSupport),
-                'RestartInterval' : int(RestartInterval),
-                'RestartStrictLsaChecking' : True if RestartStrictLsaChecking else False,
-                'StubRouterAdvertisement' : int(StubRouterAdvertisement),
-                }
-        reqUrl =  self.cfgUrlBase+'OspfGlobalConfig'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def updateOspfGlobalConfig(self,
-                               RouterId,
-                               AdminStat = None,
-                               ASBdrRtrStatus = None,
-                               TOSSupport = None,
-                               ExtLsdbLimit = None,
-                               MulticastExtensions = None,
-                               ExitOverflowInterval = None,
-                               DemandExtensions = None,
-                               RFC1583Compatibility = None,
-                               ReferenceBandwidth = None,
-                               RestartSupport = None,
-                               RestartInterval = None,
-                               RestartStrictLsaChecking = None,
-                               StubRouterAdvertisement = None):
-        obj =  {}
-        if RouterId != None :
-            obj['RouterId'] = RouterId
-
-        if AdminStat != None :
-            obj['AdminStat'] = int(AdminStat)
-
-        if ASBdrRtrStatus != None :
-            obj['ASBdrRtrStatus'] = True if ASBdrRtrStatus else False
-
-        if TOSSupport != None :
-            obj['TOSSupport'] = True if TOSSupport else False
-
-        if ExtLsdbLimit != None :
-            obj['ExtLsdbLimit'] = int(ExtLsdbLimit)
-
-        if MulticastExtensions != None :
-            obj['MulticastExtensions'] = int(MulticastExtensions)
-
-        if ExitOverflowInterval != None :
-            obj['ExitOverflowInterval'] = int(ExitOverflowInterval)
-
-        if DemandExtensions != None :
-            obj['DemandExtensions'] = True if DemandExtensions else False
-
-        if RFC1583Compatibility != None :
-            obj['RFC1583Compatibility'] = True if RFC1583Compatibility else False
-
-        if ReferenceBandwidth != None :
-            obj['ReferenceBandwidth'] = int(ReferenceBandwidth)
-
-        if RestartSupport != None :
-            obj['RestartSupport'] = int(RestartSupport)
-
-        if RestartInterval != None :
-            obj['RestartInterval'] = int(RestartInterval)
-
-        if RestartStrictLsaChecking != None :
-            obj['RestartStrictLsaChecking'] = True if RestartStrictLsaChecking else False
-
-        if StubRouterAdvertisement != None :
-            obj['StubRouterAdvertisement'] = int(StubRouterAdvertisement)
-
-        reqUrl =  self.cfgUrlBase+'OspfGlobalConfig'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def updateOspfGlobalConfigById(self,
-                                    objectId,
-                                    AdminStat = None,
-                                    ASBdrRtrStatus = None,
-                                    TOSSupport = None,
-                                    ExtLsdbLimit = None,
-                                    MulticastExtensions = None,
-                                    ExitOverflowInterval = None,
-                                    DemandExtensions = None,
-                                    RFC1583Compatibility = None,
-                                    ReferenceBandwidth = None,
-                                    RestartSupport = None,
-                                    RestartInterval = None,
-                                    RestartStrictLsaChecking = None,
-                                    StubRouterAdvertisement = None):
-        obj =  {'objectId': objectId }
-        if AdminStat !=  None:
-            obj['AdminStat'] = AdminStat
-
-        if ASBdrRtrStatus !=  None:
-            obj['ASBdrRtrStatus'] = ASBdrRtrStatus
-
-        if TOSSupport !=  None:
-            obj['TOSSupport'] = TOSSupport
-
-        if ExtLsdbLimit !=  None:
-            obj['ExtLsdbLimit'] = ExtLsdbLimit
-
-        if MulticastExtensions !=  None:
-            obj['MulticastExtensions'] = MulticastExtensions
-
-        if ExitOverflowInterval !=  None:
-            obj['ExitOverflowInterval'] = ExitOverflowInterval
-
-        if DemandExtensions !=  None:
-            obj['DemandExtensions'] = DemandExtensions
-
-        if RFC1583Compatibility !=  None:
-            obj['RFC1583Compatibility'] = RFC1583Compatibility
-
-        if ReferenceBandwidth !=  None:
-            obj['ReferenceBandwidth'] = ReferenceBandwidth
-
-        if RestartSupport !=  None:
-            obj['RestartSupport'] = RestartSupport
-
-        if RestartInterval !=  None:
-            obj['RestartInterval'] = RestartInterval
-
-        if RestartStrictLsaChecking !=  None:
-            obj['RestartStrictLsaChecking'] = RestartStrictLsaChecking
-
-        if StubRouterAdvertisement !=  None:
-            obj['StubRouterAdvertisement'] = StubRouterAdvertisement
-
-        reqUrl =  self.cfgUrlBase+'OspfGlobalConfig'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def deleteOspfGlobalConfig(self,
-                               RouterId):
-        obj =  { 
-                'RouterId' : RouterId,
-                }
-        reqUrl =  self.cfgUrlBase+'OspfGlobalConfig'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def deleteOspfGlobalConfigById(self, objectId ):
-        reqUrl =  self.cfgUrlBase+'OspfGlobalConfig'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
-        return r
-
-    @processReturnCode
-    def getOspfGlobalConfig(self,
-                            RouterId):
-        obj =  { 
-                'RouterId' : RouterId,
-                }
-        reqUrl =  self.stateUrlBase+'OspfGlobalConfig'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def getOspfGlobalConfigById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'OspfGlobalConfig'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllOspfGlobalConfigs(self):
-        return self.getObjects( 'OspfGlobalConfig', self.cfgUrlBase) 
+        return self.getObjects( 'SystemLogging', self.cfgUrlBase)
 
 
     @processReturnCode
@@ -5026,7 +4934,7 @@ class FlexSwitch( object):
         return r
 
     def getAllBGPPolicyActionStates(self):
-        return self.getObjects( 'BGPPolicyActionState', self.stateUrlBase) 
+        return self.getObjects( 'BGPPolicyAction', self.stateUrlBase)
 
 
     @processReturnCode
@@ -5050,7 +4958,7 @@ class FlexSwitch( object):
         return r
 
     def getAllOspfAsLsdbEntryStates(self):
-        return self.getObjects( 'OspfAsLsdbEntryState', self.stateUrlBase) 
+        return self.getObjects( 'OspfAsLsdbEntry', self.stateUrlBase)
 
 
     """
@@ -5142,18 +5050,18 @@ class FlexSwitch( object):
         obj =  { 
                 'VxlanId' : VxlanId,
                 }
-        reqUrl =  self.stateUrlBase+'VxlanInstanc'
+        reqUrl =  self.stateUrlBase+'VxlanInstance'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
     def getVxlanInstanceById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'VxlanInstanc'+"/%s"%(objectId)
+        reqUrl =  self.stateUrlBase+'VxlanInstance'+"/%s"%(objectId)
         r = requests.get(reqUrl, data=None, headers=headers) 
         return r
 
     def getAllVxlanInstances(self):
-        return self.getObjects( 'VxlanInstance', self.cfgUrlBase) 
+        return self.getObjects( 'VxlanInstance', self.cfgUrlBase)
 
 
     @processReturnCode
@@ -5173,7 +5081,7 @@ class FlexSwitch( object):
         return r
 
     def getAllBGPPolicyDefinitionStates(self):
-        return self.getObjects( 'BGPPolicyDefinitionState', self.stateUrlBase) 
+        return self.getObjects( 'BGPPolicyDefinition', self.stateUrlBase)
 
 
     @processReturnCode
@@ -5193,7 +5101,7 @@ class FlexSwitch( object):
         return r
 
     def getAllIPv4IntfStates(self):
-        return self.getObjects( 'IPv4IntfState', self.stateUrlBase) 
+        return self.getObjects( 'IPv4Intf', self.stateUrlBase)
 
 
     @processReturnCode
@@ -5202,18 +5110,121 @@ class FlexSwitch( object):
         obj =  { 
                 'PortNum' : PortNum,
                 }
-        reqUrl =  self.stateUrlBase+'Por'
+        reqUrl =  self.stateUrlBase+'Port'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
     def getPortStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'Por'+"/%s"%(objectId)
+        reqUrl =  self.stateUrlBase+'Port'+"/%s"%(objectId)
         r = requests.get(reqUrl, data=None, headers=headers) 
         return r
 
     def getAllPortStates(self):
-        return self.getObjects( 'PortState', self.stateUrlBase) 
+        return self.getObjects( 'Port', self.stateUrlBase)
+
+
+    """
+    .. automethod :: createOspfIfMetricEntry(self,
+        :param int32 IfMetricAddressLessIf :  For the purpose of easing the instancing of addressed and addressless interfaces; this variable takes the value 0 on interfaces with IP addresses and the value of ifIndex for interfaces having no IP address.  On row creation  For the purpose of easing the instancing of addressed and addressless interfaces; this variable takes the value 0 on interfaces with IP addresses and the value of ifIndex for interfaces having no IP address.  On row creation
+        :param int32 IfMetricTOS :  The Type of Service metric being referenced. On row creation  The Type of Service metric being referenced. On row creation
+        :param string IfMetricIpAddress :  The IP address of this OSPF interface.  On row creation  The IP address of this OSPF interface.  On row creation
+        :param int32 IfMetricValue :  The metric of using this Type of Service on this interface.  The default value of the TOS 0 metric is 10^8 / ifSpeed.  The metric of using this Type of Service on this interface.  The default value of the TOS 0 metric is 10^8 / ifSpeed.
+
+	"""
+    @processReturnCode
+    def createOspfIfMetricEntry(self,
+                                IfMetricAddressLessIf,
+                                IfMetricTOS,
+                                IfMetricIpAddress,
+                                IfMetricValue):
+        obj =  { 
+                'IfMetricAddressLessIf' : int(IfMetricAddressLessIf),
+                'IfMetricTOS' : int(IfMetricTOS),
+                'IfMetricIpAddress' : IfMetricIpAddress,
+                'IfMetricValue' : int(IfMetricValue),
+                }
+        reqUrl =  self.cfgUrlBase+'OspfIfMetricEntry'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def updateOspfIfMetricEntry(self,
+                                IfMetricAddressLessIf,
+                                IfMetricTOS,
+                                IfMetricIpAddress,
+                                IfMetricValue = None):
+        obj =  {}
+        if IfMetricAddressLessIf != None :
+            obj['IfMetricAddressLessIf'] = int(IfMetricAddressLessIf)
+
+        if IfMetricTOS != None :
+            obj['IfMetricTOS'] = int(IfMetricTOS)
+
+        if IfMetricIpAddress != None :
+            obj['IfMetricIpAddress'] = IfMetricIpAddress
+
+        if IfMetricValue != None :
+            obj['IfMetricValue'] = int(IfMetricValue)
+
+        reqUrl =  self.cfgUrlBase+'OspfIfMetricEntry'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def updateOspfIfMetricEntryById(self,
+                                     objectId,
+                                     IfMetricValue = None):
+        obj =  {'objectId': objectId }
+        if IfMetricValue !=  None:
+            obj['IfMetricValue'] = IfMetricValue
+
+        reqUrl =  self.cfgUrlBase+'OspfIfMetricEntry'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def deleteOspfIfMetricEntry(self,
+                                IfMetricAddressLessIf,
+                                IfMetricTOS,
+                                IfMetricIpAddress):
+        obj =  { 
+                'IfMetricAddressLessIf' : IfMetricAddressLessIf,
+                'IfMetricTOS' : IfMetricTOS,
+                'IfMetricIpAddress' : IfMetricIpAddress,
+                }
+        reqUrl =  self.cfgUrlBase+'OspfIfMetricEntry'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def deleteOspfIfMetricEntryById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'OspfIfMetricEntry'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    @processReturnCode
+    def getOspfIfMetricEntry(self,
+                             IfMetricAddressLessIf,
+                             IfMetricTOS,
+                             IfMetricIpAddress):
+        obj =  { 
+                'IfMetricAddressLessIf' : IfMetricAddressLessIf,
+                'IfMetricTOS' : IfMetricTOS,
+                'IfMetricIpAddress' : IfMetricIpAddress,
+                }
+        reqUrl =  self.stateUrlBase+'OspfIfMetricEntry'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def getOspfIfMetricEntryById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'OspfIfMetricEntry'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllOspfIfMetricEntrys(self):
+        return self.getObjects( 'OspfIfMetricEntry', self.cfgUrlBase)
 
 
     """
@@ -5437,7 +5448,7 @@ class FlexSwitch( object):
         return r
 
     def getAllVxlanVtepInstancess(self):
-        return self.getObjects( 'VxlanVtepInstances', self.cfgUrlBase) 
+        return self.getObjects( 'VxlanVtepInstances', self.cfgUrlBase)
 
 
     """
@@ -5540,7 +5551,7 @@ class FlexSwitch( object):
         return r
 
     def getAllBGPPolicyActions(self):
-        return self.getObjects( 'BGPPolicyAction', self.cfgUrlBase) 
+        return self.getObjects( 'BGPPolicyAction', self.cfgUrlBase)
 
 
     @processReturnCode
@@ -5560,7 +5571,7 @@ class FlexSwitch( object):
         return r
 
     def getAllArpEntryHwStates(self):
-        return self.getObjects( 'ArpEntryHwState', self.stateUrlBase) 
+        return self.getObjects( 'ArpEntryHw', self.stateUrlBase)
 
 
     @processReturnCode
@@ -5569,121 +5580,134 @@ class FlexSwitch( object):
         obj =  { 
                 'Name' : Name,
                 }
-        reqUrl =  self.stateUrlBase+'BGPPolicyStm'
+        reqUrl =  self.stateUrlBase+'BGPPolicyStmt'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
     def getBGPPolicyStmtStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BGPPolicyStm'+"/%s"%(objectId)
+        reqUrl =  self.stateUrlBase+'BGPPolicyStmt'+"/%s"%(objectId)
         r = requests.get(reqUrl, data=None, headers=headers) 
         return r
 
     def getAllBGPPolicyStmtStates(self):
-        return self.getObjects( 'BGPPolicyStmtState', self.stateUrlBase) 
+        return self.getObjects( 'BGPPolicyStmt', self.stateUrlBase)
 
 
     """
-    .. automethod :: createOspfHostEntryConfig(self,
-        :param int32 HostTOS :  The Type of Service of the route being configured.  The Type of Service of the route being configured.
-        :param string HostIpAddress :  The IP address of the host.  The IP address of the host.
-        :param int32 HostMetric :  The metric to be advertised.  The metric to be advertised.
-        :param string HostCfgAreaID :  To configure the OSPF area to which the host belongs.  To configure the OSPF area to which the host belongs.
+    .. automethod :: createOspfNbrEntry(self,
+        :param string NbrIpAddr :  The IP address this neighbor is using in its IP source address.  Note that  The IP address this neighbor is using in its IP source address.  Note that
+        :param int32 NbrAddressLessIndex :  On an interface having an IP address  On an interface having an IP address
+        :param int32 NbrPriority :  The priority of this neighbor in the designated router election algorithm.  The value 0 signifies that the neighbor is not eligible to become the designated router on this particular network.  The priority of this neighbor in the designated router election algorithm.  The value 0 signifies that the neighbor is not eligible to become the designated router on this particular network.
 
 	"""
     @processReturnCode
-    def createOspfHostEntryConfig(self,
-                                  HostTOS,
-                                  HostIpAddress,
-                                  HostMetric,
-                                  HostCfgAreaID):
+    def createOspfNbrEntry(self,
+                           NbrIpAddr,
+                           NbrAddressLessIndex,
+                           NbrPriority):
         obj =  { 
-                'HostTOS' : int(HostTOS),
-                'HostIpAddress' : HostIpAddress,
-                'HostMetric' : int(HostMetric),
-                'HostCfgAreaID' : HostCfgAreaID,
+                'NbrIpAddr' : NbrIpAddr,
+                'NbrAddressLessIndex' : int(NbrAddressLessIndex),
+                'NbrPriority' : int(NbrPriority),
                 }
-        reqUrl =  self.cfgUrlBase+'OspfHostEntryConfig'
+        reqUrl =  self.cfgUrlBase+'OspfNbrEntry'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
-    def updateOspfHostEntryConfig(self,
-                                  HostTOS,
-                                  HostIpAddress,
-                                  HostMetric = None,
-                                  HostCfgAreaID = None):
+    def updateOspfNbrEntry(self,
+                           NbrIpAddr,
+                           NbrAddressLessIndex,
+                           NbrPriority = None):
         obj =  {}
-        if HostTOS != None :
-            obj['HostTOS'] = int(HostTOS)
+        if NbrIpAddr != None :
+            obj['NbrIpAddr'] = NbrIpAddr
 
-        if HostIpAddress != None :
-            obj['HostIpAddress'] = HostIpAddress
+        if NbrAddressLessIndex != None :
+            obj['NbrAddressLessIndex'] = int(NbrAddressLessIndex)
 
-        if HostMetric != None :
-            obj['HostMetric'] = int(HostMetric)
+        if NbrPriority != None :
+            obj['NbrPriority'] = int(NbrPriority)
 
-        if HostCfgAreaID != None :
-            obj['HostCfgAreaID'] = HostCfgAreaID
-
-        reqUrl =  self.cfgUrlBase+'OspfHostEntryConfig'
+        reqUrl =  self.cfgUrlBase+'OspfNbrEntry'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
-    def updateOspfHostEntryConfigById(self,
-                                       objectId,
-                                       HostMetric = None,
-                                       HostCfgAreaID = None):
+    def updateOspfNbrEntryById(self,
+                                objectId,
+                                NbrPriority = None):
         obj =  {'objectId': objectId }
-        if HostMetric !=  None:
-            obj['HostMetric'] = HostMetric
+        if NbrPriority !=  None:
+            obj['NbrPriority'] = NbrPriority
 
-        if HostCfgAreaID !=  None:
-            obj['HostCfgAreaID'] = HostCfgAreaID
-
-        reqUrl =  self.cfgUrlBase+'OspfHostEntryConfig'
+        reqUrl =  self.cfgUrlBase+'OspfNbrEntry'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
-    def deleteOspfHostEntryConfig(self,
-                                  HostTOS,
-                                  HostIpAddress):
+    def deleteOspfNbrEntry(self,
+                           NbrIpAddr,
+                           NbrAddressLessIndex):
         obj =  { 
-                'HostTOS' : HostTOS,
-                'HostIpAddress' : HostIpAddress,
+                'NbrIpAddr' : NbrIpAddr,
+                'NbrAddressLessIndex' : NbrAddressLessIndex,
                 }
-        reqUrl =  self.cfgUrlBase+'OspfHostEntryConfig'
+        reqUrl =  self.cfgUrlBase+'OspfNbrEntry'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
-    def deleteOspfHostEntryConfigById(self, objectId ):
-        reqUrl =  self.cfgUrlBase+'OspfHostEntryConfig'+"/%s"%(objectId)
+    def deleteOspfNbrEntryById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'OspfNbrEntry'+"/%s"%(objectId)
         r = requests.delete(reqUrl, data=None, headers=headers) 
         return r
 
     @processReturnCode
-    def getOspfHostEntryConfig(self,
-                               HostTOS,
-                               HostIpAddress):
+    def getOspfNbrEntry(self,
+                        NbrIpAddr,
+                        NbrAddressLessIndex):
         obj =  { 
-                'HostTOS' : HostTOS,
-                'HostIpAddress' : HostIpAddress,
+                'NbrIpAddr' : NbrIpAddr,
+                'NbrAddressLessIndex' : NbrAddressLessIndex,
                 }
-        reqUrl =  self.stateUrlBase+'OspfHostEntryConfig'
+        reqUrl =  self.stateUrlBase+'OspfNbrEntry'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
-    def getOspfHostEntryConfigById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'OspfHostEntryConfig'+"/%s"%(objectId)
+    def getOspfNbrEntryById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'OspfNbrEntry'+"/%s"%(objectId)
         r = requests.get(reqUrl, data=None, headers=headers) 
         return r
 
-    def getAllOspfHostEntryConfigs(self):
-        return self.getObjects( 'OspfHostEntryConfig', self.cfgUrlBase) 
+    def getAllOspfNbrEntrys(self):
+        return self.getObjects( 'OspfNbrEntry', self.cfgUrlBase)
+
+
+    @processReturnCode
+    def getBGPRouteState(self,
+                         Network,
+                         NextHop,
+                         CIDRLen):
+        obj =  { 
+                'Network' : Network,
+                'NextHop' : NextHop,
+                'CIDRLen' : CIDRLen,
+                }
+        reqUrl =  self.stateUrlBase+'BGPRoute'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def getBGPRouteStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'BGPRoute'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllBGPRouteStates(self):
+        return self.getObjects( 'BGPRoute', self.stateUrlBase)
 
 
     """
@@ -5808,18 +5832,18 @@ class FlexSwitch( object):
                 'NetworkMask' : NetworkMask,
                 'NextHopIp' : NextHopIp,
                 }
-        reqUrl =  self.stateUrlBase+'IPv4Rou'
+        reqUrl =  self.stateUrlBase+'IPv4Route'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
     def getIPv4RouteById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'IPv4Rou'+"/%s"%(objectId)
+        reqUrl =  self.stateUrlBase+'IPv4Route'+"/%s"%(objectId)
         r = requests.get(reqUrl, data=None, headers=headers) 
         return r
 
     def getAllIPv4Routes(self):
-        return self.getObjects( 'IPv4Route', self.cfgUrlBase) 
+        return self.getObjects( 'IPv4Route', self.cfgUrlBase)
 
 
     @processReturnCode
@@ -5839,7 +5863,7 @@ class FlexSwitch( object):
         return r
 
     def getAllPolicyActionStates(self):
-        return self.getObjects( 'PolicyActionState', self.stateUrlBase) 
+        return self.getObjects( 'PolicyAction', self.stateUrlBase)
 
 
     @processReturnCode
@@ -5859,7 +5883,7 @@ class FlexSwitch( object):
         return r
 
     def getAllOspfGlobalStates(self):
-        return self.getObjects( 'OspfGlobalState', self.stateUrlBase) 
+        return self.getObjects( 'OspfGlobal', self.stateUrlBase)
 
 
     @processReturnCode
@@ -5881,7 +5905,110 @@ class FlexSwitch( object):
         return r
 
     def getAllBGPNeighborStates(self):
-        return self.getObjects( 'BGPNeighborState', self.stateUrlBase) 
+        return self.getObjects( 'BGPNeighbor', self.stateUrlBase)
+
+
+    """
+    .. automethod :: createOspfAreaRangeEntry(self,
+        :param string AreaRangeNet :  The IP address of the net or subnet indicated by the range.  The IP address of the net or subnet indicated by the range.
+        :param string AreaRangeAreaId :  The area that the address range is to be found within.  The area that the address range is to be found within.
+        :param string AreaRangeMask :  The subnet mask that pertains to the net or subnet.  The subnet mask that pertains to the net or subnet.
+        :param int32 AreaRangeEffect :  Subnets subsumed by ranges either trigger the advertisement of the indicated summary (advertiseMatching) or result in the subnet's not being advertised at all outside the area.  Subnets subsumed by ranges either trigger the advertisement of the indicated summary (advertiseMatching) or result in the subnet's not being advertised at all outside the area.
+
+	"""
+    @processReturnCode
+    def createOspfAreaRangeEntry(self,
+                                 AreaRangeNet,
+                                 AreaRangeAreaId,
+                                 AreaRangeMask,
+                                 AreaRangeEffect):
+        obj =  { 
+                'AreaRangeNet' : AreaRangeNet,
+                'AreaRangeAreaId' : AreaRangeAreaId,
+                'AreaRangeMask' : AreaRangeMask,
+                'AreaRangeEffect' : int(AreaRangeEffect),
+                }
+        reqUrl =  self.cfgUrlBase+'OspfAreaRangeEntry'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def updateOspfAreaRangeEntry(self,
+                                 AreaRangeNet,
+                                 AreaRangeAreaId,
+                                 AreaRangeMask = None,
+                                 AreaRangeEffect = None):
+        obj =  {}
+        if AreaRangeNet != None :
+            obj['AreaRangeNet'] = AreaRangeNet
+
+        if AreaRangeAreaId != None :
+            obj['AreaRangeAreaId'] = AreaRangeAreaId
+
+        if AreaRangeMask != None :
+            obj['AreaRangeMask'] = AreaRangeMask
+
+        if AreaRangeEffect != None :
+            obj['AreaRangeEffect'] = int(AreaRangeEffect)
+
+        reqUrl =  self.cfgUrlBase+'OspfAreaRangeEntry'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def updateOspfAreaRangeEntryById(self,
+                                      objectId,
+                                      AreaRangeMask = None,
+                                      AreaRangeEffect = None):
+        obj =  {'objectId': objectId }
+        if AreaRangeMask !=  None:
+            obj['AreaRangeMask'] = AreaRangeMask
+
+        if AreaRangeEffect !=  None:
+            obj['AreaRangeEffect'] = AreaRangeEffect
+
+        reqUrl =  self.cfgUrlBase+'OspfAreaRangeEntry'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def deleteOspfAreaRangeEntry(self,
+                                 AreaRangeNet,
+                                 AreaRangeAreaId):
+        obj =  { 
+                'AreaRangeNet' : AreaRangeNet,
+                'AreaRangeAreaId' : AreaRangeAreaId,
+                }
+        reqUrl =  self.cfgUrlBase+'OspfAreaRangeEntry'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def deleteOspfAreaRangeEntryById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'OspfAreaRangeEntry'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    @processReturnCode
+    def getOspfAreaRangeEntry(self,
+                              AreaRangeNet,
+                              AreaRangeAreaId):
+        obj =  { 
+                'AreaRangeNet' : AreaRangeNet,
+                'AreaRangeAreaId' : AreaRangeAreaId,
+                }
+        reqUrl =  self.stateUrlBase+'OspfAreaRangeEntry'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def getOspfAreaRangeEntryById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'OspfAreaRangeEntry'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllOspfAreaRangeEntrys(self):
+        return self.getObjects( 'OspfAreaRangeEntry', self.cfgUrlBase)
 
 
     @processReturnCode
@@ -5903,134 +6030,7 @@ class FlexSwitch( object):
         return r
 
     def getAllVrrpVridStates(self):
-        return self.getObjects( 'VrrpVridState', self.stateUrlBase) 
-
-
-    @processReturnCode
-    def getBGPRoute(self,
-                    Network,
-                    NextHop,
-                    CIDRLen):
-        obj =  { 
-                'Network' : Network,
-                'NextHop' : NextHop,
-                'CIDRLen' : CIDRLen,
-                }
-        reqUrl =  self.stateUrlBase+'BGPRou'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def getBGPRouteById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BGPRou'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllBGPRoutes(self):
-        return self.getObjects( 'BGPRoute', self.stateUrlBase) 
-
-
-    """
-    .. automethod :: createOspfAreaRangeEntryConfig(self,
-        :param string AreaRangeNet :  The IP address of the net or subnet indicated by the range.  The IP address of the net or subnet indicated by the range.
-        :param string AreaRangeAreaId :  The area that the address range is to be found within.  The area that the address range is to be found within.
-        :param string AreaRangeMask :  The subnet mask that pertains to the net or subnet.  The subnet mask that pertains to the net or subnet.
-        :param int32 AreaRangeEffect :  Subnets subsumed by ranges either trigger the advertisement of the indicated summary (advertiseMatching) or result in the subnet's not being advertised at all outside the area.  Subnets subsumed by ranges either trigger the advertisement of the indicated summary (advertiseMatching) or result in the subnet's not being advertised at all outside the area.
-
-	"""
-    @processReturnCode
-    def createOspfAreaRangeEntryConfig(self,
-                                       AreaRangeNet,
-                                       AreaRangeAreaId,
-                                       AreaRangeMask,
-                                       AreaRangeEffect):
-        obj =  { 
-                'AreaRangeNet' : AreaRangeNet,
-                'AreaRangeAreaId' : AreaRangeAreaId,
-                'AreaRangeMask' : AreaRangeMask,
-                'AreaRangeEffect' : int(AreaRangeEffect),
-                }
-        reqUrl =  self.cfgUrlBase+'OspfAreaRangeEntryConfig'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def updateOspfAreaRangeEntryConfig(self,
-                                       AreaRangeNet,
-                                       AreaRangeAreaId,
-                                       AreaRangeMask = None,
-                                       AreaRangeEffect = None):
-        obj =  {}
-        if AreaRangeNet != None :
-            obj['AreaRangeNet'] = AreaRangeNet
-
-        if AreaRangeAreaId != None :
-            obj['AreaRangeAreaId'] = AreaRangeAreaId
-
-        if AreaRangeMask != None :
-            obj['AreaRangeMask'] = AreaRangeMask
-
-        if AreaRangeEffect != None :
-            obj['AreaRangeEffect'] = int(AreaRangeEffect)
-
-        reqUrl =  self.cfgUrlBase+'OspfAreaRangeEntryConfig'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def updateOspfAreaRangeEntryConfigById(self,
-                                            objectId,
-                                            AreaRangeMask = None,
-                                            AreaRangeEffect = None):
-        obj =  {'objectId': objectId }
-        if AreaRangeMask !=  None:
-            obj['AreaRangeMask'] = AreaRangeMask
-
-        if AreaRangeEffect !=  None:
-            obj['AreaRangeEffect'] = AreaRangeEffect
-
-        reqUrl =  self.cfgUrlBase+'OspfAreaRangeEntryConfig'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def deleteOspfAreaRangeEntryConfig(self,
-                                       AreaRangeNet,
-                                       AreaRangeAreaId):
-        obj =  { 
-                'AreaRangeNet' : AreaRangeNet,
-                'AreaRangeAreaId' : AreaRangeAreaId,
-                }
-        reqUrl =  self.cfgUrlBase+'OspfAreaRangeEntryConfig'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def deleteOspfAreaRangeEntryConfigById(self, objectId ):
-        reqUrl =  self.cfgUrlBase+'OspfAreaRangeEntryConfig'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
-        return r
-
-    @processReturnCode
-    def getOspfAreaRangeEntryConfig(self,
-                                    AreaRangeNet,
-                                    AreaRangeAreaId):
-        obj =  { 
-                'AreaRangeNet' : AreaRangeNet,
-                'AreaRangeAreaId' : AreaRangeAreaId,
-                }
-        reqUrl =  self.stateUrlBase+'OspfAreaRangeEntryConfig'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def getOspfAreaRangeEntryConfigById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'OspfAreaRangeEntryConfig'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllOspfAreaRangeEntryConfigs(self):
-        return self.getObjects( 'OspfAreaRangeEntryConfig', self.cfgUrlBase) 
+        return self.getObjects( 'VrrpVrid', self.stateUrlBase)
 
 
     """
@@ -6133,7 +6133,7 @@ class FlexSwitch( object):
         return r
 
     def getAllBGPPolicyDefinitions(self):
-        return self.getObjects( 'BGPPolicyDefinition', self.cfgUrlBase) 
+        return self.getObjects( 'BGPPolicyDefinition', self.cfgUrlBase)
 
 
     """
@@ -6247,7 +6247,7 @@ class FlexSwitch( object):
         return r
 
     def getAllPolicyConditions(self):
-        return self.getObjects( 'PolicyCondition', self.cfgUrlBase) 
+        return self.getObjects( 'PolicyCondition', self.cfgUrlBase)
 
 
     """
@@ -6405,18 +6405,18 @@ class FlexSwitch( object):
         obj =  { 
                 'PortNum' : PortNum,
                 }
-        reqUrl =  self.stateUrlBase+'Por'
+        reqUrl =  self.stateUrlBase+'Port'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
     def getPortById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'Por'+"/%s"%(objectId)
+        reqUrl =  self.stateUrlBase+'Port'+"/%s"%(objectId)
         r = requests.get(reqUrl, data=None, headers=headers) 
         return r
 
     def getAllPorts(self):
-        return self.getObjects( 'Port', self.cfgUrlBase) 
+        return self.getObjects( 'Port', self.cfgUrlBase)
 
 
     @processReturnCode
@@ -6438,5 +6438,5 @@ class FlexSwitch( object):
         return r
 
     def getAllOspfIfEntryStates(self):
-        return self.getObjects( 'OspfIfEntryState', self.stateUrlBase) 
+        return self.getObjects( 'OspfIfEntry', self.stateUrlBase)
 
