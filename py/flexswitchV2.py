@@ -198,19 +198,19 @@ class FlexSwitch( object):
     """
     .. automethod :: createVlan(self,
         :param int32 VlanId :  802.1Q tag/Vlan ID for vlan being provisioned  802.1Q tag/Vlan ID for vlan being provisioned
-        :param string IfIndexList :  List of system assigned interface id's for tagged ports on this vlan  List of system assigned interface id's for tagged ports on this vlan
-        :param string UntagIfIndexList :  List of system assigned interface id's for untagged ports on this vlan  List of system assigned interface id's for untagged ports on this vlan
+        :param string IntfList :  List of interface names or ifindex values to  be added as tagged members of the vlan  List of interface names or ifindex values to  be added as tagged members of the vlan
+        :param string UntagIntfList :  List of interface names or ifindex values to  be added as untagged members of the vlan  List of interface names or ifindex values to  be added as untagged members of the vlan
 
 	"""
     @processReturnCode
     def createVlan(self,
                    VlanId,
-                   IfIndexList,
-                   UntagIfIndexList):
+                   IntfList,
+                   UntagIntfList):
         obj =  { 
                 'VlanId' : int(VlanId),
-                'IfIndexList' : IfIndexList,
-                'UntagIfIndexList' : UntagIfIndexList,
+                'IntfList' : IntfList,
+                'UntagIntfList' : UntagIntfList,
                 }
         reqUrl =  self.cfgUrlBase+'Vlan'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -219,17 +219,17 @@ class FlexSwitch( object):
     @processReturnCode
     def updateVlan(self,
                    VlanId,
-                   IfIndexList = None,
-                   UntagIfIndexList = None):
+                   IntfList = None,
+                   UntagIntfList = None):
         obj =  {}
         if VlanId != None :
             obj['VlanId'] = int(VlanId)
 
-        if IfIndexList != None :
-            obj['IfIndexList'] = IfIndexList
+        if IntfList != None :
+            obj['IntfList'] = IntfList
 
-        if UntagIfIndexList != None :
-            obj['UntagIfIndexList'] = UntagIfIndexList
+        if UntagIntfList != None :
+            obj['UntagIntfList'] = UntagIntfList
 
         reqUrl =  self.cfgUrlBase+'Vlan'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -238,14 +238,14 @@ class FlexSwitch( object):
     @processReturnCode
     def updateVlanById(self,
                         objectId,
-                        IfIndexList = None,
-                        UntagIfIndexList = None):
+                        IntfList = None,
+                        UntagIntfList = None):
         obj =  {'objectId': objectId }
-        if IfIndexList !=  None:
-            obj['IfIndexList'] = IfIndexList
+        if IntfList !=  None:
+            obj['IntfList'] = IntfList
 
-        if UntagIfIndexList !=  None:
-            obj['UntagIfIndexList'] = UntagIfIndexList
+        if UntagIntfList !=  None:
+            obj['UntagIntfList'] = UntagIntfList
 
         reqUrl =  self.cfgUrlBase+'Vlan'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3086,16 +3086,16 @@ class FlexSwitch( object):
     """
     .. automethod :: createIPv4Intf(self,
         :param string IpAddr :  Interface IP/Net mask in CIDR format to provision on switch interface  Interface IP/Net mask in CIDR format to provision on switch interface
-        :param int32 IfIndex :  System assigned interface id of L2 interface (port/lag/vlan) to which this IPv4 object is linked  System assigned interface id of L2 interface (port/lag/vlan) to which this IPv4 object is linked
+        :param string IntfRef :  Interface name or ifindex of port/lag or vlan on which this IPv4 object is configured  Interface name or ifindex of port/lag or vlan on which this IPv4 object is configured
 
 	"""
     @processReturnCode
     def createIPv4Intf(self,
                        IpAddr,
-                       IfIndex):
+                       IntfRef):
         obj =  { 
                 'IpAddr' : IpAddr,
-                'IfIndex' : int(IfIndex),
+                'IntfRef' : IntfRef,
                 }
         reqUrl =  self.cfgUrlBase+'IPv4Intf'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3104,13 +3104,13 @@ class FlexSwitch( object):
     @processReturnCode
     def updateIPv4Intf(self,
                        IpAddr,
-                       IfIndex = None):
+                       IntfRef = None):
         obj =  {}
         if IpAddr != None :
             obj['IpAddr'] = IpAddr
 
-        if IfIndex != None :
-            obj['IfIndex'] = int(IfIndex)
+        if IntfRef != None :
+            obj['IntfRef'] = IntfRef
 
         reqUrl =  self.cfgUrlBase+'IPv4Intf'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3119,10 +3119,10 @@ class FlexSwitch( object):
     @processReturnCode
     def updateIPv4IntfById(self,
                             objectId,
-                            IfIndex = None):
+                            IntfRef = None):
         obj =  {'objectId': objectId }
-        if IfIndex !=  None:
-            obj['IfIndex'] = IfIndex
+        if IntfRef !=  None:
+            obj['IntfRef'] = IntfRef
 
         reqUrl =  self.cfgUrlBase+'IPv4Intf'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3959,7 +3959,7 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createSubIPv4Intf(self,
-        :param int32 IfIndex : System generated id for the ipv4Intf where sub interface is to be configured System generated id for the ipv4Intf where sub interface is to be configured
+        :param string IntfRef : Intf name of system generated id (ifindex) of the ipv4Intf where sub interface is to be configured Intf name of system generated id (ifindex) of the ipv4Intf where sub interface is to be configured
         :param string IpAddr : Ip Address for the interface Ip Address for the interface
         :param string Type : Type of interface Type of interface
         :param string MacAddr : Mac address to be used for the sub interface. If none specified IPv4Intf mac address will be used Mac address to be used for the sub interface. If none specified IPv4Intf mac address will be used
@@ -3968,13 +3968,13 @@ class FlexSwitch( object):
 	"""
     @processReturnCode
     def createSubIPv4Intf(self,
-                          IfIndex,
+                          IntfRef,
                           IpAddr,
                           Type,
                           MacAddr,
                           Enable=False):
         obj =  { 
-                'IfIndex' : int(IfIndex),
+                'IntfRef' : IntfRef,
                 'IpAddr' : IpAddr,
                 'Type' : Type,
                 'MacAddr' : MacAddr,
@@ -3986,14 +3986,14 @@ class FlexSwitch( object):
 
     @processReturnCode
     def updateSubIPv4Intf(self,
-                          IfIndex,
+                          IntfRef,
                           IpAddr,
                           Type = None,
                           MacAddr = None,
                           Enable = None):
         obj =  {}
-        if IfIndex != None :
-            obj['IfIndex'] = int(IfIndex)
+        if IntfRef != None :
+            obj['IntfRef'] = IntfRef
 
         if IpAddr != None :
             obj['IpAddr'] = IpAddr
@@ -4033,10 +4033,10 @@ class FlexSwitch( object):
 
     @processReturnCode
     def deleteSubIPv4Intf(self,
-                          IfIndex,
+                          IntfRef,
                           IpAddr):
         obj =  { 
-                'IfIndex' : IfIndex,
+                'IntfRef' : IntfRef,
                 'IpAddr' : IpAddr,
                 }
         reqUrl =  self.cfgUrlBase+'SubIPv4Intf'
@@ -4051,10 +4051,10 @@ class FlexSwitch( object):
 
     @processReturnCode
     def getSubIPv4Intf(self,
-                       IfIndex,
+                       IntfRef,
                        IpAddr):
         obj =  { 
-                'IfIndex' : IfIndex,
+                'IntfRef' : IntfRef,
                 'IpAddr' : IpAddr,
                 }
         reqUrl =  self.stateUrlBase+'SubIPv4Intf'
