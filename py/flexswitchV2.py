@@ -1251,6 +1251,175 @@ class FlexSwitch( object):
 
 
     """
+    .. automethod :: createBfdSessionParam(self,
+        :param string Name :  Session parameters  Session parameters
+        :param uint32 RequiredMinRxInterval :  Required minimum rx interval in ms  Required minimum rx interval in ms
+        :param string AuthData :  Authentication password  Authentication password
+        :param bool DemandEnabled :  Enable or disable demand mode  Enable or disable demand mode
+        :param uint32 AuthKeyId :  Authentication key id  Authentication key id
+        :param string AuthType :  Authentication type  Authentication type
+        :param uint32 DesiredMinTxInterval :  Desired minimum tx interval in ms  Desired minimum tx interval in ms
+        :param bool AuthenticationEnabled :  Enable or disable authentication  Enable or disable authentication
+        :param uint32 RequiredMinEchoRxInterval :  Required minimum echo rx interval in ms  Required minimum echo rx interval in ms
+        :param uint32 LocalMultiplier :  Detection multiplier  Detection multiplier
+
+	"""
+    @processReturnCode
+    def createBfdSessionParam(self,
+                              Name,
+                              RequiredMinRxInterval=1000,
+                              AuthData='snaproute',
+                              DemandEnabled=False,
+                              AuthKeyId=1,
+                              AuthType='simple',
+                              DesiredMinTxInterval=1000,
+                              AuthenticationEnabled=False,
+                              RequiredMinEchoRxInterval=0,
+                              LocalMultiplier=3):
+        obj =  { 
+                'Name' : Name,
+                'RequiredMinRxInterval' : int(RequiredMinRxInterval),
+                'AuthData' : AuthData,
+                'DemandEnabled' : True if DemandEnabled else False,
+                'AuthKeyId' : int(AuthKeyId),
+                'AuthType' : AuthType,
+                'DesiredMinTxInterval' : int(DesiredMinTxInterval),
+                'AuthenticationEnabled' : True if AuthenticationEnabled else False,
+                'RequiredMinEchoRxInterval' : int(RequiredMinEchoRxInterval),
+                'LocalMultiplier' : int(LocalMultiplier),
+                }
+        reqUrl =  self.cfgUrlBase+'BfdSessionParam'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def updateBfdSessionParam(self,
+                              Name,
+                              RequiredMinRxInterval = None,
+                              AuthData = None,
+                              DemandEnabled = None,
+                              AuthKeyId = None,
+                              AuthType = None,
+                              DesiredMinTxInterval = None,
+                              AuthenticationEnabled = None,
+                              RequiredMinEchoRxInterval = None,
+                              LocalMultiplier = None):
+        obj =  {}
+        if Name != None :
+            obj['Name'] = Name
+
+        if RequiredMinRxInterval != None :
+            obj['RequiredMinRxInterval'] = int(RequiredMinRxInterval)
+
+        if AuthData != None :
+            obj['AuthData'] = AuthData
+
+        if DemandEnabled != None :
+            obj['DemandEnabled'] = True if DemandEnabled else False
+
+        if AuthKeyId != None :
+            obj['AuthKeyId'] = int(AuthKeyId)
+
+        if AuthType != None :
+            obj['AuthType'] = AuthType
+
+        if DesiredMinTxInterval != None :
+            obj['DesiredMinTxInterval'] = int(DesiredMinTxInterval)
+
+        if AuthenticationEnabled != None :
+            obj['AuthenticationEnabled'] = True if AuthenticationEnabled else False
+
+        if RequiredMinEchoRxInterval != None :
+            obj['RequiredMinEchoRxInterval'] = int(RequiredMinEchoRxInterval)
+
+        if LocalMultiplier != None :
+            obj['LocalMultiplier'] = int(LocalMultiplier)
+
+        reqUrl =  self.cfgUrlBase+'BfdSessionParam'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def updateBfdSessionParamById(self,
+                                   objectId,
+                                   RequiredMinRxInterval = None,
+                                   AuthData = None,
+                                   DemandEnabled = None,
+                                   AuthKeyId = None,
+                                   AuthType = None,
+                                   DesiredMinTxInterval = None,
+                                   AuthenticationEnabled = None,
+                                   RequiredMinEchoRxInterval = None,
+                                   LocalMultiplier = None):
+        obj =  {'objectId': objectId }
+        if RequiredMinRxInterval !=  None:
+            obj['RequiredMinRxInterval'] = RequiredMinRxInterval
+
+        if AuthData !=  None:
+            obj['AuthData'] = AuthData
+
+        if DemandEnabled !=  None:
+            obj['DemandEnabled'] = DemandEnabled
+
+        if AuthKeyId !=  None:
+            obj['AuthKeyId'] = AuthKeyId
+
+        if AuthType !=  None:
+            obj['AuthType'] = AuthType
+
+        if DesiredMinTxInterval !=  None:
+            obj['DesiredMinTxInterval'] = DesiredMinTxInterval
+
+        if AuthenticationEnabled !=  None:
+            obj['AuthenticationEnabled'] = AuthenticationEnabled
+
+        if RequiredMinEchoRxInterval !=  None:
+            obj['RequiredMinEchoRxInterval'] = RequiredMinEchoRxInterval
+
+        if LocalMultiplier !=  None:
+            obj['LocalMultiplier'] = LocalMultiplier
+
+        reqUrl =  self.cfgUrlBase+'BfdSessionParam'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def deleteBfdSessionParam(self,
+                              Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.cfgUrlBase+'BfdSessionParam'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def deleteBfdSessionParamById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'BfdSessionParam'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    @processReturnCode
+    def getBfdSessionParam(self,
+                           Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.stateUrlBase+'BfdSessionParam'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def getBfdSessionParamById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'BfdSessionParam'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllBfdSessionParams(self):
+        return self.getObjects( 'BfdSessionParam', self.cfgUrlBase)
+
+
+    """
     .. automethod :: createArpConfig(self,
         :param string ArpConfigKey :  Arp config  Arp config
         :param int32 Timeout :  Global Arp entry timeout value. Default value  Global Arp entry timeout value. Default value
@@ -1452,6 +1621,26 @@ class FlexSwitch( object):
 
     def getAllDhcpRelayGlobals(self):
         return self.getObjects( 'DhcpRelayGlobal', self.cfgUrlBase)
+
+
+    @processReturnCode
+    def getBfdSessionParamState(self,
+                                Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.stateUrlBase+'BfdSessionParam'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def getBfdSessionParamStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'BfdSessionParam'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllBfdSessionParamStates(self):
+        return self.getObjects( 'BfdSessionParam', self.stateUrlBase)
 
 
     @processReturnCode
@@ -1834,6 +2023,26 @@ class FlexSwitch( object):
 
     def getAllDhcpRelayIntfServerStates(self):
         return self.getObjects( 'DhcpRelayIntfServer', self.stateUrlBase)
+
+
+    @processReturnCode
+    def getLLDPIntfState(self,
+                         IfIndex):
+        obj =  { 
+                'IfIndex' : IfIndex,
+                }
+        reqUrl =  self.stateUrlBase+'LLDPIntf'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def getLLDPIntfStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'LLDPIntf'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllLLDPIntfStates(self):
+        return self.getObjects( 'LLDPIntf', self.stateUrlBase)
 
 
     """
@@ -3826,19 +4035,25 @@ class FlexSwitch( object):
     """
     .. automethod :: createBfdSession(self,
         :param string IpAddr :  BFD neighbor IP address  BFD neighbor IP address
+        :param string Interface :  Name of the interface this session has to be established on  Name of the interface this session has to be established on
         :param string Owner :  Module requesting BFD session configuration  Module requesting BFD session configuration
         :param bool PerLink :  Run BFD sessions on individual link of a LAG if the neighbor is reachable through LAG  Run BFD sessions on individual link of a LAG if the neighbor is reachable through LAG
+        :param string ParamName :  Name of the session parameters object to be applied on this session  Name of the session parameters object to be applied on this session
 
 	"""
     @processReturnCode
     def createBfdSession(self,
                          IpAddr,
+                         Interface='None',
                          Owner='user',
-                         PerLink=False):
+                         PerLink=False,
+                         ParamName='None'):
         obj =  { 
                 'IpAddr' : IpAddr,
+                'Interface' : Interface,
                 'Owner' : Owner,
                 'PerLink' : True if PerLink else False,
+                'ParamName' : ParamName,
                 }
         reqUrl =  self.cfgUrlBase+'BfdSession'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3847,17 +4062,25 @@ class FlexSwitch( object):
     @processReturnCode
     def updateBfdSession(self,
                          IpAddr,
+                         Interface = None,
                          Owner = None,
-                         PerLink = None):
+                         PerLink = None,
+                         ParamName = None):
         obj =  {}
         if IpAddr != None :
             obj['IpAddr'] = IpAddr
+
+        if Interface != None :
+            obj['Interface'] = Interface
 
         if Owner != None :
             obj['Owner'] = Owner
 
         if PerLink != None :
             obj['PerLink'] = True if PerLink else False
+
+        if ParamName != None :
+            obj['ParamName'] = ParamName
 
         reqUrl =  self.cfgUrlBase+'BfdSession'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3866,14 +4089,22 @@ class FlexSwitch( object):
     @processReturnCode
     def updateBfdSessionById(self,
                               objectId,
+                              Interface = None,
                               Owner = None,
-                              PerLink = None):
+                              PerLink = None,
+                              ParamName = None):
         obj =  {'objectId': objectId }
+        if Interface !=  None:
+            obj['Interface'] = Interface
+
         if Owner !=  None:
             obj['Owner'] = Owner
 
         if PerLink !=  None:
             obj['PerLink'] = PerLink
+
+        if ParamName !=  None:
+            obj['ParamName'] = ParamName
 
         reqUrl =  self.cfgUrlBase+'BfdSession'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
