@@ -1,4 +1,4 @@
-RM=rm -f
+RM=rm -rf
 DESTDIR=$(SR_CODE_BASE)/snaproute/src/out/bin
 MKDIR=mkdir -p
 RSYNC=rsync -rupE
@@ -8,7 +8,6 @@ SRCS=flexswitchV2.py\
 	  flexprint.py\
 
 all: install 
-clean:;
 install:
 	@$(MKDIR) $(DESTDIR)/sdk/py/
 	install $(SRCS) $(DESTDIR)/sdk/py/
@@ -19,4 +18,5 @@ ifndef SR_CODE_BASE
 endif
 
 clean:guard
-	 $(RM) $(DESTDIR)/$(COMP_NAME) 
+	 @echo "Cleaning $(RM) $(DESTDIR)/sdk/py"
+	 $(RM) $(DESTDIR)/sdk/py
