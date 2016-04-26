@@ -2750,26 +2750,6 @@ class FlexSwitch( object):
         return self.getObjects( 'BGPPeerGroup', self.cfgUrlBase)
 
 
-    @processReturnCode
-    def getBfdInterfaceState(self,
-                             IfIndex):
-        obj =  { 
-                'IfIndex' : IfIndex,
-                }
-        reqUrl =  self.stateUrlBase+'BfdInterface'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def getBfdInterfaceStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BfdInterface'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllBfdInterfaceStates(self):
-        return self.getObjects( 'BfdInterface', self.stateUrlBase)
-
-
     """
     .. automethod :: createBfdGlobal(self,
         :param string Bfd :  VRF id where BFD is globally enabled or disabled  VRF id where BFD is globally enabled or disabled
@@ -4047,7 +4027,7 @@ class FlexSwitch( object):
                          Interface='None',
                          Owner='user',
                          PerLink=False,
-                         ParamName='None'):
+                         ParamName='default'):
         obj =  { 
                 'IpAddr' : IpAddr,
                 'Interface' : Interface,
@@ -4988,175 +4968,6 @@ class FlexSwitch( object):
 
     def getAllOspfExtLsdbEntryStates(self):
         return self.getObjects( 'OspfExtLsdbEntry', self.stateUrlBase)
-
-
-    """
-    .. automethod :: createBfdInterface(self,
-        :param int32 IfIndex :  Interface index on which BFD configuration will be applied  Interface index on which BFD configuration will be applied
-        :param uint32 RequiredMinRxInterval :  Required minimum rx interval in ms  Required minimum rx interval in ms
-        :param string AuthData :  Authentication password  Authentication password
-        :param bool DemandEnabled :  Enable or disable demand mode  Enable or disable demand mode
-        :param uint32 AuthKeyId :  Authentication key id  Authentication key id
-        :param string AuthType :  Authentication type  Authentication type
-        :param uint32 DesiredMinTxInterval :  Desired minimum tx interval in ms  Desired minimum tx interval in ms
-        :param bool AuthenticationEnabled :  Enable or disable authentication  Enable or disable authentication
-        :param uint32 RequiredMinEchoRxInterval :  Required minimum echo rx interval in ms  Required minimum echo rx interval in ms
-        :param uint32 LocalMultiplier :  Detection multiplier  Detection multiplier
-
-	"""
-    @processReturnCode
-    def createBfdInterface(self,
-                           IfIndex,
-                           RequiredMinRxInterval=1000,
-                           AuthData='snaproute',
-                           DemandEnabled=False,
-                           AuthKeyId=1,
-                           AuthType='simple',
-                           DesiredMinTxInterval=1000,
-                           AuthenticationEnabled=False,
-                           RequiredMinEchoRxInterval=0,
-                           LocalMultiplier=3):
-        obj =  { 
-                'IfIndex' : int(IfIndex),
-                'RequiredMinRxInterval' : int(RequiredMinRxInterval),
-                'AuthData' : AuthData,
-                'DemandEnabled' : True if DemandEnabled else False,
-                'AuthKeyId' : int(AuthKeyId),
-                'AuthType' : AuthType,
-                'DesiredMinTxInterval' : int(DesiredMinTxInterval),
-                'AuthenticationEnabled' : True if AuthenticationEnabled else False,
-                'RequiredMinEchoRxInterval' : int(RequiredMinEchoRxInterval),
-                'LocalMultiplier' : int(LocalMultiplier),
-                }
-        reqUrl =  self.cfgUrlBase+'BfdInterface'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def updateBfdInterface(self,
-                           IfIndex,
-                           RequiredMinRxInterval = None,
-                           AuthData = None,
-                           DemandEnabled = None,
-                           AuthKeyId = None,
-                           AuthType = None,
-                           DesiredMinTxInterval = None,
-                           AuthenticationEnabled = None,
-                           RequiredMinEchoRxInterval = None,
-                           LocalMultiplier = None):
-        obj =  {}
-        if IfIndex != None :
-            obj['IfIndex'] = int(IfIndex)
-
-        if RequiredMinRxInterval != None :
-            obj['RequiredMinRxInterval'] = int(RequiredMinRxInterval)
-
-        if AuthData != None :
-            obj['AuthData'] = AuthData
-
-        if DemandEnabled != None :
-            obj['DemandEnabled'] = True if DemandEnabled else False
-
-        if AuthKeyId != None :
-            obj['AuthKeyId'] = int(AuthKeyId)
-
-        if AuthType != None :
-            obj['AuthType'] = AuthType
-
-        if DesiredMinTxInterval != None :
-            obj['DesiredMinTxInterval'] = int(DesiredMinTxInterval)
-
-        if AuthenticationEnabled != None :
-            obj['AuthenticationEnabled'] = True if AuthenticationEnabled else False
-
-        if RequiredMinEchoRxInterval != None :
-            obj['RequiredMinEchoRxInterval'] = int(RequiredMinEchoRxInterval)
-
-        if LocalMultiplier != None :
-            obj['LocalMultiplier'] = int(LocalMultiplier)
-
-        reqUrl =  self.cfgUrlBase+'BfdInterface'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def updateBfdInterfaceById(self,
-                                objectId,
-                                RequiredMinRxInterval = None,
-                                AuthData = None,
-                                DemandEnabled = None,
-                                AuthKeyId = None,
-                                AuthType = None,
-                                DesiredMinTxInterval = None,
-                                AuthenticationEnabled = None,
-                                RequiredMinEchoRxInterval = None,
-                                LocalMultiplier = None):
-        obj =  {'objectId': objectId }
-        if RequiredMinRxInterval !=  None:
-            obj['RequiredMinRxInterval'] = RequiredMinRxInterval
-
-        if AuthData !=  None:
-            obj['AuthData'] = AuthData
-
-        if DemandEnabled !=  None:
-            obj['DemandEnabled'] = DemandEnabled
-
-        if AuthKeyId !=  None:
-            obj['AuthKeyId'] = AuthKeyId
-
-        if AuthType !=  None:
-            obj['AuthType'] = AuthType
-
-        if DesiredMinTxInterval !=  None:
-            obj['DesiredMinTxInterval'] = DesiredMinTxInterval
-
-        if AuthenticationEnabled !=  None:
-            obj['AuthenticationEnabled'] = AuthenticationEnabled
-
-        if RequiredMinEchoRxInterval !=  None:
-            obj['RequiredMinEchoRxInterval'] = RequiredMinEchoRxInterval
-
-        if LocalMultiplier !=  None:
-            obj['LocalMultiplier'] = LocalMultiplier
-
-        reqUrl =  self.cfgUrlBase+'BfdInterface'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def deleteBfdInterface(self,
-                           IfIndex):
-        obj =  { 
-                'IfIndex' : IfIndex,
-                }
-        reqUrl =  self.cfgUrlBase+'BfdInterface'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def deleteBfdInterfaceById(self, objectId ):
-        reqUrl =  self.cfgUrlBase+'BfdInterface'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
-        return r
-
-    @processReturnCode
-    def getBfdInterface(self,
-                        IfIndex):
-        obj =  { 
-                'IfIndex' : IfIndex,
-                }
-        reqUrl =  self.stateUrlBase+'BfdInterface'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def getBfdInterfaceById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BfdInterface'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllBfdInterfaces(self):
-        return self.getObjects( 'BfdInterface', self.cfgUrlBase)
 
 
     """
