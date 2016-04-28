@@ -1500,26 +1500,261 @@ class FlexSwitch( object):
         return self.getObjects( 'ArpConfig', self.cfgUrlBase)
 
 
+    """
+    .. automethod :: createBGPPeerGroup(self,
+        :param string Name :  Name of the BGP peer group  Name of the BGP peer group
+        :param uint32 PeerAS :  Peer AS of the BGP neighbor  Peer AS of the BGP neighbor
+        :param uint8 MaxPrefixesRestartTimer :  Time to wait before we start BGP peer session when we receive max prefixes  Time to wait before we start BGP peer session when we receive max prefixes
+        :param bool RouteReflectorClient :  Set/Clear BGP neighbor as a route reflector client  Set/Clear BGP neighbor as a route reflector client
+        :param string Description :  Description of the BGP neighbor  Description of the BGP neighbor
+        :param uint8 MultiHopTTL :  TTL for multi hop BGP neighbor  TTL for multi hop BGP neighbor
+        :param bool MaxPrefixesDisconnect :  Disconnect the BGP peer session when we receive the max prefixes from the neighbor  Disconnect the BGP peer session when we receive the max prefixes from the neighbor
+        :param uint32 LocalAS :  Local AS of the BGP neighbor  Local AS of the BGP neighbor
+        :param uint32 KeepaliveTime :  Keep alive time for the BGP neighbor  Keep alive time for the BGP neighbor
+        :param uint32 RouteReflectorClusterId :  Cluster Id of the internal BGP neighbor route reflector client  Cluster Id of the internal BGP neighbor route reflector client
+        :param uint32 MaxPrefixes :  Maximum number of prefixes that can be received from the BGP neighbor  Maximum number of prefixes that can be received from the BGP neighbor
+        :param uint8 AddPathsMaxTx :  Max number of additional paths that can be transmitted to BGP neighbor  Max number of additional paths that can be transmitted to BGP neighbor
+        :param bool MultiHopEnable :  Enable/Disable multi hop for BGP neighbor  Enable/Disable multi hop for BGP neighbor
+        :param bool AddPathsRx :  Receive additional paths from BGP neighbor  Receive additional paths from BGP neighbor
+        :param uint8 MaxPrefixesThresholdPct :  The percentage of maximum prefixes before we start logging  The percentage of maximum prefixes before we start logging
+        :param uint32 HoldTime :  Hold time for the BGP neighbor  Hold time for the BGP neighbor
+        :param string AuthPassword :  Password to connect to the BGP neighbor  Password to connect to the BGP neighbor
+        :param uint32 ConnectRetryTime :  Connect retry time to connect to BGP neighbor after disconnect  Connect retry time to connect to BGP neighbor after disconnect
+
+	"""
     @processReturnCode
-    def getOspfNbrEntryState(self,
-                             NbrIpAddr,
-                             NbrAddressLessIndex):
+    def createBGPPeerGroup(self,
+                           Name,
+                           PeerAS,
+                           MaxPrefixesRestartTimer=0,
+                           RouteReflectorClient=False,
+                           Description='',
+                           MultiHopTTL=0,
+                           MaxPrefixesDisconnect=False,
+                           LocalAS=0,
+                           KeepaliveTime=60,
+                           RouteReflectorClusterId=0,
+                           MaxPrefixes=0,
+                           AddPathsMaxTx=0,
+                           MultiHopEnable=False,
+                           AddPathsRx=False,
+                           MaxPrefixesThresholdPct=0,
+                           HoldTime=180,
+                           AuthPassword='',
+                           ConnectRetryTime=60):
         obj =  { 
-                'NbrIpAddr' : NbrIpAddr,
-                'NbrAddressLessIndex' : NbrAddressLessIndex,
+                'Name' : Name,
+                'PeerAS' : int(PeerAS),
+                'MaxPrefixesRestartTimer' : int(MaxPrefixesRestartTimer),
+                'RouteReflectorClient' : True if RouteReflectorClient else False,
+                'Description' : Description,
+                'MultiHopTTL' : int(MultiHopTTL),
+                'MaxPrefixesDisconnect' : True if MaxPrefixesDisconnect else False,
+                'LocalAS' : int(LocalAS),
+                'KeepaliveTime' : int(KeepaliveTime),
+                'RouteReflectorClusterId' : int(RouteReflectorClusterId),
+                'MaxPrefixes' : int(MaxPrefixes),
+                'AddPathsMaxTx' : int(AddPathsMaxTx),
+                'MultiHopEnable' : True if MultiHopEnable else False,
+                'AddPathsRx' : True if AddPathsRx else False,
+                'MaxPrefixesThresholdPct' : int(MaxPrefixesThresholdPct),
+                'HoldTime' : int(HoldTime),
+                'AuthPassword' : AuthPassword,
+                'ConnectRetryTime' : int(ConnectRetryTime),
                 }
-        reqUrl =  self.stateUrlBase+'OspfNbrEntry'
+        reqUrl =  self.cfgUrlBase+'BGPPeerGroup'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def updateBGPPeerGroup(self,
+                           Name,
+                           PeerAS = None,
+                           MaxPrefixesRestartTimer = None,
+                           RouteReflectorClient = None,
+                           Description = None,
+                           MultiHopTTL = None,
+                           MaxPrefixesDisconnect = None,
+                           LocalAS = None,
+                           KeepaliveTime = None,
+                           RouteReflectorClusterId = None,
+                           MaxPrefixes = None,
+                           AddPathsMaxTx = None,
+                           MultiHopEnable = None,
+                           AddPathsRx = None,
+                           MaxPrefixesThresholdPct = None,
+                           HoldTime = None,
+                           AuthPassword = None,
+                           ConnectRetryTime = None):
+        obj =  {}
+        if Name != None :
+            obj['Name'] = Name
+
+        if PeerAS != None :
+            obj['PeerAS'] = int(PeerAS)
+
+        if MaxPrefixesRestartTimer != None :
+            obj['MaxPrefixesRestartTimer'] = int(MaxPrefixesRestartTimer)
+
+        if RouteReflectorClient != None :
+            obj['RouteReflectorClient'] = True if RouteReflectorClient else False
+
+        if Description != None :
+            obj['Description'] = Description
+
+        if MultiHopTTL != None :
+            obj['MultiHopTTL'] = int(MultiHopTTL)
+
+        if MaxPrefixesDisconnect != None :
+            obj['MaxPrefixesDisconnect'] = True if MaxPrefixesDisconnect else False
+
+        if LocalAS != None :
+            obj['LocalAS'] = int(LocalAS)
+
+        if KeepaliveTime != None :
+            obj['KeepaliveTime'] = int(KeepaliveTime)
+
+        if RouteReflectorClusterId != None :
+            obj['RouteReflectorClusterId'] = int(RouteReflectorClusterId)
+
+        if MaxPrefixes != None :
+            obj['MaxPrefixes'] = int(MaxPrefixes)
+
+        if AddPathsMaxTx != None :
+            obj['AddPathsMaxTx'] = int(AddPathsMaxTx)
+
+        if MultiHopEnable != None :
+            obj['MultiHopEnable'] = True if MultiHopEnable else False
+
+        if AddPathsRx != None :
+            obj['AddPathsRx'] = True if AddPathsRx else False
+
+        if MaxPrefixesThresholdPct != None :
+            obj['MaxPrefixesThresholdPct'] = int(MaxPrefixesThresholdPct)
+
+        if HoldTime != None :
+            obj['HoldTime'] = int(HoldTime)
+
+        if AuthPassword != None :
+            obj['AuthPassword'] = AuthPassword
+
+        if ConnectRetryTime != None :
+            obj['ConnectRetryTime'] = int(ConnectRetryTime)
+
+        reqUrl =  self.cfgUrlBase+'BGPPeerGroup'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def updateBGPPeerGroupById(self,
+                                objectId,
+                                PeerAS = None,
+                                MaxPrefixesRestartTimer = None,
+                                RouteReflectorClient = None,
+                                Description = None,
+                                MultiHopTTL = None,
+                                MaxPrefixesDisconnect = None,
+                                LocalAS = None,
+                                KeepaliveTime = None,
+                                RouteReflectorClusterId = None,
+                                MaxPrefixes = None,
+                                AddPathsMaxTx = None,
+                                MultiHopEnable = None,
+                                AddPathsRx = None,
+                                MaxPrefixesThresholdPct = None,
+                                HoldTime = None,
+                                AuthPassword = None,
+                                ConnectRetryTime = None):
+        obj =  {'objectId': objectId }
+        if PeerAS !=  None:
+            obj['PeerAS'] = PeerAS
+
+        if MaxPrefixesRestartTimer !=  None:
+            obj['MaxPrefixesRestartTimer'] = MaxPrefixesRestartTimer
+
+        if RouteReflectorClient !=  None:
+            obj['RouteReflectorClient'] = RouteReflectorClient
+
+        if Description !=  None:
+            obj['Description'] = Description
+
+        if MultiHopTTL !=  None:
+            obj['MultiHopTTL'] = MultiHopTTL
+
+        if MaxPrefixesDisconnect !=  None:
+            obj['MaxPrefixesDisconnect'] = MaxPrefixesDisconnect
+
+        if LocalAS !=  None:
+            obj['LocalAS'] = LocalAS
+
+        if KeepaliveTime !=  None:
+            obj['KeepaliveTime'] = KeepaliveTime
+
+        if RouteReflectorClusterId !=  None:
+            obj['RouteReflectorClusterId'] = RouteReflectorClusterId
+
+        if MaxPrefixes !=  None:
+            obj['MaxPrefixes'] = MaxPrefixes
+
+        if AddPathsMaxTx !=  None:
+            obj['AddPathsMaxTx'] = AddPathsMaxTx
+
+        if MultiHopEnable !=  None:
+            obj['MultiHopEnable'] = MultiHopEnable
+
+        if AddPathsRx !=  None:
+            obj['AddPathsRx'] = AddPathsRx
+
+        if MaxPrefixesThresholdPct !=  None:
+            obj['MaxPrefixesThresholdPct'] = MaxPrefixesThresholdPct
+
+        if HoldTime !=  None:
+            obj['HoldTime'] = HoldTime
+
+        if AuthPassword !=  None:
+            obj['AuthPassword'] = AuthPassword
+
+        if ConnectRetryTime !=  None:
+            obj['ConnectRetryTime'] = ConnectRetryTime
+
+        reqUrl =  self.cfgUrlBase+'BGPPeerGroup'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def deleteBGPPeerGroup(self,
+                           Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.cfgUrlBase+'BGPPeerGroup'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def deleteBGPPeerGroupById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'BGPPeerGroup'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    @processReturnCode
+    def getBGPPeerGroup(self,
+                        Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.stateUrlBase+'BGPPeerGroup'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
-    def getOspfNbrEntryStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'OspfNbrEntry'+"/%s"%(objectId)
+    def getBGPPeerGroupById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'BGPPeerGroup'+"/%s"%(objectId)
         r = requests.get(reqUrl, data=None, headers=headers) 
         return r
 
-    def getAllOspfNbrEntryStates(self):
-        return self.getObjects( 'OspfNbrEntry', self.stateUrlBase)
+    def getAllBGPPeerGroups(self):
+        return self.getObjects( 'BGPPeerGroup', self.cfgUrlBase)
 
 
     @processReturnCode
@@ -2493,261 +2728,26 @@ class FlexSwitch( object):
         return self.getObjects( 'MacTableEntry', self.stateUrlBase)
 
 
-    """
-    .. automethod :: createBGPPeerGroup(self,
-        :param string Name :  Name of the BGP peer group  Name of the BGP peer group
-        :param uint32 PeerAS :  Peer AS of the BGP neighbor  Peer AS of the BGP neighbor
-        :param uint8 MaxPrefixesRestartTimer :  Time to wait before we start BGP peer session when we receive max prefixes  Time to wait before we start BGP peer session when we receive max prefixes
-        :param bool RouteReflectorClient :  Set/Clear BGP neighbor as a route reflector client  Set/Clear BGP neighbor as a route reflector client
-        :param string Description :  Description of the BGP neighbor  Description of the BGP neighbor
-        :param uint8 MultiHopTTL :  TTL for multi hop BGP neighbor  TTL for multi hop BGP neighbor
-        :param bool MaxPrefixesDisconnect :  Disconnect the BGP peer session when we receive the max prefixes from the neighbor  Disconnect the BGP peer session when we receive the max prefixes from the neighbor
-        :param uint32 LocalAS :  Local AS of the BGP neighbor  Local AS of the BGP neighbor
-        :param uint32 KeepaliveTime :  Keep alive time for the BGP neighbor  Keep alive time for the BGP neighbor
-        :param uint32 RouteReflectorClusterId :  Cluster Id of the internal BGP neighbor route reflector client  Cluster Id of the internal BGP neighbor route reflector client
-        :param uint32 MaxPrefixes :  Maximum number of prefixes that can be received from the BGP neighbor  Maximum number of prefixes that can be received from the BGP neighbor
-        :param uint8 AddPathsMaxTx :  Max number of additional paths that can be transmitted to BGP neighbor  Max number of additional paths that can be transmitted to BGP neighbor
-        :param bool MultiHopEnable :  Enable/Disable multi hop for BGP neighbor  Enable/Disable multi hop for BGP neighbor
-        :param bool AddPathsRx :  Receive additional paths from BGP neighbor  Receive additional paths from BGP neighbor
-        :param uint8 MaxPrefixesThresholdPct :  The percentage of maximum prefixes before we start logging  The percentage of maximum prefixes before we start logging
-        :param uint32 HoldTime :  Hold time for the BGP neighbor  Hold time for the BGP neighbor
-        :param string AuthPassword :  Password to connect to the BGP neighbor  Password to connect to the BGP neighbor
-        :param uint32 ConnectRetryTime :  Connect retry time to connect to BGP neighbor after disconnect  Connect retry time to connect to BGP neighbor after disconnect
-
-	"""
     @processReturnCode
-    def createBGPPeerGroup(self,
-                           Name,
-                           PeerAS,
-                           MaxPrefixesRestartTimer=0,
-                           RouteReflectorClient=False,
-                           Description='',
-                           MultiHopTTL=0,
-                           MaxPrefixesDisconnect=False,
-                           LocalAS=0,
-                           KeepaliveTime=60,
-                           RouteReflectorClusterId=0,
-                           MaxPrefixes=0,
-                           AddPathsMaxTx=0,
-                           MultiHopEnable=False,
-                           AddPathsRx=False,
-                           MaxPrefixesThresholdPct=0,
-                           HoldTime=180,
-                           AuthPassword='',
-                           ConnectRetryTime=60):
+    def getOspfNbrEntryState(self,
+                             NbrIpAddr,
+                             NbrAddressLessIndex):
         obj =  { 
-                'Name' : Name,
-                'PeerAS' : int(PeerAS),
-                'MaxPrefixesRestartTimer' : int(MaxPrefixesRestartTimer),
-                'RouteReflectorClient' : True if RouteReflectorClient else False,
-                'Description' : Description,
-                'MultiHopTTL' : int(MultiHopTTL),
-                'MaxPrefixesDisconnect' : True if MaxPrefixesDisconnect else False,
-                'LocalAS' : int(LocalAS),
-                'KeepaliveTime' : int(KeepaliveTime),
-                'RouteReflectorClusterId' : int(RouteReflectorClusterId),
-                'MaxPrefixes' : int(MaxPrefixes),
-                'AddPathsMaxTx' : int(AddPathsMaxTx),
-                'MultiHopEnable' : True if MultiHopEnable else False,
-                'AddPathsRx' : True if AddPathsRx else False,
-                'MaxPrefixesThresholdPct' : int(MaxPrefixesThresholdPct),
-                'HoldTime' : int(HoldTime),
-                'AuthPassword' : AuthPassword,
-                'ConnectRetryTime' : int(ConnectRetryTime),
+                'NbrIpAddr' : NbrIpAddr,
+                'NbrAddressLessIndex' : NbrAddressLessIndex,
                 }
-        reqUrl =  self.cfgUrlBase+'BGPPeerGroup'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def updateBGPPeerGroup(self,
-                           Name,
-                           PeerAS = None,
-                           MaxPrefixesRestartTimer = None,
-                           RouteReflectorClient = None,
-                           Description = None,
-                           MultiHopTTL = None,
-                           MaxPrefixesDisconnect = None,
-                           LocalAS = None,
-                           KeepaliveTime = None,
-                           RouteReflectorClusterId = None,
-                           MaxPrefixes = None,
-                           AddPathsMaxTx = None,
-                           MultiHopEnable = None,
-                           AddPathsRx = None,
-                           MaxPrefixesThresholdPct = None,
-                           HoldTime = None,
-                           AuthPassword = None,
-                           ConnectRetryTime = None):
-        obj =  {}
-        if Name != None :
-            obj['Name'] = Name
-
-        if PeerAS != None :
-            obj['PeerAS'] = int(PeerAS)
-
-        if MaxPrefixesRestartTimer != None :
-            obj['MaxPrefixesRestartTimer'] = int(MaxPrefixesRestartTimer)
-
-        if RouteReflectorClient != None :
-            obj['RouteReflectorClient'] = True if RouteReflectorClient else False
-
-        if Description != None :
-            obj['Description'] = Description
-
-        if MultiHopTTL != None :
-            obj['MultiHopTTL'] = int(MultiHopTTL)
-
-        if MaxPrefixesDisconnect != None :
-            obj['MaxPrefixesDisconnect'] = True if MaxPrefixesDisconnect else False
-
-        if LocalAS != None :
-            obj['LocalAS'] = int(LocalAS)
-
-        if KeepaliveTime != None :
-            obj['KeepaliveTime'] = int(KeepaliveTime)
-
-        if RouteReflectorClusterId != None :
-            obj['RouteReflectorClusterId'] = int(RouteReflectorClusterId)
-
-        if MaxPrefixes != None :
-            obj['MaxPrefixes'] = int(MaxPrefixes)
-
-        if AddPathsMaxTx != None :
-            obj['AddPathsMaxTx'] = int(AddPathsMaxTx)
-
-        if MultiHopEnable != None :
-            obj['MultiHopEnable'] = True if MultiHopEnable else False
-
-        if AddPathsRx != None :
-            obj['AddPathsRx'] = True if AddPathsRx else False
-
-        if MaxPrefixesThresholdPct != None :
-            obj['MaxPrefixesThresholdPct'] = int(MaxPrefixesThresholdPct)
-
-        if HoldTime != None :
-            obj['HoldTime'] = int(HoldTime)
-
-        if AuthPassword != None :
-            obj['AuthPassword'] = AuthPassword
-
-        if ConnectRetryTime != None :
-            obj['ConnectRetryTime'] = int(ConnectRetryTime)
-
-        reqUrl =  self.cfgUrlBase+'BGPPeerGroup'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def updateBGPPeerGroupById(self,
-                                objectId,
-                                PeerAS = None,
-                                MaxPrefixesRestartTimer = None,
-                                RouteReflectorClient = None,
-                                Description = None,
-                                MultiHopTTL = None,
-                                MaxPrefixesDisconnect = None,
-                                LocalAS = None,
-                                KeepaliveTime = None,
-                                RouteReflectorClusterId = None,
-                                MaxPrefixes = None,
-                                AddPathsMaxTx = None,
-                                MultiHopEnable = None,
-                                AddPathsRx = None,
-                                MaxPrefixesThresholdPct = None,
-                                HoldTime = None,
-                                AuthPassword = None,
-                                ConnectRetryTime = None):
-        obj =  {'objectId': objectId }
-        if PeerAS !=  None:
-            obj['PeerAS'] = PeerAS
-
-        if MaxPrefixesRestartTimer !=  None:
-            obj['MaxPrefixesRestartTimer'] = MaxPrefixesRestartTimer
-
-        if RouteReflectorClient !=  None:
-            obj['RouteReflectorClient'] = RouteReflectorClient
-
-        if Description !=  None:
-            obj['Description'] = Description
-
-        if MultiHopTTL !=  None:
-            obj['MultiHopTTL'] = MultiHopTTL
-
-        if MaxPrefixesDisconnect !=  None:
-            obj['MaxPrefixesDisconnect'] = MaxPrefixesDisconnect
-
-        if LocalAS !=  None:
-            obj['LocalAS'] = LocalAS
-
-        if KeepaliveTime !=  None:
-            obj['KeepaliveTime'] = KeepaliveTime
-
-        if RouteReflectorClusterId !=  None:
-            obj['RouteReflectorClusterId'] = RouteReflectorClusterId
-
-        if MaxPrefixes !=  None:
-            obj['MaxPrefixes'] = MaxPrefixes
-
-        if AddPathsMaxTx !=  None:
-            obj['AddPathsMaxTx'] = AddPathsMaxTx
-
-        if MultiHopEnable !=  None:
-            obj['MultiHopEnable'] = MultiHopEnable
-
-        if AddPathsRx !=  None:
-            obj['AddPathsRx'] = AddPathsRx
-
-        if MaxPrefixesThresholdPct !=  None:
-            obj['MaxPrefixesThresholdPct'] = MaxPrefixesThresholdPct
-
-        if HoldTime !=  None:
-            obj['HoldTime'] = HoldTime
-
-        if AuthPassword !=  None:
-            obj['AuthPassword'] = AuthPassword
-
-        if ConnectRetryTime !=  None:
-            obj['ConnectRetryTime'] = ConnectRetryTime
-
-        reqUrl =  self.cfgUrlBase+'BGPPeerGroup'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def deleteBGPPeerGroup(self,
-                           Name):
-        obj =  { 
-                'Name' : Name,
-                }
-        reqUrl =  self.cfgUrlBase+'BGPPeerGroup'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def deleteBGPPeerGroupById(self, objectId ):
-        reqUrl =  self.cfgUrlBase+'BGPPeerGroup'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
-        return r
-
-    @processReturnCode
-    def getBGPPeerGroup(self,
-                        Name):
-        obj =  { 
-                'Name' : Name,
-                }
-        reqUrl =  self.stateUrlBase+'BGPPeerGroup'
+        reqUrl =  self.stateUrlBase+'OspfNbrEntry'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
-    def getBGPPeerGroupById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BGPPeerGroup'+"/%s"%(objectId)
+    def getOspfNbrEntryStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'OspfNbrEntry'+"/%s"%(objectId)
         r = requests.get(reqUrl, data=None, headers=headers) 
         return r
 
-    def getAllBGPPeerGroups(self):
-        return self.getObjects( 'BGPPeerGroup', self.cfgUrlBase)
+    def getAllOspfNbrEntryStates(self):
+        return self.getObjects( 'OspfNbrEntry', self.stateUrlBase)
 
 
     """
@@ -2956,6 +2956,26 @@ class FlexSwitch( object):
         return self.getObjects( 'BGPPolicyStmt', self.cfgUrlBase)
 
 
+    @processReturnCode
+    def getBGPPolicyStmtState(self,
+                              Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.stateUrlBase+'BGPPolicyStmt'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def getBGPPolicyStmtStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'BGPPolicyStmt'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllBGPPolicyStmtStates(self):
+        return self.getObjects( 'BGPPolicyStmt', self.stateUrlBase)
+
+
     """
     .. automethod :: createOspfAreaAggregateEntry(self,
         :param int32 AreaAggregateLsdbType :  The type of the address aggregate.  This field specifies the Lsdb type that this address aggregate applies to.  The type of the address aggregate.  This field specifies the Lsdb type that this address aggregate applies to.
@@ -3083,11 +3103,9 @@ class FlexSwitch( object):
 
     @processReturnCode
     def getIPv4RouteState(self,
-                          DestinationNw,
-                          NextHopIp):
+                          DestinationNw):
         obj =  { 
                 'DestinationNw' : DestinationNw,
-                'NextHopIp' : NextHopIp,
                 }
         reqUrl =  self.stateUrlBase+'IPv4Route'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3274,17 +3292,17 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createIPv4Intf(self,
-        :param string IpAddr :  Interface IP/Net mask in CIDR format to provision on switch interface  Interface IP/Net mask in CIDR format to provision on switch interface
         :param string IntfRef :  Interface name or ifindex of port/lag or vlan on which this IPv4 object is configured  Interface name or ifindex of port/lag or vlan on which this IPv4 object is configured
+        :param string IpAddr :  Interface IP/Net mask in CIDR format to provision on switch interface  Interface IP/Net mask in CIDR format to provision on switch interface
 
 	"""
     @processReturnCode
     def createIPv4Intf(self,
-                       IpAddr,
-                       IntfRef):
+                       IntfRef,
+                       IpAddr):
         obj =  { 
-                'IpAddr' : IpAddr,
                 'IntfRef' : IntfRef,
+                'IpAddr' : IpAddr,
                 }
         reqUrl =  self.cfgUrlBase+'IPv4Intf'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3292,14 +3310,14 @@ class FlexSwitch( object):
 
     @processReturnCode
     def updateIPv4Intf(self,
-                       IpAddr,
-                       IntfRef = None):
+                       IntfRef,
+                       IpAddr = None):
         obj =  {}
-        if IpAddr != None :
-            obj['IpAddr'] = IpAddr
-
         if IntfRef != None :
             obj['IntfRef'] = IntfRef
+
+        if IpAddr != None :
+            obj['IpAddr'] = IpAddr
 
         reqUrl =  self.cfgUrlBase+'IPv4Intf'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3308,10 +3326,10 @@ class FlexSwitch( object):
     @processReturnCode
     def updateIPv4IntfById(self,
                             objectId,
-                            IntfRef = None):
+                            IpAddr = None):
         obj =  {'objectId': objectId }
-        if IntfRef !=  None:
-            obj['IntfRef'] = IntfRef
+        if IpAddr !=  None:
+            obj['IpAddr'] = IpAddr
 
         reqUrl =  self.cfgUrlBase+'IPv4Intf'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3319,9 +3337,9 @@ class FlexSwitch( object):
 
     @processReturnCode
     def deleteIPv4Intf(self,
-                       IpAddr):
+                       IntfRef):
         obj =  { 
-                'IpAddr' : IpAddr,
+                'IntfRef' : IntfRef,
                 }
         reqUrl =  self.cfgUrlBase+'IPv4Intf'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -3335,9 +3353,9 @@ class FlexSwitch( object):
 
     @processReturnCode
     def getIPv4Intf(self,
-                    IpAddr):
+                    IntfRef):
         obj =  { 
-                'IpAddr' : IpAddr,
+                'IntfRef' : IntfRef,
                 }
         reqUrl =  self.stateUrlBase+'IPv4Intf'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -4973,16 +4991,16 @@ class FlexSwitch( object):
     """
     .. automethod :: createSystemLogging(self,
         :param string SRLogger :  Global logging  Global logging
-        :param string SystemLogging :  Global logging  Global logging
+        :param string Logging :  Global logging  Global logging
 
 	"""
     @processReturnCode
     def createSystemLogging(self,
                             SRLogger,
-                            SystemLogging='on'):
+                            Logging='on'):
         obj =  { 
                 'SRLogger' : SRLogger,
-                'SystemLogging' : SystemLogging,
+                'Logging' : Logging,
                 }
         reqUrl =  self.cfgUrlBase+'SystemLogging'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -4991,13 +5009,13 @@ class FlexSwitch( object):
     @processReturnCode
     def updateSystemLogging(self,
                             SRLogger,
-                            SystemLogging = None):
+                            Logging = None):
         obj =  {}
         if SRLogger != None :
             obj['SRLogger'] = SRLogger
 
-        if SystemLogging != None :
-            obj['SystemLogging'] = SystemLogging
+        if Logging != None :
+            obj['Logging'] = Logging
 
         reqUrl =  self.cfgUrlBase+'SystemLogging'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -5006,10 +5024,10 @@ class FlexSwitch( object):
     @processReturnCode
     def updateSystemLoggingById(self,
                                  objectId,
-                                 SystemLogging = None):
+                                 Logging = None):
         obj =  {'objectId': objectId }
-        if SystemLogging !=  None:
-            obj['SystemLogging'] = SystemLogging
+        if Logging !=  None:
+            obj['Logging'] = Logging
 
         reqUrl =  self.cfgUrlBase+'SystemLogging'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -5220,9 +5238,9 @@ class FlexSwitch( object):
 
     @processReturnCode
     def getIPv4IntfState(self,
-                         IpAddr):
+                         IntfRef):
         obj =  { 
-                'IpAddr' : IpAddr,
+                'IntfRef' : IntfRef,
                 }
         reqUrl =  self.stateUrlBase+'IPv4Intf'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -5709,23 +5727,23 @@ class FlexSwitch( object):
 
 
     @processReturnCode
-    def getBGPPolicyStmtState(self,
-                              Name):
+    def getDaemonState(self,
+                       Name):
         obj =  { 
                 'Name' : Name,
                 }
-        reqUrl =  self.stateUrlBase+'BGPPolicyStmt'
+        reqUrl =  self.stateUrlBase+'Daemon'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
-    def getBGPPolicyStmtStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BGPPolicyStmt'+"/%s"%(objectId)
+    def getDaemonStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'Daemon'+"/%s"%(objectId)
         r = requests.get(reqUrl, data=None, headers=headers) 
         return r
 
-    def getAllBGPPolicyStmtStates(self):
-        return self.getObjects( 'BGPPolicyStmt', self.stateUrlBase)
+    def getAllDaemonStates(self):
+        return self.getObjects( 'Daemon', self.stateUrlBase)
 
 
     """
