@@ -14,6 +14,7 @@ Ubuntu/Debian Installation via Linux
    *Default username: admin, default password: snaproute*
 
 :: 
+	
 	Adams-MacBook-Pro:Apps acasella$ scp flexswitch_0.0.80_amd64.deb admin@10.1.10.240:./
 	admin@10.1.10.240's password: 
 	flexswitch_0.0.80_amd64.deb                                                                                                                                                    100%   59MB   9.9MB/s   00:06 ``
@@ -21,6 +22,7 @@ Ubuntu/Debian Installation via Linux
 2. Once complete login to the whitebox switch and utilize dpkg to install package on the system:
 
 :: 
+	
 	admin@localhost:~$ sudo dpkg -i flexswitch_0.0.80_amd64_wedge.deb 
 	(Reading database ... 20599 files and directories currently installed.)
 	Preparing to unpack flexswitch_0.0.80_amd64_wedge.deb ...
@@ -65,6 +67,7 @@ Ubuntu/Debian Installation via Linux
 3. Verify FlexSwitch is up and running 
 
 ::
+
 	admin@localhost:~$ sudo service flexswitch status
 	[OK] Daemon asicd ... success!
 	[OK] Daemon sysd ... success!
@@ -84,6 +87,7 @@ Ubuntu/Debian Installation via Linux
 4. To change the daemons that start on restart edit the file /opt/flexswitch/params/clients.json and remove or add daemon specific JSON, I.E. *{"Name": "<daemon>", "Port": <port-number>}*
 
 ::
+
 	[
 		{"Name": "asicd",
 		 "Port": 4000},
@@ -134,341 +138,344 @@ Ubuntu/Debian Installation via FlexSwitch API
 1. Utilize HTTP PUT the FlexSwitch debian package to the whitebox switch.  Example below is done utilizing Linux cURL command, 
 
 ::
+
 	curl --user admin:snaproute --upload-file flexswitch_0.0.80_amd64.deb https://10.1.10.244:8080/public/v1/upload/
-    % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-	                                 Dload  Upload   Total   Spent    Left  Speed
-	100   254  100   254    0     0  38760      0 --:--:-- --:--:-- --:--:-- 42333
-	
+	    % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+						 Dload  Upload   Total   Spent    Left  Speed
+		100   254  100   254    0     0  38760      0 --:--:-- --:--:-- --:--:-- 42333
+		
 2. Once the file is uploaded, list all files that are available for download
 
 ::
-    curl --user admin:snaproute --upload-file flexswitch_0.0.80_amd64.deb https://10.1.10.244:8080/public/v1/upload/
-    % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-	                                 Dload  Upload   Total   Spent    Left  Speed
-	100   254  100   254    0     0  38760      0 --:--:-- --:--:-- --:--:-- 42333
-	{
-	"StateObjects": [
-	{
-		"ObjectId": "",
-		{
-		  "Object": {
-		  "File":"flexswitch_0.0.80_amd64.deb",
-		  "Type":"Debian package",
-		  "MD5":"07f67fc21949981007caf7dbee0908b0"
-		   }
-		},
-		"ObjectId": "",
-		{
-		  "Object": {
-		  "File":"flexswitch_0.0.70_amd64.deb",
-		  "Type":"Debian package",
-		  "MD5":"96d511af7d64a20aeee1d1ebf0ce89ed"
-		   }
-		},
-	  ]
-	}
-	
-3. Trigger upgrade of device by specifying the file, time, and specifying "Yes" operator to start the upgrade. 
 
-::
-	curl --user admin:snaproute -H "Content-Type: application/json" -d '{"File":"flexswitch_0.0.80_amd64.deb", "Upgrade":"Yes", "StartTime":"Now"}' https://10.1.10.242:8080/public/v1/upgrade/
-    % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-	                                 Dload  Upload   Total   Spent    Left  Speed
-	100   254  100   254    0     0  38760      0 --:--:-- --:--:-- --:--:-- 42333
-	{
+	curl --user admin:snaproute --upload-file flexswitch_0.0.80_amd64.deb https://10.1.10.244:8080/public/v1/upload/
+	    % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+						 Dload  Upload   Total   Spent    Left  Speed
+		100   254  100   254    0     0  38760      0 --:--:-- --:--:-- --:--:-- 42333
+		{
 		"StateObjects": [
 		{
 			"ObjectId": "",
 			{
 			  "Object": {
-			  "UpgradeStarted":"Success",
-			  "UpgradeStartTime":"Wed Apr 13 14:22:44 PDT 2016",
-			  "UpgradeEndTime":""
-			  }
+			  "File":"flexswitch_0.0.80_amd64.deb",
+			  "Type":"Debian package",
+			  "MD5":"07f67fc21949981007caf7dbee0908b0"
+			   }
+			},
+			"ObjectId": "",
+			{
+			  "Object": {
+			  "File":"flexswitch_0.0.70_amd64.deb",
+			  "Type":"Debian package",
+			  "MD5":"96d511af7d64a20aeee1d1ebf0ce89ed"
+			   }
 			},
 		  ]
 		}
-		  
+		
+3. Trigger upgrade of device by specifying the file, time, and specifying "Yes" operator to start the upgrade. 
+
+::
+
+	curl --user admin:snaproute -H "Content-Type: application/json" -d '{"File":"flexswitch_0.0.80_amd64.deb", "Upgrade":"Yes", "StartTime":"Now"}' https://10.1.10.242:8080/public/v1/upgrade/
+	    % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+						 Dload  Upload   Total   Spent    Left  Speed
+		100   254  100   254    0     0  38760      0 --:--:-- --:--:-- --:--:-- 42333
+		{
+			"StateObjects": [
+			{
+				"ObjectId": "",
+				{
+				  "Object": {
+				  "UpgradeStarted":"Success",
+				  "UpgradeStartTime":"Wed Apr 13 14:22:44 PDT 2016",
+				  "UpgradeEndTime":""
+				  }
+				},
+			  ]
+			}
+			  
 
 You can also periodically check the status of the upgrade:
 
 ::
 
 	curl --user admin:snaproute -H "Content-Type: application/json"  https://10.1.10.242:8080/public/v1/state/UpgradeStatus/
-    % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-	                                 Dload  Upload   Total   Spent    Left  Speed
-	100   254  100   254    0     0  38760      0 --:--:-- --:--:-- --:--:-- 42333
-	{
-		"StateObjects": [
+	    % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+						 Dload  Upload   Total   Spent    Left  Speed
+		100   254  100   254    0     0  38760      0 --:--:-- --:--:-- --:--:-- 42333
 		{
-			"ObjectId": "",
+			"StateObjects": [
 			{
-			  "Object": {
-			  "UpgradeStarted":"Running",
-			  "UpgradeStartTime":"Wed Apr 13 14:22:44 PDT 2016",
-			  "UpgradeEndTime":""
-			  }
-			},
-		  ]
-		}
+				"ObjectId": "",
+				{
+				  "Object": {
+				  "UpgradeStarted":"Running",
+				  "UpgradeStartTime":"Wed Apr 13 14:22:44 PDT 2016",
+				  "UpgradeEndTime":""
+				  }
+				},
+			  ]
+			}
 
 	curl --user admin:snaproute -H "Content-Type: application/json"  https://10.1.10.242:8080/public/v1/state/UpgradeStatus/
-    % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-	                                 Dload  Upload   Total   Spent    Left  Speed
-	100   254  100   254    0     0  38760      0 --:--:-- --:--:-- --:--:-- 42333
-	{
-		"StateObjects": [
+	    % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+						 Dload  Upload   Total   Spent    Left  Speed
+		100   254  100   254    0     0  38760      0 --:--:-- --:--:-- --:--:-- 42333
 		{
-			"ObjectId": "",
+			"StateObjects": [
 			{
-			  "Object": {
-			  "UpgradeStarted":"Complete",
-			  "UpgradeStartTime":"Wed Apr 13 14:22:44:45 PDT 2016",
-			  "UpgradeEndTime":""Wed Apr 13 14:22:45:10 PDT 2016"
-			  }
-			},
-		  ]
-		}		
-	
+				"ObjectId": "",
+				{
+				  "Object": {
+				  "UpgradeStarted":"Complete",
+				  "UpgradeStartTime":"Wed Apr 13 14:22:44:45 PDT 2016",
+				  "UpgradeEndTime":""Wed Apr 13 14:22:45:10 PDT 2016"
+				  }
+				},
+			  ]
+			}		
+		
 4. Confirm Daemon status by looking at the SystemStatus API and confirm correct version is running 
 
 ::
 
 	 curl --user admin:snaproute -H "Content-Type: application/json" https://10.1.10.242:8080/public/v1/state/SystemStatus | python -m json.tool
-	  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-	                                 Dload  Upload   Total   Spent    Left  Speed
-	100   254  100   254    0     0  38760      0 --:--:-- --:--:-- --:--:-- 42333
-	{
-	"StateObjects": [
-	{
-		"ObjectId": "",
+		  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+						 Dload  Upload   Total   Spent    Left  Speed
+		100   254  100   254    0     0  38760      0 --:--:-- --:--:-- --:--:-- 42333
 		{
-		  "Object": {
-		  "Name": "Sysd"
-		  "HostName": "unassigned-hostname",
-	 	  "Package": "flexswitch_0.0.80_amd64.deb",
-	 	  "Version:"0.0.80_amd64",
-		  "Ready": false,
-		  "Reason": "Not connected to vrrpd lldpd stpd vxland ribd arpd bgpd bfdd",
-		  "UpTime": "13h26m51.020600457s",
-		  "NumCreateCalls": "0 Success 0",
-		  "NumDeleteCalls": "0 Success 0",
-		  "NumUpdateCalls": "0 Success 0",
-		  "NumGetCalls": "1 Success 0",
-		  "NumActionCalls": "0 Success 0”
-		  }
-		},
-		"ObjectId": "",
+		"StateObjects": [
 		{
-		   "Object": {
-		   "Name": "bgpd"
-		   "Version": "0.0.80_amd64"
-		   "Ready": false,
-		   "Reason": "Not connected to asicd",
-		   "UpTime": "8h10m51s",
-		   "NumCreateCalls": "0 Success 0",
-		   "NumDeleteCalls": "0 Success 0",
-		   "NumUpdateCalls": "0 Success 0",
-		   "NumGetCalls": "1 Success 0",
-		   "NumActionCalls": "0 Success 0”
-		   }
-		},
-	
-		"ObjectId": "",
-		{
-		   "Object": {
-		   "Name": "ribd"
-		   "Version": "0.0.80_amd64"
-		   "Ready": true,
-		   "Reason": "Ready",
-		   "UpTime": "8h10m51s",
-		   "NumCreateCalls": "0 Success 0",
-		   "NumDeleteCalls": "0 Success 0",
-		   "NumUpdateCalls": "0 Success 0",
-		   "NumGetCalls": "1 Success 0",
-		   "NumActionCalls": "0 Success 0”
-		   }
-		},
-		"ObjectId": "",
-		{
-		   "Object": {
-		   "Name": "asicd"
-		   "Version": "0.0.80_amd64"
-		   "Ready": true,
-		   "Reason": "Ready",
-		   "UpTime": "8h10m51s",
-		   "NumCreateCalls": "0 Success 0",
-		   "NumDeleteCalls": "0 Success 0",
-		   "NumUpdateCalls": "0 Success 0",
-		   "NumGetCalls": "1 Success 0",
-		   "NumActionCalls": "0 Success 0”
-		   }
-		},
-		"ObjectId": "",
-		{
-		   "Object": {
-		   "Name": "bfdd"
-		   "Version": "0.0.80_amd64"
-		   "Ready": true,
-		   "Reason": "Ready",
-		   "UpTime": "8h10m51s",
-		   "NumCreateCalls": "0 Success 0",
-		   "NumDeleteCalls": "0 Success 0",
-		   "NumUpdateCalls": "0 Success 0",
-		   "NumGetCalls": "1 Success 0",
-		   "NumActionCalls": "0 Success 0”
-		   }
-		},
-		"ObjectId": "",
-		{
-		   "Object": {
-		   "Name": "arpd"
-		   "Version": "0.0.80_amd64"
-		   "Ready": true,
-		   "Reason": "Ready",
-		   "UpTime": "8h10m51s",
-		   "NumCreateCalls": "0 Success 0",
-		   "NumDeleteCalls": "0 Success 0",
-		   "NumUpdateCalls": "0 Success 0",
-		   "NumGetCalls": "1 Success 0",
-		   "NumActionCalls": "0 Success 0”
-		   }
-		},
-		"ObjectId": "",
-		{
-		   "Object": {
-		   "Name": "bgpd"
-		   "Version": "0.0.80_amd64"
-		   "Ready": true,
-		   "Reason": "Ready",
-		   "UpTime": "8h10m51s",
-		   "NumCreateCalls": "0 Success 0",
-		   "NumDeleteCalls": "0 Success 0",
-		   "NumUpdateCalls": "0 Success 0",
-		   "NumGetCalls": "1 Success 0",
-		   "NumActionCalls": "0 Success 0”
-		   }
-		},
-		"ObjectId": "",
-		{
-		   "Object": {
-		   "Name": "ospfd"
-		   "Version": "0.0.80_amd64"
-		   "Ready": true,
-		   "Reason": "Ready",
-		   "UpTime": "8h10m51s",
-		   "NumCreateCalls": "0 Success 0",
-		   "NumDeleteCalls": "0 Success 0",
-		   "NumUpdateCalls": "0 Success 0",
-		   "NumGetCalls": "1 Success 0",
-		   "NumActionCalls": "0 Success 0”
-		   }
-		},
-		"ObjectId": "",
-		{
-		   "Object": {
-		   "Name": "vrrpd"
-		   "Version": "0.0.80_amd64"
-		   "Ready": true,
-		   "Reason": "Ready",
-		   "UpTime": "8h10m51s",
-		   "NumCreateCalls": "0 Success 0",
-		   "NumDeleteCalls": "0 Success 0",
-		   "NumUpdateCalls": "0 Success 0",
-		   "NumGetCalls": "1 Success 0",
-		   "NumActionCalls": "0 Success 0”
-		   }
-		},
-		"ObjectId": "",
-		{
-		   "Object": {
-		   "Name": "lacpd"
-		   "Version": "0.0.80_amd64"
-		   "Ready": true,
-		   "Reason": "Ready",
-		   "UpTime": "8h10m51s",
-		   "NumCreateCalls": "0 Success 0",
-		   "NumDeleteCalls": "0 Success 0",
-		   "NumUpdateCalls": "0 Success 0",
-		   "NumGetCalls": "1 Success 0",
-		   "NumActionCalls": "0 Success 0”
-		   }
-		},
-		"ObjectId": "",
-		{
-		   "Object": {
-		   "Name": "dhcprelayd"
-		   "Version": "0.0.80_amd64"
-		   "Ready": true,
-		   "Reason": "Ready",
-		   "UpTime": "8h10m51s",
-		   "NumCreateCalls": "0 Success 0",
-		   "NumDeleteCalls": "0 Success 0",
-		   "NumUpdateCalls": "0 Success 0",
-		   "NumGetCalls": "1 Success 0",
-		   "NumActionCalls": "0 Success 0”
-		   }
-		},
-		"ObjectId": "",
-		{
-		   "Object": {
-		   "Name": "stpd"
-		   "Version": "0.0.80_amd64"
-		   "Ready": true,
-		   "Reason": "Ready",
-		   "UpTime": "8h10m51s",
-		   "NumCreateCalls": "0 Success 0",
-		   "NumDeleteCalls": "0 Success 0",
-		   "NumUpdateCalls": "0 Success 0",
-		   "NumGetCalls": "1 Success 0",
-		   "NumActionCalls": "0 Success 0”
-		   }
-		},
-		"ObjectId": "",
-		{
-		   "Object": {
-		   "Name": "lldpd"
-		   "Version": "0.0.80_amd64"
-		   "Ready": true,
-		   "Reason": "Ready",
-		   "UpTime": "8h10m51s",
-		   "NumCreateCalls": "0 Success 0",
-		   "NumDeleteCalls": "0 Success 0",
-		   "NumUpdateCalls": "0 Success 0",
-		   "NumGetCalls": "1 Success 0",
-		   "NumActionCalls": "0 Success 0”
-		   }
-		},
-		"ObjectId": "",
-		{
-		   "Object": {
-		   "Name": "vxland"
-		   "Version": "0.0.80_amd64"
-		   "Ready": true,
-		   "Reason": "Ready",
-		   "UpTime": "8h10m51s",
-		   "NumCreateCalls": "0 Success 0",
-		   "NumDeleteCalls": "0 Success 0",
-		   "NumUpdateCalls": "0 Success 0",
-		   "NumGetCalls": "1 Success 0",
-		   "NumActionCalls": "0 Success 0”
-		   }
-		},
-		"ObjectId": "",
-		{
-		   "Object": {
-		   "Name": "confd"
-		   "Version": "0.0.80_amd64"
-		   "Ready": true,
-		   "Reason": "Ready",
-		   "UpTime": "8h10m51s",
-		   "NumCreateCalls": "0 Success 0",
-		   "NumDeleteCalls": "0 Success 0",
-		   "NumUpdateCalls": "0 Success 0",
-		   "NumGetCalls": "1 Success 0",
-		   "NumActionCalls": "0 Success 0”
-		   }
-		},
-	  ]
-	}
+			"ObjectId": "",
+			{
+			  "Object": {
+			  "Name": "Sysd"
+			  "HostName": "unassigned-hostname",
+			  "Package": "flexswitch_0.0.80_amd64.deb",
+			  "Version:"0.0.80_amd64",
+			  "Ready": false,
+			  "Reason": "Not connected to vrrpd lldpd stpd vxland ribd arpd bgpd bfdd",
+			  "UpTime": "13h26m51.020600457s",
+			  "NumCreateCalls": "0 Success 0",
+			  "NumDeleteCalls": "0 Success 0",
+			  "NumUpdateCalls": "0 Success 0",
+			  "NumGetCalls": "1 Success 0",
+			  "NumActionCalls": "0 Success 0”
+			  }
+			},
+			"ObjectId": "",
+			{
+			   "Object": {
+			   "Name": "bgpd"
+			   "Version": "0.0.80_amd64"
+			   "Ready": false,
+			   "Reason": "Not connected to asicd",
+			   "UpTime": "8h10m51s",
+			   "NumCreateCalls": "0 Success 0",
+			   "NumDeleteCalls": "0 Success 0",
+			   "NumUpdateCalls": "0 Success 0",
+			   "NumGetCalls": "1 Success 0",
+			   "NumActionCalls": "0 Success 0”
+			   }
+			},
+		
+			"ObjectId": "",
+			{
+			   "Object": {
+			   "Name": "ribd"
+			   "Version": "0.0.80_amd64"
+			   "Ready": true,
+			   "Reason": "Ready",
+			   "UpTime": "8h10m51s",
+			   "NumCreateCalls": "0 Success 0",
+			   "NumDeleteCalls": "0 Success 0",
+			   "NumUpdateCalls": "0 Success 0",
+			   "NumGetCalls": "1 Success 0",
+			   "NumActionCalls": "0 Success 0”
+			   }
+			},
+			"ObjectId": "",
+			{
+			   "Object": {
+			   "Name": "asicd"
+			   "Version": "0.0.80_amd64"
+			   "Ready": true,
+			   "Reason": "Ready",
+			   "UpTime": "8h10m51s",
+			   "NumCreateCalls": "0 Success 0",
+			   "NumDeleteCalls": "0 Success 0",
+			   "NumUpdateCalls": "0 Success 0",
+			   "NumGetCalls": "1 Success 0",
+			   "NumActionCalls": "0 Success 0”
+			   }
+			},
+			"ObjectId": "",
+			{
+			   "Object": {
+			   "Name": "bfdd"
+			   "Version": "0.0.80_amd64"
+			   "Ready": true,
+			   "Reason": "Ready",
+			   "UpTime": "8h10m51s",
+			   "NumCreateCalls": "0 Success 0",
+			   "NumDeleteCalls": "0 Success 0",
+			   "NumUpdateCalls": "0 Success 0",
+			   "NumGetCalls": "1 Success 0",
+			   "NumActionCalls": "0 Success 0”
+			   }
+			},
+			"ObjectId": "",
+			{
+			   "Object": {
+			   "Name": "arpd"
+			   "Version": "0.0.80_amd64"
+			   "Ready": true,
+			   "Reason": "Ready",
+			   "UpTime": "8h10m51s",
+			   "NumCreateCalls": "0 Success 0",
+			   "NumDeleteCalls": "0 Success 0",
+			   "NumUpdateCalls": "0 Success 0",
+			   "NumGetCalls": "1 Success 0",
+			   "NumActionCalls": "0 Success 0”
+			   }
+			},
+			"ObjectId": "",
+			{
+			   "Object": {
+			   "Name": "bgpd"
+			   "Version": "0.0.80_amd64"
+			   "Ready": true,
+			   "Reason": "Ready",
+			   "UpTime": "8h10m51s",
+			   "NumCreateCalls": "0 Success 0",
+			   "NumDeleteCalls": "0 Success 0",
+			   "NumUpdateCalls": "0 Success 0",
+			   "NumGetCalls": "1 Success 0",
+			   "NumActionCalls": "0 Success 0”
+			   }
+			},
+			"ObjectId": "",
+			{
+			   "Object": {
+			   "Name": "ospfd"
+			   "Version": "0.0.80_amd64"
+			   "Ready": true,
+			   "Reason": "Ready",
+			   "UpTime": "8h10m51s",
+			   "NumCreateCalls": "0 Success 0",
+			   "NumDeleteCalls": "0 Success 0",
+			   "NumUpdateCalls": "0 Success 0",
+			   "NumGetCalls": "1 Success 0",
+			   "NumActionCalls": "0 Success 0”
+			   }
+			},
+			"ObjectId": "",
+			{
+			   "Object": {
+			   "Name": "vrrpd"
+			   "Version": "0.0.80_amd64"
+			   "Ready": true,
+			   "Reason": "Ready",
+			   "UpTime": "8h10m51s",
+			   "NumCreateCalls": "0 Success 0",
+			   "NumDeleteCalls": "0 Success 0",
+			   "NumUpdateCalls": "0 Success 0",
+			   "NumGetCalls": "1 Success 0",
+			   "NumActionCalls": "0 Success 0”
+			   }
+			},
+			"ObjectId": "",
+			{
+			   "Object": {
+			   "Name": "lacpd"
+			   "Version": "0.0.80_amd64"
+			   "Ready": true,
+			   "Reason": "Ready",
+			   "UpTime": "8h10m51s",
+			   "NumCreateCalls": "0 Success 0",
+			   "NumDeleteCalls": "0 Success 0",
+			   "NumUpdateCalls": "0 Success 0",
+			   "NumGetCalls": "1 Success 0",
+			   "NumActionCalls": "0 Success 0”
+			   }
+			},
+			"ObjectId": "",
+			{
+			   "Object": {
+			   "Name": "dhcprelayd"
+			   "Version": "0.0.80_amd64"
+			   "Ready": true,
+			   "Reason": "Ready",
+			   "UpTime": "8h10m51s",
+			   "NumCreateCalls": "0 Success 0",
+			   "NumDeleteCalls": "0 Success 0",
+			   "NumUpdateCalls": "0 Success 0",
+			   "NumGetCalls": "1 Success 0",
+			   "NumActionCalls": "0 Success 0”
+			   }
+			},
+			"ObjectId": "",
+			{
+			   "Object": {
+			   "Name": "stpd"
+			   "Version": "0.0.80_amd64"
+			   "Ready": true,
+			   "Reason": "Ready",
+			   "UpTime": "8h10m51s",
+			   "NumCreateCalls": "0 Success 0",
+			   "NumDeleteCalls": "0 Success 0",
+			   "NumUpdateCalls": "0 Success 0",
+			   "NumGetCalls": "1 Success 0",
+			   "NumActionCalls": "0 Success 0”
+			   }
+			},
+			"ObjectId": "",
+			{
+			   "Object": {
+			   "Name": "lldpd"
+			   "Version": "0.0.80_amd64"
+			   "Ready": true,
+			   "Reason": "Ready",
+			   "UpTime": "8h10m51s",
+			   "NumCreateCalls": "0 Success 0",
+			   "NumDeleteCalls": "0 Success 0",
+			   "NumUpdateCalls": "0 Success 0",
+			   "NumGetCalls": "1 Success 0",
+			   "NumActionCalls": "0 Success 0”
+			   }
+			},
+			"ObjectId": "",
+			{
+			   "Object": {
+			   "Name": "vxland"
+			   "Version": "0.0.80_amd64"
+			   "Ready": true,
+			   "Reason": "Ready",
+			   "UpTime": "8h10m51s",
+			   "NumCreateCalls": "0 Success 0",
+			   "NumDeleteCalls": "0 Success 0",
+			   "NumUpdateCalls": "0 Success 0",
+			   "NumGetCalls": "1 Success 0",
+			   "NumActionCalls": "0 Success 0”
+			   }
+			},
+			"ObjectId": "",
+			{
+			   "Object": {
+			   "Name": "confd"
+			   "Version": "0.0.80_amd64"
+			   "Ready": true,
+			   "Reason": "Ready",
+			   "UpTime": "8h10m51s",
+			   "NumCreateCalls": "0 Success 0",
+			   "NumDeleteCalls": "0 Success 0",
+			   "NumUpdateCalls": "0 Success 0",
+			   "NumGetCalls": "1 Success 0",
+			   "NumActionCalls": "0 Success 0”
+			   }
+			},
+		  ]
+		}
 

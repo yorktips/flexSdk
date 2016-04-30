@@ -3,21 +3,330 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+.. sectnum::
+
 Configuration Examples 
 ========================================
 
 Configuring ARP
 ---------------
-Example with FlexSwitch Rest API 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Example with FlexSwitch Python SDK
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+ARPd is the daemon on FlexSwitch that mnanages, learns, and programs data-plane information learned via ARP
+
+Timeout Values
+^^^^^^^^^^^^^^
+FlexSwitch supports the ability to change the ARP timers Globally.  The default timeout value is 10 minutes(600 seconds).  Arp daemon will attempt refresh of the ARP entry at the following intervals, with example times based on default timer and number of attempts:
+
+	- 50% of Arp timeout (300 seconds, 1 ARP request frame sent)
+	- 25% of Arp timeout (150 seconds, 1 ARP request frame sent)
+
+With more aggressve attempts in the last minute for timeout:
+
+	- 60 seconds of Arp Timeout (1 ARP request frame sent)
+	- 30 seconds remaining in Arp Timeout (1 ARP request frame sent)
+	- 10 seconds remaining in Arp timeout (10 ARP request frames sent)
+
+Configuring  with Rest API 
+"""""""""""""""""""""""""""""""""""""
+
+FlexSwitch has a REST based API, and below is an examlpe utilzing Linux cURL: 
+
+COMMAND:
+::
+	
+	curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"Timeout":<*Timeout Value in seconds*>}' 'http://<*your-switchip*>:8080/public/v1/Config/ArpConfig'
+	
+
+OPTIONS:
+
+::
+
+	Timeout - Length of ARP timeout in seconds. 
+
+EXAMPLE:
+::
+	
+	root@5b5a8d783113:/# curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"ArpConfigKey":"1", "Timeout":1000}' http://localhost:8080/public/v1/config/ArpConfig
+	{"ObjectId":"a97b920d-8b10-47b1-7ea9-890b07f6e712","Error":""}
+
+
+	root@5b5a8d783113:/# curl -X GET --header 'Content-Type: application/json' --header 'Accept: application/json' http://localhost:8080/public/v1/config/ArpConfigs | python -m json.tool
+	  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+					 Dload  Upload   Total   Spent    Left  Speed
+	100   174  100   174    0     0  87087      0 --:--:-- --:--:-- --:--:--  169k
+	{
+	    "CurrentMarker": 0,
+	    "MoreExist": false,
+	    "NextMarker": 0,
+	    "ObjCount": 1,
+	    "Objects": [
+		{
+		    "Object": {
+			"ArpConfigKey": "1",
+			"Timeout": 1000
+		    },
+		    "ObjectId": "a97b920d-8b10-47b1-7ea9-890b07f6e712"
+		}
+	    ]
+	}
+
+
+
+Configuring with Python SDK
+""""""""""""""""""""""""""""""""""
+
+FlexSwitch has a Python SDK for utiliztion of programtically adjusting a device via a python script/application.  This SDK has full parody with FlexSwitch's RESTful API.
+
+Below is an example to set the Arp Timeout to 1000 seconds via the Python SDK:
+
+::
+
+	#!/usr/bin/python
+	from flexswitchV2 import FlexSwitch
+
+
+	if __name__ =='__main__':
+		ip = "192.168.0.3"
+		Timeout=1000
+		restIf = FlexSwitch(ip, 8080)
+		restIf.createArpConfig("1",Timeout)
+
+
+You can display the results of this change with the followin Python Script below:
+
+::
+
+	#!/usr/bin/python
+	import json
+	from flexswitchV2 import FlexSwitch
+
+
+	if __name__ =='__main__':
+		ip = "192.168.0.3"
+		restIf = FlexSwitch(ip, 8080)
+		print json.dumps(restIf.getAllArpConfigs(), indent=4)	
+
+Output:
+
+::
+
+	acasella@snaproute-lab-r710-1:~$ ./getarpconfig.py 
+	[
+	    {
+		"Object": {
+		    "ArpConfigKey": "1", 
+		    "Timeout": 1000
+		}, 
+		"ObjectId": "e607400d-71f1-4fd2-4574-e40d313fd3e7"
+	    }
+	]
+
+Configuring via Configuration file 
+""""""""""""""""""""""""""""""""""
+
+Static Entries
+^^^^^^^^^^^^^^
+Configuring with Rest API 
+""""""""""""""""""""""""""""""""
+
+FlexSwitch has a REST based API, and below is an examlpe utilzing Linux cURL:
+
+COMMAND:
+::
+
+        curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"IP":"<*IPv4 Address*>", "MAC":"<*MAC address*>"}' 'http://<*your-switchip*>:8080/public/v1/Config/ArpConfig'
+
+
+OPTIONS:
+
+::
+
+        IP - IPv4 address to have a static entry applied 
+	MAC - Layer 2 MAC address that will be configured for the associated IPv4 address. 
+
+EXAMPLE:
+::
+
+        root@5b5a8d783113:/# curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"IP":"192.168.0.1", "MAC":"01:23:34:56:78"}' http://localhost:8080/public/v1/config/ArpConfig
+        {"ObjectId":"a97b920d-8b10-47b1-7ea9-890b07f6e712","Error":""}
+
+
+        root@5b5a8d783113:/# curl -X GET --header 'Content-Type: application/json' --header 'Accept: application/json' http://localhost:8080/public/v1/config/ArpConfigs | python -m json.tool
+          % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                         Dload  Upload   Total   Spent    Left  Speed
+        100   174  100   174    0     0  87087      0 --:--:-- --:--:-- --:--:--  169k
+        {
+            "CurrentMarker": 0,
+            "MoreExist": false,
+            "NextMarker": 0,
+            "ObjCount": 1,
+            "Objects": [
+                {
+                    "Object": {
+                        "IP": "192.168.0.1",
+                        "MAC":"01:23:34:56:78"
+                    },
+                    "ObjectId": "a97b920d-8b10-47b1-7ea9-890b07f6e712"
+                }
+            ]
+        }
+
+
+
+
+Configuring with Python SDK
+""""""""""""""""""""""""""""""""""
+Below is an example to set the Arp Timeout to 1000 seconds via the Python SDK:
+
+::
+
+	#!/usr/bin/python
+	from flexswitchV2 import FlexSwitch
+
+
+	if __name__ =='__main__':
+		ip = "192.168.0.3"
+		Timeout=1000
+		restIf = FlexSwitch(ip, 8080)
+		arp_ip="192.168.0.1"
+		mac="01:23:34:56:78"
+		restIf.createArpStatic(arp_ip,mac)
+
+
+You can display the results of this change with the followin Python Script below:
+
+::
+
+	#!/usr/bin/python
+	import json
+	from flexswitchV2 import FlexSwitch
+
+
+	if __name__ =='__main__':
+		ip = "192.168.0.3"
+		restIf = FlexSwitch(ip, 8080)
+		print json.dumps(restIf.getAllArpStatics(), indent=4)	
+
+Output:
+
+::
+
+	acasella@snaproute-lab-r710-1:~$ ./getarpstatic.py 
+	[
+	   {
+	       "Object": {
+	   	   "IP": "192.168.0.1",
+	 	   "MAC":"01:23:34:56:78"
+	       },
+	       "ObjectId": "a97b920d-8b10-47b1-7ea9-890b07f6e712"
+	   }
+	]
+
+Python SDK ARP Methods
+
+::
+	
+	@processReturnCode
+	def createArpConfig(self,
+			ArpConfigKey,
+			Timeout):
+		obj =  { 
+			'ArpConfigKey' : ArpConfigKey,
+			'Timeout' : int(Timeout),
+			}
+		reqUrl =  self.urlBase+'ArpConfig'
+		r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+		return r
+
+	@processReturnCode
+	def updateArpConfig(self,
+			ArpConfigKey,
+			Timeout = None):
+		obj =  {}
+		if ArpConfigKey != None :
+		    obj['ArpConfigKey'] = ArpConfigKey
+
+		if Timeout != None :
+		    obj['Timeout'] = int(Timeout)
+
+		reqUrl =  self.urlBase+'ArpConfig'
+		r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+		return r
+
+	@processReturnCode
+	def updateArpConfigById(self,
+			     objectId,
+			     Timeout = None):
+		obj =  {'objectId': objectId }
+		if Timeout !=  None:
+		    obj['Timeout'] = Timeout
+
+		reqUrl =  self.urlBase+'ArpConfig'
+		r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+		return r
+
+	def getAllArpConfigs(self):
+		return self.getObjects( 'ArpConfig') 
+
+
+
+Configuring via Configuration file
+""""""""""""""""""""""""""""""""""
+
+
+
+Python SDK ARP Methods
+^^^^^^^^^^^^^^^^^^^^^^
+::
+	
+	@processReturnCode
+	def createArpConfig(self,
+			ArpConfigKey,
+			Timeout):
+		obj =  { 
+			'ArpConfigKey' : ArpConfigKey,
+			'Timeout' : int(Timeout),
+			}
+		reqUrl =  self.urlBase+'ArpConfig'
+		r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+		return r
+
+	@processReturnCode
+	def updateArpConfig(self,
+			ArpConfigKey,
+			Timeout = None):
+		obj =  {}
+		if ArpConfigKey != None :
+		    obj['ArpConfigKey'] = ArpConfigKey
+
+		if Timeout != None :
+		    obj['Timeout'] = int(Timeout)
+
+		reqUrl =  self.urlBase+'ArpConfig'
+		r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+		return r
+
+	@processReturnCode
+	def updateArpConfigById(self,
+			     objectId,
+			     Timeout = None):
+		obj =  {'objectId': objectId }
+		if Timeout !=  None:
+		    obj['Timeout'] = Timeout
+
+		reqUrl =  self.urlBase+'ArpConfig'
+		r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+		return r
+
+	def getAllArpConfigs(self):
+		return self.getObjects( 'ArpConfig') 
+
 
 Configuring BFD
 ---------------
-Example with FlexSwitch Rest API 
+Configuring with Rest API 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Example with FlexSwitch Python SDK
+Configuring with Python SDK
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Configuring BGP
@@ -26,15 +335,15 @@ Configuring BGP
 Global
 ^^^^^^
 
-Example with FlexSwitch Rest API 
+Configuring with Rest API 
 """"""""""""""""""""""""""""""""
-Example with FlexSwitch Python SDK
+Configuring with Python SDK
 """""""""""""""""""""""""""""""""""
 MultiPath
 ^^^^^^^^^
-Example with FlexSwitch Rest API 
+Configuring with Rest API 
 """"""""""""""""""""""""""""""""
-Example with FlexSwitch Python SDK
+Configuring with Python SDK
 """""""""""""""""""""""""""""""""""
 
 Neighbors 
@@ -48,103 +357,103 @@ Local AS
 Authentication
 """"""""""""""
 
-Example with FlexSwitch Rest API 
+Configuring with Rest API 
 """"""""""""""""""""""""""""""""
-Example with FlexSwitch Python SDK
+Configuring with Python SDK
 """""""""""""""""""""""""""""""""""
 
 Peer Groups
 ^^^^^^^^^^^^
 
-Example with FlexSwitch Rest API 
+Configuring with Rest API 
 """"""""""""""""""""""""""""""""
-Example with FlexSwitch Python SDK
+Configuring with Python SDK
 """""""""""""""""""""""""""""""""""
 
 Policies
 ^^^^^^^^^
 
-Example with FlexSwitch Rest API 
+Configuring with Rest API 
 """"""""""""""""""""""""""""""""
-Example with FlexSwitch Python SDK
+Configuring with Python SDK
 """""""""""""""""""""""""""""""""""
 
 Route Reflectors
 ^^^^^^^^^^^^^^^^
 
-Example with FlexSwitch Rest API 
+Configuring with Rest API 
 """"""""""""""""""""""""""""""""
-Example with FlexSwitch Python SDK
+Configuring with Python SDK
 """""""""""""""""""""""""""""""""""
 
 Add Path
 ^^^^^^^^^
 
-Example with FlexSwitch Rest API 
+Configuring with Rest API 
 """"""""""""""""""""""""""""""""
-Example with FlexSwitch Python SDK
+Configuring with Python SDK
 """""""""""""""""""""""""""""""""""
 
 Configuring DHCP Relay
 -----------------------
-Example with FlexSwitch Rest API 
+Configuring with Rest API 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Example with FlexSwitch Python SDK
+Configuring with Python SDK
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Configuring LLDP
 -----------------
-Example with FlexSwitch Rest API 
+Configuring with Rest API 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Example with FlexSwitch Python SDK
+Configuring with Python SDK
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 Configuring LoopBacks
 ----------------------
-Example with FlexSwitch Rest API 
+Configuring with Rest API 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Example with FlexSwitch Python SDK
+Configuring with Python SDK
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Configuring Logging
 ---------------------
 System 
 ^^^^^^^
-Example with FlexSwitch Rest API 
+Configuring with Rest API 
 """"""""""""""""""""""""""""""""""
-Example with FlexSwitch Python SDK
+Configuring with Python SDK
 """"""""""""""""""""""""""""""""""
 
 Daemon
 ^^^^^^^
-Example with FlexSwitch Rest API 
+Configuring with Rest API 
 """"""""""""""""""""""""""""""""""
-Example with FlexSwitch Python SDK
+Configuring with Python SDK
 """"""""""""""""""""""""""""""""""
 
 
 Configuring OSPF
 ------------------
 
-Example with FlexSwitch Rest API 
+Configuring with Rest API 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Example with FlexSwitch Python SDK
+Configuring with Python SDK
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Configuring IP Addresses
 --------------------------
 
-Example with FlexSwitch Rest API 
+Configuring with Rest API 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Example with FlexSwitch Python SDK
+Configuring with Python SDK
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Configuring Routing Policies 
 -----------------------------
-Example with FlexSwitch Rest API 
+Configuring with Rest API 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Example with FlexSwitch Python SDK
+Configuring with Python SDK
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Configuring Routing 
@@ -159,9 +468,9 @@ Dynamic Protocols
 Policies 
 ^^^^^^^^
 
-Example with FlexSwitch Rest API 
+Configuring with Rest API 
 """"""""""""""""""""""""""""""""
-Example with FlexSwitch Python SDK
+Configuring with Python SDK
 """"""""""""""""""""""""""""""""""
 
 Configuring STP
@@ -171,33 +480,33 @@ RSTP
 ^^^^^
 RSTP-PVST+
 ^^^^^^^^^^
-Example with FlexSwitch Rest API 
+Configuring with Rest API 
 """"""""""""""""""""""""""""""""
-Example with FlexSwitch Python SDK
+Configuring with Python SDK
 """""""""""""""""""""""""""""""""""
 
 Configuring VLANS
 -------------------
 
 
-Example with FlexSwitch Rest API 
+Configuring with Rest API 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Example with FlexSwitch Python SDK
+Configuring with Python SDK
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 Configuring VxLAN
 --------------------
 
-Example with FlexSwitch Rest API 
+Configuring with Rest API 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Example with FlexSwitch Python SDK
+Configuring with Python SDK
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Configuring VRRP
 -------------------
 
-Example with FlexSwitch Rest API 
+Configuring with Rest API 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Example with FlexSwitch Python SDK
+Configuring with Python SDK
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
