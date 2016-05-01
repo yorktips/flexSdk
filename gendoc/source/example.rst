@@ -11,30 +11,30 @@ Configuration Examples
 Configuring ARP
 ---------------
 
-ARPd is the daemon on FlexSwitch that mnanages, learns, and programs data-plane information learned via ARP
+The ARP protocol is utilized to be learn the layer 2 MAC address of a directly attached device and associate it with an IP address in which to communicate.  ARPd is the daemon on FlexSwitch that manages, learns, and programs layer 2 adjancency information into the data-plane.   
 
 Timeout Values
 ^^^^^^^^^^^^^^
-FlexSwitch supports the ability to change the ARP timers Globally.  The default timeout value is 10 minutes(600 seconds).  Arp daemon will attempt refresh of the ARP entry at the following intervals, with example times based on default timer and number of attempts:
+FlexSwitch supports the ability to change the ARP timers Globally.  The default timeout value is 10 minutes(600 seconds).  ARP daemon will attempt refresh of the ARP entry at the following intervals, with example times based on default timer and number of attempts:
 
-	- 50% of Arp timeout (300 seconds, 1 ARP request frame sent)
-	- 25% of Arp timeout (150 seconds, 1 ARP request frame sent)
+	- 50% of ARP timeout (300 seconds, 1 ARP request frame sent)
+	- 25% of ARP timeout (150 seconds, 1 ARP request frame sent)
 
 With more aggressve attempts in the last minute for timeout:
 
-	- 60 seconds of Arp Timeout (1 ARP request frame sent)
-	- 30 seconds remaining in Arp Timeout (1 ARP request frame sent)
-	- 10 seconds remaining in Arp timeout (10 ARP request frames sent)
+	- 60 seconds of ARP Timeout (1 ARP request frame sent)
+	- 30 seconds remaining in ARP Timeout (1 ARP request frame sent)
+	- 10 seconds remaining in ARP timeout (10 ARP request frames sent)
 
 Configuring  with Rest API 
 """""""""""""""""""""""""""""""""""""
 
-FlexSwitch has a REST based API, and below is an examlpe utilzing Linux cURL: 
+FlexSwitch has a REST based API, and below is an example utilzing Linux cURL: 
 
 COMMAND:
 ::
 	
-	curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"Timeout":<*Timeout Value in seconds*>}' 'http://<*your-switchip*>:8080/public/v1/Config/ArpConfig'
+	curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"Timeout":<*Timeout Value in seconds*>}' 'http://<*your-switchip*>:8080/public/v1/config/ArpConfig'
 	
 
 OPTIONS:
@@ -77,7 +77,7 @@ Configuring with Python SDK
 
 FlexSwitch has a Python SDK for utiliztion of programtically adjusting a device via a python script/application.  This SDK has full parody with FlexSwitch's RESTful API.
 
-Below is an example to set the Arp Timeout to 1000 seconds via the Python SDK:
+Below is an example to set the ARP Timeout to 1000 seconds via the Python SDK:
 
 ::
 
@@ -126,15 +126,16 @@ Configuring via Configuration file
 
 Static Entries
 ^^^^^^^^^^^^^^
+
 Configuring with Rest API 
 """"""""""""""""""""""""""""""""
 
-FlexSwitch has a REST based API, and below is an examlpe utilzing Linux cURL:
+FlexSwitch has a REST based API, and below is an example utilzing Linux cURL:
 
 COMMAND:
 ::
 
-        curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"IP":"<*IPv4 Address*>", "MAC":"<*MAC address*>"}' 'http://<*your-switchip*>:8080/public/v1/Config/ArpConfig'
+        curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"IP":"<*IPv4 Address*>", "MAC":"<*MAC address*>"}' 'http://<*your-switchip*>:8080/public/v1/config/ArpConfig'
 
 
 OPTIONS:
@@ -176,7 +177,7 @@ EXAMPLE:
 
 Configuring with Python SDK
 """"""""""""""""""""""""""""""""""
-Below is an example to set the Arp Timeout to 1000 seconds via the Python SDK:
+Below is an example to set the ARP Timeout to 1000 seconds via the Python SDK:
 
 ::
 
@@ -222,112 +223,271 @@ Output:
 	   }
 	]
 
-Python SDK ARP Methods
-
-::
-	
-	@processReturnCode
-	def createArpConfig(self,
-			ArpConfigKey,
-			Timeout):
-		obj =  { 
-			'ArpConfigKey' : ArpConfigKey,
-			'Timeout' : int(Timeout),
-			}
-		reqUrl =  self.urlBase+'ArpConfig'
-		r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
-		return r
-
-	@processReturnCode
-	def updateArpConfig(self,
-			ArpConfigKey,
-			Timeout = None):
-		obj =  {}
-		if ArpConfigKey != None :
-		    obj['ArpConfigKey'] = ArpConfigKey
-
-		if Timeout != None :
-		    obj['Timeout'] = int(Timeout)
-
-		reqUrl =  self.urlBase+'ArpConfig'
-		r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-		return r
-
-	@processReturnCode
-	def updateArpConfigById(self,
-			     objectId,
-			     Timeout = None):
-		obj =  {'objectId': objectId }
-		if Timeout !=  None:
-		    obj['Timeout'] = Timeout
-
-		reqUrl =  self.urlBase+'ArpConfig'
-		r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-		return r
-
-	def getAllArpConfigs(self):
-		return self.getObjects( 'ArpConfig') 
-
 
 
 Configuring via Configuration file
 """"""""""""""""""""""""""""""""""
+
+Display ARP State
+^^^^^^^^^^^^^^^^^
+
+
+Display via Rest API 
+"""""""""""""""""""""
+
+
+Display All ARP Entries
+_______________________
+ 
+Utilizing the GetBulk API for ARP, "*ArpEntrys*", we can display all ARP entries learned on the device.  
+
+COMMAND:
+::
+
+        curl -X GET --header 'Content-Type: application/json' 'http://<*your-switchip*>:8080/public/v1/state/ArpEntrys'
+
+
+EXAMPLE:
+::
+
+	root@5c3bca6fb77e:/# curl -X GET --header 'Content-Type: application/json' 'http://localhost:8080/public/v1/state/ArpEntrys' | python -m json.tool
+	  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+					 Dload  Upload   Total   Spent    Left  Speed
+	100   213  100   213    0     0  44654      0 --:--:-- --:--:-- --:--:-- 53250
+	{
+	    "CurrentMarker": 0,
+	    "MoreExist": false,
+	    "NextMarker": 0,
+	    "ObjCount": 1,
+	    "Objects": [
+		{
+		    "Object": {
+			"ExpiryTimeLeft": "9m57.74904463s",
+			"Intf": "eth1",
+			"IpAddr": "51.1.1.5",
+			"MacAddr": "4e:8c:3d:c8:d4:09",
+			"Vlan": "5"
+		    },
+		    "ObjectId": ""
+		}
+	    ]
+	}
+
+
+Display a specific ARP entry
+____________________________
+
+You can return the value of an object based on any of the variables within that object.  For example you can query an ARP entry on any of the follownig parameters:
+
+- IPv4 Address (*IpAddr* variable)
+
+The example below will show how to grab a specific ARP entry based on IP address. 
+
+COMMAND:
+
+::
+	curl -X GET --header 'Content-Type: application/json' -d '{"IpAddr":"<*IPv4 Address*>"}' 'http://<*your-switchip*>:8080/public/v1/state/ArpEntry'
+
+
+OPTIONS:
+
+::
+
+	IpAddr - IPv4 Address ArpEntry to be queried 
+
+EXAMPLE:
+::
+
+	root@5c3bca6fb77e:/# curl -X GET --header 'Content-Type: application/json' -d '{"IpAddr":"51.1.1.5"}' 'http://localhost:8080/public/v1/state/ArpEntry' | python -m json.tool
+	  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+					 Dload  Upload   Total   Spent    Left  Speed
+	100   157  100   136  100    21  25185   3888 --:--:-- --:--:-- --:--:-- 27200
+	{
+	    "Object": {
+		"ExpiryTimeLeft": "9m56.277773536s",
+		"Intf": "eth1",
+		"IpAddr": "51.1.1.5",
+		"MacAddr": "4e:8c:3d:c8:d4:09",
+		"Vlan": "5"
+	    },
+	    "ObjectId": ""
+	}
+
+Displaying State with Python SDK
+""""""""""""""""""""""""""""""""""
+Below is an example to set the ARP Timeout to 1000 seconds via the Python SDK:
+
+::
+
+	#!/usr/bin/python
+	from flexswitchV2 import FlexSwitch
+
+
+	if __name__ =='__main__':
+		ip = "192.168.0.3"
+		Timeout=1000
+		restIf = FlexSwitch(ip, 8080)
+		arp_ip="51.1.1.5"
+		restIf.createArpStatic(arp_ip,mac)
+
+
+You can display the results of this change with the followin Python Script below:
+
+::
+
+	#!/usr/bin/python
+	import json
+	from flexswitchV2 import FlexSwitch
+
+
+	if __name__ =='__main__':
+		ip = "192.168.0.3"
+		restIf = FlexSwitch(ip, 8080)
+		print json.dumps(restIf.getAllArpEntrys(), indent=4)	
+
+Output:
+
+::
+
+	acasella@snaproute-lab-r710-1:~$ python getarpall.py 
+	[
+	    {
+		"Object": {
+		    "Intf": "eth1", 
+		    "Vlan": "5", 
+		    "MacAddr": "1e:b9:5a:e9:52:a1", 
+		    "IpAddr": "51.1.1.5", 
+		    "ExpiryTimeLeft": "9m48.458947622s"
+		}, 
+		"ObjectId": ""
+	    }
+	]
+
 
 
 
 Python SDK ARP Methods
 ^^^^^^^^^^^^^^^^^^^^^^
 ::
-	
-	@processReturnCode
-	def createArpConfig(self,
-			ArpConfigKey,
-			Timeout):
-		obj =  { 
-			'ArpConfigKey' : ArpConfigKey,
-			'Timeout' : int(Timeout),
-			}
-		reqUrl =  self.urlBase+'ArpConfig'
-		r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
-		return r
+    @processReturnCode
+    def getArpEntry(self,
+                    IpAddr):
+        obj =  { 
+                'IpAddr' : IpAddr,
+                }
+        reqUrl =  self.urlBase+'ArpEntry'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
 
-	@processReturnCode
-	def updateArpConfig(self,
-			ArpConfigKey,
-			Timeout = None):
-		obj =  {}
-		if ArpConfigKey != None :
-		    obj['ArpConfigKey'] = ArpConfigKey
+    @processReturnCode
+    def getArpEntryById(self, objectId ):
+        reqUrl =  self.urlBase+'ArpEntry'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
 
-		if Timeout != None :
-		    obj['Timeout'] = int(Timeout)
+    def getAllArpEntrys(self):
+        return self.getObjects( 'ArpEntry') 
 
-		reqUrl =  self.urlBase+'ArpConfig'
-		r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-		return r
 
-	@processReturnCode
-	def updateArpConfigById(self,
-			     objectId,
-			     Timeout = None):
-		obj =  {'objectId': objectId }
-		if Timeout !=  None:
-		    obj['Timeout'] = Timeout
+    """
+    .. automethod :: createArpConfig(self,
+        :param string ArpConfigKey :  Arp config  Arp config
+        :param int32 Timeout :  Global Arp entry timeout value. Default value  Global Arp entry timeout value. Default value
 
-		reqUrl =  self.urlBase+'ArpConfig'
-		r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-		return r
+	"""
+    @processReturnCode
+    def createArpConfig(self,
+                        ArpConfigKey,
+                        Timeout):
+        obj =  { 
+                'ArpConfigKey' : ArpConfigKey,
+                'Timeout' : int(Timeout),
+                }
+        reqUrl =  self.urlBase+'ArpConfig'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
 
-	def getAllArpConfigs(self):
-		return self.getObjects( 'ArpConfig') 
+    @processReturnCode
+    def updateArpConfig(self,
+                        ArpConfigKey,
+                        Timeout = None):
+        obj =  {}
+        if ArpConfigKey != None :
+            obj['ArpConfigKey'] = ArpConfigKey
+
+        if Timeout != None :
+            obj['Timeout'] = int(Timeout)
+
+        reqUrl =  self.urlBase+'ArpConfig'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def updateArpConfigById(self,
+                             objectId,
+                             Timeout = None):
+        obj =  {'objectId': objectId }
+        if Timeout !=  None:
+            obj['Timeout'] = Timeout
+
+        reqUrl =  self.urlBase+'ArpConfig'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def deleteArpConfig(self,
+                        ArpConfigKey):
+        obj =  { 
+                'ArpConfigKey' : ArpConfigKey,
+                }
+        reqUrl =  self.urlBase+'ArpConfig'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def deleteArpConfigById(self, objectId ):
+        reqUrl =  self.urlBase+'ArpConfig'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    @processReturnCode
+    def getArpConfig(self,
+                     ArpConfigKey):
+        obj =  { 
+                'ArpConfigKey' : ArpConfigKey,
+                }
+        reqUrl =  self.urlBase+'ArpConfig'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def getArpConfigById(self, objectId ):
+        reqUrl =  self.urlBase+'ArpConfig'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllArpConfigs(self):
+        return self.getObjects( 'ArpConfig') 
 
 
 Configuring BFD
 ---------------
+BFD provides an independent method to validate the operation of the forwarding plane between two routers.  This can be utilized to ensure subsecond detection of a failure and be utilized to trigger an action in a routing protocol (severing a session or adjacency).
+
 Configuring with Rest API 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+COMMAND:
+
+::
+	
+
+OPTIONS:
+
+EXAMPLE:
+
+
 Configuring with Python SDK
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Configuring BGP
 ---------------
