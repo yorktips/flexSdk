@@ -237,7 +237,7 @@ Display via Rest API
 
 
 Display All ARP Entries
-_______________________
+***********************
  
 Utilizing the GetBulk API for ARP, "*ArpEntrys*", we can display all ARP entries learned on the device.  
 
@@ -275,7 +275,7 @@ EXAMPLE:
 
 
 Display a specific ARP entry
-____________________________
+****************************
 
 You can return the value of an object based on any of the variables within that object.  For example you can query an ARP entry on any of the follownig parameters:
 
@@ -368,26 +368,34 @@ Output:
 
 Python SDK ARP Methods
 ^^^^^^^^^^^^^^^^^^^^^^
+State
+""""""
+
 ::
+
     @processReturnCode
-    def getArpEntry(self,
-                    IpAddr):
+    def getArpEntryState(self,
+                         IpAddr):
         obj =  { 
                 'IpAddr' : IpAddr,
                 }
-        reqUrl =  self.urlBase+'ArpEntry'
+        reqUrl =  self.stateUrlBase+'ArpEntry'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
-    def getArpEntryById(self, objectId ):
-        reqUrl =  self.urlBase+'ArpEntry'+"/%s"%(objectId)
+    def getArpEntryStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'ArpEntry'+"/%s"%(objectId)
         r = requests.get(reqUrl, data=None, headers=headers) 
         return r
 
-    def getAllArpEntrys(self):
-        return self.getObjects( 'ArpEntry') 
+    def getAllArpEntryStates(self):
+        return self.getObjects( 'ArpEntry', self.stateUrlBase)
 
+Config
+""""""
+
+::
 
     """
     .. automethod :: createArpConfig(self,
@@ -403,7 +411,7 @@ Python SDK ARP Methods
                 'ArpConfigKey' : ArpConfigKey,
                 'Timeout' : int(Timeout),
                 }
-        reqUrl =  self.urlBase+'ArpConfig'
+        reqUrl =  self.cfgUrlBase+'ArpConfig'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -418,7 +426,7 @@ Python SDK ARP Methods
         if Timeout != None :
             obj['Timeout'] = int(Timeout)
 
-        reqUrl =  self.urlBase+'ArpConfig'
+        reqUrl =  self.cfgUrlBase+'ArpConfig'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -430,7 +438,7 @@ Python SDK ARP Methods
         if Timeout !=  None:
             obj['Timeout'] = Timeout
 
-        reqUrl =  self.urlBase+'ArpConfig'
+        reqUrl =  self.cfgUrlBase+'ArpConfig'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -440,13 +448,13 @@ Python SDK ARP Methods
         obj =  { 
                 'ArpConfigKey' : ArpConfigKey,
                 }
-        reqUrl =  self.urlBase+'ArpConfig'
+        reqUrl =  self.cfgUrlBase+'ArpConfig'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
     def deleteArpConfigById(self, objectId ):
-        reqUrl =  self.urlBase+'ArpConfig'+"/%s"%(objectId)
+        reqUrl =  self.cfgUrlBase+'ArpConfig'+"/%s"%(objectId)
         r = requests.delete(reqUrl, data=None, headers=headers) 
         return r
 
@@ -456,18 +464,18 @@ Python SDK ARP Methods
         obj =  { 
                 'ArpConfigKey' : ArpConfigKey,
                 }
-        reqUrl =  self.urlBase+'ArpConfig'
+        reqUrl =  self.stateUrlBase+'ArpConfig'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
     def getArpConfigById(self, objectId ):
-        reqUrl =  self.urlBase+'ArpConfig'+"/%s"%(objectId)
+        reqUrl =  self.stateUrlBase+'ArpConfig'+"/%s"%(objectId)
         r = requests.get(reqUrl, data=None, headers=headers) 
         return r
 
     def getAllArpConfigs(self):
-        return self.getObjects( 'ArpConfig') 
+        return self.getObjects( 'ArpConfig', self.cfgUrlBase)
 
 
 Configuring BFD
@@ -476,6 +484,9 @@ BFD provides an independent method to validate the operation of the forwarding p
 
 Configuring with Rest API 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+
 COMMAND:
 
 ::
@@ -484,6 +495,7 @@ COMMAND:
 OPTIONS:
 
 EXAMPLE:
+
 
 
 Configuring with Python SDK
