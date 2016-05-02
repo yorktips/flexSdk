@@ -368,8 +368,8 @@ Output:
 
 Python SDK ARP Methods
 ^^^^^^^^^^^^^^^^^^^^^^
-State
-""""""
+State Methods
+"""""""""""""
 
 ::
 
@@ -392,8 +392,8 @@ State
     def getAllArpEntryStates(self):
         return self.getObjects( 'ArpEntry', self.stateUrlBase)
 
-Config
-""""""
+Config Methods
+""""""""""""""
 
 ::
 
@@ -480,16 +480,48 @@ Config
 
 Configuring BFD
 ---------------
-BFD provides an independent method to validate the operation of the forwarding plane between two routers.  This can be utilized to ensure subsecond detection of a failure and be utilized to trigger an action in a routing protocol (severing a session or adjacency).
+BFD provides an independent method to validate the operation of the forwarding plane between two routers.  
+This can be utilized to ensure subsecond detection of a failure and be utilized to trigger an action in a routing protocol (severing a session or adjacency).
+
+
+BFD Operation
+^^^^^^^^^^^^^^
+
+BFD in Flexswitch operates in the following manner 
+
+
+Enabling BFD
+^^^^^^^^^^^^
+
+BFD Needs to be enabled in the following order:
+
+ - Enable globally
+ - Creation of BFD session parameters
+ - Attach session User independent session or Routing protocol 
+
+The above assumes that the BFD daemon is already running and has registered with the system. 
+
 
 Configuring with Rest API 
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+"""""""""""""""""""""""""
 
+Step 1. Enable BFD Globally
 
-
-COMMAND:
+You need to set the "*Enable*" parameter to "*true*".  You can also see the "*Bfd*" parameter is set to the name "*default*".  This value is the 
+VRF name where BFD will be Globally enabled. By default this is the "*default*" VRF and should not need to be set by the user. 
 
 ::
+
+	curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"Bfd":"default","Enable":"true"}' 'http://<*your-switchip*>:8080/public/v1/config/BfdGlobal'
+	
+
+Step 2. Create BFD session parameters
+
+Here we need to 
+
+::
+
+	curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"Name":"BFD_session","LocalMultiplier":"3","DesiredMinTxInterval":"250","RequiredMinRxInterval":"250","RequiredMinEchoRxInterval":"0","DemandEnabled":"false","AuthenticationEnabled":"false","AuthKeyId":"1","AuthData":"snaproute"}' 'http://<*your-switchip*>:8080/public/v1/Config/BfdSessionParam'
 	
 
 OPTIONS:
@@ -499,7 +531,7 @@ EXAMPLE:
 
 
 Configuring with Python SDK
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+""""""""""""""""""""""""""""
 
 Configuring BGP
 ---------------
