@@ -325,10 +325,8 @@ Below is an example to set the ARP Timeout to 1000 seconds via the Python SDK:
 
 	if __name__ =='__main__':
 		ip = "192.168.0.3"
-		Timeout=1000
 		restIf = FlexSwitch(ip, 8080)
-		arp_ip="51.1.1.5"
-		restIf.createArpStatic(arp_ip,mac)
+		restIf.getAllArpEntrys()
 
 
 You can display the results of this change with the followin Python Script below:
