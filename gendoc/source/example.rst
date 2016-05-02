@@ -34,14 +34,14 @@ FlexSwitch has a REST based API, and below is an example utilzing Linux cURL:
 COMMAND:
 ::
 	
-	curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"Timeout":<*Timeout Value in seconds*>}' 'http://<*your-switchip*>:8080/public/v1/config/ArpConfig'
+	curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"ArpConfigKey":"VRF Name", "Timeout":<*Timeout Value in seconds*>}' 'http://<*your-switchip*>:8080/public/v1/config/ArpConfig'
 	
 
 OPTIONS:
 
 ::
-
-	Timeout - Length of ARP timeout in seconds. 
+	ArpConfigKey(string - *Optional*) - VRF name where configuration is applied. Default value is "default"
+	Timeout(int32) - Length of ARP timeout in seconds. Default Value is 600 seconds. 
 
 EXAMPLE:
 ::
@@ -75,9 +75,38 @@ EXAMPLE:
 Configuring with Python SDK
 """"""""""""""""""""""""""""""""""
 
-FlexSwitch has a Python SDK for utiliztion of programtically adjusting a device via a python script/application.  This SDK has full parody with FlexSwitch's RESTful API.
+Below is an example to set the ARP Timeout to 1000 seconds via the Python SDK, utilizing method *createArpConfig()*. 
 
-Below is an example to set the ARP Timeout to 1000 seconds via the Python SDK:
+COMMAND:
+::
+
+	>>> FlexSwitch("*IP Address*", *TCP port*).createArpConfig("<*VRF*>",<"*Timeout*">)
+	
+OPTIONS:
+
+::
+	
+   createArpConfig(self, param string ArpConfigKey :  Arp config VRF ID,
+        				 param int32 Timeout :  Global Arp entry timeout value. Default value:600 seconds)
+        
+
+
+EXAMPLE:
+
+Below are examples for utilizing this method via the Python CLI, python script and Displaying the results 
+
+1. Python CLI:
+*Note the ObjectID, UUID is the same.*
+
+::  
+	>>> FlexSwitch("10.1.10.243", 8080).createArpConfig("1", 1000)
+	({u'ObjectId': u'45dff5a0-7dc1-441d-723d-ccf731186ece', u'Error': u''}, None)      
+
+	>>> FlexSwitch("10.1.10.243", 8080).getAllArpConfigs()
+	[{u'Object': {u'ConfigObj': None, u'ArpConfigKey': u'1', u'Timeout': 1000}, u'ObjectId': u'45dff5a0-7dc1-441d-723d-ccf731186ece'},	
+
+
+2. Utilizing a Python Script to set ARP timeout
 
 ::
 
@@ -86,13 +115,13 @@ Below is an example to set the ARP Timeout to 1000 seconds via the Python SDK:
 
 
 	if __name__ =='__main__':
-		ip = "192.168.0.3"
+		switch_ip = "10.1.10.243"
 		Timeout=1000
-		restIf = FlexSwitch(ip, 8080)
+		restIf = FlexSwitch(switch_ip, 8080)
 		restIf.createArpConfig("1",Timeout)
 
 
-You can display the results of this change with the followin Python Script below:
+3. Display results of this change:
 
 ::
 
@@ -102,8 +131,8 @@ You can display the results of this change with the followin Python Script below
 
 
 	if __name__ =='__main__':
-		ip = "192.168.0.3"
-		restIf = FlexSwitch(ip, 8080)
+		switch_ip = "10.1.10.243"
+		restIf = FlexSwitch(switch_ip, 8080)
 		print json.dumps(restIf.getAllArpConfigs(), indent=4)	
 
 Output:
@@ -124,8 +153,8 @@ Output:
 Configuring via Configuration file 
 """"""""""""""""""""""""""""""""""
 
-Static Entries
-^^^^^^^^^^^^^^
+Configuring Static Entries
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Configuring with Rest API 
 """"""""""""""""""""""""""""""""
@@ -142,8 +171,8 @@ OPTIONS:
 
 ::
 
-        IP - IPv4 address to have a static entry applied 
-	MAC - Layer 2 MAC address that will be configured for the associated IPv4 address. 
+    IP (string) - IPv4 address to have a static entry applied 
+	MAC(string) - Layer 2 MAC address that will be configured for the associated IPv4 address. 
 
 EXAMPLE:
 ::
@@ -177,8 +206,30 @@ EXAMPLE:
 
 Configuring with Python SDK
 """"""""""""""""""""""""""""""""""
-Below is an example to set the ARP Timeout to 1000 seconds via the Python SDK:
+Below is an example to set a static arp entry via the Python SDK, utilizing method *createArpStatic()*. 
 
+
+COMMAND:
+::
+
+	>>> FlexSwitch("<*IPv4 Address*>", <*TCP port*>).createArpStatic(<*IPv4Address*>, <*MAC*>)
+
+OPTIONS:
+::
+
+    IPv4Address (string)- IPv4 address to have a static entry applied 
+	MAC (string) - Layer 2 MAC address that will be configured for the associated IPv4 address. 
+
+
+EXAMPLE:
+
+Python CLI:
+
+::
+	>>> FlexSwitch("10.1.10.243", 8080).createArpStatic("50.1.1.10","01:23:34:56:78")
+	({u'ObjectId': u'9e81f7d4-f9f0-4c86-556b-6398e47897bc', u'Error': u''}, None)
+	
+Utilizing a Python Script to set Static ARP:
 ::
 
 	#!/usr/bin/python
@@ -186,15 +237,15 @@ Below is an example to set the ARP Timeout to 1000 seconds via the Python SDK:
 
 
 	if __name__ =='__main__':
-		ip = "192.168.0.3"
+		switch_ip = "10.1.10.243"
 		Timeout=1000
-		restIf = FlexSwitch(ip, 8080)
+		restIf = FlexSwitch(switch_ip, 8080)
 		arp_ip="192.168.0.1"
 		mac="01:23:34:56:78"
 		restIf.createArpStatic(arp_ip,mac)
 
 
-You can display the results of this change with the followin Python Script below:
+Display results of this change:
 
 ::
 
@@ -204,8 +255,8 @@ You can display the results of this change with the followin Python Script below
 
 
 	if __name__ =='__main__':
-		ip = "192.168.0.3"
-		restIf = FlexSwitch(ip, 8080)
+		switch_ip = "10.1.10.243"
+		restIf = FlexSwitch(switch_ip, 8080)
 		print json.dumps(restIf.getAllArpStatics(), indent=4)	
 
 Output:
@@ -228,16 +279,11 @@ Output:
 Configuring via Configuration file
 """"""""""""""""""""""""""""""""""
 
-Display ARP State
-^^^^^^^^^^^^^^^^^
-
+Display All ARP Entries
+***********************
 
 Display via Rest API 
 """""""""""""""""""""
-
-
-Display All ARP Entries
-***********************
  
 Utilizing the GetBulk API for ARP, "*ArpEntrys*", we can display all ARP entries learned on the device.  
 
@@ -246,6 +292,12 @@ COMMAND:
 
         curl -X GET --header 'Content-Type: application/json' 'http://<*your-switchip*>:8080/public/v1/state/ArpEntrys'
 
+
+OPTIONS
+
+::
+
+	None
 
 EXAMPLE:
 ::
@@ -274,8 +326,68 @@ EXAMPLE:
 	}
 
 
+Displaying via Python SDK
+"""""""""""""""""""""""""
+
+Displaying all ARP entries via Python SDK
+
+::
+
+	>>> FlexSwitch("10.1.10.243", 8080).getAllArpEntryStates()
+	[{u'Object': {u'ConfigObj': None, u'Intf': u'fpPort47', u'Vlan': u'Internal Vlan', u'IpAddr': u'172.16.0.14', u'ExpiryTimeLeft': u'9m24.869691096s', u'MacAddr': u'a8:9d:21:aa:8e:01'}, u'ObjectId': u''}, {u'Object': {u'ConfigObj': None, u'Intf': u'fpPort49', u'Vlan': u'Internal Vlan', u'IpAddr': u'172.16.0.20', u'ExpiryTimeLeft': u'9m43.991376701s', u'MacAddr': u'00:02:03:04:05:00'}, u'ObjectId': u''}]
+
+::
+
+	#!/usr/bin/python
+	from flexswitchV2 import FlexSwitch
+
+
+	if __name__ =='__main__':
+		switch_ip = "10.1.10.243"
+		restIf = FlexSwitch(switch_ip, 8080)
+		restIf.getAllArpEntrys()
+
+
+You can display the results of this change with the following Python Script:
+
+::
+
+	#!/usr/bin/python
+	import json
+	from flexswitchV2 import FlexSwitch
+
+
+	if __name__ =='__main__':
+		switch_ip = "10.1.10.243"
+		restIf = FlexSwitch(switch_ip, 8080)
+		print json.dumps(restIf.getAllArpEntrys(), indent=4)	
+
+Output:
+
+::
+
+	acasella@snaproute-lab-r710-1:~$ python getarpall.py 
+	[
+	    {
+		"Object": {
+		    "Intf": "eth1", 
+		    "Vlan": "5", 
+		    "MacAddr": "1e:b9:5a:e9:52:a1", 
+		    "IpAddr": "51.1.1.5", 
+		    "ExpiryTimeLeft": "9m48.458947622s"
+		}, 
+		"ObjectId": ""
+	    }
+	]
+
+
+
+
 Display a specific ARP entry
 ****************************
+
+Display via Rest API 
+"""""""""""""""""""""
 
 You can return the value of an object based on any of the variables within that object.  For example you can query an ARP entry on any of the follownig parameters:
 
@@ -286,6 +398,7 @@ The example below will show how to grab a specific ARP entry based on IP address
 COMMAND:
 
 ::
+
 	curl -X GET --header 'Content-Type: application/json' -d '{"IpAddr":"<*IPv4 Address*>"}' 'http://<*your-switchip*>:8080/public/v1/state/ArpEntry'
 
 
@@ -313,20 +426,16 @@ EXAMPLE:
 	    "ObjectId": ""
 	}
 
-Displaying State with Python SDK
-""""""""""""""""""""""""""""""""""
-Below is an example to set the ARP Timeout to 1000 seconds via the Python SDK:
+
+
+Displaying via Python SDK
+"""""""""""""""""""""""""
+
 
 ::
 
-	#!/usr/bin/python
-	from flexswitchV2 import FlexSwitch
-
-
-	if __name__ =='__main__':
-		ip = "192.168.0.3"
-		restIf = FlexSwitch(ip, 8080)
-		restIf.getAllArpEntrys()
+	>>> FlexSwitch("10.1.10.243", 8080).getArpEntryState("172.16.0.20")
+	({u'Object': {u'ConfigObj': None, u'Intf': u'fpPort49', u'Vlan': u'Internal Vlan', u'IpAddr': u'172.16.0.20', u'ExpiryTimeLeft': u'16m38.505153914s', u'MacAddr': u'00:02:03:04:05:00'}, u'ObjectId': u''}, None)
 
 
 You can display the results of this change with the followin Python Script below:
@@ -334,20 +443,19 @@ You can display the results of this change with the followin Python Script below
 ::
 
 	#!/usr/bin/python
-	import json
 	from flexswitchV2 import FlexSwitch
 
 
 	if __name__ =='__main__':
-		ip = "192.168.0.3"
-		restIf = FlexSwitch(ip, 8080)
-		print json.dumps(restIf.getAllArpEntrys(), indent=4)	
+		switch_ip = "10.1.10.243"
+		restIf = FlexSwitch(switch_ip, 8080)
+		restIf.getArpEntryState("172.16.0.20")
 
 Output:
 
 ::
 
-	acasella@snaproute-lab-r710-1:~$ python getarpall.py 
+	acasella@snaproute-lab-r710-1:~$ python getArpEntryState.py 
 	[
 	    {
 		"Object": {
