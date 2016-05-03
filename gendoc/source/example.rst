@@ -777,6 +777,7 @@ OPTIONS:
 EXAMPLE:
 
 ::
+
 	acasella@snaproute-lab-r710-1:~$ curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"Name":"BFD_session","LocalMultiplier":3,"DesiredMinTxInterval":250,"RequiredMinRxInterval":250,"RequiredMinEchoRxInterval":0,"DemandEnabled":false,"AuthenticationEnabled":false,"AuthKeyId":1,"AuthData":"snaproute"}' 'http://10.1.10.43:8080/public/v1/config/BfdSessionParam'
 	{"ObjectId":"40ebf60d-1230-4c7b-4c91-bc4a076693d4","Error":""}
 
