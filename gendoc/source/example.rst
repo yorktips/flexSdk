@@ -40,6 +40,7 @@ COMMAND:
 OPTIONS:
 
 ::
+
 	ArpConfigKey(string - *Optional*) - VRF name where configuration is applied. Default value is "default"
 	Timeout(int32) - Length of ARP timeout in seconds. Default Value is 600 seconds. 
 
@@ -75,12 +76,12 @@ EXAMPLE:
 Configuring with Python SDK
 """"""""""""""""""""""""""""""""""
 
-Below is an example to set the ARP Timeout to 1000 seconds via the Python SDK, utilizing method *createArpConfig()*. 
+Setting the ARP Timeout to 1000 seconds via FlexSwitch's Python SDK, utilizing method *createArpConfig()*. 
 
 COMMAND:
 ::
 
-	>>> FlexSwitch("*IP Address*", *TCP port*).createArpConfig("<*VRF*>",<"*Timeout*">)
+	>>> FlexSwitch("*Switch IP*", *TCP port*).createArpConfig("<*VRF*>",<"*Timeout*">)
 	
 OPTIONS:
 
@@ -99,6 +100,8 @@ Below are examples for utilizing this method via the Python CLI, python script a
 *Note the ObjectID, UUID is the same.*
 
 ::  
+
+	>>>from flexswitchV2 import FlexSwitch
 	>>> FlexSwitch("10.1.10.243", 8080).createArpConfig("1", 1000)
 	({u'ObjectId': u'45dff5a0-7dc1-441d-723d-ccf731186ece', u'Error': u''}, None)      
 
@@ -139,7 +142,7 @@ Output:
 
 ::
 
-	acasella@snaproute-lab-r710-1:~$ ./getarpconfig.py 
+	acasella@snaproute-lab-r710-1:~$ python getarpconfig.py 
 	[
 	    {
 		"Object": {
@@ -152,6 +155,8 @@ Output:
 
 Configuring via Configuration file 
 """"""""""""""""""""""""""""""""""
+
+-----------------
 
 Configuring Static Entries
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -206,30 +211,36 @@ EXAMPLE:
 
 Configuring with Python SDK
 """"""""""""""""""""""""""""""""""
-Below is an example to set a static arp entry via the Python SDK, utilizing method *createArpStatic()*. 
+Setting a static arp entry via FlexSwitch's Python SDK, utilizing method *createArpStatic()*. 
 
 
 COMMAND:
 ::
 
-	>>> FlexSwitch("<*IPv4 Address*>", <*TCP port*>).createArpStatic(<*IPv4Address*>, <*MAC*>)
+	>>> FlexSwitch("<*Switch IP*>", <*TCP port*>).createArpStatic(<*IPv4Address*>, <*MAC*>)
 
 OPTIONS:
 ::
 
-    IPv4Address (string)- IPv4 address to have a static entry applied 
-	MAC (string) - Layer 2 MAC address that will be configured for the associated IPv4 address. 
+
+   createArpStatic(self, param string IPv4Address :  IPv4 address for ARP,
+        				 param string MAC  :   MAC address associated with IPv4 address)
 
 
 EXAMPLE:
 
-Python CLI:
+Below are examples for utilizing this method via the Python CLI, python script and displaying the results:
+
+1. Python CLI:
 
 ::
+
+	>>>from flexswitchV2 import FlexSwitch
 	>>> FlexSwitch("10.1.10.243", 8080).createArpStatic("50.1.1.10","01:23:34:56:78")
 	({u'ObjectId': u'9e81f7d4-f9f0-4c86-556b-6398e47897bc', u'Error': u''}, None)
 	
-Utilizing a Python Script to set Static ARP:
+2. Utilizing a Python Script to set Static ARP:
+
 ::
 
 	#!/usr/bin/python
@@ -245,7 +256,7 @@ Utilizing a Python Script to set Static ARP:
 		restIf.createArpStatic(arp_ip,mac)
 
 
-Display results of this change:
+3. Display results of this change:
 
 ::
 
@@ -278,6 +289,9 @@ Output:
 
 Configuring via Configuration file
 """"""""""""""""""""""""""""""""""
+
+----------------------
+
 
 Display All ARP Entries
 ***********************
@@ -329,24 +343,36 @@ EXAMPLE:
 Displaying via Python SDK
 """""""""""""""""""""""""
 
-Displaying all ARP entries via Python SDK
+Displaying all ARP entries utilizing FlexSwitch's Python SDK, utilizing method *getAllArpEntryStates()*
+
+COMMAND:
 
 ::
 
-	>>> FlexSwitch("10.1.10.243", 8080).getAllArpEntryStates()
+	>>> FlexSwitch("<*Switch IP*>", <*TCP Port*>).getAllArpEntryStates()
+
+
+OPTIONS:
+
+::
+
+   createArpStatic(self)
+	
+
+EXAMPLE:
+
+Below are examples for utilizing this method via the Python CLI, python script and displaying the results:
+
+1. Python CLI 
+::
+
+	>>>from flexswitchV2 import FlexSwitch
+	>>>FlexSwitch("10.1.10.243", 8080).getAllArpEntryStates()
 	[{u'Object': {u'ConfigObj': None, u'Intf': u'fpPort47', u'Vlan': u'Internal Vlan', u'IpAddr': u'172.16.0.14', u'ExpiryTimeLeft': u'9m24.869691096s', u'MacAddr': u'a8:9d:21:aa:8e:01'}, u'ObjectId': u''}, {u'Object': {u'ConfigObj': None, u'Intf': u'fpPort49', u'Vlan': u'Internal Vlan', u'IpAddr': u'172.16.0.20', u'ExpiryTimeLeft': u'9m43.991376701s', u'MacAddr': u'00:02:03:04:05:00'}, u'ObjectId': u''}]
 
-::
-
-	#!/usr/bin/python
-	from flexswitchV2 import FlexSwitch
 
 
-	if __name__ =='__main__':
-		switch_ip = "10.1.10.243"
-		restIf = FlexSwitch(switch_ip, 8080)
-		restIf.getAllArpEntrys()
-
+2. Utilizing a Python Script pretty print Arp Entries
 
 You can display the results of this change with the following Python Script:
 
@@ -360,28 +386,40 @@ You can display the results of this change with the following Python Script:
 	if __name__ =='__main__':
 		switch_ip = "10.1.10.243"
 		restIf = FlexSwitch(switch_ip, 8080)
-		print json.dumps(restIf.getAllArpEntrys(), indent=4)	
+		print json.dumps(restIf.getAllArpEntryStates(), indent=4)	
 
 Output:
 
 ::
 
-	acasella@snaproute-lab-r710-1:~$ python getarpall.py 
+	acasella@snaproute-lab-r710-1:~$ python getAllArpEntry.py
 	[
-	    {
-		"Object": {
-		    "Intf": "eth1", 
-		    "Vlan": "5", 
-		    "MacAddr": "1e:b9:5a:e9:52:a1", 
-		    "IpAddr": "51.1.1.5", 
-		    "ExpiryTimeLeft": "9m48.458947622s"
+		{
+			"Object": {
+				"ConfigObj": null, 
+				"Intf": "fpPort47", 
+				"Vlan": "Internal Vlan", 
+				"IpAddr": "172.16.0.14", 
+				"ExpiryTimeLeft": "16m38.415016779s", 
+				"MacAddr": "a8:9d:21:aa:8e:01"
+			}, 
+			"ObjectId": ""
 		}, 
-		"ObjectId": ""
-	    }
+		{
+			"Object": {
+				"ConfigObj": null, 
+				"Intf": "fpPort49", 
+				"Vlan": "Internal Vlan", 
+				"IpAddr": "172.16.0.20", 
+				"ExpiryTimeLeft": "16m29.520461011s", 
+				"MacAddr": "00:02:03:04:05:00"
+			}, 
+			"ObjectId": ""
+		}
 	]
 
 
-
+-----------------------
 
 Display a specific ARP entry
 ****************************
@@ -406,7 +444,7 @@ OPTIONS:
 
 ::
 
-	IpAddr - IPv4 Address ArpEntry to be queried 
+	IpAddr(string) - IPv4 Address ArpEntry to be queried 
 
 EXAMPLE:
 ::
@@ -431,46 +469,66 @@ EXAMPLE:
 Displaying via Python SDK
 """""""""""""""""""""""""
 
+Displaying all ARP entries utilizing FlexSwitch's Python SDK, utilizing method *getAllArpEntryStates()*
+
+COMMAND:
 
 ::
 
+	>>> FlexSwitch("<*Switch IP*>", <*TCP Port*>).getArpEntryState("<*IPv4Address*>")
+
+OPTIONS:
+
+::
+
+	getArpEntryState(self, param string IPv4Address :  IPv4 address to return from ARP Table)
+	
+EXAMPLE:
+
+::
+
+	>>>from flexswitchV2 import FlexSwitch
 	>>> FlexSwitch("10.1.10.243", 8080).getArpEntryState("172.16.0.20")
 	({u'Object': {u'ConfigObj': None, u'Intf': u'fpPort49', u'Vlan': u'Internal Vlan', u'IpAddr': u'172.16.0.20', u'ExpiryTimeLeft': u'16m38.505153914s', u'MacAddr': u'00:02:03:04:05:00'}, u'ObjectId': u''}, None)
 
 
-You can display the results of this change with the followin Python Script below:
+You can pretty print the results with the following python script:
 
 ::
 
 	#!/usr/bin/python
+	import json
 	from flexswitchV2 import FlexSwitch
 
 
 	if __name__ =='__main__':
 		switch_ip = "10.1.10.243"
 		restIf = FlexSwitch(switch_ip, 8080)
-		restIf.getArpEntryState("172.16.0.20")
+		print json.dumps(restIf.getArpEntryState("172.16.0.20"), indent=4)
 
 Output:
 
 ::
 
-	acasella@snaproute-lab-r710-1:~$ python getArpEntryState.py 
+	acasella@snaproute-lab-r710-1:~$  python ~/getArpState.py
 	[
-	    {
-		"Object": {
-		    "Intf": "eth1", 
-		    "Vlan": "5", 
-		    "MacAddr": "1e:b9:5a:e9:52:a1", 
-		    "IpAddr": "51.1.1.5", 
-		    "ExpiryTimeLeft": "9m48.458947622s"
+		{
+			"Object": {
+				"ConfigObj": null, 
+				"Intf": "fpPort49", 
+				"Vlan": "Internal Vlan", 
+				"IpAddr": "172.16.0.20", 
+				"ExpiryTimeLeft": "16m19.337528389s", 
+				"MacAddr": "00:02:03:04:05:00"
+			}, 
+			"ObjectId": ""
 		}, 
-		"ObjectId": ""
-	    }
+		null
 	]
 
 
 
+-------------------------
 
 Python SDK ARP Methods
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -583,27 +641,88 @@ Config Methods
     def getAllArpConfigs(self):
         return self.getObjects( 'ArpConfig', self.cfgUrlBase)
 
+---------------------
+
+---------------------
 
 Configuring BFD
 ---------------
 BFD provides an independent method to validate the operation of the forwarding plane between two routers.  
 This can be utilized to ensure subsecond detection of a failure and be utilized to trigger an action in a routing protocol (severing a session or adjacency).
 
+BFD Support
+^^^^^^^^^^^
+
+BFD supports the following options:
+
+ - Asynchronous mode
+ - Demand mode
+ - Per-link (BFD over LAG)
+ - Authentication  
+ - BGP peer failure detection 
+
+-------------
 
 BFD Operation
 ^^^^^^^^^^^^^^
 
-BFD in Flexswitch operates in the following manner 
+Flexswitch's BFD implementation was designed to allow for single or multi-hop sessions. This is done by either having an IP based BFD session, where there could be one of many layer 3 hops between the two devices
+or interface based sessions, where the BFD peer, much be directly attached.  This allows for BFD sessions to be tied an interface based protocol, such as OSPF vs a peer-based protocol, such as BGP. 
 
+------------------
+
+Session Establishment 
+"""""""""""""""""""""
+
+BFD session establishments begins by implementing a slow timer, by setting the *Desired min Tx Interval* to 2000 ms with a multiplier of 3, resulting in a 6000ms timeout for hello packets that are sent.  
+This is done to ensure proper interoperability between 3rd-party peers by ensuring the appropriate BFD parameters are correctly negotiated; I.E. RemoteDiscriminator, SessionState and failure detection timers. 
+Once this information is negotiated, we begin to send BFD hello packets at the configured rate. 
+
+If a BFD session does not see hello packets within the configured *Required min Rx Interval*, three things occur:
+
+	1. BFD session state is set to down 
+	2. Any associated protocol sessions are torn down
+	3. BFD will flush the learned Remote Discriminator  
+	
+If BFD is associated to a particular protocol, BFD will hold down that protocols session state, until the associated routing-protocol or user-created session is reset by an administrator.   If BFD is brought administratively-down (either locally or remotely), the BFD session is cleared without any impact 
+to the associated protocol and only the BFD session is self is torn down. 
+
+For details surrounding specific routing protocol implementations, check out the "BGP with BFD" or "OSPF with BFD" sections. 
+
+Demand Mode
+""""""""""""
+
+In demand mode, no Hello packets are exchanged after the session is established; it is assumed that the endpoints have another way to verify connectivity to each other, perhaps on the underlying physical layer.
+
+Per-link
+""""""""
+
+Since traditional Asynchronous BFD is an IP point-to-point protocol, it has no concept of layer 2 links that may exist between two devices.  This is especially true for layer 2 port-channels with multiple member-links.   
+If these one of these links happen to fail, while BFD is running across them, it may result in a false-positive detection of a connectivity failure.  This could have unintended impact, by bringing down an associated routing-protocol session incorrectly, 
+thus taking our an entire port-channel, rather than a single-link.  
+
+BFD over LAG or BFD per-link was created as an enhancement to limit the impact of single port-channel member-link failure.  When BFD per-link is enabled on a port-channel interface, an asynchronous mode BFD sessions is run on every port-channel member link.  This allows for failure detection of a single port-channel member-link, 
+limiting the impact and traffic-transitions to only links that failed.  When all BFD sessions fail on a particular port-channel interface, only then are the associated protocol sessions torn down, allowing for accurate fault detection. 
+
+
+BGP peer failure detection
+""""""""""""""""""""""""""
+
+See BGP with BFD section for more details
+
+-------------------
+
+Configuring BFD
+^^^^^^^^^^^^^^^
 
 Enabling BFD
-^^^^^^^^^^^^
+""""""""""""
 
 BFD Needs to be enabled in the following order:
 
  - Enable globally
  - Creation of BFD session parameters
- - Attach session User independent session or Routing protocol 
+ - Attach session User configured construct or Routing protocol 
 
 The above assumes that the BFD daemon is already running and has registered with the system. 
 
@@ -616,25 +735,50 @@ Step 1. Enable BFD Globally
 You need to set the "*Enable*" parameter to "*true*".  You can also see the "*Bfd*" parameter is set to the name "*default*".  This value is the 
 VRF name where BFD will be Globally enabled. By default this is the "*default*" VRF and should not need to be set by the user. 
 
+COMMAND:
 ::
 
 	curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"Bfd":"default","Enable":"true"}' 'http://<*your-switchip*>:8080/public/v1/config/BfdGlobal'
 	
 
-Step 2. Create BFD session parameters
-
-Here we need to 
-
+OPTIONS:
 ::
 
-	curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"Name":"BFD_session","LocalMultiplier":"3","DesiredMinTxInterval":"250","RequiredMinRxInterval":"250","RequiredMinEchoRxInterval":"0","DemandEnabled":"false","AuthenticationEnabled":"false","AuthKeyId":"1","AuthData":"snaproute"}' 'http://<*your-switchip*>:8080/public/v1/Config/BfdSessionParam'
+	Bfd (string) - VRF where BFD will be enabled. 
+	Enable (boolean) - Boolean value to specify the global state for BFD; I.E. true/false. 
+
+EXAMPLE:
+::
+	
+	acasella@snaproute-lab-r710-1:~$ curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"Bfd":"default","Enable":true}' 'http://10.1.10.43:8080/public/v1/config/BfdGlobal'
+	{"ObjectId":"0880b0cb-d0da-461e-7826-9b2eef1b800e","Error":""}
+
+Step 2. Create BFD session parameters 
+
+COMMAND:
+::
+
+	curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"Name":"BFD_session","LocalMultiplier":3,"DesiredMinTxInterval":250,"RequiredMinRxInterval":250,"RequiredMinEchoRxInterval":0,"DemandEnabled":false,"AuthenticationEnabled":false,"AuthKeyId":1,"AuthData":"snaproute"}' 'http://<*your-switchip*>:8080/public/v1/config/BfdSessionParam'
 	
 
 OPTIONS:
+::
+
+	Name (string) - Name of the BFD session
+	LocalMultiplier (int32) - Multiplier of BFD hello RX interval to wait before tearing down session
+	DesiredMinTxInterval (int32) - Time in milliseconds between TX of BFD hello packets  
+	RequiredMinRxInterval (int32)- Expected interval in milliseconds between RX of BFD hello packets 
+	RequiredMinEchoRxInterval (int32)- Expected interval in milliseconds between RX of BFD echo packets 
+	DemandEnabled (boolean)-  Boolean value to specify the global state for BFD demand mode; I.E. true/false
+	AuthenticationEnabled (boolean)-  Boolean value to specify the global state for BFD authentication; I.E. true/false
+	AuthKeyId (int32)- Authentication key ID
+	AuthData (string)- Authentication string 
 
 EXAMPLE:
 
-
+::
+	acasella@snaproute-lab-r710-1:~$ curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"Name":"BFD_session","LocalMultiplier":3,"DesiredMinTxInterval":250,"RequiredMinRxInterval":250,"RequiredMinEchoRxInterval":0,"DemandEnabled":false,"AuthenticationEnabled":false,"AuthKeyId":1,"AuthData":"snaproute"}' 'http://10.1.10.43:8080/public/v1/config/BfdSessionParam'
+	{"ObjectId":"40ebf60d-1230-4c7b-4c91-bc4a076693d4","Error":""}
 
 Configuring with Python SDK
 """"""""""""""""""""""""""""
