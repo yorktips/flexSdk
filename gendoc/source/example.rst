@@ -174,11 +174,15 @@ COMMAND:
 
 OPTIONS:
 
-::
++------------+------------+---------------------------------------------------------------------------------+
+| Variables  | Type       |  Description                                                                    |   
++============+============+=================================================================================+ 
+| IP         | String     | IPv4 address to have a static entry applied                                     |
++------------+------------+---------------------------------------------------------------------------------+
+| MAC        | String     | Layer 2 MAC address that will be configured for the associated IPv4 address.    |   
++------------+------------+---------------------------------------------------------------------------------+ 
 
-    IP (string) - IPv4 address to have a static entry applied 
-	MAC(string) - Layer 2 MAC address that will be configured for the associated IPv4 address. 
-
+	
 EXAMPLE:
 ::
 
@@ -444,9 +448,13 @@ COMMAND:
 
 OPTIONS:
 
-::
++------------+------------+---------------------------------------+
+| Variables  | Type       |  Description                          |   
++============+============+=======================================+ 
+| IpAddr     | String     | IPv4 Address ArpEntry to be queried   |
++------------+------------+---------------------------------------+
 
-	IpAddr(string) - IPv4 Address ArpEntry to be queried 
+	(string) -  
 
 EXAMPLE:
 ::
@@ -484,6 +492,14 @@ OPTIONS:
 ::
 
 	getArpEntryState(self, param string IPv4Address :  IPv4 address to return from ARP Table)
+
++------------------+------------+-------+--------------------------------------+
+| Python Method    | Variables  | Type  | Description                          |   
++==================+============+=======+======================================+ 
+| getArpEntryState | IPv4Address| String|  IPv4 Address ArpEntry to be queried |
++------------------+------------+-------+--------------------------------------+
+
+	
 	
 EXAMPLE:
 
