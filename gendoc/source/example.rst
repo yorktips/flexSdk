@@ -292,12 +292,14 @@ Configuring via Configuration file
 
 ----------------------
 
+Display ARP Entry
+^^^^^^^^^^^^^^^^^
 
 Display All ARP Entries
-***********************
+"""""""""""""""""""""""
 
 Display via Rest API 
-"""""""""""""""""""""
+********************
  
 Utilizing the GetBulk API for ARP, "*ArpEntrys*", we can display all ARP entries learned on the device.  
 
@@ -341,7 +343,7 @@ EXAMPLE:
 
 
 Displaying via Python SDK
-"""""""""""""""""""""""""
+*************************
 
 Displaying all ARP entries utilizing FlexSwitch's Python SDK, utilizing method *getAllArpEntryStates()*
 
@@ -422,10 +424,10 @@ Output:
 -----------------------
 
 Display a specific ARP entry
-****************************
+""""""""""""""""""""""""""""
 
 Display via Rest API 
-"""""""""""""""""""""
+********************
 
 You can return the value of an object based on any of the variables within that object.  For example you can query an ARP entry on any of the follownig parameters:
 
@@ -467,7 +469,7 @@ EXAMPLE:
 
 
 Displaying via Python SDK
-"""""""""""""""""""""""""
+*************************
 
 Displaying all ARP entries utilizing FlexSwitch's Python SDK, utilizing method *getAllArpEntryStates()*
 
