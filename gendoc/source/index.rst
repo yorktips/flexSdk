@@ -9,8 +9,10 @@ Welcome to FlexSwitchSDK's documentation!
 .. toctree::
    :maxdepth: 2
 
+    Quick Start Guide <quickstart>
     Installing FlexSwitch <install>
     Example Configurations <example>
+    Example Use Cases	   <usecase>
     Network Topologies    <topology>
     API Reference         <apis>
 
