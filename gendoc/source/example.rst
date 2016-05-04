@@ -39,10 +39,14 @@ COMMAND:
 
 OPTIONS:
 
-::
++------------+------------+-------------------------------------------+----------+----------+
+| Variables  | Type       |  Description                              | Required |  Default |   
++============+============+===========================================+==========+==========+ 
+|ArpConfigKey| string     | VRF name where configuration is applied.  |    No    | "default"|
++------------+------------+-------------------------------------------+----------+----------+
+| Timeout    | int32      | Length of ARP timeout in seconds.         |    Yes   |    600s  |   
++------------+------------+-------------------------------------------+----------+----------+ 
 
-	ArpConfigKey(string - *Optional*) - VRF name where configuration is applied. Default value is "default"
-	Timeout(int32) - Length of ARP timeout in seconds. Default Value is 600 seconds. 
 
 EXAMPLE:
 ::
@@ -87,9 +91,16 @@ OPTIONS:
 
 ::
 	
-   createArpConfig(self, param string ArpConfigKey :  Arp config VRF ID,
-        				 param int32 Timeout :  Global Arp entry timeout value. Default value:600 seconds)
-        
+  createArpConfig(self, param string ArpConfigKey :  Arp config VRF ID,
+                        param int32 Timeout :  Global Arp entry timeout value. Default value:600 seconds)
+
++------------------+------------+------------+-------------------------------------------+----------+----------+
+| Python Method    | Variables  | Type       |  Description                              | Required |  Default |   
++==================+============+============+===========================================+==========+==========+ 
+| createArpConfig  |ArpConfigKey| string     | VRF name where configuration is applied.  |    No    | "default"|
++                  +------------+------------+-------------------------------------------+----------+----------+
+|                  | Timeout    | int32      | Length of ARP timeout in seconds.         |    Yes   |    600s  |   
++------------------+------------+------------+-------------------------------------------+----------+----------+   
 
 
 EXAMPLE:
@@ -174,13 +185,13 @@ COMMAND:
 
 OPTIONS:
 
-+------------+------------+---------------------------------------------------------------------------------+
-| Variables  | Type       |  Description                                                                    |   
-+============+============+=================================================================================+ 
-| IP         | String     | IPv4 address to have a static entry applied                                     |
-+------------+------------+---------------------------------------------------------------------------------+
-| MAC        | String     | Layer 2 MAC address that will be configured for the associated IPv4 address.    |   
-+------------+------------+---------------------------------------------------------------------------------+ 
++------------+------------+---------------------------------------------------+----------+----------+
+| Variables  | Type       |  Description                                      | Required |  Default |    
++============+============+===================================================+==========+==========+  
+| IP         | String     | IPv4 address to have a static entry applied       |    Yes   |   None   |
++------------+------------+---------------------------------------------------+----------+----------+
+| MAC        | String     | Layer 2 MAC address associated with IPv4 address. |    Yes   |   None   |   
++------------+------------+---------------------------------------------------+----------+----------+  
 
 	
 EXAMPLE:
@@ -226,10 +237,17 @@ COMMAND:
 OPTIONS:
 ::
 
-
    createArpStatic(self, param string IPv4Address :  IPv4 address for ARP,
         				 param string MAC  :   MAC address associated with IPv4 address)
 
+
++------------------+------------+------------+---------------------------------------------------+----------+----------+
+| Python Method    | Variables  | Type       |  Description                                      | Required |  Default |    
++==================+============+============+===================================================+==========+==========+  
+| createArpStatic  | IP         | String     | IPv4 address to have a static entry applied       |    Yes   |   None   |
++                  +------------+------------+---------------------------------------------------+----------+----------+
+|                  | MAC        | String     | Layer 2 MAC address associated with IPv4 address. |    Yes   |   None   |   
++------------------+------------+------------+---------------------------------------------------+----------+----------+  
 
 EXAMPLE:
 
@@ -362,7 +380,7 @@ OPTIONS:
 
 ::
 
-   createArpStatic(self)
+   getAllArpEntryStates(self)
 	
 
 EXAMPLE:
@@ -448,13 +466,11 @@ COMMAND:
 
 OPTIONS:
 
-+------------+------------+---------------------------------------+
-| Variables  | Type       |  Description                          |   
-+============+============+=======================================+ 
-| IpAddr     | String     | IPv4 Address ArpEntry to be queried   |
-+------------+------------+---------------------------------------+
-
-	(string) -  
++------------+------------+---------------------------------------+----------+----------+
+| Variables  | Type       |  Description                          | Required |  Default |     
++============+============+=======================================+==========+==========+   
+| IpAddr     | String     | IPv4 Address ArpEntry to be queried   |    Yes   |   None   |
++------------+------------+---------------------------------------+----------+----------+
 
 EXAMPLE:
 ::
@@ -493,13 +509,12 @@ OPTIONS:
 
 	getArpEntryState(self, param string IPv4Address :  IPv4 address to return from ARP Table)
 
-+------------------+------------+-------+--------------------------------------+
-| Python Method    | Variables  | Type  | Description                          |   
-+==================+============+=======+======================================+ 
-| getArpEntryState | IPv4Address| String|  IPv4 Address ArpEntry to be queried |
-+------------------+------------+-------+--------------------------------------+
++------------------+------------+-------+--------------------------------------+----------+----------+
+| Python Method    | Variables  | Type  | Description                          | Required |  Default |  
++==================+============+=======+======================================+==========+==========+
+| getArpEntryState | IPv4Address| String|  IPv4 Address ArpEntry to be queried |    Yes   |   None   |
++------------------+------------+-------+--------------------------------------+----------+----------+
 
-	
 	
 EXAMPLE:
 
@@ -736,19 +751,22 @@ Configuring BFD
 Enabling BFD
 """"""""""""
 
-BFD Needs to be enabled in the following order:
+BFD is enabled in the following order:
 
- - Enable globally
- - Creation of BFD session parameters
- - Attach session User configured construct or Routing protocol 
+ 1. Enable globally
+ 2. Creation of BFD session parameter profile
+ 3. Attach to User created BFD session or a routing protocol 
+ 4. Review configuration and state 
 
 The above assumes that the BFD daemon is already running and has registered with the system. 
 
+-----------------
 
 Configuring with Rest API 
-"""""""""""""""""""""""""
+*************************
 
-Step 1. Enable BFD Globally
+Enable BFD Globally
++++++++++++++++++++
 
 You need to set the "*Enable*" parameter to "*true*".  You can also see the "*Bfd*" parameter is set to the name "*default*".  This value is the 
 VRF name where BFD will be Globally enabled. By default this is the "*default*" VRF and should not need to be set by the user. 
@@ -760,10 +778,15 @@ COMMAND:
 	
 
 OPTIONS:
-::
 
-	Bfd (string) - VRF where BFD will be enabled. 
-	Enable (boolean) - Boolean value to specify the global state for BFD; I.E. true/false. 
++------------+------------+--------------------------------------------------------+----------+----------+
+| Variables  | Type       |  Description                                           | Required |  Default |     
++============+============+========================================================+==========+==========+   
+| Bfd        | string     | VRF where BFD will be enabled.                         |    Yes   |   None   |
++------------+------------+--------------------------------------------------------+----------+----------+
+| Enable     | boolean    | IPv4 Address ArpEntry to be queried; I.E. true/false.  |    Yes   |   None   |
++------------+------------+--------------------------------------------------------+----------+----------+
+
 
 EXAMPLE:
 ::
@@ -771,26 +794,43 @@ EXAMPLE:
 	acasella@snaproute-lab-r710-1:~$ curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"Bfd":"default","Enable":true}' 'http://10.1.10.43:8080/public/v1/config/BfdGlobal'
 	{"ObjectId":"0880b0cb-d0da-461e-7826-9b2eef1b800e","Error":""}
 
-Step 2. Create BFD session parameters 
+Creating BFD session parameters 
++++++++++++++++++++++++++++++++
 
 COMMAND:
 ::
 
-	curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"Name":"BFD_session","LocalMultiplier":3,"DesiredMinTxInterval":250,"RequiredMinRxInterval":250,"RequiredMinEchoRxInterval":0,"DemandEnabled":false,"AuthenticationEnabled":false,"AuthKeyId":1,"AuthData":"snaproute"}' 'http://<*your-switchip*>:8080/public/v1/config/BfdSessionParam'
+	curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"Name":"<*Param Profile Name*>","LocalMultiplier":3,"DesiredMinTxInterval":250,"RequiredMinRxInterval":250,"RequiredMinEchoRxInterval":0,"DemandEnabled":false,"AuthenticationEnabled":false,"AuthKeyId":1,"AuthData":"snaproute"}' 'http://<*your-switchip*>:8080/public/v1/config/BfdSessionParam'
 	
 
 OPTIONS:
-::
 
-	Name (string) - Name of the BFD session
-	LocalMultiplier (int32) - Multiplier of BFD hello RX interval to wait before tearing down session
-	DesiredMinTxInterval (int32) - Time in milliseconds between TX of BFD hello packets  
-	RequiredMinRxInterval (int32)- Expected interval in milliseconds between RX of BFD hello packets 
-	RequiredMinEchoRxInterval (int32)- Expected interval in milliseconds between RX of BFD echo packets 
-	DemandEnabled (boolean)-  Boolean value to specify the global state for BFD demand mode; I.E. true/false
-	AuthenticationEnabled (boolean)-  Boolean value to specify the global state for BFD authentication; I.E. true/false
-	AuthKeyId (int32)- Authentication key ID
-	AuthData (string)- Authentication string 
+
++---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
+| Variables                 | Type       |  Description                                                                     | Required |  Default  |     
++===========================+============+==================================================================================+==========+===========+   
+| Name                      | string     | Name of the BFD session                                                          |    Yes   |   None    |
++---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
+| LocalMultiplier           | int32      | Multiplier of BFD hello RX interval to wait before tearing down session          |    no    |   3       |
++---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
+| DesiredMinTxInterval      | int32      | Time in milliseconds between interval TX of BFD hello packets                    |    no    |   1000    |
++---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
+| RequiredMinRxInterval     | int32      | Expected interval in milliseconds between RX of BFD  packets                     |    no    |   1000    |
++---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
+| RequiredMinRxEchoInterval | int32      | Expected interval in milliseconds between RX of BFD echo packets                 |    no    |   0       |
++---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
+| DemandEnabled             | boolean    | Boolean value to specify the global state for BFD demand mode; I.E. true/false   |    no    |   false   |
++---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
+| AuthenticationEnabled     | boolean    | Boolean value to specify the global state for BFD authentication; I.E. true/false|    no    |   false   |
++---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
+| AuthType                  | string     | Authentication type; I.E. keyed MD5, simple, keyed Sha1                          |    no    |   None    |
++---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
+| AuthKeyId                 | int32      | Authentication key ID                                                            |    no    |   1       |
++---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
+| AuthData                  | string     | Authentication string                                                            |    no    |"snaproute"|
++---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
+
+
 
 EXAMPLE:
 
@@ -798,9 +838,327 @@ EXAMPLE:
 
 	acasella@snaproute-lab-r710-1:~$ curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"Name":"BFD_session","LocalMultiplier":3,"DesiredMinTxInterval":250,"RequiredMinRxInterval":250,"RequiredMinEchoRxInterval":0,"DemandEnabled":false,"AuthenticationEnabled":false,"AuthKeyId":1,"AuthData":"snaproute"}' 'http://10.1.10.43:8080/public/v1/config/BfdSessionParam'
 	{"ObjectId":"40ebf60d-1230-4c7b-4c91-bc4a076693d4","Error":""}
+	
+	
+Attaching BFD params to a BFD session  
++++++++++++++++++++++++++++++++++++++
+
+	Attaching to user create BFD session:
+
+		1. Create User session with BFD session parameter profile specified
+		
+			COMMAND:
+			::
+				
+				curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"IpAddr":"<*IPv4 Address*>","ParamName":"<*Param Profile Name*>","Interface":"None","Owner":"user"}' 'http://<*your-switchip*>:8080/public/v1/config/BfdSession'
+
+				
+			OPTIONS:
+				+-----------+------------+---------------------------------------------------------------------------------------+----------+-----------+
+				| Variables | Type       |  Description                                                                          | Required |  Default  |     
+				+===========+============+=======================================================================================+==========+===========+   
+				| IpAddr    | string     | BFD neighbor IP address                                                               |    Yes   |   None    |
+				+-----------+------------+---------------------------------------------------------------------------------------+----------+-----------+
+				| ParaName  | string     | Name of the session parameters object to be applied on this session                   |    no    | "default" |
+				+-----------+------------+---------------------------------------------------------------------------------------+----------+-----------+
+				| Interface | boolean    | Name of the interface this session has to be established on                           |    no    |   None    |
+				+-----------+------------+---------------------------------------------------------------------------------------+----------+-----------+
+				| PerLink   | string     | Run BFD sessions on individual link of a LAG if the neighbor is reachable through LAG |    no    |   false   |
+				+-----------+------------+---------------------------------------------------------------------------------------+----------+-----------+
+				| Owner     | string     | Module requesting BFD session configuration                                           |    no    |   user    |
+				+-----------+------------+---------------------------------------------------------------------------------------+----------+-----------+
+						
+			
+			
+			EXAMPLE:
+			::
+				
+				curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"IpAddr":"1.1.1.1","ParamName":"BFD_session","Interface":"None","Owner":"user"}' 'http://10.1.10.43:8080/public/v1/config/BfdSession'
+
+	Attaching to Protocol created BFD session:
+
+		See configuring BGP or configuring OSPF for enabling BFD with a routing protocol. 
+							
+
+Configuring BFD over LAG (Per-Link)
++++++++++++++++++++++++++++++++++++++
+
+
+Configuring BFD demand mode
++++++++++++++++++++++++++++++++++++++
+
+Configuring BFD Authentication
++++++++++++++++++++++++++++++++++++++
+
+
+Displaying Configuration and State
+++++++++++++++++++++++++++++++++++
+
+Display BFD session parameter profile configuration:
+
+COMMAND:
+::
+	
+	curl -X GET --header 'Content-Type: application/json' --header 'Accept: application/json' 'http://10.1.10.43:8080/public/v1/config/BfdSessionParams'
+
+OPTIONS:
+::
+	
+	None
+	
+EXAMPLE:
+	
+We can start by looking at the BFD configuration of was setup in the example sections above.  We can view the session parameters:
+
+::
+
+	curl -X GET --header 'Content-Type: application/json' --header 'Accept: application/json' 'http://10.1.10.43:8080/public/v1/config/BfdSessionParams' | python -m json.tool
+	  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+									 Dload  Upload   Total   Spent    Left  Speed
+	100   386  100   386    0     0  51411      0 --:--:-- --:--:-- --:--:-- 55142
+	{
+		"CurrentMarker": 0,
+		"MoreExist": false,
+		"NextMarker": 0,
+		"ObjCount": 1,
+		"Objects": [
+			{
+				"Object": {
+					"AuthData": "snaproute",
+					"AuthKeyId": 1,
+					"AuthType": "",
+					"AuthenticationEnabled": false,
+					"ConfigObj": null,
+					"DemandEnabled": false,
+					"DesiredMinTxInterval": 250,
+					"LocalMultiplier": 3,
+					"Name": "BFD_session",
+					"RequiredMinEchoRxInterval": 0,
+					"RequiredMinRxInterval": 250
+				},
+				"ObjectId": "4c46080c-f4c1-477b-6ce3-873aee89ab9c"
+			}
+		]
+	}
+
+
+Display BFD Session configuration:
+
+
+COMMAND:
+::
+	
+	curl -X GET --header 'Content-Type: application/json' --header 'Accept: application/json' 'http://10.1.10.43:8080/public/v1/config/BfdSessions'
+
+OPTIONS:
+::
+	
+	None
+	
+EXAMPLE:
+
+Below we can see the BFD Session Parameter profile "BFD_Session": parameter profile as well:
+
+::
+
+	curl -X GET --header 'Content-Type: application/json' --header 'Accept: application/json' 'http://10.1.10.43:8080/public/v1/config/BfdSessions' | python -m json.tool
+	  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+									 Dload  Upload   Total   Spent    Left  Speed
+	100   431  100   431    0     0  64987      0 --:--:-- --:--:-- --:--:-- 71833
+	{
+		"CurrentMarker": 0,
+		"MoreExist": false,
+		"NextMarker": 0,
+		"ObjCount": 1,
+		"Objects": [
+			{
+				"Object": {
+					"ConfigObj": null,
+					"Interface": "None",
+					"IpAddr": "1.1.1.1",
+					"Owner": "user",
+					"ParamName": "BFD_session",
+					"PerLink": false
+				},
+				"ObjectId": "b825914b-5b6c-4c5f-6a65-a80fc958d38d"
+			},
+
+
+
+Display BFD State:
+
+
+COMMAND:
+
+::
+
+	curl -X GET --header 'Content-Type: application/json' --header 'Accept: application/json' 'http://10.1.10.245:8080/public/v1/state/BfdSessionParams'
+
+OPTIONS:
+::
+	
+	None
+	
+EXAMPLE:
+
+When we look at the BfdSessionParams status, we see very similar data to that of the configuration, but there are a few very important differences:
+
+1. This indicated that BFDd has ingested the configuration and is ready to begin utilizing it.
+2. State related items to show us how this configuration is being utilized. 
+
+   
+If we look at the "NumSessions" variable, we can see this BFD session parameter profile is being utilized by 1 BFD session. We can also see that the 
+millisecond variables we utilized in the configuration have been changed to microseconds.  This is done for RFC compliance and interoperability with 3rd-party
+BFD implementations. 
+
+
+::
+
+	curl -X GET --header 'Content-Type: application/json' --header 'Accept: application/json' 'http://10.1.10.43:8080/public/v1/state/BfdSessionParams' | python -m json.tool
+	  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+									 Dload  Upload   Total   Spent    Left  Speed
+	100   789  100   789    0     0  55657      0 --:--:-- --:--:-- --:--:-- 60692
+	{
+		"CurrentMarker": 0,
+		"MoreExist": false,
+		"NextMarker": 0,
+		"ObjCount": 1,
+		"Objects": [
+			{
+				"Object": {
+					"AuthenticationData": "snaproute",
+					"AuthenticationEnabled": false,
+					"AuthenticationKeyId": 1,
+					"AuthenticationType": "",
+					"ConfigObj": null,
+					"DemandEnabled": false,
+					"DesiredMinTxInterval": "250000(us)",
+					"LocalMultiplier": 3,
+					"Name": "BFD_session",
+					"NumSessions": 0,
+					"RequiredMinEchoRxInterval": "0(us)",
+					"RequiredMinRxInterval": "250000(us)"
+				},
+				"ObjectId": "4c46080c-f4c1-477b-6ce3-873aee89ab9c"
+			}
+		]
+	}
+
+
+COMMAND:
+
+::
+
+	curl -X GET --header 'Content-Type: application/json' --header 'Accept: application/json' 'http://10.1.10.245:8080/public/v1/state/BfdSessions'
+
+OPTIONS:
+::
+	
+	None
+	
+EXAMPLE:
+
+The BfdSessions state API responds with the relevant state of all BFD sessions.  We can see the current BFD timers being utilized, the BFD Parameter Profile this information was
+inherited via the *ParamName* variable, BFD_Sessions in this case. As well aa BFD session status via *SessionState* variable, which is up and working. 
+
+::
+
+	curl -H "Content-Type: application/json" 'http://10.1.10.245:8080/public/v1/state/BfdSessions' | python -m json.tool
+	  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+									 Dload  Upload   Total   Spent    Left  Speed
+	100  1391  100  1391    0     0  95371      0 --:--:-- --:--:-- --:--:-- 99357
+	{
+		"CurrentMarker": 0,
+		"MoreExist": false,
+		"NextMarker": 0,
+		"ObjCount": 2,
+		"Objects": [
+			{
+				"Object": {
+					"AuthSeqKnown": false,
+					"AuthType": "",
+					"ConfigObj": null,
+					"DemandMode": false,
+					"DesiredMinTxInterval": "250000(us)",
+					"DetectionMultiplier": 3,
+					"IfIndex": 30,
+					"IfName": "",
+					"InterfaceSpecific": false,
+					"IpAddr": "1.1.1.1",
+					"LocalDiagType": "None",
+					"LocalDiscriminator": 979,
+					"LocalMacAddr": "",
+					"NumRxPackets": 217275,
+					"NumTxPackets": 199389,
+					"ParamName": "BFD_Sessions",
+					"PerLinkSession": false,
+					"ReceivedAuthSeq": 0,
+					"RegisteredProtocols": "user, ",
+					"RemoteDemandMode": false,
+					"RemoteDiscriminator": 533,
+					"RemoteMacAddr": "",
+					"RemoteMinRxInterval": "250000(us)",
+					"RemoteSessionState": "up",
+					"RequiredMinRxInterval": "250000(us)",
+					"SentAuthSeq": 0,
+					"SessionId": 979,
+					"SessionState": "up"
+				},
+				"ObjectId": ""
+			},
+
+-------------------
 
 Configuring with Python SDK
-""""""""""""""""""""""""""""
+***************************
+
+COMMAND:
+
+
+OPTIONS:
+
++------------------------+---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
+| Python Method          | Variables                 | Type       |  Description                                                                     | Required |  Default  |     
++========================+===========================+============+==================================================================================+==========+===========+   
+| createBfdSessionParam  | Name                      | string     | Name of the BFD session                                                          |    Yes   |   None    |
+|                        +---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
+|                        | LocalMultiplier           | int32      | Multiplier of BFD hello RX interval to wait before tearing down session          |    no    |   3       |
+|                        +---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
+|                        | DesiredMinTxInterval      | int32      | Time in milliseconds between interval TX of BFD hello packets                    |    no    |   1000    |
+|                        +---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
+|                        | RequiredMinRxInterval     | int32      | Expected interval in milliseconds between RX of BFD  packets                     |    no    |   1000    |
+|                        +---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
+|                        | RequiredMinRxEchoInterval | int32      | Expected interval in milliseconds between RX of BFD echo packets                 |    no    |   0       |
+|                        +---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
+|                        | DemandEnabled             | boolean    | Boolean value to specify the global state for BFD demand mode; I.E. true/false   |    no    |   false   |
+|                        +---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
+|                        | AuthenticationEnabled     | boolean    | Boolean value to specify the global state for BFD authentication; I.E. true/false|    no    |   false   |
+|                        +---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
+|                        | AuthKeyId                 | int32      | Authentication key ID                                                            |    no    |   1       |
+|                        +---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
+|                        | AuthData                  | string     | Authentication string                                                            |    no    |"snaproute"|
++------------------------+---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
+
+::
+
+	createBfdSessionParam(self,
+       					 param string Name :  Session parameters  Session parameters
+       					 param uint32 RequiredMinRxInterval :  Required minimum rx interval in ms  Required minimum rx interval in ms
+       					 param string AuthData :  Authentication password  Authentication password
+       					 param bool DemandEnabled :  Enable or disable demand mode  Enable or disable demand mode
+       					 param uint32 AuthKeyId :  Authentication key id  Authentication key id
+       					 param string AuthType :  Authentication type  Authentication type
+       					 param uint32 DesiredMinTxInterval :  Desired minimum tx interval in ms  Desired minimum tx interval in ms
+       					 param bool AuthenticationEnabled :  Enable or disable authentication  Enable or disable authentication
+       					 param uint32 RequiredMinEchoRxInterval :  Required minimum echo rx interval in ms  Required minimum echo rx interval in ms
+       					 param uint32 LocalMultiplier :  Detection multiplier  Detection multiplier
+
+
+
+EXAMPLE:
+
+
+
 
 Configuring BGP
 ---------------
