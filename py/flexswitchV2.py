@@ -3155,6 +3155,109 @@ class FlexSwitch( object):
 
 
     """
+    .. automethod :: createDhcpGlobalConfig(self,
+        :param string DhcpConfigKey :  DHCP global config  DHCP global config
+        :param bool Enable :  DHCP Server enable/disable control DEFAULT  DHCP Server enable/disable control DEFAULT
+        :param uint32 DefaultLeaseTime :  Default Lease Time in seconds DEFAULT  Default Lease Time in seconds DEFAULT
+        :param uint32 MaxLeaseTime :  Max Lease Time in seconds DEFAULT  Max Lease Time in seconds DEFAULT
+
+	"""
+    @processReturnCode
+    def createDhcpGlobalConfig(self,
+                               DhcpConfigKey,
+                               Enable,
+                               DefaultLeaseTime,
+                               MaxLeaseTime):
+        obj =  { 
+                'DhcpConfigKey' : DhcpConfigKey,
+                'Enable' : True if Enable else False,
+                'DefaultLeaseTime' : int(DefaultLeaseTime),
+                'MaxLeaseTime' : int(MaxLeaseTime),
+                }
+        reqUrl =  self.cfgUrlBase+'DhcpGlobalConfig'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def updateDhcpGlobalConfig(self,
+                               DhcpConfigKey,
+                               Enable = None,
+                               DefaultLeaseTime = None,
+                               MaxLeaseTime = None):
+        obj =  {}
+        if DhcpConfigKey != None :
+            obj['DhcpConfigKey'] = DhcpConfigKey
+
+        if Enable != None :
+            obj['Enable'] = True if Enable else False
+
+        if DefaultLeaseTime != None :
+            obj['DefaultLeaseTime'] = int(DefaultLeaseTime)
+
+        if MaxLeaseTime != None :
+            obj['MaxLeaseTime'] = int(MaxLeaseTime)
+
+        reqUrl =  self.cfgUrlBase+'DhcpGlobalConfig'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def updateDhcpGlobalConfigById(self,
+                                    objectId,
+                                    Enable = None,
+                                    DefaultLeaseTime = None,
+                                    MaxLeaseTime = None):
+        obj =  {'objectId': objectId }
+        if Enable !=  None:
+            obj['Enable'] = Enable
+
+        if DefaultLeaseTime !=  None:
+            obj['DefaultLeaseTime'] = DefaultLeaseTime
+
+        if MaxLeaseTime !=  None:
+            obj['MaxLeaseTime'] = MaxLeaseTime
+
+        reqUrl =  self.cfgUrlBase+'DhcpGlobalConfig'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def deleteDhcpGlobalConfig(self,
+                               DhcpConfigKey):
+        obj =  { 
+                'DhcpConfigKey' : DhcpConfigKey,
+                }
+        reqUrl =  self.cfgUrlBase+'DhcpGlobalConfig'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def deleteDhcpGlobalConfigById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'DhcpGlobalConfig'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    @processReturnCode
+    def getDhcpGlobalConfig(self,
+                            DhcpConfigKey):
+        obj =  { 
+                'DhcpConfigKey' : DhcpConfigKey,
+                }
+        reqUrl =  self.stateUrlBase+'DhcpGlobalConfig'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def getDhcpGlobalConfigById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'DhcpGlobalConfig'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllDhcpGlobalConfigs(self):
+        return self.getObjects( 'DhcpGlobalConfig', self.cfgUrlBase)
+
+
+    """
     .. automethod :: createIPv4Intf(self,
         :param string IntfRef :  Interface name or ifindex of port/lag or vlan on which this IPv4 object is configured  Interface name or ifindex of port/lag or vlan on which this IPv4 object is configured
         :param string IpAddr :  Interface IP/Net mask in CIDR format to provision on switch interface  Interface IP/Net mask in CIDR format to provision on switch interface
@@ -3376,6 +3479,164 @@ class FlexSwitch( object):
 
     def getAllOspfStubAreaEntrys(self):
         return self.getObjects( 'OspfStubAreaEntry', self.cfgUrlBase)
+
+
+    """
+    .. automethod :: createDhcpIntfConfig(self,
+        :param string IntfRef :  Interface name or ifindex of L3 interface object on which Dhcp Server need to be configured  Interface name or ifindex of L3 interface object on which Dhcp Server need to be configured
+        :param string Subnet :  Subnet  Subnet
+        :param string SubnetMask :  Subnet Mask  Subnet Mask
+        :param string IPAddrRange :  Range of IP Addresses DEFAULT  Range of IP Addresses DEFAULT
+        :param string BroadcastAddr :  Broadcast Address DEFAULT  Broadcast Address DEFAULT
+        :param string RouterAddr :  Router Address DEFAULT  Router Address DEFAULT
+        :param string DNSServerAddr :  Comma seperated List of DNS Server Address DEFAULT  Comma seperated List of DNS Server Address DEFAULT
+        :param string DomainName :  Domain Name Address DEFAULT  Domain Name Address DEFAULT
+        :param bool Enable :  Enable and Disable Control DEFAULT  Enable and Disable Control DEFAULT
+
+	"""
+    @processReturnCode
+    def createDhcpIntfConfig(self,
+                             IntfRef,
+                             Subnet,
+                             SubnetMask,
+                             IPAddrRange,
+                             BroadcastAddr,
+                             RouterAddr,
+                             DNSServerAddr,
+                             DomainName,
+                             Enable):
+        obj =  { 
+                'IntfRef' : IntfRef,
+                'Subnet' : Subnet,
+                'SubnetMask' : SubnetMask,
+                'IPAddrRange' : IPAddrRange,
+                'BroadcastAddr' : BroadcastAddr,
+                'RouterAddr' : RouterAddr,
+                'DNSServerAddr' : DNSServerAddr,
+                'DomainName' : DomainName,
+                'Enable' : True if Enable else False,
+                }
+        reqUrl =  self.cfgUrlBase+'DhcpIntfConfig'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def updateDhcpIntfConfig(self,
+                             IntfRef,
+                             Subnet = None,
+                             SubnetMask = None,
+                             IPAddrRange = None,
+                             BroadcastAddr = None,
+                             RouterAddr = None,
+                             DNSServerAddr = None,
+                             DomainName = None,
+                             Enable = None):
+        obj =  {}
+        if IntfRef != None :
+            obj['IntfRef'] = IntfRef
+
+        if Subnet != None :
+            obj['Subnet'] = Subnet
+
+        if SubnetMask != None :
+            obj['SubnetMask'] = SubnetMask
+
+        if IPAddrRange != None :
+            obj['IPAddrRange'] = IPAddrRange
+
+        if BroadcastAddr != None :
+            obj['BroadcastAddr'] = BroadcastAddr
+
+        if RouterAddr != None :
+            obj['RouterAddr'] = RouterAddr
+
+        if DNSServerAddr != None :
+            obj['DNSServerAddr'] = DNSServerAddr
+
+        if DomainName != None :
+            obj['DomainName'] = DomainName
+
+        if Enable != None :
+            obj['Enable'] = True if Enable else False
+
+        reqUrl =  self.cfgUrlBase+'DhcpIntfConfig'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def updateDhcpIntfConfigById(self,
+                                  objectId,
+                                  Subnet = None,
+                                  SubnetMask = None,
+                                  IPAddrRange = None,
+                                  BroadcastAddr = None,
+                                  RouterAddr = None,
+                                  DNSServerAddr = None,
+                                  DomainName = None,
+                                  Enable = None):
+        obj =  {'objectId': objectId }
+        if Subnet !=  None:
+            obj['Subnet'] = Subnet
+
+        if SubnetMask !=  None:
+            obj['SubnetMask'] = SubnetMask
+
+        if IPAddrRange !=  None:
+            obj['IPAddrRange'] = IPAddrRange
+
+        if BroadcastAddr !=  None:
+            obj['BroadcastAddr'] = BroadcastAddr
+
+        if RouterAddr !=  None:
+            obj['RouterAddr'] = RouterAddr
+
+        if DNSServerAddr !=  None:
+            obj['DNSServerAddr'] = DNSServerAddr
+
+        if DomainName !=  None:
+            obj['DomainName'] = DomainName
+
+        if Enable !=  None:
+            obj['Enable'] = Enable
+
+        reqUrl =  self.cfgUrlBase+'DhcpIntfConfig'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def deleteDhcpIntfConfig(self,
+                             IntfRef):
+        obj =  { 
+                'IntfRef' : IntfRef,
+                }
+        reqUrl =  self.cfgUrlBase+'DhcpIntfConfig'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def deleteDhcpIntfConfigById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'DhcpIntfConfig'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    @processReturnCode
+    def getDhcpIntfConfig(self,
+                          IntfRef):
+        obj =  { 
+                'IntfRef' : IntfRef,
+                }
+        reqUrl =  self.stateUrlBase+'DhcpIntfConfig'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def getDhcpIntfConfigById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'DhcpIntfConfig'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllDhcpIntfConfigs(self):
+        return self.getObjects( 'DhcpIntfConfig', self.cfgUrlBase)
 
 
     @processReturnCode
