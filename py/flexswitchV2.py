@@ -3155,6 +3155,109 @@ class FlexSwitch( object):
 
 
     """
+    .. automethod :: createDhcpGlobalConfig(self,
+        :param string DhcpConfigKey :  DHCP global config  DHCP global config
+        :param bool Enable :  DHCP Server enable/disable control DEFAULT  DHCP Server enable/disable control DEFAULT
+        :param uint32 DefaultLeaseTime :  Default Lease Time in seconds DEFAULT  Default Lease Time in seconds DEFAULT
+        :param uint32 MaxLeaseTime :  Max Lease Time in seconds DEFAULT  Max Lease Time in seconds DEFAULT
+
+	"""
+    @processReturnCode
+    def createDhcpGlobalConfig(self,
+                               DhcpConfigKey,
+                               Enable,
+                               DefaultLeaseTime,
+                               MaxLeaseTime):
+        obj =  { 
+                'DhcpConfigKey' : DhcpConfigKey,
+                'Enable' : True if Enable else False,
+                'DefaultLeaseTime' : int(DefaultLeaseTime),
+                'MaxLeaseTime' : int(MaxLeaseTime),
+                }
+        reqUrl =  self.cfgUrlBase+'DhcpGlobalConfig'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def updateDhcpGlobalConfig(self,
+                               DhcpConfigKey,
+                               Enable = None,
+                               DefaultLeaseTime = None,
+                               MaxLeaseTime = None):
+        obj =  {}
+        if DhcpConfigKey != None :
+            obj['DhcpConfigKey'] = DhcpConfigKey
+
+        if Enable != None :
+            obj['Enable'] = True if Enable else False
+
+        if DefaultLeaseTime != None :
+            obj['DefaultLeaseTime'] = int(DefaultLeaseTime)
+
+        if MaxLeaseTime != None :
+            obj['MaxLeaseTime'] = int(MaxLeaseTime)
+
+        reqUrl =  self.cfgUrlBase+'DhcpGlobalConfig'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def updateDhcpGlobalConfigById(self,
+                                    objectId,
+                                    Enable = None,
+                                    DefaultLeaseTime = None,
+                                    MaxLeaseTime = None):
+        obj =  {'objectId': objectId }
+        if Enable !=  None:
+            obj['Enable'] = Enable
+
+        if DefaultLeaseTime !=  None:
+            obj['DefaultLeaseTime'] = DefaultLeaseTime
+
+        if MaxLeaseTime !=  None:
+            obj['MaxLeaseTime'] = MaxLeaseTime
+
+        reqUrl =  self.cfgUrlBase+'DhcpGlobalConfig'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def deleteDhcpGlobalConfig(self,
+                               DhcpConfigKey):
+        obj =  { 
+                'DhcpConfigKey' : DhcpConfigKey,
+                }
+        reqUrl =  self.cfgUrlBase+'DhcpGlobalConfig'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def deleteDhcpGlobalConfigById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'DhcpGlobalConfig'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    @processReturnCode
+    def getDhcpGlobalConfig(self,
+                            DhcpConfigKey):
+        obj =  { 
+                'DhcpConfigKey' : DhcpConfigKey,
+                }
+        reqUrl =  self.stateUrlBase+'DhcpGlobalConfig'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def getDhcpGlobalConfigById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'DhcpGlobalConfig'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllDhcpGlobalConfigs(self):
+        return self.getObjects( 'DhcpGlobalConfig', self.cfgUrlBase)
+
+
+    """
     .. automethod :: createIPv4Intf(self,
         :param string IntfRef :  Interface name or ifindex of port/lag or vlan on which this IPv4 object is configured  Interface name or ifindex of port/lag or vlan on which this IPv4 object is configured
         :param string IpAddr :  Interface IP/Net mask in CIDR format to provision on switch interface  Interface IP/Net mask in CIDR format to provision on switch interface
@@ -3376,6 +3479,164 @@ class FlexSwitch( object):
 
     def getAllOspfStubAreaEntrys(self):
         return self.getObjects( 'OspfStubAreaEntry', self.cfgUrlBase)
+
+
+    """
+    .. automethod :: createDhcpIntfConfig(self,
+        :param string IntfRef :  Interface name or ifindex of L3 interface object on which Dhcp Server need to be configured  Interface name or ifindex of L3 interface object on which Dhcp Server need to be configured
+        :param string Subnet :  Subnet  Subnet
+        :param string SubnetMask :  Subnet Mask  Subnet Mask
+        :param string IPAddrRange :  Range of IP Addresses DEFAULT  Range of IP Addresses DEFAULT
+        :param string BroadcastAddr :  Broadcast Address DEFAULT  Broadcast Address DEFAULT
+        :param string RouterAddr :  Router Address DEFAULT  Router Address DEFAULT
+        :param string DNSServerAddr :  Comma seperated List of DNS Server Address DEFAULT  Comma seperated List of DNS Server Address DEFAULT
+        :param string DomainName :  Domain Name Address DEFAULT  Domain Name Address DEFAULT
+        :param bool Enable :  Enable and Disable Control DEFAULT  Enable and Disable Control DEFAULT
+
+	"""
+    @processReturnCode
+    def createDhcpIntfConfig(self,
+                             IntfRef,
+                             Subnet,
+                             SubnetMask,
+                             IPAddrRange,
+                             BroadcastAddr,
+                             RouterAddr,
+                             DNSServerAddr,
+                             DomainName,
+                             Enable):
+        obj =  { 
+                'IntfRef' : IntfRef,
+                'Subnet' : Subnet,
+                'SubnetMask' : SubnetMask,
+                'IPAddrRange' : IPAddrRange,
+                'BroadcastAddr' : BroadcastAddr,
+                'RouterAddr' : RouterAddr,
+                'DNSServerAddr' : DNSServerAddr,
+                'DomainName' : DomainName,
+                'Enable' : True if Enable else False,
+                }
+        reqUrl =  self.cfgUrlBase+'DhcpIntfConfig'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def updateDhcpIntfConfig(self,
+                             IntfRef,
+                             Subnet = None,
+                             SubnetMask = None,
+                             IPAddrRange = None,
+                             BroadcastAddr = None,
+                             RouterAddr = None,
+                             DNSServerAddr = None,
+                             DomainName = None,
+                             Enable = None):
+        obj =  {}
+        if IntfRef != None :
+            obj['IntfRef'] = IntfRef
+
+        if Subnet != None :
+            obj['Subnet'] = Subnet
+
+        if SubnetMask != None :
+            obj['SubnetMask'] = SubnetMask
+
+        if IPAddrRange != None :
+            obj['IPAddrRange'] = IPAddrRange
+
+        if BroadcastAddr != None :
+            obj['BroadcastAddr'] = BroadcastAddr
+
+        if RouterAddr != None :
+            obj['RouterAddr'] = RouterAddr
+
+        if DNSServerAddr != None :
+            obj['DNSServerAddr'] = DNSServerAddr
+
+        if DomainName != None :
+            obj['DomainName'] = DomainName
+
+        if Enable != None :
+            obj['Enable'] = True if Enable else False
+
+        reqUrl =  self.cfgUrlBase+'DhcpIntfConfig'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def updateDhcpIntfConfigById(self,
+                                  objectId,
+                                  Subnet = None,
+                                  SubnetMask = None,
+                                  IPAddrRange = None,
+                                  BroadcastAddr = None,
+                                  RouterAddr = None,
+                                  DNSServerAddr = None,
+                                  DomainName = None,
+                                  Enable = None):
+        obj =  {'objectId': objectId }
+        if Subnet !=  None:
+            obj['Subnet'] = Subnet
+
+        if SubnetMask !=  None:
+            obj['SubnetMask'] = SubnetMask
+
+        if IPAddrRange !=  None:
+            obj['IPAddrRange'] = IPAddrRange
+
+        if BroadcastAddr !=  None:
+            obj['BroadcastAddr'] = BroadcastAddr
+
+        if RouterAddr !=  None:
+            obj['RouterAddr'] = RouterAddr
+
+        if DNSServerAddr !=  None:
+            obj['DNSServerAddr'] = DNSServerAddr
+
+        if DomainName !=  None:
+            obj['DomainName'] = DomainName
+
+        if Enable !=  None:
+            obj['Enable'] = Enable
+
+        reqUrl =  self.cfgUrlBase+'DhcpIntfConfig'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def deleteDhcpIntfConfig(self,
+                             IntfRef):
+        obj =  { 
+                'IntfRef' : IntfRef,
+                }
+        reqUrl =  self.cfgUrlBase+'DhcpIntfConfig'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def deleteDhcpIntfConfigById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'DhcpIntfConfig'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    @processReturnCode
+    def getDhcpIntfConfig(self,
+                          IntfRef):
+        obj =  { 
+                'IntfRef' : IntfRef,
+                }
+        reqUrl =  self.stateUrlBase+'DhcpIntfConfig'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    @processReturnCode
+    def getDhcpIntfConfigById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'DhcpIntfConfig'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllDhcpIntfConfigs(self):
+        return self.getObjects( 'DhcpIntfConfig', self.cfgUrlBase)
 
 
     @processReturnCode
@@ -4237,73 +4498,76 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createBGPNeighbor(self,
-        :param int32 IfIndex :  Interface of the BGP neighbor  Interface of the BGP neighbor
         :param string NeighborAddress :  Address of the BGP neighbor  Address of the BGP neighbor
+        :param int32 IfIndex :  Interface of the BGP neighbor  Interface of the BGP neighbor
         :param uint32 PeerAS :  Peer AS of the BGP neighbor  Peer AS of the BGP neighbor
         :param bool BfdEnable :  Enable/Disable BFD for the BGP neighbor  Enable/Disable BFD for the BGP neighbor
-        :param uint8 MaxPrefixesRestartTimer :  Time in seconds to wait before we start BGP peer session when we receive max prefixes  Time in seconds to wait before we start BGP peer session when we receive max prefixes
         :param string PeerGroup :  Peer group of the BGP neighbor  Peer group of the BGP neighbor
-        :param string Description :  Description of the BGP neighbor  Description of the BGP neighbor
         :param uint8 MultiHopTTL :  TTL for multi hop BGP neighbor  TTL for multi hop BGP neighbor
-        :param bool MaxPrefixesDisconnect :  Disconnect the BGP peer session when we receive the max prefixes from the neighbor  Disconnect the BGP peer session when we receive the max prefixes from the neighbor
         :param uint32 LocalAS :  Local AS of the BGP neighbor  Local AS of the BGP neighbor
         :param uint32 KeepaliveTime :  Keep alive time for the BGP neighbor  Keep alive time for the BGP neighbor
-        :param uint32 MaxPrefixes :  Maximum number of prefixes that can be received from the BGP neighbor  Maximum number of prefixes that can be received from the BGP neighbor
-        :param uint8 AddPathsMaxTx :  Max number of additional paths that can be transmitted to BGP neighbor  Max number of additional paths that can be transmitted to BGP neighbor
-        :param bool MultiHopEnable :  Enable/Disable multi hop for BGP neighbor  Enable/Disable multi hop for BGP neighbor
-        :param bool RouteReflectorClient :  Set/Clear BGP neighbor as a route reflector client  Set/Clear BGP neighbor as a route reflector client
         :param bool AddPathsRx :  Receive additional paths from BGP neighbor  Receive additional paths from BGP neighbor
-        :param uint32 RouteReflectorClusterId :  Cluster Id of the internal BGP neighbor route reflector client  Cluster Id of the internal BGP neighbor route reflector client
-        :param uint8 MaxPrefixesThresholdPct :  The percentage of maximum prefixes before we start logging  The percentage of maximum prefixes before we start logging
-        :param uint32 HoldTime :  Hold time for the BGP neighbor  Hold time for the BGP neighbor
+        :param bool RouteReflectorClient :  Set/Clear BGP neighbor as a route reflector client  Set/Clear BGP neighbor as a route reflector client
+        :param uint8 MaxPrefixesRestartTimer :  Time in seconds to wait before we start BGP peer session when we receive max prefixes  Time in seconds to wait before we start BGP peer session when we receive max prefixes
+        :param string Description :  Description of the BGP neighbor  Description of the BGP neighbor
+        :param bool MultiHopEnable :  Enable/Disable multi hop for BGP neighbor  Enable/Disable multi hop for BGP neighbor
         :param string AuthPassword :  Password to connect to the BGP neighbor  Password to connect to the BGP neighbor
+        :param uint32 RouteReflectorClusterId :  Cluster Id of the internal BGP neighbor route reflector client  Cluster Id of the internal BGP neighbor route reflector client
+        :param bool MaxPrefixesDisconnect :  Disconnect the BGP peer session when we receive the max prefixes from the neighbor  Disconnect the BGP peer session when we receive the max prefixes from the neighbor
+        :param uint8 AddPathsMaxTx :  Max number of additional paths that can be transmitted to BGP neighbor  Max number of additional paths that can be transmitted to BGP neighbor
+        :param uint32 MaxPrefixes :  Maximum number of prefixes that can be received from the BGP neighbor  Maximum number of prefixes that can be received from the BGP neighbor
+        :param uint8 MaxPrefixesThresholdPct :  The percentage of maximum prefixes before we start logging  The percentage of maximum prefixes before we start logging
+        :param string BfdSessionParam :  Bfd session param name to be applied  Bfd session param name to be applied
+        :param uint32 HoldTime :  Hold time for the BGP neighbor  Hold time for the BGP neighbor
         :param uint32 ConnectRetryTime :  Connect retry time to connect to BGP neighbor after disconnect  Connect retry time to connect to BGP neighbor after disconnect
 
 	"""
     @processReturnCode
     def createBGPNeighbor(self,
-                          IfIndex,
                           NeighborAddress,
+                          IfIndex,
                           PeerAS,
                           BfdEnable=False,
-                          MaxPrefixesRestartTimer=0,
                           PeerGroup='',
-                          Description='',
                           MultiHopTTL=0,
-                          MaxPrefixesDisconnect=False,
                           LocalAS=0,
                           KeepaliveTime=60,
-                          MaxPrefixes=0,
-                          AddPathsMaxTx=0,
-                          MultiHopEnable=False,
-                          RouteReflectorClient=False,
                           AddPathsRx=False,
-                          RouteReflectorClusterId=0,
-                          MaxPrefixesThresholdPct=80,
-                          HoldTime=180,
+                          RouteReflectorClient=False,
+                          MaxPrefixesRestartTimer=0,
+                          Description='',
+                          MultiHopEnable=False,
                           AuthPassword='',
+                          RouteReflectorClusterId=0,
+                          MaxPrefixesDisconnect=False,
+                          AddPathsMaxTx=0,
+                          MaxPrefixes=0,
+                          MaxPrefixesThresholdPct=80,
+                          BfdSessionParam='default',
+                          HoldTime=180,
                           ConnectRetryTime=60):
         obj =  { 
-                'IfIndex' : int(IfIndex),
                 'NeighborAddress' : NeighborAddress,
+                'IfIndex' : int(IfIndex),
                 'PeerAS' : int(PeerAS),
                 'BfdEnable' : True if BfdEnable else False,
-                'MaxPrefixesRestartTimer' : int(MaxPrefixesRestartTimer),
                 'PeerGroup' : PeerGroup,
-                'Description' : Description,
                 'MultiHopTTL' : int(MultiHopTTL),
-                'MaxPrefixesDisconnect' : True if MaxPrefixesDisconnect else False,
                 'LocalAS' : int(LocalAS),
                 'KeepaliveTime' : int(KeepaliveTime),
-                'MaxPrefixes' : int(MaxPrefixes),
-                'AddPathsMaxTx' : int(AddPathsMaxTx),
-                'MultiHopEnable' : True if MultiHopEnable else False,
-                'RouteReflectorClient' : True if RouteReflectorClient else False,
                 'AddPathsRx' : True if AddPathsRx else False,
-                'RouteReflectorClusterId' : int(RouteReflectorClusterId),
-                'MaxPrefixesThresholdPct' : int(MaxPrefixesThresholdPct),
-                'HoldTime' : int(HoldTime),
+                'RouteReflectorClient' : True if RouteReflectorClient else False,
+                'MaxPrefixesRestartTimer' : int(MaxPrefixesRestartTimer),
+                'Description' : Description,
+                'MultiHopEnable' : True if MultiHopEnable else False,
                 'AuthPassword' : AuthPassword,
+                'RouteReflectorClusterId' : int(RouteReflectorClusterId),
+                'MaxPrefixesDisconnect' : True if MaxPrefixesDisconnect else False,
+                'AddPathsMaxTx' : int(AddPathsMaxTx),
+                'MaxPrefixes' : int(MaxPrefixes),
+                'MaxPrefixesThresholdPct' : int(MaxPrefixesThresholdPct),
+                'BfdSessionParam' : BfdSessionParam,
+                'HoldTime' : int(HoldTime),
                 'ConnectRetryTime' : int(ConnectRetryTime),
                 }
         reqUrl =  self.cfgUrlBase+'BGPNeighbor'
@@ -4312,33 +4576,34 @@ class FlexSwitch( object):
 
     @processReturnCode
     def updateBGPNeighbor(self,
-                          IfIndex,
                           NeighborAddress,
+                          IfIndex,
                           PeerAS = None,
                           BfdEnable = None,
-                          MaxPrefixesRestartTimer = None,
                           PeerGroup = None,
-                          Description = None,
                           MultiHopTTL = None,
-                          MaxPrefixesDisconnect = None,
                           LocalAS = None,
                           KeepaliveTime = None,
-                          MaxPrefixes = None,
-                          AddPathsMaxTx = None,
-                          MultiHopEnable = None,
-                          RouteReflectorClient = None,
                           AddPathsRx = None,
-                          RouteReflectorClusterId = None,
-                          MaxPrefixesThresholdPct = None,
-                          HoldTime = None,
+                          RouteReflectorClient = None,
+                          MaxPrefixesRestartTimer = None,
+                          Description = None,
+                          MultiHopEnable = None,
                           AuthPassword = None,
+                          RouteReflectorClusterId = None,
+                          MaxPrefixesDisconnect = None,
+                          AddPathsMaxTx = None,
+                          MaxPrefixes = None,
+                          MaxPrefixesThresholdPct = None,
+                          BfdSessionParam = None,
+                          HoldTime = None,
                           ConnectRetryTime = None):
         obj =  {}
-        if IfIndex != None :
-            obj['IfIndex'] = int(IfIndex)
-
         if NeighborAddress != None :
             obj['NeighborAddress'] = NeighborAddress
+
+        if IfIndex != None :
+            obj['IfIndex'] = int(IfIndex)
 
         if PeerAS != None :
             obj['PeerAS'] = int(PeerAS)
@@ -4346,20 +4611,11 @@ class FlexSwitch( object):
         if BfdEnable != None :
             obj['BfdEnable'] = True if BfdEnable else False
 
-        if MaxPrefixesRestartTimer != None :
-            obj['MaxPrefixesRestartTimer'] = int(MaxPrefixesRestartTimer)
-
         if PeerGroup != None :
             obj['PeerGroup'] = PeerGroup
 
-        if Description != None :
-            obj['Description'] = Description
-
         if MultiHopTTL != None :
             obj['MultiHopTTL'] = int(MultiHopTTL)
-
-        if MaxPrefixesDisconnect != None :
-            obj['MaxPrefixesDisconnect'] = True if MaxPrefixesDisconnect else False
 
         if LocalAS != None :
             obj['LocalAS'] = int(LocalAS)
@@ -4367,32 +4623,44 @@ class FlexSwitch( object):
         if KeepaliveTime != None :
             obj['KeepaliveTime'] = int(KeepaliveTime)
 
-        if MaxPrefixes != None :
-            obj['MaxPrefixes'] = int(MaxPrefixes)
-
-        if AddPathsMaxTx != None :
-            obj['AddPathsMaxTx'] = int(AddPathsMaxTx)
-
-        if MultiHopEnable != None :
-            obj['MultiHopEnable'] = True if MultiHopEnable else False
+        if AddPathsRx != None :
+            obj['AddPathsRx'] = True if AddPathsRx else False
 
         if RouteReflectorClient != None :
             obj['RouteReflectorClient'] = True if RouteReflectorClient else False
 
-        if AddPathsRx != None :
-            obj['AddPathsRx'] = True if AddPathsRx else False
+        if MaxPrefixesRestartTimer != None :
+            obj['MaxPrefixesRestartTimer'] = int(MaxPrefixesRestartTimer)
+
+        if Description != None :
+            obj['Description'] = Description
+
+        if MultiHopEnable != None :
+            obj['MultiHopEnable'] = True if MultiHopEnable else False
+
+        if AuthPassword != None :
+            obj['AuthPassword'] = AuthPassword
 
         if RouteReflectorClusterId != None :
             obj['RouteReflectorClusterId'] = int(RouteReflectorClusterId)
 
+        if MaxPrefixesDisconnect != None :
+            obj['MaxPrefixesDisconnect'] = True if MaxPrefixesDisconnect else False
+
+        if AddPathsMaxTx != None :
+            obj['AddPathsMaxTx'] = int(AddPathsMaxTx)
+
+        if MaxPrefixes != None :
+            obj['MaxPrefixes'] = int(MaxPrefixes)
+
         if MaxPrefixesThresholdPct != None :
             obj['MaxPrefixesThresholdPct'] = int(MaxPrefixesThresholdPct)
 
+        if BfdSessionParam != None :
+            obj['BfdSessionParam'] = BfdSessionParam
+
         if HoldTime != None :
             obj['HoldTime'] = int(HoldTime)
-
-        if AuthPassword != None :
-            obj['AuthPassword'] = AuthPassword
 
         if ConnectRetryTime != None :
             obj['ConnectRetryTime'] = int(ConnectRetryTime)
@@ -4406,22 +4674,23 @@ class FlexSwitch( object):
                                objectId,
                                PeerAS = None,
                                BfdEnable = None,
-                               MaxPrefixesRestartTimer = None,
                                PeerGroup = None,
-                               Description = None,
                                MultiHopTTL = None,
-                               MaxPrefixesDisconnect = None,
                                LocalAS = None,
                                KeepaliveTime = None,
-                               MaxPrefixes = None,
-                               AddPathsMaxTx = None,
-                               MultiHopEnable = None,
-                               RouteReflectorClient = None,
                                AddPathsRx = None,
-                               RouteReflectorClusterId = None,
-                               MaxPrefixesThresholdPct = None,
-                               HoldTime = None,
+                               RouteReflectorClient = None,
+                               MaxPrefixesRestartTimer = None,
+                               Description = None,
+                               MultiHopEnable = None,
                                AuthPassword = None,
+                               RouteReflectorClusterId = None,
+                               MaxPrefixesDisconnect = None,
+                               AddPathsMaxTx = None,
+                               MaxPrefixes = None,
+                               MaxPrefixesThresholdPct = None,
+                               BfdSessionParam = None,
+                               HoldTime = None,
                                ConnectRetryTime = None):
         obj =  {'objectId': objectId }
         if PeerAS !=  None:
@@ -4430,20 +4699,11 @@ class FlexSwitch( object):
         if BfdEnable !=  None:
             obj['BfdEnable'] = BfdEnable
 
-        if MaxPrefixesRestartTimer !=  None:
-            obj['MaxPrefixesRestartTimer'] = MaxPrefixesRestartTimer
-
         if PeerGroup !=  None:
             obj['PeerGroup'] = PeerGroup
 
-        if Description !=  None:
-            obj['Description'] = Description
-
         if MultiHopTTL !=  None:
             obj['MultiHopTTL'] = MultiHopTTL
-
-        if MaxPrefixesDisconnect !=  None:
-            obj['MaxPrefixesDisconnect'] = MaxPrefixesDisconnect
 
         if LocalAS !=  None:
             obj['LocalAS'] = LocalAS
@@ -4451,32 +4711,44 @@ class FlexSwitch( object):
         if KeepaliveTime !=  None:
             obj['KeepaliveTime'] = KeepaliveTime
 
-        if MaxPrefixes !=  None:
-            obj['MaxPrefixes'] = MaxPrefixes
-
-        if AddPathsMaxTx !=  None:
-            obj['AddPathsMaxTx'] = AddPathsMaxTx
-
-        if MultiHopEnable !=  None:
-            obj['MultiHopEnable'] = MultiHopEnable
+        if AddPathsRx !=  None:
+            obj['AddPathsRx'] = AddPathsRx
 
         if RouteReflectorClient !=  None:
             obj['RouteReflectorClient'] = RouteReflectorClient
 
-        if AddPathsRx !=  None:
-            obj['AddPathsRx'] = AddPathsRx
+        if MaxPrefixesRestartTimer !=  None:
+            obj['MaxPrefixesRestartTimer'] = MaxPrefixesRestartTimer
+
+        if Description !=  None:
+            obj['Description'] = Description
+
+        if MultiHopEnable !=  None:
+            obj['MultiHopEnable'] = MultiHopEnable
+
+        if AuthPassword !=  None:
+            obj['AuthPassword'] = AuthPassword
 
         if RouteReflectorClusterId !=  None:
             obj['RouteReflectorClusterId'] = RouteReflectorClusterId
 
+        if MaxPrefixesDisconnect !=  None:
+            obj['MaxPrefixesDisconnect'] = MaxPrefixesDisconnect
+
+        if AddPathsMaxTx !=  None:
+            obj['AddPathsMaxTx'] = AddPathsMaxTx
+
+        if MaxPrefixes !=  None:
+            obj['MaxPrefixes'] = MaxPrefixes
+
         if MaxPrefixesThresholdPct !=  None:
             obj['MaxPrefixesThresholdPct'] = MaxPrefixesThresholdPct
 
+        if BfdSessionParam !=  None:
+            obj['BfdSessionParam'] = BfdSessionParam
+
         if HoldTime !=  None:
             obj['HoldTime'] = HoldTime
-
-        if AuthPassword !=  None:
-            obj['AuthPassword'] = AuthPassword
 
         if ConnectRetryTime !=  None:
             obj['ConnectRetryTime'] = ConnectRetryTime
@@ -4487,11 +4759,11 @@ class FlexSwitch( object):
 
     @processReturnCode
     def deleteBGPNeighbor(self,
-                          IfIndex,
-                          NeighborAddress):
+                          NeighborAddress,
+                          IfIndex):
         obj =  { 
-                'IfIndex' : IfIndex,
                 'NeighborAddress' : NeighborAddress,
+                'IfIndex' : IfIndex,
                 }
         reqUrl =  self.cfgUrlBase+'BGPNeighbor'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -4505,11 +4777,11 @@ class FlexSwitch( object):
 
     @processReturnCode
     def getBGPNeighbor(self,
-                       IfIndex,
-                       NeighborAddress):
+                       NeighborAddress,
+                       IfIndex):
         obj =  { 
-                'IfIndex' : IfIndex,
                 'NeighborAddress' : NeighborAddress,
+                'IfIndex' : IfIndex,
                 }
         reqUrl =  self.stateUrlBase+'BGPNeighbor'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
