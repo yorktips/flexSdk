@@ -95,22 +95,22 @@ class FlexSwitch( object):
     """
     .. automethod :: createPolicyStmt(self,
         :param string Name :  Policy Statement Name  Policy Statement Name
-        :param string MatchConditions : Specifies whether to match all/any of the conditions of this policy statement Specifies whether to match all/any of the conditions of this policy statement
         :param string Conditions : List of conditions added to this policy statement List of conditions added to this policy statement
-        :param string Actions : List of actions added to this policy statement List of actions added to this policy statement
+        :param string Action : Action for this policy statement Action for this policy statement
+        :param string MatchConditions : Specifies whether to match all/any of the conditions of this policy statement Specifies whether to match all/any of the conditions of this policy statement
 
 	"""
     @processReturnCode
     def createPolicyStmt(self,
                          Name,
-                         MatchConditions,
                          Conditions,
-                         Actions):
+                         Action='deny',
+                         MatchConditions='all'):
         obj =  { 
                 'Name' : Name,
-                'MatchConditions' : MatchConditions,
                 'Conditions' : Conditions,
-                'Actions' : Actions,
+                'Action' : Action,
+                'MatchConditions' : MatchConditions,
                 }
         reqUrl =  self.cfgUrlBase+'PolicyStmt'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -119,21 +119,21 @@ class FlexSwitch( object):
     @processReturnCode
     def updatePolicyStmt(self,
                          Name,
-                         MatchConditions = None,
                          Conditions = None,
-                         Actions = None):
+                         Action = None,
+                         MatchConditions = None):
         obj =  {}
         if Name != None :
             obj['Name'] = Name
 
-        if MatchConditions != None :
-            obj['MatchConditions'] = MatchConditions
-
         if Conditions != None :
             obj['Conditions'] = Conditions
 
-        if Actions != None :
-            obj['Actions'] = Actions
+        if Action != None :
+            obj['Action'] = Action
+
+        if MatchConditions != None :
+            obj['MatchConditions'] = MatchConditions
 
         reqUrl =  self.cfgUrlBase+'PolicyStmt'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -142,18 +142,18 @@ class FlexSwitch( object):
     @processReturnCode
     def updatePolicyStmtById(self,
                               objectId,
-                              MatchConditions = None,
                               Conditions = None,
-                              Actions = None):
+                              Action = None,
+                              MatchConditions = None):
         obj =  {'objectId': objectId }
-        if MatchConditions !=  None:
-            obj['MatchConditions'] = MatchConditions
-
         if Conditions !=  None:
             obj['Conditions'] = Conditions
 
-        if Actions !=  None:
-            obj['Actions'] = Actions
+        if Action !=  None:
+            obj['Action'] = Action
+
+        if MatchConditions !=  None:
+            obj['MatchConditions'] = MatchConditions
 
         reqUrl =  self.cfgUrlBase+'PolicyStmt'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -651,153 +651,6 @@ class FlexSwitch( object):
 
     def getAllDhcpRelayIntfs(self):
         return self.getObjects( 'DhcpRelayIntf', self.cfgUrlBase)
-
-
-    """
-    .. automethod :: createPolicyAction(self,
-        :param string Name :  PolicyActionName  PolicyActionName
-        :param string ActionType :  Specifies the type of the action  - eg  Specifies the type of the action  - eg
-        :param int32 SetAdminDistanceValue : Specifies the value of the admin distance/protocol preference when the action type is SetAdminDistance Specifies the value of the admin distance/protocol preference when the action type is SetAdminDistance
-        :param bool Accept : When set to true When set to true
-        :param bool Reject : When set to true When set to true
-        :param string RedistributeAction : Used in conjuction with RedistributeTargetProtocol for action type Redistribute Used in conjuction with RedistributeTargetProtocol for action type Redistribute
-        :param string RedistributeTargetProtocol : Used in conjuction with RedistributeAction for action type Redistribute Used in conjuction with RedistributeAction for action type Redistribute
-        :param string NetworkStatementTargetProtocol : Used for action type NetworkStatementAdvertise Used for action type NetworkStatementAdvertise
-
-	"""
-    @processReturnCode
-    def createPolicyAction(self,
-                           Name,
-                           ActionType,
-                           SetAdminDistanceValue,
-                           Accept,
-                           Reject,
-                           RedistributeAction,
-                           RedistributeTargetProtocol,
-                           NetworkStatementTargetProtocol):
-        obj =  { 
-                'Name' : Name,
-                'ActionType' : ActionType,
-                'SetAdminDistanceValue' : int(SetAdminDistanceValue),
-                'Accept' : True if Accept else False,
-                'Reject' : True if Reject else False,
-                'RedistributeAction' : RedistributeAction,
-                'RedistributeTargetProtocol' : RedistributeTargetProtocol,
-                'NetworkStatementTargetProtocol' : NetworkStatementTargetProtocol,
-                }
-        reqUrl =  self.cfgUrlBase+'PolicyAction'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def updatePolicyAction(self,
-                           Name,
-                           ActionType = None,
-                           SetAdminDistanceValue = None,
-                           Accept = None,
-                           Reject = None,
-                           RedistributeAction = None,
-                           RedistributeTargetProtocol = None,
-                           NetworkStatementTargetProtocol = None):
-        obj =  {}
-        if Name != None :
-            obj['Name'] = Name
-
-        if ActionType != None :
-            obj['ActionType'] = ActionType
-
-        if SetAdminDistanceValue != None :
-            obj['SetAdminDistanceValue'] = int(SetAdminDistanceValue)
-
-        if Accept != None :
-            obj['Accept'] = True if Accept else False
-
-        if Reject != None :
-            obj['Reject'] = True if Reject else False
-
-        if RedistributeAction != None :
-            obj['RedistributeAction'] = RedistributeAction
-
-        if RedistributeTargetProtocol != None :
-            obj['RedistributeTargetProtocol'] = RedistributeTargetProtocol
-
-        if NetworkStatementTargetProtocol != None :
-            obj['NetworkStatementTargetProtocol'] = NetworkStatementTargetProtocol
-
-        reqUrl =  self.cfgUrlBase+'PolicyAction'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def updatePolicyActionById(self,
-                                objectId,
-                                ActionType = None,
-                                SetAdminDistanceValue = None,
-                                Accept = None,
-                                Reject = None,
-                                RedistributeAction = None,
-                                RedistributeTargetProtocol = None,
-                                NetworkStatementTargetProtocol = None):
-        obj =  {'objectId': objectId }
-        if ActionType !=  None:
-            obj['ActionType'] = ActionType
-
-        if SetAdminDistanceValue !=  None:
-            obj['SetAdminDistanceValue'] = SetAdminDistanceValue
-
-        if Accept !=  None:
-            obj['Accept'] = Accept
-
-        if Reject !=  None:
-            obj['Reject'] = Reject
-
-        if RedistributeAction !=  None:
-            obj['RedistributeAction'] = RedistributeAction
-
-        if RedistributeTargetProtocol !=  None:
-            obj['RedistributeTargetProtocol'] = RedistributeTargetProtocol
-
-        if NetworkStatementTargetProtocol !=  None:
-            obj['NetworkStatementTargetProtocol'] = NetworkStatementTargetProtocol
-
-        reqUrl =  self.cfgUrlBase+'PolicyAction'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def deletePolicyAction(self,
-                           Name):
-        obj =  { 
-                'Name' : Name,
-                }
-        reqUrl =  self.cfgUrlBase+'PolicyAction'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def deletePolicyActionById(self, objectId ):
-        reqUrl =  self.cfgUrlBase+'PolicyAction'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
-        return r
-
-    @processReturnCode
-    def getPolicyAction(self,
-                        Name):
-        obj =  { 
-                'Name' : Name,
-                }
-        reqUrl =  self.stateUrlBase+'PolicyAction'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def getPolicyActionById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'PolicyAction'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllPolicyActions(self):
-        return self.getObjects( 'PolicyAction', self.cfgUrlBase)
 
 
     """
@@ -2283,22 +2136,25 @@ class FlexSwitch( object):
     """
     .. automethod :: createPolicyDefinition(self,
         :param string Name :  Policy Name  Policy Name
-        :param int32 Precedence : Priority of the policy w.r.t other policies configured Priority of the policy w.r.t other policies configured
+        :param int32 Priority : Priority of the policy w.r.t other policies configured Priority of the policy w.r.t other policies configured
+        :param PolicyDefinitionStmtPriority StatementList : Specifies list of statements along with their precedence order. Specifies list of statements along with their precedence order.
         :param string MatchType : Specifies whether to match all/any of the statements within this policy Specifies whether to match all/any of the statements within this policy
-        :param PolicyDefinitionStmtPrecedence StatementList : Specifies list of statements along with their precedence order. Specifies list of statements along with their precedence order.
+        :param string PolicyType :  Specifies the intended protocol application for the policy  Specifies the intended protocol application for the policy
 
 	"""
     @processReturnCode
     def createPolicyDefinition(self,
                                Name,
-                               Precedence,
-                               MatchType,
-                               StatementList):
+                               Priority,
+                               StatementList,
+                               MatchType='all',
+                               PolicyType='ALL'):
         obj =  { 
                 'Name' : Name,
-                'Precedence' : int(Precedence),
-                'MatchType' : MatchType,
+                'Priority' : int(Priority),
                 'StatementList' : StatementList,
+                'MatchType' : MatchType,
+                'PolicyType' : PolicyType,
                 }
         reqUrl =  self.cfgUrlBase+'PolicyDefinition'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -2307,21 +2163,25 @@ class FlexSwitch( object):
     @processReturnCode
     def updatePolicyDefinition(self,
                                Name,
-                               Precedence = None,
+                               Priority = None,
+                               StatementList = None,
                                MatchType = None,
-                               StatementList = None):
+                               PolicyType = None):
         obj =  {}
         if Name != None :
             obj['Name'] = Name
 
-        if Precedence != None :
-            obj['Precedence'] = int(Precedence)
+        if Priority != None :
+            obj['Priority'] = int(Priority)
+
+        if StatementList != None :
+            obj['StatementList'] = StatementList
 
         if MatchType != None :
             obj['MatchType'] = MatchType
 
-        if StatementList != None :
-            obj['StatementList'] = StatementList
+        if PolicyType != None :
+            obj['PolicyType'] = PolicyType
 
         reqUrl =  self.cfgUrlBase+'PolicyDefinition'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -2330,18 +2190,22 @@ class FlexSwitch( object):
     @processReturnCode
     def updatePolicyDefinitionById(self,
                                     objectId,
-                                    Precedence = None,
+                                    Priority = None,
+                                    StatementList = None,
                                     MatchType = None,
-                                    StatementList = None):
+                                    PolicyType = None):
         obj =  {'objectId': objectId }
-        if Precedence !=  None:
-            obj['Precedence'] = Precedence
+        if Priority !=  None:
+            obj['Priority'] = Priority
+
+        if StatementList !=  None:
+            obj['StatementList'] = StatementList
 
         if MatchType !=  None:
             obj['MatchType'] = MatchType
 
-        if StatementList !=  None:
-            obj['StatementList'] = StatementList
+        if PolicyType !=  None:
+            obj['PolicyType'] = PolicyType
 
         reqUrl =  self.cfgUrlBase+'PolicyDefinition'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -4150,27 +4014,30 @@ class FlexSwitch( object):
     .. automethod :: createBGPGlobal(self,
         :param string RouterId :  Router id for BGP global config  Router id for BGP global config
         :param uint32 ASNum :  Local AS for BGP global config  Local AS for BGP global config
+        :param SourcePolicyList Redistribution :  Provide redistribution policies for BGP from different sources  Provide redistribution policies for BGP from different sources
+        :param bool UseMultiplePaths :  Enable/disable ECMP for BGP  Enable/disable ECMP for BGP
         :param uint32 EBGPMaxPaths :  Max ECMP paths from External BGP neighbors  Max ECMP paths from External BGP neighbors
         :param bool EBGPAllowMultipleAS :  Enable/diable ECMP paths from multiple ASes  Enable/diable ECMP paths from multiple ASes
         :param uint32 IBGPMaxPaths :  Max ECMP paths from Internal BGP neighbors  Max ECMP paths from Internal BGP neighbors
-        :param bool UseMultiplePaths :  Enable/disable ECMP for BGP  Enable/disable ECMP for BGP
 
 	"""
     @processReturnCode
     def createBGPGlobal(self,
                         RouterId,
                         ASNum,
+                        Redistribution,
+                        UseMultiplePaths=False,
                         EBGPMaxPaths=0,
                         EBGPAllowMultipleAS=False,
-                        IBGPMaxPaths=0,
-                        UseMultiplePaths=False):
+                        IBGPMaxPaths=0):
         obj =  { 
                 'RouterId' : RouterId,
                 'ASNum' : int(ASNum),
+                'Redistribution' : Redistribution,
+                'UseMultiplePaths' : True if UseMultiplePaths else False,
                 'EBGPMaxPaths' : int(EBGPMaxPaths),
                 'EBGPAllowMultipleAS' : True if EBGPAllowMultipleAS else False,
                 'IBGPMaxPaths' : int(IBGPMaxPaths),
-                'UseMultiplePaths' : True if UseMultiplePaths else False,
                 }
         reqUrl =  self.cfgUrlBase+'BGPGlobal'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -4180,16 +4047,23 @@ class FlexSwitch( object):
     def updateBGPGlobal(self,
                         RouterId,
                         ASNum = None,
+                        Redistribution = None,
+                        UseMultiplePaths = None,
                         EBGPMaxPaths = None,
                         EBGPAllowMultipleAS = None,
-                        IBGPMaxPaths = None,
-                        UseMultiplePaths = None):
+                        IBGPMaxPaths = None):
         obj =  {}
         if RouterId != None :
             obj['RouterId'] = RouterId
 
         if ASNum != None :
             obj['ASNum'] = int(ASNum)
+
+        if Redistribution != None :
+            obj['Redistribution'] = Redistribution
+
+        if UseMultiplePaths != None :
+            obj['UseMultiplePaths'] = True if UseMultiplePaths else False
 
         if EBGPMaxPaths != None :
             obj['EBGPMaxPaths'] = int(EBGPMaxPaths)
@@ -4200,9 +4074,6 @@ class FlexSwitch( object):
         if IBGPMaxPaths != None :
             obj['IBGPMaxPaths'] = int(IBGPMaxPaths)
 
-        if UseMultiplePaths != None :
-            obj['UseMultiplePaths'] = True if UseMultiplePaths else False
-
         reqUrl =  self.cfgUrlBase+'BGPGlobal'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
@@ -4211,13 +4082,20 @@ class FlexSwitch( object):
     def updateBGPGlobalById(self,
                              objectId,
                              ASNum = None,
+                             Redistribution = None,
+                             UseMultiplePaths = None,
                              EBGPMaxPaths = None,
                              EBGPAllowMultipleAS = None,
-                             IBGPMaxPaths = None,
-                             UseMultiplePaths = None):
+                             IBGPMaxPaths = None):
         obj =  {'objectId': objectId }
         if ASNum !=  None:
             obj['ASNum'] = ASNum
+
+        if Redistribution !=  None:
+            obj['Redistribution'] = Redistribution
+
+        if UseMultiplePaths !=  None:
+            obj['UseMultiplePaths'] = UseMultiplePaths
 
         if EBGPMaxPaths !=  None:
             obj['EBGPMaxPaths'] = EBGPMaxPaths
@@ -4227,9 +4105,6 @@ class FlexSwitch( object):
 
         if IBGPMaxPaths !=  None:
             obj['IBGPMaxPaths'] = IBGPMaxPaths
-
-        if UseMultiplePaths !=  None:
-            obj['UseMultiplePaths'] = UseMultiplePaths
 
         reqUrl =  self.cfgUrlBase+'BGPGlobal'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -5979,26 +5854,6 @@ class FlexSwitch( object):
 
 
     @processReturnCode
-    def getArpEntryHwState(self,
-                           IpAddr):
-        obj =  { 
-                'IpAddr' : IpAddr,
-                }
-        reqUrl =  self.stateUrlBase+'ArpEntryHw'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def getArpEntryHwStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'ArpEntryHw'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllArpEntryHwStates(self):
-        return self.getObjects( 'ArpEntryHw', self.stateUrlBase)
-
-
-    @processReturnCode
     def getDaemonState(self,
                        Name):
         obj =  { 
@@ -6271,23 +6126,23 @@ class FlexSwitch( object):
 
 
     @processReturnCode
-    def getPolicyActionState(self,
-                             Name):
+    def getArpEntryHwState(self,
+                           IpAddr):
         obj =  { 
-                'Name' : Name,
+                'IpAddr' : IpAddr,
                 }
-        reqUrl =  self.stateUrlBase+'PolicyAction'
+        reqUrl =  self.stateUrlBase+'ArpEntryHw'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
-    def getPolicyActionStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'PolicyAction'+"/%s"%(objectId)
+    def getArpEntryHwStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'ArpEntryHw'+"/%s"%(objectId)
         r = requests.get(reqUrl, data=None, headers=headers) 
         return r
 
-    def getAllPolicyActionStates(self):
-        return self.getObjects( 'PolicyAction', self.stateUrlBase)
+    def getAllArpEntryHwStates(self):
+        return self.getObjects( 'ArpEntryHw', self.stateUrlBase)
 
 
     @processReturnCode
@@ -6563,8 +6418,8 @@ class FlexSwitch( object):
     """
     .. automethod :: createPolicyCondition(self,
         :param string Name :  PolicyConditionName  PolicyConditionName
-        :param string ConditionType :  Specifies the match criterion this condition defines - eg  Specifies the match criterion this condition defines - eg
-        :param string MatchProtocol :  Protocol to match on if the ConditionType is set to MatchProtocol  Protocol to match on if the ConditionType is set to MatchProtocol
+        :param string ConditionType :  Specifies the match criterion this condition defines  Specifies the match criterion this condition defines
+        :param string Protocol :  Protocol to match on if the ConditionType is set to MatchProtocol  Protocol to match on if the ConditionType is set to MatchProtocol
         :param string IpPrefix :  Used in conjunction with MaskLengthRange to specify the IP Prefix to match on when the ConditionType is MatchDstIpPrefix/MatchSrcIpPrefix.  Used in conjunction with MaskLengthRange to specify the IP Prefix to match on when the ConditionType is MatchDstIpPrefix/MatchSrcIpPrefix.
         :param string MaskLengthRange :  Used in conjuction with IpPrefix to specify specify the IP Prefix to match on when the ConditionType is MatchDstIpPrefix/MatchSrcIpPrefix.  Used in conjuction with IpPrefix to specify specify the IP Prefix to match on when the ConditionType is MatchDstIpPrefix/MatchSrcIpPrefix.
 
@@ -6573,13 +6428,13 @@ class FlexSwitch( object):
     def createPolicyCondition(self,
                               Name,
                               ConditionType,
-                              MatchProtocol,
+                              Protocol,
                               IpPrefix,
                               MaskLengthRange):
         obj =  { 
                 'Name' : Name,
                 'ConditionType' : ConditionType,
-                'MatchProtocol' : MatchProtocol,
+                'Protocol' : Protocol,
                 'IpPrefix' : IpPrefix,
                 'MaskLengthRange' : MaskLengthRange,
                 }
@@ -6591,7 +6446,7 @@ class FlexSwitch( object):
     def updatePolicyCondition(self,
                               Name,
                               ConditionType = None,
-                              MatchProtocol = None,
+                              Protocol = None,
                               IpPrefix = None,
                               MaskLengthRange = None):
         obj =  {}
@@ -6601,8 +6456,8 @@ class FlexSwitch( object):
         if ConditionType != None :
             obj['ConditionType'] = ConditionType
 
-        if MatchProtocol != None :
-            obj['MatchProtocol'] = MatchProtocol
+        if Protocol != None :
+            obj['Protocol'] = Protocol
 
         if IpPrefix != None :
             obj['IpPrefix'] = IpPrefix
@@ -6618,15 +6473,15 @@ class FlexSwitch( object):
     def updatePolicyConditionById(self,
                                    objectId,
                                    ConditionType = None,
-                                   MatchProtocol = None,
+                                   Protocol = None,
                                    IpPrefix = None,
                                    MaskLengthRange = None):
         obj =  {'objectId': objectId }
         if ConditionType !=  None:
             obj['ConditionType'] = ConditionType
 
-        if MatchProtocol !=  None:
-            obj['MatchProtocol'] = MatchProtocol
+        if Protocol !=  None:
+            obj['Protocol'] = Protocol
 
         if IpPrefix !=  None:
             obj['IpPrefix'] = IpPrefix
