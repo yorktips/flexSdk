@@ -31,13 +31,13 @@ Configuring  with Rest API
 
 FlexSwitch has a REST based API, and below is an example utilzing Linux cURL: 
 
-COMMAND:
+**COMMAND:**
 ::
 	
 	curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"ArpConfigKey":"VRF Name", "Timeout":<*Timeout Value in seconds*>}' 'http://<*your-switchip*>:8080/public/v1/config/ArpConfig'
 	
 
-OPTIONS:
+**OPTIONS:**
 
 +------------+------------+-------------------------------------------+----------+----------+
 | Variables  | Type       |  Description                              | Required |  Default |   
@@ -48,7 +48,7 @@ OPTIONS:
 +------------+------------+-------------------------------------------+----------+----------+ 
 
 
-EXAMPLE:
+**EXAMPLE:**
 ::
 	
 	root@5b5a8d783113:/# curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"ArpConfigKey":"1", "Timeout":1000}' http://localhost:8080/public/v1/config/ArpConfig
@@ -82,12 +82,12 @@ Configuring with Python SDK
 
 Setting the ARP Timeout to 1000 seconds via FlexSwitch's Python SDK, utilizing method *createArpConfig()*. 
 
-COMMAND:
+**COMMAND:**
 ::
 
 	>>> FlexSwitch("*Switch IP*", *TCP port*).createArpConfig("<*VRF*>",<"*Timeout*">)
 	
-OPTIONS:
+**OPTIONS:**
 
 ::
 	
@@ -103,7 +103,7 @@ OPTIONS:
 +------------------+------------+------------+-------------------------------------------+----------+----------+   
 
 
-EXAMPLE:
+**EXAMPLE:**
 
 Below are examples for utilizing this method via the Python CLI, python script and Displaying the results 
 
@@ -178,13 +178,13 @@ Configuring with Rest API
 
 FlexSwitch has a REST based API, and below is an example utilzing Linux cURL:
 
-COMMAND:
+**COMMAND:**
 ::
 
         curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"IP":"<*IPv4 Address*>", "MAC":"<*MAC address*>"}' 'http://<*your-switchip*>:8080/public/v1/config/ArpConfig'
 
 
-OPTIONS:
+**OPTIONS:**
 
 +------------+------------+---------------------------------------------------+----------+----------+
 | Variables  | Type       |  Description                                      | Required |  Default |    
@@ -195,7 +195,7 @@ OPTIONS:
 +------------+------------+---------------------------------------------------+----------+----------+  
 
 	
-EXAMPLE:
+**EXAMPLE:**
 ::
 
         root@5b5a8d783113:/# curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"IP":"192.168.0.1", "MAC":"01:23:34:56:78"}' http://localhost:8080/public/v1/config/ArpConfig
@@ -230,12 +230,12 @@ Configuring with Python SDK
 Setting a static arp entry via FlexSwitch's Python SDK, utilizing method *createArpStatic()*. 
 
 
-COMMAND:
+**COMMAND:**
 ::
 
 	>>> FlexSwitch("<*Switch IP*>", <*TCP port*>).createArpStatic(<*IPv4Address*>, <*MAC*>)
 
-OPTIONS:
+**OPTIONS:**
 ::
 
    createArpStatic(self, param string IPv4Address :  IPv4 address for ARP,
@@ -250,7 +250,7 @@ OPTIONS:
 |                  | MAC        | String     | Layer 2 MAC address associated with IPv4 address. |    Yes   |   None   |   
 +------------------+------------+------------+---------------------------------------------------+----------+----------+  
 
-EXAMPLE:
+**EXAMPLE:**
 
 Below are examples for utilizing this method via the Python CLI, python script and displaying the results:
 
@@ -326,7 +326,7 @@ Display via Rest API
  
 Utilizing the GetBulk API for ARP, "*ArpEntrys*", we can display all ARP entries learned on the device.  
 
-COMMAND:
+**COMMAND:**
 ::
 
         curl -X GET --header 'Content-Type: application/json' 'http://<*your-switchip*>:8080/public/v1/state/ArpEntrys'
@@ -338,7 +338,7 @@ OPTIONS
 
 	None
 
-EXAMPLE:
+**EXAMPLE:**
 ::
 
 	root@5c3bca6fb77e:/# curl -X GET --header 'Content-Type: application/json' 'http://localhost:8080/public/v1/state/ArpEntrys' | python -m json.tool
@@ -370,21 +370,21 @@ Displaying via Python SDK
 
 Displaying all ARP entries utilizing FlexSwitch's Python SDK, utilizing method *getAllArpEntryStates()*
 
-COMMAND:
+**COMMAND:**
 
 ::
 
 	>>> FlexSwitch("<*Switch IP*>", <*TCP Port*>).getAllArpEntryStates()
 
 
-OPTIONS:
+**OPTIONS:**
 
 ::
 
    getAllArpEntryStates(self)
 	
 
-EXAMPLE:
+**EXAMPLE:**
 
 Below are examples for utilizing this method via the Python CLI, python script and displaying the results:
 
@@ -456,14 +456,14 @@ You can return the value of an object based on any of the variables within that 
 
 The example below will show how to grab a specific ARP entry based on IP address. 
 
-COMMAND:
+**COMMAND:**
 
 ::
 
 	curl -X GET --header 'Content-Type: application/json' -d '{"IpAddr":"<*IPv4 Address*>"}' 'http://<*your-switchip*>:8080/public/v1/state/ArpEntry'
 
 
-OPTIONS:
+**OPTIONS:**
 
 +------------+------------+---------------------------------------+----------+----------+
 | Variables  | Type       |  Description                          | Required |  Default |     
@@ -471,7 +471,7 @@ OPTIONS:
 | IpAddr     | String     | IPv4 Address ArpEntry to be queried   |    Yes   |   None   |
 +------------+------------+---------------------------------------+----------+----------+
 
-EXAMPLE:
+**EXAMPLE:**
 ::
 
 	root@5c3bca6fb77e:/# curl -X GET --header 'Content-Type: application/json' -d '{"IpAddr":"51.1.1.5"}' 'http://localhost:8080/public/v1/state/ArpEntry' | python -m json.tool
@@ -496,13 +496,13 @@ Displaying via Python SDK
 
 Displaying all ARP entries utilizing FlexSwitch's Python SDK, utilizing method *getAllArpEntryStates()*
 
-COMMAND:
+**COMMAND:**
 
 ::
 
 	>>> FlexSwitch("<*Switch IP*>", <*TCP Port*>).getArpEntryState("<*IPv4Address*>")
 
-OPTIONS:
+**OPTIONS:**
 
 ::
 
@@ -515,7 +515,7 @@ OPTIONS:
 +------------------+------------+-------+--------------------------------------+----------+----------+
 
 	
-EXAMPLE:
+**EXAMPLE:**
 
 ::
 
@@ -725,14 +725,14 @@ Demand Mode
 
 In demand mode, no Hello packets are exchanged after the session is established; it is assumed that the endpoints have another way to verify connectivity to each other, perhaps on the underlying physical layer.
 
-Per-link
-""""""""
+.. Per-link
+.. """"""""
 
-Since traditional Asynchronous BFD is an IP point-to-point protocol, it has no concept of layer 2 links that may exist between two devices.  This is especially true for layer 2 port-channels with multiple member-links.   
+.. Since traditional Asynchronous BFD is an IP point-to-point protocol, it has no concept of layer 2 links that may exist between two devices.  This is especially true for layer 2 port-channels with multiple member-links.   
 If these one of these links happen to fail, while BFD is running across them, it may result in a false-positive detection of a connectivity failure.  This could have unintended impact, by bringing down an associated routing-protocol session incorrectly, 
 thus taking our an entire port-channel, rather than a single-link.  
 
-BFD over LAG or BFD per-link was created as an enhancement to limit the impact of single port-channel member-link failure.  When BFD per-link is enabled on a port-channel interface, an asynchronous mode BFD sessions is run on every port-channel member link.  This allows for failure detection of a single port-channel member-link, 
+.. BFD over LAG or BFD per-link was created as an enhancement to limit the impact of single port-channel member-link failure.  When BFD per-link is enabled on a port-channel interface, an asynchronous mode BFD sessions is run on every port-channel member link.  This allows for failure detection of a single port-channel member-link, 
 limiting the impact and traffic-transitions to only links that failed.  When all BFD sessions fail on a particular port-channel interface, only then are the associated protocol sessions torn down, allowing for accurate fault detection. 
 
 
@@ -756,7 +756,7 @@ BFD is enabled in the following order:
  3. Attach to User created BFD session or a routing protocol 
  4. Review configuration and state 
 
-The above assumes that the BFD daemon is already running and has registered with the system. 
+.. Note::The above assumes that the BFD daemon is already running and has registered with the system. 
 
 -----------------
 
@@ -766,18 +766,13 @@ Configuring with Rest API
 Enable BFD Globally
 *******************
 
-You need to set the "*Enable*" parameter to "*true*".  You can also see the "*Bfd*" parameter is set to the name "*default*".  This value is the 
-VRF name where BFD will be Globally enabled. By default this is the "*default*" VRF and should not need to be set by the user. 
-
-.. Note::BFD is enabled by default when the Daemon is started. 
-
-COMMAND:
+**COMMAND:**
 ::
 
-	curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"Bfd":"default","Enable":"true"}' 'http://<*your-switchip*>:8080/public/v1/config/BfdGlobal'
+	curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"Bfd":"default","Enable":true}' 'http://<*your-switchip*>:8080/public/v1/config/BfdGlobal'
 	
 
-OPTIONS:
+**OPTIONS:**
 
 +------------+------------+--------------------------------------------------------+----------+----------+
 | Variables  | Type       |  Description                                           | Required |  Default |     
@@ -788,22 +783,28 @@ OPTIONS:
 +------------+------------+--------------------------------------------------------+----------+----------+
 
 
-EXAMPLE:
+**EXAMPLE:**
+
+You need to set the "*Enable*" parameter to "*true*".  You can also see the "*Bfd*" parameter is set to the name "*default*".  This value is the 
+VRF name where BFD will be Globally enabled. By default this is the "*default*" VRF and should not need to be set by the user. 
+
+.. Note::BFD is enabled by default when the Daemon is started. 
+
 ::
 	
-	acasella@snaproute-lab-r710-1:~$ curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"Bfd":"default","Enable":true}' 'http://10.1.10.43:8080/public/v1/config/BfdGlobal'
+	curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"Bfd":"default","Enable":true}' 'http://10.1.10.43:8080/public/v1/config/BfdGlobal'
 	{"ObjectId":"0880b0cb-d0da-461e-7826-9b2eef1b800e","Error":""}
 
 Creating BFD session parameters 
 *******************************
 
-COMMAND:
+**COMMAND:**
 ::
 
 	curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"Name":"<*Param Profile Name*>","LocalMultiplier":3,"DesiredMinTxInterval":250,"RequiredMinRxInterval":250,"RequiredMinEchoRxInterval":0,"DemandEnabled":false,"AuthenticationEnabled":false,"AuthKeyId":1,"AuthData":"snaproute"}' 'http://<*your-switchip*>:8080/public/v1/config/BfdSessionParam'
 	
 
-OPTIONS:
+**OPTIONS:**
 
 
 +---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
@@ -832,7 +833,7 @@ OPTIONS:
 
 
 
-EXAMPLE:
+**EXAMPLE:**
 
 ::
 
@@ -847,13 +848,13 @@ Attaching BFD params to a BFD session
 
 		1. Create User session with BFD session parameter profile specified
 		
-			COMMAND:
+			**COMMAND:**
 			::
 				
 				curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"IpAddr":"<*IPv4 Address*>","ParamName":"<*Param Profile Name*>","Interface":"None","Owner":"user"}' 'http://<*your-switchip*>:8080/public/v1/config/BfdSession'
 
 				
-			OPTIONS:
+			**OPTIONS:**
 				+-----------+------------+---------------------------------------------------------------------------------------+----------+-----------+
 				| Variables | Type       |  Description                                                                          | Required |  Default  |     
 				+===========+============+=======================================================================================+==========+===========+   
@@ -870,7 +871,7 @@ Attaching BFD params to a BFD session
 						
 			
 			
-			EXAMPLE:
+			**EXAMPLE:**
 			::
 				
 				curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"IpAddr":"1.1.1.1","ParamName":"BFD_session","Interface":"None","Owner":"user"}' 'http://10.1.10.43:8080/public/v1/config/BfdSession'
@@ -897,17 +898,17 @@ Displaying Configuration and State
 
 Display BFD session parameter profile configuration:
 
-COMMAND:
+**COMMAND:**
 ::
 	
 	curl -X GET --header 'Content-Type: application/json' --header 'Accept: application/json' 'http://10.1.10.43:8080/public/v1/config/BfdSessionParams'
 
-OPTIONS:
+**OPTIONS:**
 ::
 	
 	None
 	
-EXAMPLE:
+**EXAMPLE:**
 	
 We can start by looking at the BFD configuration of was setup in the example sections above.  We can view the session parameters:
 
@@ -946,17 +947,17 @@ We can start by looking at the BFD configuration of was setup in the example sec
 Display BFD Session configuration:
 
 
-COMMAND:
+**COMMAND:**
 ::
 	
 	curl -X GET --header 'Content-Type: application/json' --header 'Accept: application/json' 'http://10.1.10.43:8080/public/v1/config/BfdSessions'
 
-OPTIONS:
+**OPTIONS:**
 ::
 	
 	None
 	
-EXAMPLE:
+**EXAMPLE:**
 
 Below we can see the BFD Session Parameter profile "BFD_Session": parameter profile as well:
 
@@ -989,18 +990,18 @@ Below we can see the BFD Session Parameter profile "BFD_Session": parameter prof
 Display BFD Session Parameter State:
 
 
-COMMAND:
+**COMMAND:**
 
 ::
 
 	curl -X GET --header 'Content-Type: application/json' --header 'Accept: application/json' 'http://10.1.10.245:8080/public/v1/state/BfdSessionParams'
 
-OPTIONS:
+**OPTIONS:**
 ::
 	
 	None
 	
-EXAMPLE:
+**EXAMPLE:**
 
 When we look at the BfdSessionParams status, we see very similar data to that of the configuration, but there are a few very important differences:
 
@@ -1048,18 +1049,18 @@ BFD implementations.
 Display BFD Session State:
 
 
-COMMAND:
+**COMMAND:**
 
 ::
 
 	curl -X GET --header 'Content-Type: application/json' --header 'Accept: application/json' 'http://10.1.10.245:8080/public/v1/state/BfdSessions'
 
-OPTIONS:
+**OPTIONS:**
 ::
 	
 	None
 	
-EXAMPLE:
+**EXAMPLE:**
 
 The BfdSessions state API responds with the relevant state of all BFD sessions.  We can see the current BFD timers being utilized, the BFD Parameter Profile this information was
 inherited via the *ParamName* variable, BFD_Sessions in this case. As well aa BFD session status via *SessionState* variable, which is up and working. 
@@ -1115,11 +1116,72 @@ inherited via the *ParamName* variable, BFD_Sessions in this case. As well aa BF
 Configuring with Python SDK
 """""""""""""""""""""""""""
 
-COMMAND:
+Enable BFD Globally
+*******************
+
+You need to set the "*Enable*" parameter to "*true*".  You can also see the "*Bfd*" parameter is set to the name "*default*".  This value is the 
+VRF name where BFD will be Globally enabled. By default this is the "*default*" VRF and should not need to be set by the user. 
+
+.. Note::BFD is enabled by default when the Daemon is started. 
+
+**COMMAND:**
+
+::
+
+	>>> FlexSwitch("<*Switch IP*>", <*TCP port*>).createBfdGlobal(<*VRF Name*> , <*Enable/Disable BFD*>)
+
+**OPTIONS:**
+
++------------------+---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
+| Python Method    | Variables                 | Type       |  Description                                                                     | Required |  Default  |     
++==================+===========================+============+==================================================================================+==========+===========+   
+| createBfdGlobal  | Bfd                       | string     | VRF Name where BFD is enabled                                                    |    Yes   |   None    |
+|                  +---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
+|                  | Enable           		   | int32      | Multiplier of BFD hello RX interval to wait before tearing down session          |    no    |   3       |
+|                  +---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
+|                  | DesiredMinTxInterval      | int32      | Time in milliseconds between interval TX of BFD hello packets                    |    no    |   1000    |
+|                  +---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
+|                  | RequiredMinRxInterval     | int32      | Expected interval in milliseconds between RX of BFD  packets                     |    no    |   1000    |
+|                  +---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
+|                  | RequiredMinRxEchoInterval | int32      | Expected interval in milliseconds between RX of BFD echo packets                 |    no    |   0       |
+|                  +---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
+|                  | DemandEnabled             | boolean    | Boolean value to specify the global state for BFD demand mode; I.E. true/false   |    no    |   false   |
+|                  +---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
+|                  | AuthenticationEnabled     | boolean    | Boolean value to specify the global state for BFD authentication; I.E. true/false|    no    |   false   |
+|                  +---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
+|                  | AuthKeyId                 | int32      | Authentication key ID                                                            |    no    |   1       |
+|                  +---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
+|                  | AuthData                  | string     | Authentication string                                                            |    no    |"snaproute"|
++------------------+---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
+
+::
+
+	createBfdSessionParam(self,
+       					 param string Name :  Session parameters  Session parameters
+       					 param uint32 RequiredMinRxInterval :  Required minimum rx interval in ms  Required minimum rx interval in ms
+       					 param string AuthData :  Authentication password  Authentication password
+       					 param bool DemandEnabled :  Enable or disable demand mode  Enable or disable demand mode
+       					 param uint32 AuthKeyId :  Authentication key id  Authentication key id
+       					 param string AuthType :  Authentication type  Authentication type
+       					 param uint32 DesiredMinTxInterval :  Desired minimum tx interval in ms  Desired minimum tx interval in ms
+       					 param bool AuthenticationEnabled :  Enable or disable authentication  Enable or disable authentication
+       					 param uint32 RequiredMinEchoRxInterval :  Required minimum echo rx interval in ms  Required minimum echo rx interval in ms
+       					 param uint32 LocalMultiplier :  Detection multiplier  Detection multiplier
+
+**EXAMPLE:**
+
+
+
+Creating BFD session parameters 
+*******************************
+
+
+**COMMAND:**
+::
 
 	>>> FlexSwitch("<*Switch IP*>", <*TCP port*>).createBfdSessionParam(<*Name*>, <*LocalMultiplier*>, <*DesiredMinTxInterval*>, <*RequiredMinRxInterval*>,<*RequiredMinRxEchoInterval*>,<*DemandEnabled*>,<*AuthenticationEnabled*>, <*AuthKeyId*>,<*AuthData*> )
 
-OPTIONS:
+**OPTIONS:**
 
 +------------------------+---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
 | Python Method          | Variables                 | Type       |  Description                                                                     | Required |  Default  |     
@@ -1159,10 +1221,42 @@ OPTIONS:
 
 
 
-EXAMPLE:
+**EXAMPLE:**
+
+::
+
+	>>>from flexswitchV2 import FlexSwitch
+	>>> >>> FlexSwitch("10.1.10.243", 8080).createBfdSessionParam("BFD_Session", LocalMultiplier=3, RequiredMinRxInterval=250, DesiredMinTxInterval=250)
+	({u'ObjectId': u'5b4a4b49-7310-444e-64da-5d8e8764e914', u'Error': u''}, None)
 
 
+Can be applied with the following Python Script:
 
+
+::
+
+	#!/usr/bin/python
+	from flexswitchV2 import FlexSwitch
+
+
+	if __name__ =='__main__':
+		switch_ip = "10.1.10.243"
+		restIf = FlexSwitch(switch_ip, 8080)
+		restIf.createBfdSessionParam("BFD_Session", LocalMultiplier=3, RequiredMinRxInterval=250, DesiredMinTxInterval=250)
+
+
+Attaching BFD params to a BFD session  
+*************************************
+
+Configuring BFD demand mode
+***************************
+
+Configuring BFD Authentication
+******************************
+
+
+Displaying Configuration and State
+**********************************
 
 Configuring BGP
 ---------------
