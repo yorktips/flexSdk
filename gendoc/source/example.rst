@@ -835,6 +835,8 @@ Creating BFD session parameters
 
 **EXAMPLE:**
 
+Here we are creating the BFD session parameters that will be utilized by the BFD session between devices. 
+
 ::
 
 	acasella@snaproute-lab-r710-1:~$ curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"Name":"BFD_session","LocalMultiplier":3,"DesiredMinTxInterval":250,"RequiredMinRxInterval":250,"RequiredMinEchoRxInterval":0,"DemandEnabled":false,"AuthenticationEnabled":false,"AuthKeyId":1,"AuthData":"snaproute"}' 'http://10.1.10.43:8080/public/v1/config/BfdSessionParam'
@@ -844,7 +846,7 @@ Creating BFD session parameters
 Attaching BFD params to a BFD session  
 *************************************
 
-	Attaching to user create BFD session:
+	Attaching BFD parameter profile to user create BFD session:
 
 		1. Create User session with BFD session parameter profile specified
 		
@@ -876,7 +878,7 @@ Attaching BFD params to a BFD session
 				
 				curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"IpAddr":"1.1.1.1","ParamName":"BFD_session","Interface":"None","Owner":"user"}' 'http://10.1.10.43:8080/public/v1/config/BfdSession'
 
-	Attaching to protocol created BFD session:
+	Attaching BFD parameter profile to protocol created BFD session:
 
 		For more details on how BFD integrates with other protocols, please goto that protocols specific section:
 
@@ -1119,58 +1121,55 @@ Configuring with Python SDK
 Enable BFD Globally
 *******************
 
+**COMMAND:**
+
+::
+
+	>>> FlexSwitch("<*Switch IP*>", <*TCP port*>).createBfdGlobal(Bfd=<*VRF Name*> , Enable=<*true/false*>)
+
+**OPTIONS:**
+
++------------------+-------------+------------+------------------------------------+----------+-----------+
+| Python Method    | Variables   | Type       |  Description                       | Required |  Default  |     
++==================+=============+============+====================================+==========+===========+   
+| createBfdGlobal  | Bfd         | string     | VRF Name where BFD is enabled      |    Yes   | "default" |
+|                  +-------------+------------+------------------------------------+----------+-----------+
+|                  | Enable      | boolean    | Enable BFD within specified VRF    |    Yes   |   true    |
++------------------+-------------+------------+------------------------------------+----------+-----------+
+
+::
+
+	createBfdGlobal(self,
+       					 param string Bfd :  VRF Name where BFD is enabled
+       					 param boolean Enable :  Enable BFD within specified VRF
+       					 
+**EXAMPLE:**
+
 You need to set the "*Enable*" parameter to "*true*".  You can also see the "*Bfd*" parameter is set to the name "*default*".  This value is the 
 VRF name where BFD will be Globally enabled. By default this is the "*default*" VRF and should not need to be set by the user. 
 
 .. Note::BFD is enabled by default when the Daemon is started. 
 
-**COMMAND:**
+::
+
+	>>> from flexswitchV2 import FlexSwitch
+	>>> FlexSwitch("10.1.10.243", 8080).createBfdGlobal("default", True)
+	({u'ObjectId': u'5b4a4b49-7310-444e-64da-5d8e8764e914', u'Error': u''}, None)
+
+
+Can be applied with the following Python Script:
+
 
 ::
 
-	>>> FlexSwitch("<*Switch IP*>", <*TCP port*>).createBfdGlobal(<*VRF Name*> , <*Enable/Disable BFD*>)
-
-**OPTIONS:**
-
-+------------------+---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
-| Python Method    | Variables                 | Type       |  Description                                                                     | Required |  Default  |     
-+==================+===========================+============+==================================================================================+==========+===========+   
-| createBfdGlobal  | Bfd                       | string     | VRF Name where BFD is enabled                                                    |    Yes   |   None    |
-|                  +---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
-|                  | Enable           		   | int32      | Multiplier of BFD hello RX interval to wait before tearing down session          |    no    |   3       |
-|                  +---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
-|                  | DesiredMinTxInterval      | int32      | Time in milliseconds between interval TX of BFD hello packets                    |    no    |   1000    |
-|                  +---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
-|                  | RequiredMinRxInterval     | int32      | Expected interval in milliseconds between RX of BFD  packets                     |    no    |   1000    |
-|                  +---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
-|                  | RequiredMinRxEchoInterval | int32      | Expected interval in milliseconds between RX of BFD echo packets                 |    no    |   0       |
-|                  +---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
-|                  | DemandEnabled             | boolean    | Boolean value to specify the global state for BFD demand mode; I.E. true/false   |    no    |   false   |
-|                  +---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
-|                  | AuthenticationEnabled     | boolean    | Boolean value to specify the global state for BFD authentication; I.E. true/false|    no    |   false   |
-|                  +---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
-|                  | AuthKeyId                 | int32      | Authentication key ID                                                            |    no    |   1       |
-|                  +---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
-|                  | AuthData                  | string     | Authentication string                                                            |    no    |"snaproute"|
-+------------------+---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
-
-::
-
-	createBfdSessionParam(self,
-       					 param string Name :  Session parameters  Session parameters
-       					 param uint32 RequiredMinRxInterval :  Required minimum rx interval in ms  Required minimum rx interval in ms
-       					 param string AuthData :  Authentication password  Authentication password
-       					 param bool DemandEnabled :  Enable or disable demand mode  Enable or disable demand mode
-       					 param uint32 AuthKeyId :  Authentication key id  Authentication key id
-       					 param string AuthType :  Authentication type  Authentication type
-       					 param uint32 DesiredMinTxInterval :  Desired minimum tx interval in ms  Desired minimum tx interval in ms
-       					 param bool AuthenticationEnabled :  Enable or disable authentication  Enable or disable authentication
-       					 param uint32 RequiredMinEchoRxInterval :  Required minimum echo rx interval in ms  Required minimum echo rx interval in ms
-       					 param uint32 LocalMultiplier :  Detection multiplier  Detection multiplier
-
-**EXAMPLE:**
+	#!/usr/bin/python
+	from flexswitchV2 import FlexSwitch
 
 
+	if __name__ =='__main__':
+		switch_ip = "10.1.10.243"
+		restIf = FlexSwitch(switch_ip, 8080)
+		restIf.createBfdGlobal("default", True)	
 
 Creating BFD session parameters 
 *******************************
@@ -1223,6 +1222,8 @@ Creating BFD session parameters
 
 **EXAMPLE:**
 
+Here we are creating the BFD session parameters that will be utilized by the BFD session between devices. 
+
 ::
 
 	>>>from flexswitchV2 import FlexSwitch
@@ -1247,6 +1248,40 @@ Can be applied with the following Python Script:
 
 Attaching BFD params to a BFD session  
 *************************************
+
+
+	Attaching BFD parameter profile to user create BFD session:
+
+		1. Create User session with BFD session parameter profile specified
+		
+			**COMMAND:**
+			::
+
+			**OPTIONS**
+			    +-----------+------------+---------------------------------------------------------------------------------------+----------+-----------+
+				| Variables | Type       |  Description                                                                          | Required |  Default  |     
+				+===========+============+=======================================================================================+==========+===========+   
+				| IpAddr    | string     | BFD neighbor IP address                                                               |    Yes   |   None    |
+				+-----------+------------+---------------------------------------------------------------------------------------+----------+-----------+
+				| ParaName  | string     | Name of the session parameters object to be applied on this session                   |    no    | "default" |
+				+-----------+------------+---------------------------------------------------------------------------------------+----------+-----------+
+				| Interface | boolean    | Name of the interface this session has to be established on                           |    no    |   None    |
+				+-----------+------------+---------------------------------------------------------------------------------------+----------+-----------+
+				| PerLink   | string     | Run BFD sessions on individual link of a LAG if the neighbor is reachable through LAG |    no    |   false   |
+				+-----------+------------+---------------------------------------------------------------------------------------+----------+-----------+
+				| Owner     | string     | Module requesting BFD session configuration                                           |    no    |   user    |
+				+-----------+------------+---------------------------------------------------------------------------------------+----------+-----------+	
+						
+			**EXAMPLE**
+			::
+			
+
+	Attaching BFD parameter profile to protocol created BFD session:
+
+		For more details on how BFD integrates with other protocols, please goto that protocols specific section:
+
+		    - BGP with BFD 
+   		    - OSPF with BFD 
 
 Configuring BFD demand mode
 ***************************
