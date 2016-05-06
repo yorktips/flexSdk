@@ -241,241 +241,158 @@ You can also periodically check the status of the upgrade:
 
 ::
 
-	 curl --user admin:snaproute -H "Content-Type: application/json" https://10.1.10.242:8080/public/v1/state/SystemStatus | python -m json.tool
-		  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-						 Dload  Upload   Total   Spent    Left  Speed
-		100   254  100   254    0     0  38760      0 --:--:-- --:--:-- --:--:-- 42333
-		{
-		"StateObjects": [
-		{
-			"ObjectId": "",
-			{
-			  "Object": {
-			  "Name": "Sysd"
-			  "HostName": "unassigned-hostname",
-			  "Package": "flexswitch_0.0.80_amd64.deb",
-			  "Version:"0.0.80_amd64",
-			  "Ready": false,
-			  "Reason": "Not connected to vrrpd lldpd stpd vxland ribd arpd bgpd bfdd",
-			  "UpTime": "13h26m51.020600457s",
-			  "NumCreateCalls": "0 Success 0",
-			  "NumDeleteCalls": "0 Success 0",
-			  "NumUpdateCalls": "0 Success 0",
-			  "NumGetCalls": "1 Success 0",
-			  "NumActionCalls": "0 Success 0”
-			  }
-			},
-			"ObjectId": "",
-			{
-			   "Object": {
-			   "Name": "bgpd"
-			   "Version": "0.0.80_amd64"
-			   "Ready": false,
-			   "Reason": "Not connected to asicd",
-			   "UpTime": "8h10m51s",
-			   "NumCreateCalls": "0 Success 0",
-			   "NumDeleteCalls": "0 Success 0",
-			   "NumUpdateCalls": "0 Success 0",
-			   "NumGetCalls": "1 Success 0",
-			   "NumActionCalls": "0 Success 0”
-			   }
-			},
-		
-			"ObjectId": "",
-			{
-			   "Object": {
-			   "Name": "ribd"
-			   "Version": "0.0.80_amd64"
-			   "Ready": true,
-			   "Reason": "Ready",
-			   "UpTime": "8h10m51s",
-			   "NumCreateCalls": "0 Success 0",
-			   "NumDeleteCalls": "0 Success 0",
-			   "NumUpdateCalls": "0 Success 0",
-			   "NumGetCalls": "1 Success 0",
-			   "NumActionCalls": "0 Success 0”
-			   }
-			},
-			"ObjectId": "",
-			{
-			   "Object": {
-			   "Name": "asicd"
-			   "Version": "0.0.80_amd64"
-			   "Ready": true,
-			   "Reason": "Ready",
-			   "UpTime": "8h10m51s",
-			   "NumCreateCalls": "0 Success 0",
-			   "NumDeleteCalls": "0 Success 0",
-			   "NumUpdateCalls": "0 Success 0",
-			   "NumGetCalls": "1 Success 0",
-			   "NumActionCalls": "0 Success 0”
-			   }
-			},
-			"ObjectId": "",
-			{
-			   "Object": {
-			   "Name": "bfdd"
-			   "Version": "0.0.80_amd64"
-			   "Ready": true,
-			   "Reason": "Ready",
-			   "UpTime": "8h10m51s",
-			   "NumCreateCalls": "0 Success 0",
-			   "NumDeleteCalls": "0 Success 0",
-			   "NumUpdateCalls": "0 Success 0",
-			   "NumGetCalls": "1 Success 0",
-			   "NumActionCalls": "0 Success 0”
-			   }
-			},
-			"ObjectId": "",
-			{
-			   "Object": {
-			   "Name": "arpd"
-			   "Version": "0.0.80_amd64"
-			   "Ready": true,
-			   "Reason": "Ready",
-			   "UpTime": "8h10m51s",
-			   "NumCreateCalls": "0 Success 0",
-			   "NumDeleteCalls": "0 Success 0",
-			   "NumUpdateCalls": "0 Success 0",
-			   "NumGetCalls": "1 Success 0",
-			   "NumActionCalls": "0 Success 0”
-			   }
-			},
-			"ObjectId": "",
-			{
-			   "Object": {
-			   "Name": "bgpd"
-			   "Version": "0.0.80_amd64"
-			   "Ready": true,
-			   "Reason": "Ready",
-			   "UpTime": "8h10m51s",
-			   "NumCreateCalls": "0 Success 0",
-			   "NumDeleteCalls": "0 Success 0",
-			   "NumUpdateCalls": "0 Success 0",
-			   "NumGetCalls": "1 Success 0",
-			   "NumActionCalls": "0 Success 0”
-			   }
-			},
-			"ObjectId": "",
-			{
-			   "Object": {
-			   "Name": "ospfd"
-			   "Version": "0.0.80_amd64"
-			   "Ready": true,
-			   "Reason": "Ready",
-			   "UpTime": "8h10m51s",
-			   "NumCreateCalls": "0 Success 0",
-			   "NumDeleteCalls": "0 Success 0",
-			   "NumUpdateCalls": "0 Success 0",
-			   "NumGetCalls": "1 Success 0",
-			   "NumActionCalls": "0 Success 0”
-			   }
-			},
-			"ObjectId": "",
-			{
-			   "Object": {
-			   "Name": "vrrpd"
-			   "Version": "0.0.80_amd64"
-			   "Ready": true,
-			   "Reason": "Ready",
-			   "UpTime": "8h10m51s",
-			   "NumCreateCalls": "0 Success 0",
-			   "NumDeleteCalls": "0 Success 0",
-			   "NumUpdateCalls": "0 Success 0",
-			   "NumGetCalls": "1 Success 0",
-			   "NumActionCalls": "0 Success 0”
-			   }
-			},
-			"ObjectId": "",
-			{
-			   "Object": {
-			   "Name": "lacpd"
-			   "Version": "0.0.80_amd64"
-			   "Ready": true,
-			   "Reason": "Ready",
-			   "UpTime": "8h10m51s",
-			   "NumCreateCalls": "0 Success 0",
-			   "NumDeleteCalls": "0 Success 0",
-			   "NumUpdateCalls": "0 Success 0",
-			   "NumGetCalls": "1 Success 0",
-			   "NumActionCalls": "0 Success 0”
-			   }
-			},
-			"ObjectId": "",
-			{
-			   "Object": {
-			   "Name": "dhcprelayd"
-			   "Version": "0.0.80_amd64"
-			   "Ready": true,
-			   "Reason": "Ready",
-			   "UpTime": "8h10m51s",
-			   "NumCreateCalls": "0 Success 0",
-			   "NumDeleteCalls": "0 Success 0",
-			   "NumUpdateCalls": "0 Success 0",
-			   "NumGetCalls": "1 Success 0",
-			   "NumActionCalls": "0 Success 0”
-			   }
-			},
-			"ObjectId": "",
-			{
-			   "Object": {
-			   "Name": "stpd"
-			   "Version": "0.0.80_amd64"
-			   "Ready": true,
-			   "Reason": "Ready",
-			   "UpTime": "8h10m51s",
-			   "NumCreateCalls": "0 Success 0",
-			   "NumDeleteCalls": "0 Success 0",
-			   "NumUpdateCalls": "0 Success 0",
-			   "NumGetCalls": "1 Success 0",
-			   "NumActionCalls": "0 Success 0”
-			   }
-			},
-			"ObjectId": "",
-			{
-			   "Object": {
-			   "Name": "lldpd"
-			   "Version": "0.0.80_amd64"
-			   "Ready": true,
-			   "Reason": "Ready",
-			   "UpTime": "8h10m51s",
-			   "NumCreateCalls": "0 Success 0",
-			   "NumDeleteCalls": "0 Success 0",
-			   "NumUpdateCalls": "0 Success 0",
-			   "NumGetCalls": "1 Success 0",
-			   "NumActionCalls": "0 Success 0”
-			   }
-			},
-			"ObjectId": "",
-			{
-			   "Object": {
-			   "Name": "vxland"
-			   "Version": "0.0.80_amd64"
-			   "Ready": true,
-			   "Reason": "Ready",
-			   "UpTime": "8h10m51s",
-			   "NumCreateCalls": "0 Success 0",
-			   "NumDeleteCalls": "0 Success 0",
-			   "NumUpdateCalls": "0 Success 0",
-			   "NumGetCalls": "1 Success 0",
-			   "NumActionCalls": "0 Success 0”
-			   }
-			},
-			"ObjectId": "",
-			{
-			   "Object": {
-			   "Name": "confd"
-			   "Version": "0.0.80_amd64"
-			   "Ready": true,
-			   "Reason": "Ready",
-			   "UpTime": "8h10m51s",
-			   "NumCreateCalls": "0 Success 0",
-			   "NumDeleteCalls": "0 Success 0",
-			   "NumUpdateCalls": "0 Success 0",
-			   "NumGetCalls": "1 Success 0",
-			   "NumActionCalls": "0 Success 0”
-			   }
-			},
-		  ]
-		}
+	curl --user admin:snaproute curl -X GET --header 'Content-Type: application/json' --header 'Accept: application/json' 'http://10.1.10.243:8080/public/v1/state/SystemStatus' | python -m json.tool
+	% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+									 Dload  Upload   Total   Spent    Left  Speed
+	100  2311    0  2311    0     0   206k      0 --:--:-- --:--:-- --:--:--  225k
+	{
+		"Object": {
+			"ConfigObj": null,
+			"FlexDaemons": [
+				{
+					"ConfigObj": null,
+					"Enable": true,
+					"KeepAlive": "Received 2 keepalives",
+					"Name": "arpd",
+					"Reason": "None",
+					"RestartCount": 0,
+					"RestartReason": "",
+					"RestartTime": "",
+					"State": "up",
+					"Version": ""
+				},
+				{
+					"ConfigObj": null,
+					"Enable": true,
+					"KeepAlive": "Received 3 keepalives",
+					"Name": "stpd",
+					"Reason": "None",
+					"RestartCount": 0,
+					"RestartReason": "",
+					"RestartTime": "",
+					"State": "up",
+					"Version": ""
+				},
+				{
+					"ConfigObj": null,
+					"Enable": true,
+					"KeepAlive": "Received 3 keepalives",
+					"Name": "dhcprelayd",
+					"Reason": "None",
+					"RestartCount": 0,
+					"RestartReason": "",
+					"RestartTime": "",
+					"State": "up",
+					"Version": ""
+				},
+				{
+					"ConfigObj": null,
+					"Enable": true,
+					"KeepAlive": "Received 3 keepalives",
+					"Name": "ribd",
+					"Reason": "None",
+					"RestartCount": 0,
+					"RestartReason": "",
+					"RestartTime": "",
+					"State": "up",
+					"Version": ""
+				},
+				{
+					"ConfigObj": null,
+					"Enable": true,
+					"KeepAlive": "Received 2 keepalives",
+					"Name": "vxland",
+					"Reason": "None",
+					"RestartCount": 0,
+					"RestartReason": "",
+					"RestartTime": "",
+					"State": "up",
+					"Version": ""
+				},
+				{
+					"ConfigObj": null,
+					"Enable": true,
+					"KeepAlive": "Received 2 keepalives",
+					"Name": "bfdd",
+					"Reason": "None",
+					"RestartCount": 0,
+					"RestartReason": "",
+					"RestartTime": "",
+					"State": "up",
+					"Version": ""
+				},
+				{
+					"ConfigObj": null,
+					"Enable": true,
+					"KeepAlive": "Received 2 keepalives",
+					"Name": "vrrpd",
+					"Reason": "None",
+					"RestartCount": 0,
+					"RestartReason": "",
+					"RestartTime": "",
+					"State": "up",
+					"Version": ""
+				},
+				{
+					"ConfigObj": null,
+					"Enable": true,
+					"KeepAlive": "Received 3 keepalives",
+					"Name": "lacpd",
+					"Reason": "None",
+					"RestartCount": 0,
+					"RestartReason": "",
+					"RestartTime": "",
+					"State": "up",
+					"Version": ""
+				},
+				{
+					"ConfigObj": null,
+					"Enable": true,
+					"KeepAlive": "Received 3 keepalives",
+					"Name": "bgpd",
+					"Reason": "None",
+					"RestartCount": 0,
+					"RestartReason": "",
+					"RestartTime": "",
+					"State": "up",
+					"Version": ""
+				},
+				{
+					"ConfigObj": null,
+					"Enable": true,
+					"KeepAlive": "Received 3 keepalives",
+					"Name": "lldpd",
+					"Reason": "None",
+					"RestartCount": 0,
+					"RestartReason": "",
+					"RestartTime": "",
+					"State": "up",
+					"Version": ""
+				},
+				{
+					"ConfigObj": null,
+					"Enable": true,
+					"KeepAlive": "Received 2 keepalives",
+					"Name": "asicd",
+					"Reason": "None",
+					"RestartCount": 0,
+					"RestartReason": "",
+					"RestartTime": "",
+					"State": "up",
+					"Version": ""
+				}
+			],
+			"Name": "rxp-tor-ru40",
+			"NumActionCalls": "Total 0 Success 0",
+			"NumCreateCalls": "Total 17 Success 16",
+			"NumDeleteCalls": "Total 0 Success 0",
+			"NumGetCalls": "Total 12 Success 9",
+			"NumUpdateCalls": "Total 3 Success 2",
+			"Ready": true,
+			"Reason": "None",
+			"SwVersion": "",
+			"UpTime": "17h17m26.846427945s"
+		},
+		"ObjectId": ""
+	}
 

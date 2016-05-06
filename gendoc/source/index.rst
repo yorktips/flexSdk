@@ -7,9 +7,10 @@ Welcome to FlexSwitchSDK's documentation!
 =========================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 4
 
-    Quick Start Guide <quickstart>
+    Introduction        <introduction>
+    Quick Start Guide   <quickstart>
     Installing FlexSwitch <install>
     Example Configurations <example>
     Example Use Cases	   <usecase>

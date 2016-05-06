@@ -108,7 +108,7 @@ EXAMPLE:
 Below are examples for utilizing this method via the Python CLI, python script and Displaying the results 
 
 1. Python CLI:
-*Note the ObjectID, UUID is the same.*
+
 
 ::  
 
@@ -119,6 +119,7 @@ Below are examples for utilizing this method via the Python CLI, python script a
 	>>> FlexSwitch("10.1.10.243", 8080).getAllArpConfigs()
 	[{u'Object': {u'ConfigObj': None, u'ArpConfigKey': u'1', u'Timeout': 1000}, u'ObjectId': u'45dff5a0-7dc1-441d-723d-ccf731186ece'},	
 
+.. Note:: the ObjectID and UUID are the same.
 
 2. Utilizing a Python Script to set ARP timeout
 
@@ -451,9 +452,7 @@ Display a specific ARP entry
 Display via Rest API 
 ********************
 
-You can return the value of an object based on any of the variables within that object.  For example you can query an ARP entry on any of the follownig parameters:
-
-- IPv4 Address (*IpAddr* variable)
+You can return the value of an object based on any of the variables within that object.  For example you can query an ARP entry via an IPv4 Address. 
 
 The example below will show how to grab a specific ARP entry based on IP address. 
 
@@ -525,7 +524,7 @@ EXAMPLE:
 	({u'Object': {u'ConfigObj': None, u'Intf': u'fpPort49', u'Vlan': u'Internal Vlan', u'IpAddr': u'172.16.0.20', u'ExpiryTimeLeft': u'16m38.505153914s', u'MacAddr': u'00:02:03:04:05:00'}, u'ObjectId': u''}, None)
 
 
-You can pretty print the results with the following python script:
+.. Hint:: You can pretty print the results with the following python script:
 
 ::
 
@@ -690,7 +689,6 @@ BFD supports the following options:
 
  - Asynchronous mode
  - Demand mode
- - Per-link (BFD over LAG)
  - Authentication  
  - BGP peer failure detection 
 
@@ -738,22 +736,22 @@ BFD over LAG or BFD per-link was created as an enhancement to limit the impact o
 limiting the impact and traffic-transitions to only links that failed.  When all BFD sessions fail on a particular port-channel interface, only then are the associated protocol sessions torn down, allowing for accurate fault detection. 
 
 
-BGP peer failure detection
-""""""""""""""""""""""""""
+Protocol Specific failure detection
+""""""""""""""""""""""""""""""""""""
 
-See BGP with BFD section for more details
+For more details on how BFD integrates with other protocols, please see that protocols specific section:
 
+    - BGP with BFD 
+    - OSPF with BFD 
+    
 -------------------
 
-Configuring BFD
-^^^^^^^^^^^^^^^
-
 Enabling BFD
-""""""""""""
+^^^^^^^^^^^^
 
 BFD is enabled in the following order:
 
- 1. Enable globally
+ 1. Enable globally (Default when daemon is started)
  2. Creation of BFD session parameter profile
  3. Attach to User created BFD session or a routing protocol 
  4. Review configuration and state 
@@ -763,13 +761,15 @@ The above assumes that the BFD daemon is already running and has registered with
 -----------------
 
 Configuring with Rest API 
-*************************
+"""""""""""""""""""""""""
 
 Enable BFD Globally
-+++++++++++++++++++
+*******************
 
 You need to set the "*Enable*" parameter to "*true*".  You can also see the "*Bfd*" parameter is set to the name "*default*".  This value is the 
 VRF name where BFD will be Globally enabled. By default this is the "*default*" VRF and should not need to be set by the user. 
+
+.. Note::BFD is enabled by default when the Daemon is started. 
 
 COMMAND:
 ::
@@ -795,7 +795,7 @@ EXAMPLE:
 	{"ObjectId":"0880b0cb-d0da-461e-7826-9b2eef1b800e","Error":""}
 
 Creating BFD session parameters 
-+++++++++++++++++++++++++++++++
+*******************************
 
 COMMAND:
 ::
@@ -841,7 +841,7 @@ EXAMPLE:
 	
 	
 Attaching BFD params to a BFD session  
-+++++++++++++++++++++++++++++++++++++
+*************************************
 
 	Attaching to user create BFD session:
 
@@ -875,24 +875,25 @@ Attaching BFD params to a BFD session
 				
 				curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"IpAddr":"1.1.1.1","ParamName":"BFD_session","Interface":"None","Owner":"user"}' 'http://10.1.10.43:8080/public/v1/config/BfdSession'
 
-	Attaching to Protocol created BFD session:
+	Attaching to protocol created BFD session:
 
-		See configuring BGP or configuring OSPF for enabling BFD with a routing protocol. 
+		For more details on how BFD integrates with other protocols, please goto that protocols specific section:
+
+		    - BGP with BFD 
+   		    - OSPF with BFD 
+    
 							
 
-Configuring BFD over LAG (Per-Link)
-+++++++++++++++++++++++++++++++++++++
-
-
 Configuring BFD demand mode
-+++++++++++++++++++++++++++++++++++++
+***************************
 
 Configuring BFD Authentication
-+++++++++++++++++++++++++++++++++++++
+******************************
 
 
 Displaying Configuration and State
-++++++++++++++++++++++++++++++++++
+**********************************
+
 
 Display BFD session parameter profile configuration:
 
@@ -985,7 +986,7 @@ Below we can see the BFD Session Parameter profile "BFD_Session": parameter prof
 
 
 
-Display BFD State:
+Display BFD Session Parameter State:
 
 
 COMMAND:
@@ -1043,6 +1044,8 @@ BFD implementations.
 			}
 		]
 	}
+
+Display BFD Session State:
 
 
 COMMAND:
@@ -1110,10 +1113,11 @@ inherited via the *ParamName* variable, BFD_Sessions in this case. As well aa BF
 -------------------
 
 Configuring with Python SDK
-***************************
+"""""""""""""""""""""""""""
 
 COMMAND:
 
+	>>> FlexSwitch("<*Switch IP*>", <*TCP port*>).createBfdSessionParam(<*Name*>, <*LocalMultiplier*>, <*DesiredMinTxInterval*>, <*RequiredMinRxInterval*>,<*RequiredMinRxEchoInterval*>,<*DemandEnabled*>,<*AuthenticationEnabled*>, <*AuthKeyId*>,<*AuthData*> )
 
 OPTIONS:
 
