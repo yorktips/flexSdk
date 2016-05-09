@@ -1554,17 +1554,23 @@ acasella@snaproute-lab-r710-1:~$ python get_bfd.py
 Configuring BGP
 ---------------
 
-Global
-^^^^^^
+Border Gateway Protocol (BGP) is a standardized exterior gateway protocol designed to exchange routing and reachability information among autonomous systems (AS) on a network. The protocol is often classified as a path vector protocol but is sometimes also classed as a distance-vector routing protocol.
+
+-------------
+
+BGP Operation
+^^^^^^^^^^^^^^
+
+
+
+Enabling Globally
+^^^^^^^^^^^^^^^^^^
 
 Configuring with Rest API 
 """"""""""""""""""""""""""""""""
-Configuring with Python SDK
-"""""""""""""""""""""""""""""""""""
-MultiPath
-^^^^^^^^^
-Configuring with Rest API 
-""""""""""""""""""""""""""""""""
+
+
+
 Configuring with Python SDK
 """""""""""""""""""""""""""""""""""
 
@@ -1579,18 +1585,16 @@ Local AS
 Authentication
 """"""""""""""
 
-Configuring with Rest API 
-""""""""""""""""""""""""""""""""
-Configuring with Python SDK
-"""""""""""""""""""""""""""""""""""
-
 Peer Groups
-^^^^^^^^^^^^
+"""""""""""
 
+MultiPath
+^^^^^^^^^
 Configuring with Rest API 
 """"""""""""""""""""""""""""""""
 Configuring with Python SDK
 """""""""""""""""""""""""""""""""""
+
 
 Policies
 ^^^^^^^^^
@@ -1615,6 +1619,8 @@ Configuring with Rest API
 """"""""""""""""""""""""""""""""
 Configuring with Python SDK
 """""""""""""""""""""""""""""""""""
+
+
 
 Configuring DHCP Relay
 -----------------------
