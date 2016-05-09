@@ -236,11 +236,6 @@ Setting a static arp entry via FlexSwitch's Python SDK, utilizing method *create
 	>>> FlexSwitch("<*Switch IP*>", <*TCP port*>).createArpStatic(<*IPv4Address*>, <*MAC*>)
 
 **OPTIONS:**
-::
-
-   createArpStatic(self, param string IPv4Address :  IPv4 address for ARP,
-        				 param string MAC  :   MAC address associated with IPv4 address)
-
 
 +------------------+------------+------------+---------------------------------------------------+----------+----------+
 | Python Method    | Variables  | Type       |  Description                                      | Required |  Default |    
@@ -504,9 +499,6 @@ Displaying all ARP entries utilizing FlexSwitch's Python SDK, utilizing method *
 
 **OPTIONS:**
 
-::
-
-	getArpEntryState(self, param string IPv4Address :  IPv4 address to return from ARP Table)
 
 +------------------+------------+-------+--------------------------------------+----------+----------+
 | Python Method    | Variables  | Type  | Description                          | Required |  Default |  
@@ -848,8 +840,6 @@ Attaching BFD params to a BFD session
 
 	Attaching BFD parameter profile to user create BFD session:
 
-		1. Create User session with BFD session parameter profile specified
-		
 			**COMMAND:**
 			::
 				
@@ -874,9 +864,14 @@ Attaching BFD params to a BFD session
 			
 			
 			**EXAMPLE:**
+			
+			As you can see below "ParamName" variable specifies the BFD parameter profile with a BFD session.  
+			
 			::
 				
 				curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"IpAddr":"1.1.1.1","ParamName":"BFD_session","Interface":"None","Owner":"user"}' 'http://10.1.10.43:8080/public/v1/config/BfdSession'
+
+
 
 	Attaching BFD parameter profile to protocol created BFD session:
 
@@ -1137,11 +1132,6 @@ Enable BFD Globally
 |                  | Enable      | boolean    | Enable BFD within specified VRF    |    Yes   |   true    |
 +------------------+-------------+------------+------------------------------------+----------+-----------+
 
-::
-
-	createBfdGlobal(self,
-       					 param string Bfd :  VRF Name where BFD is enabled
-       					 param boolean Enable :  Enable BFD within specified VRF
        					 
 **EXAMPLE:**
 
@@ -1204,20 +1194,6 @@ Creating BFD session parameters
 |                        | AuthData                  | string     | Authentication string                                                            |    no    |"snaproute"|
 +------------------------+---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
 
-::
-
-	createBfdSessionParam(self,
-       					 param string Name :  Session parameters  Session parameters
-       					 param uint32 RequiredMinRxInterval :  Required minimum rx interval in ms  Required minimum rx interval in ms
-       					 param string AuthData :  Authentication password  Authentication password
-       					 param bool DemandEnabled :  Enable or disable demand mode  Enable or disable demand mode
-       					 param uint32 AuthKeyId :  Authentication key id  Authentication key id
-       					 param string AuthType :  Authentication type  Authentication type
-       					 param uint32 DesiredMinTxInterval :  Desired minimum tx interval in ms  Desired minimum tx interval in ms
-       					 param bool AuthenticationEnabled :  Enable or disable authentication  Enable or disable authentication
-       					 param uint32 RequiredMinEchoRxInterval :  Required minimum echo rx interval in ms  Required minimum echo rx interval in ms
-       					 param uint32 LocalMultiplier :  Detection multiplier  Detection multiplier
-
 
 
 **EXAMPLE:**
@@ -1227,7 +1203,7 @@ Here we are creating the BFD session parameters that will be utilized by the BFD
 ::
 
 	>>>from flexswitchV2 import FlexSwitch
-	>>> >>> FlexSwitch("10.1.10.243", 8080).createBfdSessionParam("BFD_Session", LocalMultiplier=3, RequiredMinRxInterval=250, DesiredMinTxInterval=250)
+	>>> FlexSwitch("10.1.10.243", 8080).createBfdSessionParam("BFD_Session", LocalMultiplier=3, RequiredMinRxInterval=250, DesiredMinTxInterval=250)
 	({u'ObjectId': u'5b4a4b49-7310-444e-64da-5d8e8764e914', u'Error': u''}, None)
 
 
@@ -1252,29 +1228,50 @@ Attaching BFD params to a BFD session
 
 	Attaching BFD parameter profile to user create BFD session:
 
-		1. Create User session with BFD session parameter profile specified
 		
 			**COMMAND:**
 			::
-
-			**OPTIONS**
-			    +-----------+------------+---------------------------------------------------------------------------------------+----------+-----------+
-				| Variables | Type       |  Description                                                                          | Required |  Default  |     
-				+===========+============+=======================================================================================+==========+===========+   
-				| IpAddr    | string     | BFD neighbor IP address                                                               |    Yes   |   None    |
-				+-----------+------------+---------------------------------------------------------------------------------------+----------+-----------+
-				| ParaName  | string     | Name of the session parameters object to be applied on this session                   |    no    | "default" |
-				+-----------+------------+---------------------------------------------------------------------------------------+----------+-----------+
-				| Interface | boolean    | Name of the interface this session has to be established on                           |    no    |   None    |
-				+-----------+------------+---------------------------------------------------------------------------------------+----------+-----------+
-				| PerLink   | string     | Run BFD sessions on individual link of a LAG if the neighbor is reachable through LAG |    no    |   false   |
-				+-----------+------------+---------------------------------------------------------------------------------------+----------+-----------+
-				| Owner     | string     | Module requesting BFD session configuration                                           |    no    |   user    |
-				+-----------+------------+---------------------------------------------------------------------------------------+----------+-----------+	
-						
-			**EXAMPLE**
-			::
+				>>> FlexSwitch("<*Switch IP*>", <*TCP port*>).createBfdSession(ParaName=<*Name*>, IpAddr=<*IPv4 Address*>, Interface=<*L3 interface*>, PerLink=<*perlink*>,Owner=<*BFD owner*>)
 			
+			**OPTIONS**
+				+-------------------+-----------+------------+---------------------------------------------------------------------------------------+----------+-----------+
+				| Python Method     | Variables | Type       |  Description                                                                          | Required |  Default  |      
+				+===================+===========+============+=======================================================================================+==========+===========+    
+				| createBfdSession  | IpAddr    | string     | BFD neighbor IP address                                                               |    Yes   |   None    |
+				|                   +-----------+------------+---------------------------------------------------------------------------------------+----------+-----------+
+				|                   | ParaName  | string     | Name of the session parameters object to be applied on this session                   |    no    | "default" |
+				|                   +-----------+------------+---------------------------------------------------------------------------------------+----------+-----------+
+				|                   | Interface | boolean    | Name of the interface this session has to be established on                           |    no    |   None    |
+				|                   +-----------+------------+---------------------------------------------------------------------------------------+----------+-----------+
+				|                   | PerLink   | string     | Run BFD sessions on individual link of a LAG if the neighbor is reachable through LAG |    no    |   false   |
+				|                   +-----------+------------+---------------------------------------------------------------------------------------+----------+-----------+
+				|                   | Owner     | string     | Module requesting BFD session configuration                                           |    no    |   user    |
+				+-------------------+-----------+------------+---------------------------------------------------------------------------------------+----------+-----------+
+	    
+										
+			**EXAMPLE**
+			As you can see below "ParamName" variable specifies the BFD parameter profile with a BFD session.  
+
+			::
+
+				>>>from flexswitchV2 import FlexSwitch
+				>>> FlexSwitch("10.1.10.243", 8080).createBfdSession(ParaName="BFD_Sessions", IpAddr="1.1.1.1")
+				({u'ObjectId': u'5b4a4b49-7310-444e-64da-5d8e8764e914', u'Error': u''}, None)
+
+
+			Can be applied with the following Python Script:
+
+
+			::
+
+				#!/usr/bin/python
+				from flexswitchV2 import FlexSwitch
+
+
+				if __name__ =='__main__':
+					switch_ip = "10.1.10.243"
+					restIf = FlexSwitch(switch_ip, 8080)
+					restIf.createBfdSession(ParaName="BFD_Sessions", IpAddr="1.1.1.1")
 
 	Attaching BFD parameter profile to protocol created BFD session:
 
@@ -1292,6 +1289,267 @@ Configuring BFD Authentication
 
 Displaying Configuration and State
 **********************************
+
+Display BFD session parameter profile configuration:
+
+**COMMAND:**
+::
+
+	>>> FlexSwitch("<*Switch IP*>", <*TCP port*>).getAllBfdSessionParams(self)
+
+
+**OPTIONS:**
+::
+	
+	None
+	
+**EXAMPLE:**
+	
+We can start by looking at the BFD configuration of was setup in the example sections above.  We can view the session parameters via python CLI:
+
+::
+
+	>>> from flexswitchV2 import FlexSwitch
+	>>> FlexSwitch("10.1.10.243", 8080).getAllBfdSessionParams()
+	[{u'Object': {u'ConfigObj': None, u'RequiredMinRxInterval': 250, u'AuthType': u'simple', u'Name': u'Session1', u'AuthKeyId': 1, u'AuthData': u'snaproute', u'DesiredMinTxInterval': 250, u'AuthenticationEnabled': False, u'DemandEnabled': False, u'RequiredMinEchoRxInterval': 0, u'LocalMultiplier': 3}, u'ObjectId': u'376eebef-4061-45e8-77c4-058b4b501deb'}]	
+
+Can be viewed with the following Python Script:
+
+
+::
+
+	#!/usr/bin/python
+	import json
+	from flexswitchV2 import FlexSwitch
+
+
+	if __name__ =='__main__':
+		switch_ip = "10.1.10.243"
+		restIf = FlexSwitch(switch_ip, 8080)
+		json.dumps(restIf.getAllBfdSessionParams(), indent=4)
+
+	acasella@snaproute-lab-r710-1:~$ python get_bfd.py 
+	
+	[
+		{
+			"Object": {
+				"ConfigObj": null, 
+				"RequiredMinRxInterval": 250, 
+				"AuthType": "simple", 
+				"Name": "Session1", 
+				"AuthKeyId": 1, 
+				"AuthData": "snaproute", 
+				"DesiredMinTxInterval": 250, 
+				"AuthenticationEnabled": false, 
+				"DemandEnabled": false, 
+				"RequiredMinEchoRxInterval": 0, 
+				"LocalMultiplier": 3
+			}, 
+			"ObjectId": "376eebef-4061-45e8-77c4-058b4b501deb"
+		}
+	]
+
+
+Display BFD Session configuration:
+
+
+**COMMAND:**
+::
+
+	>>> FlexSwitch("<*Switch IP*>", <*TCP port*>).getAllBfdSessions(self)
+
+
+**OPTIONS:**
+::
+	
+	None
+	
+**EXAMPLE:**
+	
+Below we can see the BFD Session Parameter profile "BFD_Session": parameter profile as well:
+
+::
+
+	>>> FlexSwitch("10.1.10.243", 8080).getAllBfdSessions()
+	[{u'Object': {u'ConfigObj': None, u'IpAddr': u'1.1.1.1', u'PerLink': False, u'Owner': u'user', u'ParamName': u'BFD_Sessions', u'Interface': u'None'}, u'ObjectId': u'b37cd681-90ad-487c-4afa-1efae74eda29'}]
+
+
+Can be viewed with the following Python Script:
+
+::
+
+	#!/usr/bin/python
+	import json
+	from flexswitchV2 import FlexSwitch
+
+
+	if __name__ =='__main__':
+		switch_ip = "10.1.10.243"
+		restIf = FlexSwitch(switch_ip, 8080)
+		print json.dumps(restIf.getAllBfdSessions(), indent=4)
+	
+	acasella@snaproute-lab-r710-1:~$ python get_bfd.py 
+	[
+		{
+			"Object": {
+				"ConfigObj": null, 
+				"IpAddr": "1.1.1.1", 
+				"PerLink": false, 
+				"Owner": "user", 
+				"ParamName": "BFD_Sessions", 
+				"Interface": "None"
+			}, 
+			"ObjectId": "b37cd681-90ad-487c-4afa-1efae74eda29"
+		}
+	]
+ 
+Display BFD Session Parameter State:
+
+
+**COMMAND:**
+
+::
+
+	>>> FlexSwitch("<*Switch IP*>", <*TCP port*>).getAllBfdSessionParamStates(self)
+	
+	
+**OPTIONS:**
+::
+	
+	None
+	
+**EXAMPLE:**
+
+When we look at the BfdSessionParams status, we see very similar data to that of the configuration, but there are a few very important differences:
+
+1. This indicated that BFDd has ingested the configuration and is ready to begin utilizing it.
+2. State related items to show us how this configuration is being utilized. 
+
+   
+If we look at the "NumSessions" variable, we can see this BFD session parameter profile is being utilized by 1 BFD session. We can also see that the 
+millisecond variables we utilized in the configuration have been changed to microseconds.  This is done for RFC compliance and interoperability with 3rd-party
+BFD implementations. 
+
+
+
+::
+
+	>>> FlexSwitch("10.1.10.243", 8080).getAllBfdSessionParamStates()
+	[{u'Object': {u'ConfigObj': None, u'RequiredMinRxInterval': u'250000(us)', u'Name': u'BFD_Sessions', u'AuthenticationType': u'simple', u'AuthenticationData': u'snaproute', u'DesiredMinTxInterval': u'250000(us)', u'AuthenticationEnabled': False, u'DemandEnabled': False, u'NumSessions': 0, u'AuthenticationKeyId': 1, u'RequiredMinEchoRxInterval': u'0(us)', u'LocalMultiplier': 3}, u'ObjectId': u'376eebef-4061-45e8-77c4-058b4b501deb'}]
+
+
+Can be viewed via the following python script
+
+::
+
+	#!/usr/bin/python
+	import json
+	from flexswitchV2 import FlexSwitch
+
+
+	if __name__ =='__main__':
+		switch_ip = "10.1.10.243"
+		restIf = FlexSwitch(switch_ip, 8080)
+		print json.dumps(restIf.getAllBfdSessionParamStates(), indent=4)
+	
+	acasella@snaproute-lab-r710-1:~$ python get_bfd.py 
+	[
+		{
+			"Object": {
+				"ConfigObj": null, 
+				"RequiredMinRxInterval": "250000(us)", 
+				"Name": "BFD_Sessions", 
+				"AuthenticationType": "simple", 
+				"AuthenticationData": "snaproute", 
+				"DesiredMinTxInterval": "250000(us)", 
+				"AuthenticationEnabled": false, 
+				"DemandEnabled": false, 
+				"NumSessions": 0, 
+				"AuthenticationKeyId": 1, 
+				"RequiredMinEchoRxInterval": "0(us)", 
+				"LocalMultiplier": 3
+			}, 
+			"ObjectId": "376eebef-4061-45e8-77c4-058b4b501deb"
+		}
+	]
+
+
+Display BFD Session State:
+
+
+**COMMAND:**
+
+::
+
+	>>> from flexswitchV2 import FlexSwitch
+	>>> FlexSwitch("<*Switch IP*>", <*TCP port*>).getAllBfdSessionStates()
+	
+**OPTIONS:**
+::
+	
+	None
+	
+**EXAMPLE:**
+
+The BfdSessions state API responds with the relevant state of all BFD sessions.  We can see the current BFD timers being utilized, the BFD Parameter Profile this information was
+inherited via the *ParamName* variable, BFD_Sessions in this case. As well aa BFD session status via *SessionState* variable, which is up and working. 
+
+::
+
+	>>> FlexSwitch("10.1.10.243", 8080).getAllBfdSessionStates()
+	[{u'Object': {u'RegisteredProtocols': u'user, ', u'DesiredMinTxInterval': u'250000(us)', u'SessionId': 640, u'ParamName': u'BFD_Sessons', u'DemandMode': False, u'DetectionMultiplier': 3, u'SentAuthSeq': 0, u'LocalDiscriminator': 640, u'SessionState': u'up', u'AuthSeqKnown': False, u'PerLinkSession': False, u'IfName': u'', u'ConfigObj': None, u'RequiredMinRxInterval': u'250000(us)', u'AuthType': u'', u'RemoteDiscriminator': 564, u'RemoteSessionState': u'up', u'NumTxPackets': 850068, u'InterfaceSpecific': False, u'NumRxPackets': 826751, u'RemoteDemandMode': False, u'LocalMacAddr': u'', u'RemoteMinRxInterval': u'250000(us)', u'IpAddr': u'1.1.1.1', u'RemoteMacAddr': u'', u'LocalDiagType': u'None', u'IfIndex': 49, u'ReceivedAuthSeq': 0}, u'ObjectId': u''}]
+	
+
+Can be viewed via the following python script. 
+
+::
+import json
+from flexswitchV2 import FlexSwitch
+
+
+if __name__ =='__main__':
+	switch_ip = "10.1.10.243"
+	restIf = FlexSwitch(switch_ip, 8080)
+	print json.dumps(restIf.getAllBfdSessionStates(), indent=4)
+
+acasella@snaproute-lab-r710-1:~$ python get_bfd.py 
+[
+    {
+        "Object": {
+            "RegisteredProtocols": "user, ", 
+            "DesiredMinTxInterval": "250000(us)", 
+            "SessionId": 701, 
+            "ParamName": "BFD_Sessions", 
+            "DemandMode": false, 
+            "DetectionMultiplier": 3, 
+            "SentAuthSeq": 0, 
+            "LocalDiscriminator": 701, 
+            "SessionState": "up", 
+            "AuthSeqKnown": false, 
+            "PerLinkSession": false, 
+            "IfName": "", 
+            "ConfigObj": null, 
+            "RequiredMinRxInterval": "250000(us)", 
+            "AuthType": "", 
+            "RemoteDiscriminator": 1090519237, 
+            "RemoteSessionState": "up", 
+            "NumTxPackets": 747461, 
+            "InterfaceSpecific": false, 
+            "NumRxPackets": 908113, 
+            "RemoteDemandMode": false, 
+            "LocalMacAddr": "", 
+            "RemoteMinRxInterval": "250000(us)", 
+            "IpAddr": "1.1.1.1", 
+            "RemoteMacAddr": "", 
+            "LocalDiagType": "None", 
+            "IfIndex": 47, 
+            "ReceivedAuthSeq": 0
+        }, 
+        "ObjectId": ""
+
+			
+------------------
+
 
 Configuring BGP
 ---------------
