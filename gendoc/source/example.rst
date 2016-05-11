@@ -44,7 +44,7 @@ FlexSwitch has a REST based API, and below is an example utilzing Linux cURL:
 +============+============+===========================================+==========+==========+ 
 |ArpConfigKey| string     | VRF name where configuration is applied.  |    No    | "default"|
 +------------+------------+-------------------------------------------+----------+----------+
-| Timeout    | int32      | Length of ARP timeout in seconds.         |    Yes   |    600s  |   
+| Timeout    | integer    | Length of ARP timeout in seconds.         |    Yes   |    600s  |   
 +------------+------------+-------------------------------------------+----------+----------+ 
 
 
@@ -92,14 +92,14 @@ Setting the ARP Timeout to 1000 seconds via FlexSwitch's Python SDK, utilizing m
 ::
 	
   createArpConfig(self, param string ArpConfigKey :  Arp config VRF ID,
-                        param int32 Timeout :  Global Arp entry timeout value. Default value:600 seconds)
+                        param integer Timeout :  Global Arp entry timeout value. Default value:600 seconds)
 
 +------------------+------------+------------+-------------------------------------------+----------+----------+
 | Python Method    | Variables  | Type       |  Description                              | Required |  Default |   
 +==================+============+============+===========================================+==========+==========+ 
 | createArpConfig  |ArpConfigKey| string     | VRF name where configuration is applied.  |    No    | "default"|
 +                  +------------+------------+-------------------------------------------+----------+----------+
-|                  | Timeout    | int32      | Length of ARP timeout in seconds.         |    Yes   |    600s  |   
+|                  | Timeout    | integer    | Length of ARP timeout in seconds.         |    Yes   |    600s  |   
 +------------------+------------+------------+-------------------------------------------+----------+----------+   
 
 
@@ -588,7 +588,7 @@ Config Methods
     """
     .. automethod :: createArpConfig(self,
         :param string ArpConfigKey :  Arp config  Arp config
-        :param int32 Timeout :  Global Arp entry timeout value. Default value  Global Arp entry timeout value. Default value
+        :param integer Timeout :  Global Arp entry timeout value. Default value  Global Arp entry timeout value. Default value
 
 	"""
     @processReturnCode
@@ -689,7 +689,7 @@ BFD supports the following options:
 BFD Operation
 ^^^^^^^^^^^^^^
 
-Flexswitch's BFD implementation was designed to allow for single or multi-hop sessions. This is done by either having an IP based BFD session, where there could be one of many layer 3 hops between the two devices
+Flexswitch's BFD implementation was designed to allow for single or multi-hop session establishment. This is done by either having an IP based BFD session, where there could be one of many layer 3 hops between the two devices
 or interface based sessions, where the BFD peer, much be directly attached.  This allows for BFD sessions to be tied an interface based protocol, such as OSPF vs a peer-based protocol, such as BGP. 
 
 ------------------
@@ -804,13 +804,13 @@ Creating BFD session parameters
 +===========================+============+==================================================================================+==========+===========+   
 | Name                      | string     | Name of the BFD session                                                          |    Yes   |   None    |
 +---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
-| LocalMultiplier           | int32      | Multiplier of BFD hello RX interval to wait before tearing down session          |    no    |   3       |
+| LocalMultiplier           | integer    | Multiplier of BFD hello RX interval to wait before tearing down session          |    no    |   3       |
 +---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
-| DesiredMinTxInterval      | int32      | Time in milliseconds between interval TX of BFD hello packets                    |    no    |   1000    |
+| DesiredMinTxInterval      | integer    | Time in milliseconds between interval TX of BFD hello packets                    |    no    |   1000    |
 +---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
-| RequiredMinRxInterval     | int32      | Expected interval in milliseconds between RX of BFD  packets                     |    no    |   1000    |
+| RequiredMinRxInterval     | integer    | Expected interval in milliseconds between RX of BFD  packets                     |    no    |   1000    |
 +---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
-| RequiredMinRxEchoInterval | int32      | Expected interval in milliseconds between RX of BFD echo packets                 |    no    |   0       |
+| RequiredMinRxEchoInterval | integer    | Expected interval in milliseconds between RX of BFD echo packets                 |    no    |   0       |
 +---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
 | DemandEnabled             | boolean    | Boolean value to specify the global state for BFD demand mode; I.E. true/false   |    no    |   false   |
 +---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
@@ -818,7 +818,7 @@ Creating BFD session parameters
 +---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
 | AuthType                  | string     | Authentication type; I.E. keyed MD5, simple, keyed Sha1                          |    no    |   None    |
 +---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
-| AuthKeyId                 | int32      | Authentication key ID                                                            |    no    |   1       |
+| AuthKeyId                 | integer    | Authentication key ID                                                            |    no    |   1       |
 +---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
 | AuthData                  | string     | Authentication string                                                            |    no    |"snaproute"|
 +---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
@@ -1177,19 +1177,19 @@ Creating BFD session parameters
 +========================+===========================+============+==================================================================================+==========+===========+   
 | createBfdSessionParam  | Name                      | string     | Name of the BFD session                                                          |    Yes   |   None    |
 |                        +---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
-|                        | LocalMultiplier           | int32      | Multiplier of BFD hello RX interval to wait before tearing down session          |    no    |   3       |
+|                        | LocalMultiplier           | integer    | Multiplier of BFD hello RX interval to wait before tearing down session          |    no    |   3       |
 |                        +---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
-|                        | DesiredMinTxInterval      | int32      | Time in milliseconds between interval TX of BFD hello packets                    |    no    |   1000    |
+|                        | DesiredMinTxInterval      | integer    | Time in milliseconds between interval TX of BFD hello packets                    |    no    |   1000    |
 |                        +---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
-|                        | RequiredMinRxInterval     | int32      | Expected interval in milliseconds between RX of BFD  packets                     |    no    |   1000    |
+|                        | RequiredMinRxInterval     | integer    | Expected interval in milliseconds between RX of BFD  packets                     |    no    |   1000    |
 |                        +---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
-|                        | RequiredMinRxEchoInterval | int32      | Expected interval in milliseconds between RX of BFD echo packets                 |    no    |   0       |
+|                        | RequiredMinRxEchoInterval | integer    | Expected interval in milliseconds between RX of BFD echo packets                 |    no    |   0       |
 |                        +---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
 |                        | DemandEnabled             | boolean    | Boolean value to specify the global state for BFD demand mode; I.E. true/false   |    no    |   false   |
 |                        +---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
 |                        | AuthenticationEnabled     | boolean    | Boolean value to specify the global state for BFD authentication; I.E. true/false|    no    |   false   |
 |                        +---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
-|                        | AuthKeyId                 | int32      | Authentication key ID                                                            |    no    |   1       |
+|                        | AuthKeyId                 | integer    | Authentication key ID                                                            |    no    |   1       |
 |                        +---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
 |                        | AuthData                  | string     | Authentication string                                                            |    no    |"snaproute"|
 +------------------------+---------------------------+------------+----------------------------------------------------------------------------------+----------+-----------+
@@ -1481,7 +1481,6 @@ Display BFD Session State:
 
 ::
 
-	>>> from flexswitchV2 import FlexSwitch
 	>>> FlexSwitch("<*Switch IP*>", <*TCP port*>).getAllBfdSessionStates()
 	
 **OPTIONS:**
@@ -1496,6 +1495,7 @@ inherited via the *ParamName* variable, BFD_Sessions in this case. As well aa BF
 
 ::
 
+	>>> from flexswitchV2 import FlexSwitch
 	>>> FlexSwitch("10.1.10.243", 8080).getAllBfdSessionStates()
 	[{u'Object': {u'RegisteredProtocols': u'user, ', u'DesiredMinTxInterval': u'250000(us)', u'SessionId': 640, u'ParamName': u'BFD_Sessons', u'DemandMode': False, u'DetectionMultiplier': 3, u'SentAuthSeq': 0, u'LocalDiscriminator': 640, u'SessionState': u'up', u'AuthSeqKnown': False, u'PerLinkSession': False, u'IfName': u'', u'ConfigObj': None, u'RequiredMinRxInterval': u'250000(us)', u'AuthType': u'', u'RemoteDiscriminator': 564, u'RemoteSessionState': u'up', u'NumTxPackets': 850068, u'InterfaceSpecific': False, u'NumRxPackets': 826751, u'RemoteDemandMode': False, u'LocalMacAddr': u'', u'RemoteMinRxInterval': u'250000(us)', u'IpAddr': u'1.1.1.1', u'RemoteMacAddr': u'', u'LocalDiagType': u'None', u'IfIndex': 49, u'ReceivedAuthSeq': 0}, u'ObjectId': u''}]
 	
@@ -1555,41 +1555,258 @@ Configuring BGP
 ---------------
 
 Border Gateway Protocol (BGP) is a standardized exterior gateway protocol designed to exchange routing and reachability information among autonomous systems (AS) on a network. The protocol is often classified as a path vector protocol but is sometimes also classed as a distance-vector routing protocol.
+BGP version 4 is defined by RFC 4271.
+
+Multiprotocol BGPv4+ can exchange routing information based on multiple address families (AFI) and sub-address families (SAFI) simultaneously over a single BGP established session.  Multiprotocol BGP is defined by RFC 4760.
 
 -------------
 
 BGP Operation
-^^^^^^^^^^^^^^
+^^^^^^^^^^^^^
+BGP is an exterior gateway protocol, that exchanges prefixes through the same or different autonomous systems over established TCP sessions. 
+
+This communication is performed over TCP port 179, and is done via static neighbor relationships configured via an administrator.  BGP is split into two operational schema's, IBGP and EBGP.  IGBP peers
+function within a single AS, where EBGP peers function to exchange routing information between different AS's.  The goal of IBGP is used to exchange routing information throughout the AS, where EBGP peers are
+utilized to exchange routing information internal to an AS to another/external AS and vice-versa.
+
+Session Establishment
+"""""""""""""""""""""
+
+BGP utilizes its own finite state machine for establishing connections to exchange routes with another peer. This is done for both TCP session collision handling (ensuring the right TCP session is being utilized, between
+two peers), as well as exchanging BGP information over the TCP session utilized.  The following FSM states exists:
+
+ 1. **Idle** - In this state BGP refuses all incoming BGP connections, initiates a TCP connection with its configured BGP peer and Changes its state to **Connect**.  
+
+ 		 - If an error occurs during FSM process, BGP session is terminated and returns to **Idle** state. 
+ 
+ 2. **Connect** - Waits for successful TCP negotiation with peer, then sends an OPEN message to the peer.
+ 	
+ 			- If successful, the router will transition to the **OpenSent** state.  
+ 			- If unsuccessful, the router will set the *ConnectionRetry* timer and transition to the **Active** state upon expiry. 
+
+ 3. **Active** - If TCP session establishment was unsuccessful BGP will be placed in this state.  The router will set *ConnectionRetry* timer to zero, attempt a TCP session establishment then sends an OPEN message to the peer.
+ 	
+ 		   - If successful, transition to the **OpenSent** state.  If unsuccessful, transitions to the **Idle** state.  
+ 		   - Repeated TCP session failures may result in session bouncing between **Active** and **Idle** states. 
+
+ 4. **OpenSent** - Listens for Open Message from peer.  Once valid message has been received a Keepalive message is sent, various timers are set and the state transitions to **OpenConfirm**. 
+ 	
+ 			 - If there is an error, router then sends a NOTIFICATION message to the peer indicating why the error occurred.
+
+ 5. **OpenConfirm** - The Router waits for a keepalive messages from its peer.  If message is received before timer expiry, the router transitions to the **Established** State.  
+ 	
+ 				- If keep-alive timer expires or an error occurs,  router transitions to **Idle** state. 
+
+ 6. **Established** - Peers exchange UPDATE messages about prefixes they advertise.  
+ 	
+ 				- If UPDATE message contains an error the router sends a NOTIFICATION message and then transitions to the **Idle** state.  
+ 				- If Keepalive timer expires or if an error condition occurs, the router transitions back to the **Idle** state.
 
 
-
+During the Established state BGP sessions exchange UPDATE messages about prefixes in which they have connectivity. These UPDATES
+contain all the necessary information to forward data to these routes.  The UPDATES include destination prefix, prefix length, AS path, the next hop IP, and additional information which may affect if this route is accepted by the receiving router.
+  
 Enabling Globally
 ^^^^^^^^^^^^^^^^^^
 
 Configuring with Rest API 
 """"""""""""""""""""""""""""""""
 
+**COMMAND:**
+::
+
+	curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"ASNum":<*AS Number*>,"RouterId":"<*IP Addr*>","UseMultiplePaths":<*true/false*>,"EBGPMaxPaths":<*Number of Paths*>,"UseMultiplePaths":<*true/false*> ,"IBGPMaxPaths":<*Number of Paths*>}' 'http://<*your-switchip*>:8080/public/v1/config/BGPGlobal'
+	
+
+**OPTIONS:**
+
++----------------------+------------+---------------------------------------------+----------+----------+
+| Variables            | Type       |  Description                                | Required |  Default |     
++======================+============+=============================================+==========+==========+   
+| ASNum                | integer    | Local AS for BGP global config              |    Yes   |   None   |
++----------------------+------------+---------------------------------------------+----------+----------+
+| RouterId             | string     | Router id for BGP global config             |    Yes   |   None   |
++----------------------+------------+---------------------------------------------+----------+----------+
+| UseMultiplePaths     | boolean    | Enable/disable ECMP for BGP                 |    no    |  false   |
++----------------------+------------+---------------------------------------------+----------+----------+
+| EBGPMaxPaths         | integer    | Max ECMP paths from External BGP neighbors  |    no    |     0    |
++----------------------+------------+---------------------------------------------+----------+----------+
+| EBGPAllowMultipleAS  | boolean    | Enable/diable ECMP paths from multiple AS's |    no    |  false   |
++----------------------+------------+---------------------------------------------+----------+----------+
+| IBGPMaxPaths         | integer    | Max ECMP paths from Internal BGP neighbors  |    no    |     0    |
++----------------------+------------+---------------------------------------------+----------+----------+
+
+**EXAMPLE:**
+
+BGP requires a local AS Number and a Router ID to enable globally.  Once these two items are assigned, BGP will be globally enabled on FlexSwitch. 
+
+.. Note:: AS number and Router Id, MUST be unique per device.  
+
+::
+
+	curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"ASNum":65535,"RouterId":"1.1.1.1"}' 'http://192.168.0.2:8080/public/v1/config/BGPGlobal'
+	{"ObjectId":"c5f253d9-1f0d-461e-62aa-963b1ef3b0bd","Error":""}
 
 
 Configuring with Python SDK
 """""""""""""""""""""""""""""""""""
 
-Neighbors 
-^^^^^^^^^^
+**COMMAND:**
+::
+
+
+	>>> FlexSwitch("<*Switch IP*>", <*TCP port*>).createBGPGlobal(ASNum=<*AS Number*>,RouterId=<*IP Addr*>,UseMultiplePaths=<*true/false*>,EBGPMaxPaths=<*Number of Paths*>,UseMultiplePaths=<*true/false*> ,IBGPMaxPaths=<*Number of Paths*>)
+	
+
+**OPTIONS:**
+
++----------------------+----------------------+------------+---------------------------------------------+----------+----------+
+| Python Method        | Variables            | Type       |  Description                                | Required |  Default |     
++======================+======================+============+=============================================+==========+==========+   
+| createBGPGlobal      | ASNum                | integer    | Local AS for BGP global config              |    Yes   |   None   |
+|                      +----------------------+------------+---------------------------------------------+----------+----------+
+|                      | RouterId             | string     | Router id for BGP global config             |    Yes   |   None   |
+|                      +----------------------+------------+---------------------------------------------+----------+----------+
+|                      | UseMultiplePaths     | boolean    | Enable/disable ECMP for BGP                 |    no    |  False   |
+|                      +----------------------+------------+---------------------------------------------+----------+----------+
+|                      | EBGPMaxPaths         | integer    | Max ECMP paths from External BGP neighbors  |    no    |     0    |
+|                      +----------------------+------------+---------------------------------------------+----------+----------+
+|                      | EBGPAllowMultipleAS  | boolean    | Enable/diable ECMP paths from multiple AS's |    no    |  False   |
+|                      +----------------------+------------+---------------------------------------------+----------+----------+
+|                      | IBGPMaxPaths         | integer    | Max ECMP paths from Internal BGP neighbors  |    no    |     0    |
++----------------------+----------------------+------------+---------------------------------------------+----------+----------+
+
+**EXAMPLE:**
+
+BGP requires a local AS Number and a Router ID to enable globally.  Once these two items are assigned, BGP will be globally enabled on FlexSwitch. 
+
+.. Note:: AS number and Router Id, MUST be unique per device.  
+
+::
+
+	>>> from flexswitchV2 import FlexSwitch
+	>>> FlexSwitch("192.168.0.2", 8080).createBGPGlobal(ASNum=65535 ,RouterId="1.1.1.1")
+	({u'ObjectId': u'61e6ad4b-6bc7-4e35-5c9a-89106728c4b4', u'Error': u''}, None)
+
+
+Neighbor Setup 
+^^^^^^^^^^^^^^
+
+BGP requires established peering relationships to exchange routing information.  This section will assist in setting up a BGP peer with another device. 
+
+Configuring with Rest API 
+"""""""""""""""""""""""""
+
+**COMMAND:**
+
+::
+
+	curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"PeerAS":<*Peer AS Number*>,"LocalAS":"<*Local AS number*>","AuthPassword":<*Password*>,"Description":<*Peer Description*>,"NeighborAddress":<*IPv4 Address*> ,"IfIndex":<*Interface IfIndex*>,"RouteReflectorClusterId":<*ClusterID*>,"RouteReflectorClient":<*true/false*>,"MultiHopEnable":<*true/false*>,"MultiHopTTL":<*TTL*>, "ConnectRetryTime":<*Retry Timer*>, "HoldTime":<*Hold down Timer*>, "KeepAliveTime":<*Keepalive Timer*>, "AddPathRx":<*true/false*>, "AddPathsMaxTx":<*Max Transmit AddPaths*>,"PeerGroup":<*Peer Group Name*>, "BfdEnable":<*true/false*>, "BfdSessionParam":<*Bfd session param profile*>, "MaxPrefixes"":<*number of prefix's*>, "MaxPrefixesThresholdPct":<*Percentage of Prefix's*>, "MaxPrefixesDisconnect":<*true/false*>, "MaxPrefixesRestartTimer":<*Restart Timer*>	}' 'http://<*your-switchip*>:8080/public/v1/config/BGPNeighbor'
+	
+
+**OPTIONS:**
+
++-------------------------+------------+-----------------------------------------------------------------------------------------+----------+----------+
+| Variables               | Type       |  Description                                                                            | Required |  Default |     
++=========================+============+=========================================================================================+==========+==========+   
+| PeerAS                  | integer    | Peer AS of the BGP neighbor                                                             |    Yes   |   None   |
++-------------------------+------------+-----------------------------------------------------------------------------------------+----------+----------+
+| LocalAS                 | integer    | Local AS of the BGP, overrides Global AS value, can be used to spoof AS number          |    no    |     0    |
++-------------------------+------------+-----------------------------------------------------------------------------------------+----------+----------+
+| AuthPassword            | string     | Password to connect to the BGP neighbor                                                 |    no    |   None   |
++-------------------------+------------+-----------------------------------------------------------------------------------------+----------+----------+
+| Description             | string     | Description of the BGP neighbor                                                         |    no    |     0    |
++-------------------------+------------+-----------------------------------------------------------------------------------------+----------+----------+
+| NeighborAddress         | string     | Address of the BGP neighbor (required if IfIndex is not supplied)                       |    Yes   |   None   |
++-------------------------+------------+-----------------------------------------------------------------------------------------+----------+----------+
+| IfIndex                 | integer    | Interface of BGP neighbor (required if NeighborAddress is not supplied)                 |    Yes   |     0    |
++-------------------------+------------+-----------------------------------------------------------------------------------------+----------+----------+
+| RouteReflectorClusterId | integer    | Cluster ID of the internal BGP neighbor router reflector client                         |    no    |     0    |
++-------------------------+------------+-----------------------------------------------------------------------------------------+----------+----------+
+| RouteReflectorClient    | boolean    | Set/Clear BGP neighbor as a route reflector client                                      |    no    |  False   |
++-------------------------+------------+-----------------------------------------------------------------------------------------+----------+----------+
+| MultiHopEnable          | boolean    | Enable/Disable multihop for BGP neighbor 		        			 |    no    |  False   |
++-------------------------+------------+-----------------------------------------------------------------------------------------+----------+----------+
+| MultiHopTTL             | string     | Number of hops(TTL) to multi-hop BGP neighbor                                           |    no    |     0    |
++-------------------------+------------+-----------------------------------------------------------------------------------------+----------+----------+
+| ConnectRetryTime        | integer    | Retry timer for BGP session reconnect attempt after disconnect/failure                  |    no    |    60s   |
++-------------------------+------------+-----------------------------------------------------------------------------------------+----------+----------+
+| HoldTime                | integer    | Hold down time for BGP neighbor failure/disconnect                                      |    no    |   180s   |
++-------------------------+------------+-----------------------------------------------------------------------------------------+----------+----------+
+| KeepaliveTime           | integer    | Frequency of BGP Keepalive messages 							 |    no    |    60s   |
++-------------------------+------------+-----------------------------------------------------------------------------------------+----------+----------+
+| AddPathsRx              | boolean    | Enable/Disable reception of BGP Add-Path NLRI updates                                   |    no    |  False   |
++-------------------------+------------+-----------------------------------------------------------------------------------------+----------+----------+
+| AddPathsMaxTx           | integer    | Max number of additional paths that can be transmitted to BGP neighbor                  |    no    |     0    |
++-------------------------+------------+-----------------------------------------------------------------------------------------+----------+----------+
+| PeerGroup               | string     | Peer group to inherit common configuration for BGP neighbors                            |    no    |   None   |
++-------------------------+------------+-----------------------------------------------------------------------------------------+----------+----------+
+| BfdEnable               | boolean    | Enable/Disable BFD for BGP neigbor                                                      |    no    |  False   |
++-------------------------+------------+-----------------------------------------------------------------------------------------+----------+----------+
+| BfdSessionParam         | string     | BFD session parameter profile name to be utilized by BFD session                        |    no    |   None   |
++-------------------------+------------+-----------------------------------------------------------------------------------------+----------+----------+
+| MaxPrefixes             | integer    | Maximum number of prefixes that can be received from the BGP neighbor                   |    no    |     0    |
++-------------------------+------------+-----------------------------------------------------------------------------------------+----------+----------+
+| MaxPrefixesThresholdPct | string     | The percentage of maximum prefixes before we start logging                              |    no    |    80%   |
++-------------------------+------------+-----------------------------------------------------------------------------------------+----------+----------+
+| MaxPrefixesDisconnect   | boolean    | Disconnect the BGP peer session when we receive the max prefixes from the neighbor      |    no    |  False   |
++-------------------------+------------+-----------------------------------------------------------------------------------------+----------+----------+
+| MaxPrefixesRestartTimer | string     | Time in seconds to wait before we start BGP peer session when we receive max prefixes   |    no    |   None   |
++-------------------------+------------+-----------------------------------------------------------------------------------------+----------+----------+
+
+
+**EXAMPLE:**
+
+::
+
+	curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"PeerAS":500,"NeighborAddress":"1.1.1.1"}' 'http://10.1.10.243:8080/public/v1/config/BGPNeighbor'
+	{"ObjectId":"e530c4dc-1a81-4f68-593f-29aa877276e7","Error":""}
+
 Timers
-""""""
-BFD 
-"""
+******
+
 Local AS
-""""""""
+********
 Authentication
-""""""""""""""
+**************
+
+
+Configuring with Python SDK
+""""""""""""""""""""""""""""
+
++----------------------+----------------------+------------+---------------------------------------------+----------+----------+
+| Python Method        | Variables            | Type       |  Description                                | Required |  Default |     
++======================+======================+============+=============================================+==========+==========+   
+| createBGPGlobal      | ASNum                | integer    | Local AS for BGP global config              |    Yes   |   None   |
++                      +----------------------+------------+---------------------------------------------+----------+----------+
+|                      | RouterId             | string     | Router id for BGP global config             |    Yes   |   None   |
++                      +----------------------+------------+---------------------------------------------+----------+----------+
+|                      | UseMultiplePaths     | boolean    | Enable/disable ECMP for BGP                 |    no    |  False   |
++                      +----------------------+------------+---------------------------------------------+----------+----------+
+|                      | EBGPMaxPaths         | integer    | Max ECMP paths from External BGP neighbors  |    no    |     0    |
++                      +----------------------+------------+---------------------------------------------+----------+----------+
+|                      | EBGPAllowMultipleAS  | boolean    | Enable/diable ECMP paths from multiple AS's |    no    |  False   |
++                      +----------------------+------------+---------------------------------------------+----------+----------+
+|                      | IBGPMaxPaths         | integer    | Max ECMP paths from Internal BGP neighbors  |    no    |     0    |
++----------------------+----------------------+------------+---------------------------------------------+----------+----------+
+
+Timers
+******
+Local AS
+********
+Authentication
+**************
 
 Peer Groups
-"""""""""""
+^^^^^^^^^^^
 
-MultiPath
-^^^^^^^^^
+
+Enabling BFD 
+^^^^^^^^^^^^
+
+Enabling MultiPath
+^^^^^^^^^^^^^^^^^^
+
 Configuring with Rest API 
 """"""""""""""""""""""""""""""""
 Configuring with Python SDK
@@ -1597,7 +1814,7 @@ Configuring with Python SDK
 
 
 Policies
-^^^^^^^^^
+^^^^^^^^
 
 Configuring with Rest API 
 """"""""""""""""""""""""""""""""
@@ -1613,14 +1830,14 @@ Configuring with Python SDK
 """""""""""""""""""""""""""""""""""
 
 Add Path
-^^^^^^^^^
+^^^^^^^^
 
 Configuring with Rest API 
 """"""""""""""""""""""""""""""""
 Configuring with Python SDK
 """""""""""""""""""""""""""""""""""
 
-
+----------------------
 
 Configuring DHCP Relay
 -----------------------
