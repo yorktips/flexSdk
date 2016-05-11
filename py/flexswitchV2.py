@@ -5997,19 +5997,17 @@ class FlexSwitch( object):
         :param string OutgoingIntfType : Interface type of the next hop interface Interface type of the next hop interface
         :param string OutgoingInterface : Interface ID of the next hop interface Interface ID of the next hop interface
         :param string Protocol : Protocol type of the route Protocol type of the route
-        :param int32 Weight :  Weight of the next hop  Weight of the next hop
         :param uint32 Cost : Cost of this route Cost of this route
 
 	"""
     @processReturnCode
     def createIPv4Route(self,
                         DestinationNw,
+                        NetworkMask,
+                        NextHopIp,
                         OutgoingIntfType,
                         OutgoingInterface,
-                        NetworkMask='255.255.255.255',
-                        NextHopIp='0.0.0.0',
-                        Protocol='STATIC',
-                        Weight=0,
+                        Protocol,
                         Cost=0):
         obj =  { 
                 'DestinationNw' : DestinationNw,
@@ -6018,7 +6016,6 @@ class FlexSwitch( object):
                 'OutgoingIntfType' : OutgoingIntfType,
                 'OutgoingInterface' : OutgoingInterface,
                 'Protocol' : Protocol,
-                'Weight' : int(Weight),
                 'Cost' : int(Cost),
                 }
         reqUrl =  self.cfgUrlBase+'IPv4Route'
@@ -6033,7 +6030,6 @@ class FlexSwitch( object):
                         OutgoingIntfType = None,
                         OutgoingInterface = None,
                         Protocol = None,
-                        Weight = None,
                         Cost = None):
         obj =  {}
         if DestinationNw != None :
@@ -6054,9 +6050,6 @@ class FlexSwitch( object):
         if Protocol != None :
             obj['Protocol'] = Protocol
 
-        if Weight != None :
-            obj['Weight'] = int(Weight)
-
         if Cost != None :
             obj['Cost'] = int(Cost)
 
@@ -6070,7 +6063,6 @@ class FlexSwitch( object):
                              OutgoingIntfType = None,
                              OutgoingInterface = None,
                              Protocol = None,
-                             Weight = None,
                              Cost = None):
         obj =  {'objectId': objectId }
         if OutgoingIntfType !=  None:
@@ -6081,9 +6073,6 @@ class FlexSwitch( object):
 
         if Protocol !=  None:
             obj['Protocol'] = Protocol
-
-        if Weight !=  None:
-            obj['Weight'] = Weight
 
         if Cost !=  None:
             obj['Cost'] = Cost
