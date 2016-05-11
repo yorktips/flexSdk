@@ -659,7 +659,6 @@ class FlexSwitch( object):
         :param string HostIpAddress :  The IP address of the host.  The IP address of the host.
         :param int32 HostMetric :  The metric to be advertised.  The metric to be advertised.
         :param string HostCfgAreaID :  To configure the OSPF area to which the host belongs.  To configure the OSPF area to which the host belongs.
-
 	"""
     @processReturnCode
     def createOspfHostEntry(self,
@@ -893,17 +892,7 @@ class FlexSwitch( object):
     def getAllVrrpIntfs(self):
         return self.getObjects( 'VrrpIntf', self.cfgUrlBase)
 
-
-    """
-    .. automethod :: createLaPortChannel(self,
-        :param int32 LagId :  Id of the lag group  Id of the lag group
-        :param int32 LagType :  Sets the type of LAG  Sets the type of LAG
-        :param uint16 MinLinks :  Specifies the mininum number of member interfaces that must be active for the aggregate interface to be available  Specifies the mininum number of member interfaces that must be active for the aggregate interface to be available
-        :param string SystemIdMac :  The MAC address portion of the node's System ID. This is combined with the system priority to construct the 8-octet system-id  The MAC address portion of the node's System ID. This is combined with the system priority to construct the 8-octet system-id
-        :param uint16 SystemPriority :  Sytem priority used by the node on this LAG interface. Lower value is higher priority for determining which node is the controlling system.  Sytem priority used by the node on this LAG interface. Lower value is higher priority for determining which node is the controlling system.
-        :param string AdminState :  Convenient way to disable/enable a lag group.  The behaviour should be such that all traffic should stop.  LACP frames should continue to be processed  Convenient way to disable/enable a lag group.  The behaviour should be such that all traffic should stop.  LACP frames should continue to be processed
         :param int32 Members :  List of current member interfaces for the aggregate  List of current member interfaces for the aggregate
-        :param int32 Interval :  Set the period between LACP messages -- uses the lacp-period-type enumeration.  Set the period between LACP messages -- uses the lacp-period-type enumeration.
         :param int32 LagHash :  The tx hashing algorithm used by the lag group  The tx hashing algorithm used by the lag group
         :param int32 LacpMode :  ACTIVE is to initiate the transmission of LACP packets. PASSIVE is to wait for peer to initiate the transmission of LACP packets.  ACTIVE is to initiate the transmission of LACP packets. PASSIVE is to wait for peer to initiate the transmission of LACP packets.
 
@@ -2266,7 +2255,6 @@ class FlexSwitch( object):
         return r
 
     def getAllOspfVirtNbrEntryStates(self):
-        return self.getObjects( 'OspfVirtNbrEntry', self.stateUrlBase)
 
 
     """
@@ -2962,7 +2950,6 @@ class FlexSwitch( object):
         return r
 
     def getAllOspfAreaAggregateEntrys(self):
-        return self.getObjects( 'OspfAreaAggregateEntry', self.cfgUrlBase)
 
 
     @processReturnCode
@@ -3030,7 +3017,6 @@ class FlexSwitch( object):
         return r
 
     def getAllOspfVirtLocalLsdbEntryStates(self):
-        return self.getObjects( 'OspfVirtLocalLsdbEntry', self.stateUrlBase)
 
 
     @processReturnCode
@@ -3160,7 +3146,6 @@ class FlexSwitch( object):
         :param bool Enable :  DHCP Server enable/disable control DEFAULT  DHCP Server enable/disable control DEFAULT
         :param uint32 DefaultLeaseTime :  Default Lease Time in seconds DEFAULT  Default Lease Time in seconds DEFAULT
         :param uint32 MaxLeaseTime :  Max Lease Time in seconds DEFAULT  Max Lease Time in seconds DEFAULT
-
 	"""
     @processReturnCode
     def createDhcpGlobalConfig(self,
@@ -3259,7 +3244,6 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createIPv4Intf(self,
-        :param string IntfRef :  Interface name or ifindex of port/lag or vlan on which this IPv4 object is configured  Interface name or ifindex of port/lag or vlan on which this IPv4 object is configured
         :param string IpAddr :  Interface IP/Net mask in CIDR format to provision on switch interface  Interface IP/Net mask in CIDR format to provision on switch interface
 
 	"""
@@ -3495,18 +3479,12 @@ class FlexSwitch( object):
 
 	"""
     @processReturnCode
-    def createDhcpIntfConfig(self,
-                             IntfRef,
-                             Subnet,
-                             SubnetMask,
                              IPAddrRange,
                              BroadcastAddr,
                              RouterAddr,
                              DNSServerAddr,
                              DomainName,
                              Enable):
-        obj =  { 
-                'IntfRef' : IntfRef,
                 'Subnet' : Subnet,
                 'SubnetMask' : SubnetMask,
                 'IPAddrRange' : IPAddrRange,
@@ -3515,8 +3493,6 @@ class FlexSwitch( object):
                 'DNSServerAddr' : DNSServerAddr,
                 'DomainName' : DomainName,
                 'Enable' : True if Enable else False,
-                }
-        reqUrl =  self.cfgUrlBase+'DhcpIntfConfig'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -3626,17 +3602,6 @@ class FlexSwitch( object):
                 'IntfRef' : IntfRef,
                 }
         reqUrl =  self.stateUrlBase+'DhcpIntfConfig'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def getDhcpIntfConfigById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'DhcpIntfConfig'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllDhcpIntfConfigs(self):
-        return self.getObjects( 'DhcpIntfConfig', self.cfgUrlBase)
 
 
     @processReturnCode
@@ -3659,19 +3624,6 @@ class FlexSwitch( object):
 
     def getAllVrrpIntfStates(self):
         return self.getObjects( 'VrrpIntf', self.stateUrlBase)
-
-
-    """
-    .. automethod :: createIpTableAcl(self,
-        :param string Name :  Ip Table ACL rule name  Ip Table ACL rule name
-        :param string Action :  ACCEPT or DROP  ACCEPT or DROP
-        :param string IpAddr :  ip address of subnet or host  ip address of subnet or host
-        :param string Protocol :  
-        :param string Port :  
-        :param string PhysicalPort :  IfIndex where the acl rule is to be applied  IfIndex where the acl rule is to be applied
-
-	"""
-    @processReturnCode
     def createIpTableAcl(self,
                          Name,
                          Action,
@@ -4143,11 +4095,7 @@ class FlexSwitch( object):
         return r
 
     def getAllBGPGlobals(self):
-        return self.getObjects( 'BGPGlobal', self.cfgUrlBase)
 
-
-    @processReturnCode
-    def getOspfAreaEntryState(self,
                               AreaId):
         obj =  { 
                 'AreaId' : AreaId,
@@ -4297,7 +4245,6 @@ class FlexSwitch( object):
         return r
 
     def getAllPolicyConditionStates(self):
-        return self.getObjects( 'PolicyCondition', self.stateUrlBase)
 
 
     @processReturnCode
@@ -4308,27 +4255,16 @@ class FlexSwitch( object):
                 'BrgIfIndex' : BrgIfIndex,
                 'IfIndex' : IfIndex,
                 }
-        reqUrl =  self.stateUrlBase+'StpPort'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     @processReturnCode
     def getStpPortStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'StpPort'+"/%s"%(objectId)
         r = requests.get(reqUrl, data=None, headers=headers) 
         return r
 
     def getAllStpPortStates(self):
-        return self.getObjects( 'StpPort', self.stateUrlBase)
 
-
-    """
-    .. automethod :: createSubIPv4Intf(self,
-        :param string IntfRef : Intf name of system generated id (ifindex) of the ipv4Intf where sub interface is to be configured Intf name of system generated id (ifindex) of the ipv4Intf where sub interface is to be configured
-        :param string IpAddr : Ip Address for the interface Ip Address for the interface
-        :param string Type : Type of interface Type of interface
-        :param string MacAddr : Mac address to be used for the sub interface. If none specified IPv4Intf mac address will be used Mac address to be used for the sub interface. If none specified IPv4Intf mac address will be used
-        :param bool Enable : Enable or disable this interface Enable or disable this interface
 
 	"""
     @processReturnCode
@@ -4493,7 +4429,6 @@ class FlexSwitch( object):
         return r
 
     def getAllLogicalIntfStates(self):
-        return self.getObjects( 'LogicalIntf', self.stateUrlBase)
 
 
     """
@@ -5135,11 +5070,6 @@ class FlexSwitch( object):
         return self.getObjects( 'OspfExtLsdbEntry', self.stateUrlBase)
 
 
-    """
-    .. automethod :: createSystemLogging(self,
-        :param string SRLogger :  Global logging  Global logging
-        :param string Logging :  Global logging  Global logging
-
 	"""
     @processReturnCode
     def createSystemLogging(self,
@@ -5527,236 +5457,6 @@ class FlexSwitch( object):
 
 
     """
-    .. automethod :: createVxlanVtepInstances(self,
-        :param uint32 VtepId :  VTEP ID.  VTEP ID.
-        :param uint32 VxlanId :  VxLAN ID.  VxLAN ID.
-        :param string VtepName :  VTEP instance name.  VTEP instance name.
-        :param int32 SrcIfIndex :  Source physical interface ifIndex.  Source physical interface ifIndex.
-        :param uint16 TTL :  TTL of the Vxlan tunnel  TTL of the Vxlan tunnel
-        :param uint16 TOS :  Type of Service  Type of Service
-        :param int32 Learning :  specifies if unknown source link layer  addresses and IP addresses are entered into the VXLAN  device forwarding database.  specifies if unknown source link layer  addresses and IP addresses are entered into the VXLAN  device forwarding database.
-        :param int32 Rsc :  specifies if route short circuit is turned on.  specifies if route short circuit is turned on.
-        :param int32 L2miss :  specifies if netlink LLADDR miss notifications are generated.  specifies if netlink LLADDR miss notifications are generated.
-        :param int32 L3miss :  specifies if netlink IP ADDR miss notifications are generated.  specifies if netlink IP ADDR miss notifications are generated.
-        :param string DstIp :  Destination IP address for the static VxLAN tunnel  Destination IP address for the static VxLAN tunnel
-        :param string DstMac :  Destination MAC address for the static VxLAN tunnel  Destination MAC address for the static VxLAN tunnel
-        :param uint16 VlanId :  Vlan Id to encapsulate with the vtep tunnel ethernet header  Vlan Id to encapsulate with the vtep tunnel ethernet header
-        :param uint16 UDP :  vxlan udp port.  Deafult is the iana default udp port  vxlan udp port.  Deafult is the iana default udp port
-        :param int32 InnerVlanHandlingMode :  The inner vlan tag handling mode.  The inner vlan tag handling mode.
-
-	"""
-    @processReturnCode
-    def createVxlanVtepInstances(self,
-                                 VtepId,
-                                 VxlanId,
-                                 VtepName,
-                                 SrcIfIndex,
-                                 TTL,
-                                 TOS,
-                                 Learning,
-                                 Rsc,
-                                 L2miss,
-                                 L3miss,
-                                 DstIp,
-                                 DstMac,
-                                 VlanId,
-                                 UDP='4789',
-                                 InnerVlanHandlingMode=0):
-        obj =  { 
-                'VtepId' : int(VtepId),
-                'VxlanId' : int(VxlanId),
-                'VtepName' : VtepName,
-                'SrcIfIndex' : int(SrcIfIndex),
-                'TTL' : TTL,
-                'TOS' : TOS,
-                'Learning' : int(Learning),
-                'Rsc' : int(Rsc),
-                'L2miss' : int(L2miss),
-                'L3miss' : int(L3miss),
-                'DstIp' : DstIp,
-                'DstMac' : DstMac,
-                'VlanId' : VlanId,
-                'UDP' : UDP,
-                'InnerVlanHandlingMode' : int(InnerVlanHandlingMode),
-                }
-        reqUrl =  self.cfgUrlBase+'VxlanVtepInstances'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def updateVxlanVtepInstances(self,
-                                 VtepId,
-                                 VxlanId,
-                                 VtepName = None,
-                                 SrcIfIndex = None,
-                                 TTL = None,
-                                 TOS = None,
-                                 Learning = None,
-                                 Rsc = None,
-                                 L2miss = None,
-                                 L3miss = None,
-                                 DstIp = None,
-                                 DstMac = None,
-                                 VlanId = None,
-                                 UDP = None,
-                                 InnerVlanHandlingMode = None):
-        obj =  {}
-        if VtepId != None :
-            obj['VtepId'] = int(VtepId)
-
-        if VxlanId != None :
-            obj['VxlanId'] = int(VxlanId)
-
-        if VtepName != None :
-            obj['VtepName'] = VtepName
-
-        if SrcIfIndex != None :
-            obj['SrcIfIndex'] = int(SrcIfIndex)
-
-        if TTL != None :
-            obj['TTL'] = TTL
-
-        if TOS != None :
-            obj['TOS'] = TOS
-
-        if Learning != None :
-            obj['Learning'] = int(Learning)
-
-        if Rsc != None :
-            obj['Rsc'] = int(Rsc)
-
-        if L2miss != None :
-            obj['L2miss'] = int(L2miss)
-
-        if L3miss != None :
-            obj['L3miss'] = int(L3miss)
-
-        if DstIp != None :
-            obj['DstIp'] = DstIp
-
-        if DstMac != None :
-            obj['DstMac'] = DstMac
-
-        if VlanId != None :
-            obj['VlanId'] = VlanId
-
-        if UDP != None :
-            obj['UDP'] = UDP
-
-        if InnerVlanHandlingMode != None :
-            obj['InnerVlanHandlingMode'] = int(InnerVlanHandlingMode)
-
-        reqUrl =  self.cfgUrlBase+'VxlanVtepInstances'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def updateVxlanVtepInstancesById(self,
-                                      objectId,
-                                      VtepName = None,
-                                      SrcIfIndex = None,
-                                      TTL = None,
-                                      TOS = None,
-                                      Learning = None,
-                                      Rsc = None,
-                                      L2miss = None,
-                                      L3miss = None,
-                                      DstIp = None,
-                                      DstMac = None,
-                                      VlanId = None,
-                                      UDP = None,
-                                      InnerVlanHandlingMode = None):
-        obj =  {'objectId': objectId }
-        if VtepName !=  None:
-            obj['VtepName'] = VtepName
-
-        if SrcIfIndex !=  None:
-            obj['SrcIfIndex'] = SrcIfIndex
-
-        if TTL !=  None:
-            obj['TTL'] = TTL
-
-        if TOS !=  None:
-            obj['TOS'] = TOS
-
-        if Learning !=  None:
-            obj['Learning'] = Learning
-
-        if Rsc !=  None:
-            obj['Rsc'] = Rsc
-
-        if L2miss !=  None:
-            obj['L2miss'] = L2miss
-
-        if L3miss !=  None:
-            obj['L3miss'] = L3miss
-
-        if DstIp !=  None:
-            obj['DstIp'] = DstIp
-
-        if DstMac !=  None:
-            obj['DstMac'] = DstMac
-
-        if VlanId !=  None:
-            obj['VlanId'] = VlanId
-
-        if UDP !=  None:
-            obj['UDP'] = UDP
-
-        if InnerVlanHandlingMode !=  None:
-            obj['InnerVlanHandlingMode'] = InnerVlanHandlingMode
-
-        reqUrl =  self.cfgUrlBase+'VxlanVtepInstances'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def deleteVxlanVtepInstances(self,
-                                 VtepId,
-                                 VxlanId):
-        obj =  { 
-                'VtepId' : VtepId,
-                'VxlanId' : VxlanId,
-                }
-        reqUrl =  self.cfgUrlBase+'VxlanVtepInstances'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def deleteVxlanVtepInstancesById(self, objectId ):
-        reqUrl =  self.cfgUrlBase+'VxlanVtepInstances'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
-        return r
-
-    @processReturnCode
-    def getVxlanVtepInstances(self,
-                              VtepId,
-                              VxlanId):
-        obj =  { 
-                'VtepId' : VtepId,
-                'VxlanId' : VxlanId,
-                }
-        reqUrl =  self.stateUrlBase+'VxlanVtepInstances'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    @processReturnCode
-    def getVxlanVtepInstancesById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'VxlanVtepInstances'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllVxlanVtepInstancess(self):
-        return self.getObjects( 'VxlanVtepInstances', self.cfgUrlBase)
-
-
-    """
-    .. automethod :: createBGPPolicyAction(self,
-        :param string Name :  Name of the BGP policy action  Name of the BGP policy action
-        :param string ActionType :  Type of the BGP policy action  Type of the BGP policy action
-        :param bool GenerateASSet :  Enable/Disable generating AS set for BGP aggregate action  Enable/Disable generating AS set for BGP aggregate action
-        :param bool SendSummaryOnly :  Enable/Disable sending summary only for BGP aggregate action  Enable/Disable sending summary only for BGP aggregate action
-
 	"""
     @processReturnCode
     def createBGPPolicyAction(self,
@@ -5878,7 +5578,6 @@ class FlexSwitch( object):
         :param string NbrIpAddr :  The IP address this neighbor is using in its IP source address.  Note that  The IP address this neighbor is using in its IP source address.  Note that
         :param int32 NbrAddressLessIndex :  On an interface having an IP address  On an interface having an IP address
         :param int32 NbrPriority :  The priority of this neighbor in the designated router election algorithm.  The value 0 signifies that the neighbor is not eligible to become the designated router on this particular network.  The priority of this neighbor in the designated router election algorithm.  The value 0 signifies that the neighbor is not eligible to become the designated router on this particular network.
-
 	"""
     @processReturnCode
     def createOspfNbrEntry(self,
@@ -6311,13 +6010,6 @@ class FlexSwitch( object):
     def getAllVrrpVridStates(self):
         return self.getObjects( 'VrrpVrid', self.stateUrlBase)
 
-
-    """
-    .. automethod :: createBGPPolicyDefinition(self,
-        :param string Name :  Name of the BGP policy definition  Name of the BGP policy definition
-        :param int32 Precedence :  Precedence of the policy definition  Precedence of the policy definition
-        :param string MatchType :  Match type for policy definition    Match type for policy definition  
-        :param BGPPolicyDefinitionStmtPrecedence StatementList :  Precedence of statements in the policy  Precedence of statements in the policy
 
 	"""
     @processReturnCode
