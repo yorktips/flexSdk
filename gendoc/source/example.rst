@@ -1762,6 +1762,72 @@ Configuring with Rest API
 
 	curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"PeerAS":500,"NeighborAddress":"1.1.1.1"}' 'http://10.1.10.243:8080/public/v1/config/BGPNeighbor'
 	{"ObjectId":"e530c4dc-1a81-4f68-593f-29aa877276e7","Error":""}
+	
+
+Validation:
+
+::
+	
+	curl -X GET --header 'Content-Type: application/json' --header 'Accept: application/json'  'http://10.1.10.243:8080/public/v1/state/BGPNeighbors' | python -m json.tool
+
+	curl -X GET --header 'Content-Type: application/json' --header 'Accept: application/json'  'http://10.1.10.243:8080/public/v1/state/BGPNeighbors' | python -m json.tool
+	  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+									 Dload  Upload   Total   Spent    Left  Speed
+	100  2270    0  2270    0     0   227k      0 --:--:-- --:--:-- --:--:--  246k
+	{
+		"CurrentMarker": 0,
+		"MoreExist": false,
+		"NextMarker": 0,
+		"ObjCount": 1,
+		"Objects": [
+			{
+				"Object": {
+					"AddPathsMaxTx": 0,
+					"AddPathsRx": false,
+					"AuthPassword": "",
+					"BfdNeighborState": "",
+					"ConfigObj": null,
+					"ConnectRetryTime": 60,
+					"Description": "",
+					"HoldTime": 180,
+					"IfIndex": 0,
+					"KeepaliveTime": 60,
+					"LocalAS": 65535,
+					"MaxPrefixes": 0,
+					"MaxPrefixesDisconnect": false,
+					"MaxPrefixesRestartTimer": 0,
+					"MaxPrefixesThresholdPct": 80,
+					"Messages": {
+						"Received": {
+							"Notification": 1,
+							"Update": 9
+						},
+						"Sent": {
+							"Notification": 1,
+							"Update": 6
+						}
+					},
+					"MultiHopEnable": false,
+					"MultiHopTTL": 0,
+					"NeighborAddress": "1.1.1.1",
+					"PeerAS": 500,
+					"PeerGroup": "Group1",
+					"PeerType": 1,
+					"Queues": {
+						"Input": 0,
+						"Output": 0
+					},
+					"RouteReflectorClient": false,
+					"RouteReflectorClusterId": 0,
+					"SessionState": 6,
+					"TotalPrefixes": 11
+				},
+				"ObjectId": "5977ffa7-67bd-4847-7597-4175b513883c"
+			}
+
+		]
+	}
+
 
 Timers
 ******
@@ -1775,20 +1841,20 @@ Authentication
 Configuring with Python SDK
 """"""""""""""""""""""""""""
 
-+----------------------+-------------------------+------------+-----------------------------------------------------------------------------------------+----------+----------+-----------------+------------+---------------------------------------------+----------+----------+
-| Python Method        | Variables               | Type       |  Description                                                                            | Required |  Default |     ables            | Type       |  Description                                | Required |  Default |     
-+======================+=========================+============+=========================================================================================+==========+==========+   =================+============+=============================================+==========+==========+   
-| createBGPGlobal      | PeerAS                  | integer    | Peer AS of the BGP neighbor                                                             |    Yes   |   None   |m                | integer    | Local AS for BGP global config              |    Yes   |   None   |
-|                      +-------------------------+------------+-----------------------------------------------------------------------------------------+----------+----------+-----------------+------------+---------------------------------------------+----------+----------+
-|                      | LocalAS                 | integer    | Local AS of the BGP, overrides Global AS value, can be used to spoof AS number          |    no    |     0    |erId             | string     | Router id for BGP global config             |    Yes   |   None   |
-|                      +-------------------------+------------+-----------------------------------------------------------------------------------------+----------+----------+-----------------+------------+---------------------------------------------+----------+----------+
-|                      | AuthPassword            | string     | Password to connect to the BGP neighbor                                                 |    no    |   None   |ultiplePaths     | boolean    | Enable/disable ECMP for BGP                 |    no    |  False   |
-|                      +-------------------------+------------+-----------------------------------------------------------------------------------------+----------+----------+-----------------+------------+---------------------------------------------+----------+----------+
-|                      | Description             | string     | Description of the BGP neighbor                                                         |    no    |     0    |MaxPaths         | integer    | Max ECMP paths from External BGP neighbors  |    no    |     0    |
-|                      +-------------------------+------------+-----------------------------------------------------------------------------------------+----------+----------+-----------------+------------+---------------------------------------------+----------+----------+
-|                      | NeighborAddress         | string     | Address of the BGP neighbor (required if IfIndex is not supplied)                       |    Yes   |   None   |AllowMultipleAS  | boolean    | Enable/diable ECMP paths from multiple AS's |    no    |  False   |
-|                      +-------------------------+------------+-----------------------------------------------------------------------------------------+----------+----------+-----------------+------------+---------------------------------------------+----------+----------+
-|                      | IfIndex                 | integer    | Interface of BGP neighbor (required if NeighborAddress is not supplied)                 |    Yes   |     0    |MaxPaths         | integer    | Max ECMP paths from Internal BGP neighbors  |    no    |     0    |
++----------------------+-------------------------+------------+-----------------------------------------------------------------------------------------+----------+----------+
+| Python Method        | Variables               | Type       |  Description                                                                            | Required |  Default | 
++======================+=========================+============+=========================================================================================+==========+==========+
+| createBGPGlobal      | PeerAS                  | integer    | Peer AS of the BGP neighbor                                                             |    Yes   |   None   |
+|                      +-------------------------+------------+-----------------------------------------------------------------------------------------+----------+----------+
+|                      | LocalAS                 | integer    | Local AS of the BGP, overrides Global AS value, can be used to spoof AS number          |    no    |     0    |
+|                      +-------------------------+------------+-----------------------------------------------------------------------------------------+----------+----------+
+|                      | AuthPassword            | string     | Password to connect to the BGP neighbor                                                 |    no    |   None   |
+|                      +-------------------------+------------+-----------------------------------------------------------------------------------------+----------+----------+
+|                      | Description             | string     | Description of the BGP neighbor                                                         |    no    |     0    |
+|                      +-------------------------+------------+-----------------------------------------------------------------------------------------+----------+----------+
+|                      | NeighborAddress         | string     | Address of the BGP neighbor (required if IfIndex is not supplied)                       |    Yes   |   None   |
+|                      +-------------------------+------------+-----------------------------------------------------------------------------------------+----------+----------+
+|                      | IfIndex                 | integer    | Interface of BGP neighbor (required if NeighborAddress is not supplied)                 |    Yes   |     0    |
 |                      +-------------------------+------------+-----------------------------------------------------------------------------------------+----------+----------+
 |                      | RouteReflectorClusterId | integer    | Cluster ID of the internal BGP neighbor router reflector client                         |    no    |     0    |
 |                      +-------------------------+------------+-----------------------------------------------------------------------------------------+----------+----------+
