@@ -1503,49 +1503,50 @@ inherited via the *ParamName* variable, BFD_Sessions in this case. As well aa BF
 Can be viewed via the following python script. 
 
 ::
-import json
-from flexswitchV2 import FlexSwitch
+
+	import json
+	from flexswitchV2 import FlexSwitch
 
 
-if __name__ =='__main__':
-	switch_ip = "10.1.10.243"
-	restIf = FlexSwitch(switch_ip, 8080)
-	print json.dumps(restIf.getAllBfdSessionStates(), indent=4)
+	if __name__ =='__main__':
+		switch_ip = "10.1.10.243"
+		restIf = FlexSwitch(switch_ip, 8080)
+		print json.dumps(restIf.getAllBfdSessionStates(), indent=4)
 
-acasella@snaproute-lab-r710-1:~$ python get_bfd.py 
-[
-    {
-        "Object": {
-            "RegisteredProtocols": "user, ", 
-            "DesiredMinTxInterval": "250000(us)", 
-            "SessionId": 701, 
-            "ParamName": "BFD_Sessions", 
-            "DemandMode": false, 
-            "DetectionMultiplier": 3, 
-            "SentAuthSeq": 0, 
-            "LocalDiscriminator": 701, 
-            "SessionState": "up", 
-            "AuthSeqKnown": false, 
-            "PerLinkSession": false, 
-            "IfName": "", 
-            "ConfigObj": null, 
-            "RequiredMinRxInterval": "250000(us)", 
-            "AuthType": "", 
-            "RemoteDiscriminator": 1090519237, 
-            "RemoteSessionState": "up", 
-            "NumTxPackets": 747461, 
-            "InterfaceSpecific": false, 
-            "NumRxPackets": 908113, 
-            "RemoteDemandMode": false, 
-            "LocalMacAddr": "", 
-            "RemoteMinRxInterval": "250000(us)", 
-            "IpAddr": "1.1.1.1", 
-            "RemoteMacAddr": "", 
-            "LocalDiagType": "None", 
-            "IfIndex": 47, 
-            "ReceivedAuthSeq": 0
-        }, 
-        "ObjectId": ""
+	acasella@snaproute-lab-r710-1:~$ python get_bfd.py 
+	[
+		{
+			"Object": {
+				"RegisteredProtocols": "user, ", 
+				"DesiredMinTxInterval": "250000(us)", 
+				"SessionId": 701, 
+				"ParamName": "BFD_Sessions", 
+				"DemandMode": false, 
+				"DetectionMultiplier": 3, 
+				"SentAuthSeq": 0, 
+				"LocalDiscriminator": 701, 
+				"SessionState": "up", 
+				"AuthSeqKnown": false, 
+				"PerLinkSession": false, 
+				"IfName": "", 
+				"ConfigObj": null, 
+				"RequiredMinRxInterval": "250000(us)", 
+				"AuthType": "", 
+				"RemoteDiscriminator": 1090519237, 
+				"RemoteSessionState": "up", 
+				"NumTxPackets": 747461, 
+				"InterfaceSpecific": false, 
+				"NumRxPackets": 908113, 
+				"RemoteDemandMode": false, 
+				"LocalMacAddr": "", 
+				"RemoteMinRxInterval": "250000(us)", 
+				"IpAddr": "1.1.1.1", 
+				"RemoteMacAddr": "", 
+				"LocalDiagType": "None", 
+				"IfIndex": 47, 
+				"ReceivedAuthSeq": 0
+			}, 
+			"ObjectId": ""
 
 			
 ------------------
