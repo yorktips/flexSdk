@@ -109,7 +109,7 @@ Below are examples for utilizing this method via the Python CLI, python script a
 
 ::  
 
-	>>>from flexswitchV2 import FlexSwitch
+	>>> from flexswitchV2 import FlexSwitch
 	>>> FlexSwitch("10.1.10.243", 8080).createArpConfig("1", 1000)
 	({u'ObjectId': u'45dff5a0-7dc1-441d-723d-ccf731186ece', u'Error': u''}, None)      
 
@@ -250,7 +250,7 @@ Below are examples for utilizing this method via the Python CLI, python script a
 
 ::
 
-	>>>from flexswitchV2 import FlexSwitch
+	>>> from flexswitchV2 import FlexSwitch
 	>>> FlexSwitch("10.1.10.243", 8080).createArpStatic("50.1.1.10","01:23:34:56:78")
 	({u'ObjectId': u'9e81f7d4-f9f0-4c86-556b-6398e47897bc', u'Error': u''}, None)
 	
@@ -383,8 +383,8 @@ Below are examples for utilizing this method via the Python CLI, python script a
 1. Python CLI 
 ::
 
-	>>>from flexswitchV2 import FlexSwitch
-	>>>FlexSwitch("10.1.10.243", 8080).getAllArpEntryStates()
+	>>> from flexswitchV2 import FlexSwitch
+	>>> flexSwitch("10.1.10.243", 8080).getAllArpEntryStates()
 	[{u'Object': {u'ConfigObj': None, u'Intf': u'fpPort47', u'Vlan': u'Internal Vlan', u'IpAddr': u'172.16.0.14', u'ExpiryTimeLeft': u'9m24.869691096s', u'MacAddr': u'a8:9d:21:aa:8e:01'}, u'ObjectId': u''}, {u'Object': {u'ConfigObj': None, u'Intf': u'fpPort49', u'Vlan': u'Internal Vlan', u'IpAddr': u'172.16.0.20', u'ExpiryTimeLeft': u'9m43.991376701s', u'MacAddr': u'00:02:03:04:05:00'}, u'ObjectId': u''}]
 
 
@@ -446,7 +446,7 @@ Display via Rest API
 
 You can return the value of an object based on any of the variables within that object.  For example you can query an ARP entry via an IPv4 Address. 
 
-The example below will show how to grab a specific ARP entry based on IP address. 
+The example below will show how to grab a specific ARP entry by IP address. 
 
 **COMMAND:**
 
@@ -486,7 +486,7 @@ The example below will show how to grab a specific ARP entry based on IP address
 Displaying via Python SDK
 *************************
 
-Displaying all ARP entries utilizing FlexSwitch's Python SDK, utilizing method *getAllArpEntryStates()*
+Displaying all ARP entries utilizing FlexSwitch's Python SDK, utilizing method *getArpEntryStates()*
 
 **COMMAND:**
 
@@ -508,7 +508,7 @@ Displaying all ARP entries utilizing FlexSwitch's Python SDK, utilizing method *
 
 ::
 
-	>>>from flexswitchV2 import FlexSwitch
+	>>> from flexswitchV2 import FlexSwitch
 	>>> FlexSwitch("10.1.10.243", 8080).getArpEntryState("172.16.0.20")
 	({u'Object': {u'ConfigObj': None, u'Intf': u'fpPort49', u'Vlan': u'Internal Vlan', u'IpAddr': u'172.16.0.20', u'ExpiryTimeLeft': u'16m38.505153914s', u'MacAddr': u'00:02:03:04:05:00'}, u'ObjectId': u''}, None)
 
@@ -714,18 +714,19 @@ Demand Mode
 
 In demand mode, no Hello packets are exchanged after the session is established; it is assumed that the endpoints have another way to verify connectivity to each other, perhaps on the underlying physical layer.
 
-.. Per-link
-.. """"""""
+..
+	Per-link
+	""""""""
 
-.. Since traditional Asynchronous BFD is an IP point-to-point protocol, it has no concept of layer 2 links that may exist between two devices.  This is especially true for layer 2 port-channels with multiple member-links.   
-If these one of these links happen to fail, while BFD is running across them, it may result in a false-positive detection of a connectivity failure.  This could have unintended impact, by bringing down an associated routing-protocol session incorrectly, 
-thus taking our an entire port-channel, rather than a single-link.  
+	Since traditional Asynchronous BFD is an IP point-to-point protocol, it has no concept of layer 2 links that may exist between two devices.  This is especially true for layer 2 port-channels with multiple member-links.   
+	If these one of these links happen to fail, while BFD is running across them, it may result in a false-positive detection of a connectivity failure.  This could have unintended impact, by bringing down an associated routing-protocol session incorrectly, 
+	thus taking our an entire port-channel, rather than a single-link.  
 
-.. BFD over LAG or BFD per-link was created as an enhancement to limit the impact of single port-channel member-link failure.  When BFD per-link is enabled on a port-channel interface, an asynchronous mode BFD sessions is run on every port-channel member link.  This allows for failure detection of a single port-channel member-link, 
-limiting the impact and traffic-transitions to only links that failed.  When all BFD sessions fail on a particular port-channel interface, only then are the associated protocol sessions torn down, allowing for accurate fault detection. 
+	BFD over LAG or BFD per-link was created as an enhancement to limit the impact of single port-channel member-link failure.  When BFD per-link is enabled on a port-channel interface, an asynchronous mode BFD sessions is run on every port-channel member link.  This allows for failure detection of a single port-channel member-link, 
+	limiting the impact and traffic-transitions to only links that failed.  When all BFD sessions fail on a particular port-channel interface, only then are the associated protocol sessions torn down, allowing for accurate fault detection. 
 
 
-Protocol Specific failure detection
+Protocol Specific Failure Detection
 """"""""""""""""""""""""""""""""""""
 
 For more details on how BFD integrates with other protocols, please see that protocols specific section:
@@ -1199,7 +1200,7 @@ Here we are creating the BFD session parameters that will be utilized by the BFD
 
 ::
 
-	>>>from flexswitchV2 import FlexSwitch
+	>>> from flexswitchV2 import FlexSwitch
 	>>> FlexSwitch("10.1.10.243", 8080).createBfdSessionParam("BFD_Session", LocalMultiplier=3, RequiredMinRxInterval=250, DesiredMinTxInterval=250)
 	({u'ObjectId': u'5b4a4b49-7310-444e-64da-5d8e8764e914', u'Error': u''}, None)
 
@@ -1251,7 +1252,7 @@ Attaching BFD params to a BFD session
 
 			::
 
-				>>>from flexswitchV2 import FlexSwitch
+				>>> from flexswitchV2 import FlexSwitch
 				>>> FlexSwitch("10.1.10.243", 8080).createBfdSession(ParaName="BFD_Sessions", IpAddr="1.1.1.1")
 				({u'ObjectId': u'5b4a4b49-7310-444e-64da-5d8e8764e914', u'Error': u''}, None)
 
