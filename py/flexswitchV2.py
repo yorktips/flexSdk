@@ -52,8 +52,8 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createArpConfig(self,
-        :param string Vrf :  Vrf Name  Vrf Name
-        :param int32 Timeout :  Global Arp entry timeout value. Default value  Global Arp entry timeout value. Default value
+        :param string Vrf : Vrf Name Vrf Name
+        :param int32 Timeout : Global Arp entry timeout value. Default value Global Arp entry timeout value. Default value
 
 	"""
     @processReturnCode
@@ -133,33 +133,35 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createBGPPeerGroup(self,
-        :param string Name :  Name of the BGP peer group  Name of the BGP peer group
-        :param uint32 PeerAS :  Peer AS of the BGP neighbor  Peer AS of the BGP neighbor
-        :param uint8 MaxPrefixesRestartTimer :  Time to wait before we start BGP peer session when we receive max prefixes  Time to wait before we start BGP peer session when we receive max prefixes
-        :param bool RouteReflectorClient :  Set/Clear BGP neighbor as a route reflector client  Set/Clear BGP neighbor as a route reflector client
-        :param string Description :  Description of the BGP neighbor  Description of the BGP neighbor
-        :param uint8 MultiHopTTL :  TTL for multi hop BGP neighbor  TTL for multi hop BGP neighbor
-        :param bool MaxPrefixesDisconnect :  Disconnect the BGP peer session when we receive the max prefixes from the neighbor  Disconnect the BGP peer session when we receive the max prefixes from the neighbor
-        :param uint32 LocalAS :  Local AS of the BGP neighbor  Local AS of the BGP neighbor
-        :param uint32 KeepaliveTime :  Keep alive time for the BGP neighbor  Keep alive time for the BGP neighbor
-        :param uint32 RouteReflectorClusterId :  Cluster Id of the internal BGP neighbor route reflector client  Cluster Id of the internal BGP neighbor route reflector client
-        :param uint32 MaxPrefixes :  Maximum number of prefixes that can be received from the BGP neighbor  Maximum number of prefixes that can be received from the BGP neighbor
-        :param uint8 AddPathsMaxTx :  Max number of additional paths that can be transmitted to BGP neighbor  Max number of additional paths that can be transmitted to BGP neighbor
-        :param bool MultiHopEnable :  Enable/Disable multi hop for BGP neighbor  Enable/Disable multi hop for BGP neighbor
-        :param bool AddPathsRx :  Receive additional paths from BGP neighbor  Receive additional paths from BGP neighbor
-        :param uint8 MaxPrefixesThresholdPct :  The percentage of maximum prefixes before we start logging  The percentage of maximum prefixes before we start logging
-        :param uint32 HoldTime :  Hold time for the BGP neighbor  Hold time for the BGP neighbor
-        :param string AuthPassword :  Password to connect to the BGP neighbor  Password to connect to the BGP neighbor
-        :param uint32 ConnectRetryTime :  Connect retry time to connect to BGP neighbor after disconnect  Connect retry time to connect to BGP neighbor after disconnect
+        :param string Name : Name of the BGP peer group Name of the BGP peer group
+        :param string UpdateSource : Source IP to connect to the BGP neighbor Source IP to connect to the BGP neighbor
+        :param string AuthPassword : Password to connect to the BGP neighbor Password to connect to the BGP neighbor
+        :param string Description : Description of the BGP neighbor Description of the BGP neighbor
+        :param uint8 MaxPrefixesRestartTimer : Time to wait before we start BGP peer session when we receive max prefixes Time to wait before we start BGP peer session when we receive max prefixes
+        :param bool RouteReflectorClient : Set/Clear BGP neighbor as a route reflector client Set/Clear BGP neighbor as a route reflector client
+        :param uint8 MultiHopTTL : TTL for multi hop BGP neighbor TTL for multi hop BGP neighbor
+        :param bool MaxPrefixesDisconnect : Disconnect the BGP peer session when we receive the max prefixes from the neighbor Disconnect the BGP peer session when we receive the max prefixes from the neighbor
+        :param uint32 LocalAS : Local AS of the BGP neighbor Local AS of the BGP neighbor
+        :param uint32 KeepaliveTime : Keep alive time for the BGP neighbor Keep alive time for the BGP neighbor
+        :param uint32 RouteReflectorClusterId : Cluster Id of the internal BGP neighbor route reflector client Cluster Id of the internal BGP neighbor route reflector client
+        :param uint32 MaxPrefixes : Maximum number of prefixes that can be received from the BGP neighbor Maximum number of prefixes that can be received from the BGP neighbor
+        :param uint8 AddPathsMaxTx : Max number of additional paths that can be transmitted to BGP neighbor Max number of additional paths that can be transmitted to BGP neighbor
+        :param bool MultiHopEnable : Enable/Disable multi hop for BGP neighbor Enable/Disable multi hop for BGP neighbor
+        :param bool AddPathsRx : Receive additional paths from BGP neighbor Receive additional paths from BGP neighbor
+        :param uint8 MaxPrefixesThresholdPct : The percentage of maximum prefixes before we start logging The percentage of maximum prefixes before we start logging
+        :param uint32 HoldTime : Hold time for the BGP neighbor Hold time for the BGP neighbor
+        :param uint32 PeerAS : Peer AS of the BGP neighbor Peer AS of the BGP neighbor
+        :param uint32 ConnectRetryTime : Connect retry time to connect to BGP neighbor after disconnect Connect retry time to connect to BGP neighbor after disconnect
 
 	"""
     @processReturnCode
     def createBGPPeerGroup(self,
                            Name,
-                           PeerAS,
+                           UpdateSource='',
+                           AuthPassword='',
+                           Description='',
                            MaxPrefixesRestartTimer=0,
                            RouteReflectorClient=False,
-                           Description='',
                            MultiHopTTL=0,
                            MaxPrefixesDisconnect=False,
                            LocalAS=0,
@@ -171,14 +173,15 @@ class FlexSwitch( object):
                            AddPathsRx=False,
                            MaxPrefixesThresholdPct=0,
                            HoldTime=180,
-                           AuthPassword='',
+                           PeerAS=0,
                            ConnectRetryTime=60):
         obj =  { 
                 'Name' : Name,
-                'PeerAS' : int(PeerAS),
+                'UpdateSource' : UpdateSource,
+                'AuthPassword' : AuthPassword,
+                'Description' : Description,
                 'MaxPrefixesRestartTimer' : int(MaxPrefixesRestartTimer),
                 'RouteReflectorClient' : True if RouteReflectorClient else False,
-                'Description' : Description,
                 'MultiHopTTL' : int(MultiHopTTL),
                 'MaxPrefixesDisconnect' : True if MaxPrefixesDisconnect else False,
                 'LocalAS' : int(LocalAS),
@@ -190,7 +193,7 @@ class FlexSwitch( object):
                 'AddPathsRx' : True if AddPathsRx else False,
                 'MaxPrefixesThresholdPct' : int(MaxPrefixesThresholdPct),
                 'HoldTime' : int(HoldTime),
-                'AuthPassword' : AuthPassword,
+                'PeerAS' : int(PeerAS),
                 'ConnectRetryTime' : int(ConnectRetryTime),
                 }
         reqUrl =  self.cfgUrlBase+'BGPPeerGroup'
@@ -200,10 +203,11 @@ class FlexSwitch( object):
     @processReturnCode
     def updateBGPPeerGroup(self,
                            Name,
-                           PeerAS = None,
+                           UpdateSource = None,
+                           AuthPassword = None,
+                           Description = None,
                            MaxPrefixesRestartTimer = None,
                            RouteReflectorClient = None,
-                           Description = None,
                            MultiHopTTL = None,
                            MaxPrefixesDisconnect = None,
                            LocalAS = None,
@@ -215,23 +219,26 @@ class FlexSwitch( object):
                            AddPathsRx = None,
                            MaxPrefixesThresholdPct = None,
                            HoldTime = None,
-                           AuthPassword = None,
+                           PeerAS = None,
                            ConnectRetryTime = None):
         obj =  {}
         if Name != None :
             obj['Name'] = Name
 
-        if PeerAS != None :
-            obj['PeerAS'] = int(PeerAS)
+        if UpdateSource != None :
+            obj['UpdateSource'] = UpdateSource
+
+        if AuthPassword != None :
+            obj['AuthPassword'] = AuthPassword
+
+        if Description != None :
+            obj['Description'] = Description
 
         if MaxPrefixesRestartTimer != None :
             obj['MaxPrefixesRestartTimer'] = int(MaxPrefixesRestartTimer)
 
         if RouteReflectorClient != None :
             obj['RouteReflectorClient'] = True if RouteReflectorClient else False
-
-        if Description != None :
-            obj['Description'] = Description
 
         if MultiHopTTL != None :
             obj['MultiHopTTL'] = int(MultiHopTTL)
@@ -266,8 +273,8 @@ class FlexSwitch( object):
         if HoldTime != None :
             obj['HoldTime'] = int(HoldTime)
 
-        if AuthPassword != None :
-            obj['AuthPassword'] = AuthPassword
+        if PeerAS != None :
+            obj['PeerAS'] = int(PeerAS)
 
         if ConnectRetryTime != None :
             obj['ConnectRetryTime'] = int(ConnectRetryTime)
@@ -279,10 +286,11 @@ class FlexSwitch( object):
     @processReturnCode
     def updateBGPPeerGroupById(self,
                                 objectId,
-                                PeerAS = None,
+                                UpdateSource = None,
+                                AuthPassword = None,
+                                Description = None,
                                 MaxPrefixesRestartTimer = None,
                                 RouteReflectorClient = None,
-                                Description = None,
                                 MultiHopTTL = None,
                                 MaxPrefixesDisconnect = None,
                                 LocalAS = None,
@@ -294,20 +302,23 @@ class FlexSwitch( object):
                                 AddPathsRx = None,
                                 MaxPrefixesThresholdPct = None,
                                 HoldTime = None,
-                                AuthPassword = None,
+                                PeerAS = None,
                                 ConnectRetryTime = None):
         obj =  {'objectId': objectId }
-        if PeerAS !=  None:
-            obj['PeerAS'] = PeerAS
+        if UpdateSource !=  None:
+            obj['UpdateSource'] = UpdateSource
+
+        if AuthPassword !=  None:
+            obj['AuthPassword'] = AuthPassword
+
+        if Description !=  None:
+            obj['Description'] = Description
 
         if MaxPrefixesRestartTimer !=  None:
             obj['MaxPrefixesRestartTimer'] = MaxPrefixesRestartTimer
 
         if RouteReflectorClient !=  None:
             obj['RouteReflectorClient'] = RouteReflectorClient
-
-        if Description !=  None:
-            obj['Description'] = Description
 
         if MultiHopTTL !=  None:
             obj['MultiHopTTL'] = MultiHopTTL
@@ -342,8 +353,8 @@ class FlexSwitch( object):
         if HoldTime !=  None:
             obj['HoldTime'] = HoldTime
 
-        if AuthPassword !=  None:
-            obj['AuthPassword'] = AuthPassword
+        if PeerAS !=  None:
+            obj['PeerAS'] = PeerAS
 
         if ConnectRetryTime !=  None:
             obj['ConnectRetryTime'] = ConnectRetryTime
@@ -450,8 +461,8 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createDhcpRelayGlobal(self,
-        :param string DhcpRelay :  Global Dhcp Relay Agent Information  Global Dhcp Relay Agent Information
-        :param bool Enable :  Global Config stating whether DHCP Relay Agent is enabled on the box or not  Global Config stating whether DHCP Relay Agent is enabled on the box or not
+        :param string DhcpRelay : Global Dhcp Relay Agent Information Global Dhcp Relay Agent Information
+        :param bool Enable : Global Config stating whether DHCP Relay Agent is enabled on the box or not Global Config stating whether DHCP Relay Agent is enabled on the box or not
 
 	"""
     @processReturnCode
@@ -531,14 +542,14 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createStpBridgeInstance(self,
-        :param uint16 Vlan :  Each bridge is associated with a domain.  Typically this domain is represented as the vlan; The default domain is typically 1  Each bridge is associated with a domain.  Typically this domain is represented as the vlan; The default domain is typically 1
-        :param string Address :  The bridge identifier of the root of the spanning tree  The bridge identifier of the root of the spanning tree
-        :param int32 Priority :  The value of the write-able portion of the Bridge ID (i.e.  The value of the write-able portion of the Bridge ID (i.e.
-        :param int32 MaxAge :  The value that all bridges use for MaxAge when this bridge is acting as the root.  Note that 802.1D-1998 specifies that the range for this parameter is related to the value of HelloTime.  The granularity of this timer is specified by 802.1D-1998 to be 1 second.  An agent may return a badValue error if a set is attempted to a value that is not a whole number of seconds.  The value that all bridges use for MaxAge when this bridge is acting as the root.  Note that 802.1D-1998 specifies that the range for this parameter is related to the value of HelloTime.  The granularity of this timer is specified by 802.1D-1998 to be 1 second.  An agent may return a badValue error if a set is attempted to a value that is not a whole number of seconds.
-        :param int32 HelloTime :  The value that all bridges use for HelloTime when this bridge is acting as the root.  The granularity of this timer is specified by 802.1D-1998 to be 1 second.  An agent may return a badValue error if a set is attempted    to a value that is not a whole number of seconds.  The value that all bridges use for HelloTime when this bridge is acting as the root.  The granularity of this timer is specified by 802.1D-1998 to be 1 second.  An agent may return a badValue error if a set is attempted    to a value that is not a whole number of seconds.
-        :param int32 ForwardDelay :  The value that all bridges use for ForwardDelay when this bridge is acting as the root.  Note that 802.1D-1998 specifies that the range for this parameter is related to the value of MaxAge.  The granularity of this timer is specified by 802.1D-1998 to be 1 second.  An agent may return a badValue error if a set is attempted to a value that is not a whole number of seconds.  The value that all bridges use for ForwardDelay when this bridge is acting as the root.  Note that 802.1D-1998 specifies that the range for this parameter is related to the value of MaxAge.  The granularity of this timer is specified by 802.1D-1998 to be 1 second.  An agent may return a badValue error if a set is attempted to a value that is not a whole number of seconds.
-        :param int32 ForceVersion :  TODO  TODO
-        :param int32 TxHoldCount :  TODO  TODO
+        :param uint16 Vlan : Each bridge is associated with a domain.  Typically this domain is represented as the vlan; The default domain is typically 1 Each bridge is associated with a domain.  Typically this domain is represented as the vlan; The default domain is typically 1
+        :param string Address : The bridge identifier of the root of the spanning tree The bridge identifier of the root of the spanning tree
+        :param int32 Priority : The value of the write-able portion of the Bridge ID (i.e. The value of the write-able portion of the Bridge ID (i.e.
+        :param int32 MaxAge : The value that all bridges use for MaxAge when this bridge is acting as the root.  Note that 802.1D-1998 specifies that the range for this parameter is related to the value of HelloTime.  The granularity of this timer is specified by 802.1D-1998 to be 1 second.  An agent may return a badValue error if a set is attempted to a value that is not a whole number of seconds. The value that all bridges use for MaxAge when this bridge is acting as the root.  Note that 802.1D-1998 specifies that the range for this parameter is related to the value of HelloTime.  The granularity of this timer is specified by 802.1D-1998 to be 1 second.  An agent may return a badValue error if a set is attempted to a value that is not a whole number of seconds.
+        :param int32 HelloTime : The value that all bridges use for HelloTime when this bridge is acting as the root.  The granularity of this timer is specified by 802.1D-1998 to be 1 second.  An agent may return a badValue error if a set is attempted    to a value that is not a whole number of seconds. The value that all bridges use for HelloTime when this bridge is acting as the root.  The granularity of this timer is specified by 802.1D-1998 to be 1 second.  An agent may return a badValue error if a set is attempted    to a value that is not a whole number of seconds.
+        :param int32 ForwardDelay : The value that all bridges use for ForwardDelay when this bridge is acting as the root.  Note that 802.1D-1998 specifies that the range for this parameter is related to the value of MaxAge.  The granularity of this timer is specified by 802.1D-1998 to be 1 second.  An agent may return a badValue error if a set is attempted to a value that is not a whole number of seconds. The value that all bridges use for ForwardDelay when this bridge is acting as the root.  Note that 802.1D-1998 specifies that the range for this parameter is related to the value of MaxAge.  The granularity of this timer is specified by 802.1D-1998 to be 1 second.  An agent may return a badValue error if a set is attempted to a value that is not a whole number of seconds.
+        :param int32 ForceVersion : TODO TODO
+        :param int32 TxHoldCount : TODO TODO
 
 	"""
     @processReturnCode
@@ -698,8 +709,8 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createLLDPIntf(self,
-        :param int32 IfIndex :  IfIndex where lldp needs to be configured  IfIndex where lldp needs to be configured
-        :param bool Enable :  Enable/Disable lldp config  Enable/Disable lldp config
+        :param int32 IfIndex : IfIndex where lldp needs to be configured IfIndex where lldp needs to be configured
+        :param bool Enable : Enable/Disable lldp config Enable/Disable lldp config
 
 	"""
     @processReturnCode
@@ -779,10 +790,10 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createDhcpGlobalConfig(self,
-        :param string DhcpConfigKey :  DHCP global config  DHCP global config
-        :param bool Enable :  DHCP Server enable/disable control DEFAULT  DHCP Server enable/disable control DEFAULT
-        :param uint32 DefaultLeaseTime :  Default Lease Time in seconds DEFAULT  Default Lease Time in seconds DEFAULT
-        :param uint32 MaxLeaseTime :  Max Lease Time in seconds DEFAULT  Max Lease Time in seconds DEFAULT
+        :param string DhcpConfigKey : DHCP global config DHCP global config
+        :param bool Enable : DHCP Server enable/disable control DEFAULT DHCP Server enable/disable control DEFAULT
+        :param uint32 DefaultLeaseTime : Default Lease Time in seconds DEFAULT Default Lease Time in seconds DEFAULT
+        :param uint32 MaxLeaseTime : Max Lease Time in seconds DEFAULT Max Lease Time in seconds DEFAULT
 
 	"""
     @processReturnCode
@@ -882,14 +893,14 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createOspfVirtIfEntry(self,
-        :param string VirtIfNeighbor :  The Router ID of the virtual neighbor.  The Router ID of the virtual neighbor.
-        :param string VirtIfAreaId :  The transit area that the virtual link traverses.  By definition  The transit area that the virtual link traverses.  By definition
-        :param int32 VirtIfTransitDelay :  The estimated number of seconds it takes to transmit a Link State update packet over this interface.  Note that the minimal value SHOULD be 1 second.  The estimated number of seconds it takes to transmit a Link State update packet over this interface.  Note that the minimal value SHOULD be 1 second.
-        :param int32 VirtIfRetransInterval :  The number of seconds between link state avertisement retransmissions  The number of seconds between link state avertisement retransmissions
-        :param int32 VirtIfHelloInterval :  The length of time  The length of time
-        :param int32 VirtIfRtrDeadInterval :  The number of seconds that a router's Hello packets have not been seen before its neighbors declare the router down.  This should be some multiple of the Hello interval.  This value must be the same for the virtual neighbor.  The number of seconds that a router's Hello packets have not been seen before its neighbors declare the router down.  This should be some multiple of the Hello interval.  This value must be the same for the virtual neighbor.
-        :param string VirtIfAuthKey :  The cleartext password used as an OSPF authentication key when simplePassword security is enabled.  This object does not access any OSPF cryptogaphic (e.g.  The cleartext password used as an OSPF authentication key when simplePassword security is enabled.  This object does not access any OSPF cryptogaphic (e.g.
-        :param int32 VirtIfAuthType :  The authentication type specified for a virtual interface.  Note that this object can be used to engage in significant attacks against an OSPF router.  The authentication type specified for a virtual interface.  Note that this object can be used to engage in significant attacks against an OSPF router.
+        :param string VirtIfNeighbor : The Router ID of the virtual neighbor. The Router ID of the virtual neighbor.
+        :param string VirtIfAreaId : The transit area that the virtual link traverses.  By definition The transit area that the virtual link traverses.  By definition
+        :param int32 VirtIfTransitDelay : The estimated number of seconds it takes to transmit a Link State update packet over this interface.  Note that the minimal value SHOULD be 1 second. The estimated number of seconds it takes to transmit a Link State update packet over this interface.  Note that the minimal value SHOULD be 1 second.
+        :param int32 VirtIfRetransInterval : The number of seconds between link state avertisement retransmissions The number of seconds between link state avertisement retransmissions
+        :param int32 VirtIfHelloInterval : The length of time The length of time
+        :param int32 VirtIfRtrDeadInterval : The number of seconds that a router's Hello packets have not been seen before its neighbors declare the router down.  This should be some multiple of the Hello interval.  This value must be the same for the virtual neighbor. The number of seconds that a router's Hello packets have not been seen before its neighbors declare the router down.  This should be some multiple of the Hello interval.  This value must be the same for the virtual neighbor.
+        :param string VirtIfAuthKey : The cleartext password used as an OSPF authentication key when simplePassword security is enabled.  This object does not access any OSPF cryptogaphic (e.g. The cleartext password used as an OSPF authentication key when simplePassword security is enabled.  This object does not access any OSPF cryptogaphic (e.g.
+        :param int32 VirtIfAuthType : The authentication type specified for a virtual interface.  Note that this object can be used to engage in significant attacks against an OSPF router. The authentication type specified for a virtual interface.  Note that this object can be used to engage in significant attacks against an OSPF router.
 
 	"""
     @processReturnCode
@@ -1135,8 +1146,8 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createSystemLogging(self,
-        :param string SRLogger :  Global logging  Global logging
-        :param string Logging :  Global logging  Global logging
+        :param string SRLogger : Global logging Global logging
+        :param string Logging : Global logging Global logging
 
 	"""
     @processReturnCode
@@ -1216,7 +1227,7 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createPolicyStmt(self,
-        :param string Name :  Policy Statement Name  Policy Statement Name
+        :param string Name : Policy Statement Name Policy Statement Name
         :param string Conditions : List of conditions added to this policy statement List of conditions added to this policy statement
         :param string Action : Action for this policy statement Action for this policy statement
         :param string MatchConditions : Specifies whether to match all/any of the conditions of this policy statement Specifies whether to match all/any of the conditions of this policy statement
@@ -1319,20 +1330,20 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createOspfGlobal(self,
-        :param string RouterId :  A 32-bit integer uniquely identifying the router in the Autonomous System. By convention  A 32-bit integer uniquely identifying the router in the Autonomous System. By convention
-        :param int32 AdminStat :  The administrative status of OSPF in the router.  The value 'enabled' denotes that the OSPF Process is active on at least one interface; 'disabled' disables it on all interfaces.  This object is persistent and when written the entity SHOULD save the change to non-volatile storage.  The administrative status of OSPF in the router.  The value 'enabled' denotes that the OSPF Process is active on at least one interface; 'disabled' disables it on all interfaces.  This object is persistent and when written the entity SHOULD save the change to non-volatile storage.
-        :param bool ASBdrRtrStatus :  A flag to note whether this router is configured as an Autonomous System Border Router.  This object is persistent and when written the entity SHOULD save the change to non-volatile storage.  A flag to note whether this router is configured as an Autonomous System Border Router.  This object is persistent and when written the entity SHOULD save the change to non-volatile storage.
-        :param bool TOSSupport :  The router's support for type-of-service routing.  This object is persistent and when written the entity SHOULD save the change to non-volatile storage.  The router's support for type-of-service routing.  This object is persistent and when written the entity SHOULD save the change to non-volatile storage.
-        :param int32 ExtLsdbLimit :  The maximum number of non-default AS-external LSAs entries that can be stored in the link state database.  If the value is -1  The maximum number of non-default AS-external LSAs entries that can be stored in the link state database.  If the value is -1
-        :param int32 MulticastExtensions :  A bit mask indicating whether the router is forwarding IP multicast (Class D) datagrams based on the algorithms defined in the multicast extensions to OSPF.  Bit 0  A bit mask indicating whether the router is forwarding IP multicast (Class D) datagrams based on the algorithms defined in the multicast extensions to OSPF.  Bit 0
-        :param int32 ExitOverflowInterval :  The number of seconds that  The number of seconds that
-        :param bool DemandExtensions :  The router's support for demand routing. This object is persistent and when written the entity SHOULD save the change to non-volatile storage.  The router's support for demand routing. This object is persistent and when written the entity SHOULD save the change to non-volatile storage.
-        :param bool RFC1583Compatibility :  Indicates metrics used to choose among multiple AS-external LSAs.  When RFC1583Compatibility is set to enabled  Indicates metrics used to choose among multiple AS-external LSAs.  When RFC1583Compatibility is set to enabled
-        :param uint32 ReferenceBandwidth :  Reference bandwidth in kilobits/second for  calculating default interface metrics.  The default value is 100  Reference bandwidth in kilobits/second for  calculating default interface metrics.  The default value is 100
-        :param int32 RestartSupport :  The router's support for OSPF graceful restart. Options include  The router's support for OSPF graceful restart. Options include
-        :param int32 RestartInterval :  Configured OSPF graceful restart timeout interval.  This object is persistent and when written the entity SHOULD save the change to non-volatile storage.  Configured OSPF graceful restart timeout interval.  This object is persistent and when written the entity SHOULD save the change to non-volatile storage.
-        :param bool RestartStrictLsaChecking :  Indicates if strict LSA checking is enabled for graceful restart.  This object is persistent and when written the entity SHOULD save the change to non-volatile  storage.  Indicates if strict LSA checking is enabled for graceful restart.  This object is persistent and when written the entity SHOULD save the change to non-volatile  storage.
-        :param int32 StubRouterAdvertisement :  This object controls the advertisement of stub router LSAs by the router.  The value doNotAdvertise will result in the advertisement of a standard router LSA and is the default value.  This object is persistent and when written the entity SHOULD save the change to non-volatile storage.  This object controls the advertisement of stub router LSAs by the router.  The value doNotAdvertise will result in the advertisement of a standard router LSA and is the default value.  This object is persistent and when written the entity SHOULD save the change to non-volatile storage.
+        :param string RouterId : A 32-bit integer uniquely identifying the router in the Autonomous System. By convention A 32-bit integer uniquely identifying the router in the Autonomous System. By convention
+        :param int32 AdminStat : The administrative status of OSPF in the router.  The value 'enabled' denotes that the OSPF Process is active on at least one interface; 'disabled' disables it on all interfaces.  This object is persistent and when written the entity SHOULD save the change to non-volatile storage. The administrative status of OSPF in the router.  The value 'enabled' denotes that the OSPF Process is active on at least one interface; 'disabled' disables it on all interfaces.  This object is persistent and when written the entity SHOULD save the change to non-volatile storage.
+        :param bool ASBdrRtrStatus : A flag to note whether this router is configured as an Autonomous System Border Router.  This object is persistent and when written the entity SHOULD save the change to non-volatile storage. A flag to note whether this router is configured as an Autonomous System Border Router.  This object is persistent and when written the entity SHOULD save the change to non-volatile storage.
+        :param bool TOSSupport : The router's support for type-of-service routing.  This object is persistent and when written the entity SHOULD save the change to non-volatile storage. The router's support for type-of-service routing.  This object is persistent and when written the entity SHOULD save the change to non-volatile storage.
+        :param int32 ExtLsdbLimit : The maximum number of non-default AS-external LSAs entries that can be stored in the link state database.  If the value is -1 The maximum number of non-default AS-external LSAs entries that can be stored in the link state database.  If the value is -1
+        :param int32 MulticastExtensions : A bit mask indicating whether the router is forwarding IP multicast (Class D) datagrams based on the algorithms defined in the multicast extensions to OSPF.  Bit 0 A bit mask indicating whether the router is forwarding IP multicast (Class D) datagrams based on the algorithms defined in the multicast extensions to OSPF.  Bit 0
+        :param int32 ExitOverflowInterval : The number of seconds that The number of seconds that
+        :param bool DemandExtensions : The router's support for demand routing. This object is persistent and when written the entity SHOULD save the change to non-volatile storage. The router's support for demand routing. This object is persistent and when written the entity SHOULD save the change to non-volatile storage.
+        :param bool RFC1583Compatibility : Indicates metrics used to choose among multiple AS-external LSAs.  When RFC1583Compatibility is set to enabled Indicates metrics used to choose among multiple AS-external LSAs.  When RFC1583Compatibility is set to enabled
+        :param uint32 ReferenceBandwidth : Reference bandwidth in kilobits/second for  calculating default interface metrics.  The default value is 100 Reference bandwidth in kilobits/second for  calculating default interface metrics.  The default value is 100
+        :param int32 RestartSupport : The router's support for OSPF graceful restart. Options include The router's support for OSPF graceful restart. Options include
+        :param int32 RestartInterval : Configured OSPF graceful restart timeout interval.  This object is persistent and when written the entity SHOULD save the change to non-volatile storage. Configured OSPF graceful restart timeout interval.  This object is persistent and when written the entity SHOULD save the change to non-volatile storage.
+        :param bool RestartStrictLsaChecking : Indicates if strict LSA checking is enabled for graceful restart.  This object is persistent and when written the entity SHOULD save the change to non-volatile  storage. Indicates if strict LSA checking is enabled for graceful restart.  This object is persistent and when written the entity SHOULD save the change to non-volatile  storage.
+        :param int32 StubRouterAdvertisement : This object controls the advertisement of stub router LSAs by the router.  The value doNotAdvertise will result in the advertisement of a standard router LSA and is the default value.  This object is persistent and when written the entity SHOULD save the change to non-volatile storage. This object controls the advertisement of stub router LSAs by the router.  The value doNotAdvertise will result in the advertisement of a standard router LSA and is the default value.  This object is persistent and when written the entity SHOULD save the change to non-volatile storage.
 
 	"""
     @processReturnCode
@@ -1654,11 +1665,11 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createPolicyDefinition(self,
-        :param string Name :  Policy Name  Policy Name
+        :param string Name : Policy Name Policy Name
         :param int32 Priority : Priority of the policy w.r.t other policies configured Priority of the policy w.r.t other policies configured
         :param PolicyDefinitionStmtPriority StatementList : Specifies list of statements along with their precedence order. Specifies list of statements along with their precedence order.
         :param string MatchType : Specifies whether to match all/any of the statements within this policy Specifies whether to match all/any of the statements within this policy
-        :param string PolicyType :  Specifies the intended protocol application for the policy  Specifies the intended protocol application for the policy
+        :param string PolicyType : Specifies the intended protocol application for the policy Specifies the intended protocol application for the policy
 
 	"""
     @processReturnCode
@@ -1768,9 +1779,9 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createVlan(self,
-        :param int32 VlanId :  802.1Q tag/Vlan ID for vlan being provisioned  802.1Q tag/Vlan ID for vlan being provisioned
-        :param string IntfList :  List of interface names or ifindex values to  be added as tagged members of the vlan  List of interface names or ifindex values to  be added as tagged members of the vlan
-        :param string UntagIntfList :  List of interface names or ifindex values to  be added as untagged members of the vlan  List of interface names or ifindex values to  be added as untagged members of the vlan
+        :param int32 VlanId : 802.1Q tag/Vlan ID for vlan being provisioned 802.1Q tag/Vlan ID for vlan being provisioned
+        :param string IntfList : List of interface names or ifindex values to  be added as tagged members of the vlan List of interface names or ifindex values to  be added as tagged members of the vlan
+        :param string UntagIntfList : List of interface names or ifindex values to  be added as untagged members of the vlan List of interface names or ifindex values to  be added as untagged members of the vlan
 
 	"""
     @processReturnCode
@@ -1900,10 +1911,10 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createOspfIfMetricEntry(self,
-        :param int32 IfMetricAddressLessIf :  For the purpose of easing the instancing of addressed and addressless interfaces; this variable takes the value 0 on interfaces with IP addresses and the value of ifIndex for interfaces having no IP address.  On row creation  For the purpose of easing the instancing of addressed and addressless interfaces; this variable takes the value 0 on interfaces with IP addresses and the value of ifIndex for interfaces having no IP address.  On row creation
-        :param int32 IfMetricTOS :  The Type of Service metric being referenced. On row creation  The Type of Service metric being referenced. On row creation
-        :param string IfMetricIpAddress :  The IP address of this OSPF interface.  On row creation  The IP address of this OSPF interface.  On row creation
-        :param int32 IfMetricValue :  The metric of using this Type of Service on this interface.  The default value of the TOS 0 metric is 10^8 / ifSpeed.  The metric of using this Type of Service on this interface.  The default value of the TOS 0 metric is 10^8 / ifSpeed.
+        :param int32 IfMetricAddressLessIf : For the purpose of easing the instancing of addressed and addressless interfaces; this variable takes the value 0 on interfaces with IP addresses and the value of ifIndex for interfaces having no IP address.  On row creation For the purpose of easing the instancing of addressed and addressless interfaces; this variable takes the value 0 on interfaces with IP addresses and the value of ifIndex for interfaces having no IP address.  On row creation
+        :param int32 IfMetricTOS : The Type of Service metric being referenced. On row creation The Type of Service metric being referenced. On row creation
+        :param string IfMetricIpAddress : The IP address of this OSPF interface.  On row creation The IP address of this OSPF interface.  On row creation
+        :param int32 IfMetricValue : The metric of using this Type of Service on this interface.  The default value of the TOS 0 metric is 10^8 / ifSpeed. The metric of using this Type of Service on this interface.  The default value of the TOS 0 metric is 10^8 / ifSpeed.
 
 	"""
     @processReturnCode
@@ -2025,8 +2036,8 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createComponentLogging(self,
-        :param string Module :  Module name to set logging level  Module name to set logging level
-        :param string Level :  Logging level  Logging level
+        :param string Module : Module name to set logging level Module name to set logging level
+        :param string Level : Logging level Logging level
 
 	"""
     @processReturnCode
@@ -2106,8 +2117,8 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createBfdGlobal(self,
-        :param string Bfd :  VRF id where BFD is globally enabled or disabled  VRF id where BFD is globally enabled or disabled
-        :param bool Enable :  Global BFD state in this VRF  Global BFD state in this VRF
+        :param string Bfd : VRF id where BFD is globally enabled or disabled VRF id where BFD is globally enabled or disabled
+        :param bool Enable : Global BFD state in this VRF Global BFD state in this VRF
 
 	"""
     @processReturnCode
@@ -2187,15 +2198,15 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createDhcpIntfConfig(self,
-        :param string IntfRef :  Interface name or ifindex of L3 interface object on which Dhcp Server need to be configured  Interface name or ifindex of L3 interface object on which Dhcp Server need to be configured
-        :param string Subnet :  Subnet  Subnet
-        :param string SubnetMask :  Subnet Mask  Subnet Mask
-        :param string IPAddrRange :  Range of IP Addresses DEFAULT  Range of IP Addresses DEFAULT
-        :param string BroadcastAddr :  Broadcast Address DEFAULT  Broadcast Address DEFAULT
-        :param string RouterAddr :  Router Address DEFAULT  Router Address DEFAULT
-        :param string DNSServerAddr :  Comma seperated List of DNS Server Address DEFAULT  Comma seperated List of DNS Server Address DEFAULT
-        :param string DomainName :  Domain Name Address DEFAULT  Domain Name Address DEFAULT
-        :param bool Enable :  Enable and Disable Control DEFAULT  Enable and Disable Control DEFAULT
+        :param string IntfRef : Interface name or ifindex of L3 interface object on which Dhcp Server need to be configured Interface name or ifindex of L3 interface object on which Dhcp Server need to be configured
+        :param string Subnet : Subnet Subnet
+        :param string SubnetMask : Subnet Mask Subnet Mask
+        :param string IPAddrRange : Range of IP Addresses DEFAULT Range of IP Addresses DEFAULT
+        :param string BroadcastAddr : Broadcast Address DEFAULT Broadcast Address DEFAULT
+        :param string RouterAddr : Router Address DEFAULT Router Address DEFAULT
+        :param string DNSServerAddr : Comma seperated List of DNS Server Address DEFAULT Comma seperated List of DNS Server Address DEFAULT
+        :param string DomainName : Domain Name Address DEFAULT Domain Name Address DEFAULT
+        :param bool Enable : Enable and Disable Control DEFAULT Enable and Disable Control DEFAULT
 
 	"""
     @processReturnCode
@@ -2373,10 +2384,10 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createBGPPolicyAction(self,
-        :param string Name :  Name of the BGP policy action  Name of the BGP policy action
-        :param string ActionType :  Type of the BGP policy action  Type of the BGP policy action
-        :param bool GenerateASSet :  Enable/Disable generating AS set for BGP aggregate action  Enable/Disable generating AS set for BGP aggregate action
-        :param bool SendSummaryOnly :  Enable/Disable sending summary only for BGP aggregate action  Enable/Disable sending summary only for BGP aggregate action
+        :param string Name : Name of the BGP policy action Name of the BGP policy action
+        :param string ActionType : Type of the BGP policy action Type of the BGP policy action
+        :param bool GenerateASSet : Enable/Disable generating AS set for BGP aggregate action Enable/Disable generating AS set for BGP aggregate action
+        :param bool SendSummaryOnly : Enable/Disable sending summary only for BGP aggregate action Enable/Disable sending summary only for BGP aggregate action
 
 	"""
     @processReturnCode
@@ -2476,10 +2487,10 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createBGPPolicyCondition(self,
-        :param string Name :  Name of the BGP policy condition  Name of the BGP policy condition
-        :param string ConditionType :  Type of the BGP policy condition.   Type of the BGP policy condition. 
-        :param string IpPrefix :  IP adddress to match in CIDR format  IP adddress to match in CIDR format
-        :param string MaskLengthRange :  IP address mask lenght range to match  IP address mask lenght range to match
+        :param string Name : Name of the BGP policy condition Name of the BGP policy condition
+        :param string ConditionType : Type of the BGP policy condition. Type of the BGP policy condition.
+        :param string IpPrefix : IP adddress to match in CIDR format IP adddress to match in CIDR format
+        :param string MaskLengthRange : IP address mask lenght range to match IP address mask lenght range to match
 
 	"""
     @processReturnCode
@@ -2619,8 +2630,8 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createLogicalIntf(self,
-        :param string Name :  Name of logical interface  Name of logical interface
-        :param string Type :  Type of logical interface (e.x. loopback)  Type of logical interface (e.x. loopback)
+        :param string Name : Name of logical interface Name of logical interface
+        :param string Type : Type of logical interface (e.x. loopback) Type of logical interface (e.x. loopback)
 
 	"""
     @processReturnCode
@@ -2762,19 +2773,19 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createStpPort(self,
-        :param int32 BrgIfIndex :  The value of the instance of the ifIndex object  The value of the instance of the ifIndex object
-        :param int32 IfIndex :  The port number of the port for which this entry contains Spanning Tree Protocol management information.  The port number of the port for which this entry contains Spanning Tree Protocol management information.
-        :param int32 Priority :  The value of the priority field that is contained in the first (in network byte order) octet of the (2 octet long) Port ID.  The other octet of the Port ID is given by the value of StpPort. On bridges supporting IEEE 802.1t or IEEE 802.1w  The value of the priority field that is contained in the first (in network byte order) octet of the (2 octet long) Port ID.  The other octet of the Port ID is given by the value of StpPort. On bridges supporting IEEE 802.1t or IEEE 802.1w
-        :param int32 Enable :  The enabled/disabled status of the port.  The enabled/disabled status of the port.
-        :param int32 PathCost :  The contribution of this port to the path cost of paths towards the spanning tree root which include this port.  802.1D-1998 recommends that the default value of this parameter be in inverse proportion to    the speed of the attached LAN.  New implementations should support PathCost32. If the port path costs exceeds the maximum value of this object then this object should report the maximum value  The contribution of this port to the path cost of paths towards the spanning tree root which include this port.  802.1D-1998 recommends that the default value of this parameter be in inverse proportion to    the speed of the attached LAN.  New implementations should support PathCost32. If the port path costs exceeds the maximum value of this object then this object should report the maximum value
-        :param int32 PathCost32 :  The contribution of this port to the path cost of paths towards the spanning tree root which include this port.  802.1D-1998 recommends that the default value of this parameter be in inverse proportion to the speed of the attached LAN.  This object replaces PathCost to support IEEE 802.1t.  The contribution of this port to the path cost of paths towards the spanning tree root which include this port.  802.1D-1998 recommends that the default value of this parameter be in inverse proportion to the speed of the attached LAN.  This object replaces PathCost to support IEEE 802.1t.
-        :param int32 ProtocolMigration :  When operating in RSTP (version 2) mode  When operating in RSTP (version 2) mode
-        :param int32 AdminPointToPoint :  The administrative point-to-point status of the LAN segment attached to this port  The administrative point-to-point status of the LAN segment attached to this port
-        :param int32 AdminEdgePort :  The administrative value of the Edge Port parameter.  A value of true(1) indicates that this port should be assumed as an edge-port  The administrative value of the Edge Port parameter.  A value of true(1) indicates that this port should be assumed as an edge-port
-        :param int32 AdminPathCost :  The administratively assigned value for the contribution of this port to the path cost of paths toward the spanning tree root.  Writing a value of '0' assigns the automatically calculated default Path Cost value to the port.  If the default Path Cost is being used  The administratively assigned value for the contribution of this port to the path cost of paths toward the spanning tree root.  Writing a value of '0' assigns the automatically calculated default Path Cost value to the port.  If the default Path Cost is being used
-        :param int32 BpduGuard :  A Port as OperEdge which receives BPDU with BpduGuard enabled will shut the port down.  A Port as OperEdge which receives BPDU with BpduGuard enabled will shut the port down.
-        :param int32 BpduGuardInterval :  The interval time to which a port will try to recover from BPDU Guard err-disable state.  If no BPDU frames are detected after this timeout plus 3 Times Hello Time then the port will transition back to Up state.  If condition is cleared manually then this operation is ignored.  If set to zero then timer is inactive and recovery is based on manual intervention.  The interval time to which a port will try to recover from BPDU Guard err-disable state.  If no BPDU frames are detected after this timeout plus 3 Times Hello Time then the port will transition back to Up state.  If condition is cleared manually then this operation is ignored.  If set to zero then timer is inactive and recovery is based on manual intervention.
-        :param int32 BridgeAssurance :  When enabled BPDUs will be transmitted out of all stp ports regardless of state.  When an stp port fails to receive a BPDU the port should  transition to a Blocked state.  Upon reception of BDPU after shutdown  should transition port into the bridge.  When enabled BPDUs will be transmitted out of all stp ports regardless of state.  When an stp port fails to receive a BPDU the port should  transition to a Blocked state.  Upon reception of BDPU after shutdown  should transition port into the bridge.
+        :param int32 BrgIfIndex : The value of the instance of the ifIndex object The value of the instance of the ifIndex object
+        :param int32 IfIndex : The port number of the port for which this entry contains Spanning Tree Protocol management information. The port number of the port for which this entry contains Spanning Tree Protocol management information.
+        :param int32 Priority : The value of the priority field that is contained in the first (in network byte order) octet of the (2 octet long) Port ID.  The other octet of the Port ID is given by the value of StpPort. On bridges supporting IEEE 802.1t or IEEE 802.1w The value of the priority field that is contained in the first (in network byte order) octet of the (2 octet long) Port ID.  The other octet of the Port ID is given by the value of StpPort. On bridges supporting IEEE 802.1t or IEEE 802.1w
+        :param int32 Enable : The enabled/disabled status of the port. The enabled/disabled status of the port.
+        :param int32 PathCost : The contribution of this port to the path cost of paths towards the spanning tree root which include this port.  802.1D-1998 recommends that the default value of this parameter be in inverse proportion to    the speed of the attached LAN.  New implementations should support PathCost32. If the port path costs exceeds the maximum value of this object then this object should report the maximum value The contribution of this port to the path cost of paths towards the spanning tree root which include this port.  802.1D-1998 recommends that the default value of this parameter be in inverse proportion to    the speed of the attached LAN.  New implementations should support PathCost32. If the port path costs exceeds the maximum value of this object then this object should report the maximum value
+        :param int32 PathCost32 : The contribution of this port to the path cost of paths towards the spanning tree root which include this port.  802.1D-1998 recommends that the default value of this parameter be in inverse proportion to the speed of the attached LAN.  This object replaces PathCost to support IEEE 802.1t. The contribution of this port to the path cost of paths towards the spanning tree root which include this port.  802.1D-1998 recommends that the default value of this parameter be in inverse proportion to the speed of the attached LAN.  This object replaces PathCost to support IEEE 802.1t.
+        :param int32 ProtocolMigration : When operating in RSTP (version 2) mode When operating in RSTP (version 2) mode
+        :param int32 AdminPointToPoint : The administrative point-to-point status of the LAN segment attached to this port The administrative point-to-point status of the LAN segment attached to this port
+        :param int32 AdminEdgePort : The administrative value of the Edge Port parameter.  A value of true(1) indicates that this port should be assumed as an edge-port The administrative value of the Edge Port parameter.  A value of true(1) indicates that this port should be assumed as an edge-port
+        :param int32 AdminPathCost : The administratively assigned value for the contribution of this port to the path cost of paths toward the spanning tree root.  Writing a value of '0' assigns the automatically calculated default Path Cost value to the port.  If the default Path Cost is being used The administratively assigned value for the contribution of this port to the path cost of paths toward the spanning tree root.  Writing a value of '0' assigns the automatically calculated default Path Cost value to the port.  If the default Path Cost is being used
+        :param int32 BpduGuard : A Port as OperEdge which receives BPDU with BpduGuard enabled will shut the port down. A Port as OperEdge which receives BPDU with BpduGuard enabled will shut the port down.
+        :param int32 BpduGuardInterval : The interval time to which a port will try to recover from BPDU Guard err-disable state.  If no BPDU frames are detected after this timeout plus 3 Times Hello Time then the port will transition back to Up state.  If condition is cleared manually then this operation is ignored.  If set to zero then timer is inactive and recovery is based on manual intervention. The interval time to which a port will try to recover from BPDU Guard err-disable state.  If no BPDU frames are detected after this timeout plus 3 Times Hello Time then the port will transition back to Up state.  If condition is cleared manually then this operation is ignored.  If set to zero then timer is inactive and recovery is based on manual intervention.
+        :param int32 BridgeAssurance : When enabled BPDUs will be transmitted out of all stp ports regardless of state.  When an stp port fails to receive a BPDU the port should  transition to a Blocked state.  Upon reception of BDPU after shutdown  should transition port into the bridge. When enabled BPDUs will be transmitted out of all stp ports regardless of state.  When an stp port fails to receive a BPDU the port should  transition to a Blocked state.  Upon reception of BDPU after shutdown  should transition port into the bridge.
 
 	"""
     @processReturnCode
@@ -2984,12 +2995,12 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createIpTableAcl(self,
-        :param string Name :  Ip Table ACL rule name  Ip Table ACL rule name
-        :param string Action :  ACCEPT or DROP  ACCEPT or DROP
-        :param string IpAddr :  ip address of subnet or host  ip address of subnet or host
+        :param string Name : Ip Table ACL rule name Ip Table ACL rule name
+        :param string Action : ACCEPT or DROP ACCEPT or DROP
+        :param string IpAddr : ip address of subnet or host ip address of subnet or host
         :param string Protocol :  
         :param string Port :  
-        :param string PhysicalPort :  IfIndex where the acl rule is to be applied  IfIndex where the acl rule is to be applied
+        :param string PhysicalPort : IfIndex where the acl rule is to be applied IfIndex where the acl rule is to be applied
 
 	"""
     @processReturnCode
@@ -3129,12 +3140,12 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createOspfAreaEntry(self,
-        :param string AreaId :  A 32-bit integer uniquely identifying an area. Area ID 0.0.0.0 is used for the OSPF backbone.  A 32-bit integer uniquely identifying an area. Area ID 0.0.0.0 is used for the OSPF backbone.
-        :param int32 AuthType :  The authentication type specified for an area.  The authentication type specified for an area.
-        :param int32 ImportAsExtern :  Indicates if an area is a stub area  Indicates if an area is a stub area
-        :param int32 AreaSummary :  The variable ospfAreaSummary controls the import of summary LSAs into stub and NSSA areas. It has no effect on other areas.  If it is noAreaSummary  The variable ospfAreaSummary controls the import of summary LSAs into stub and NSSA areas. It has no effect on other areas.  If it is noAreaSummary
-        :param int32 AreaNssaTranslatorRole :  Indicates an NSSA border router's ability to perform NSSA translation of type-7 LSAs into type-5 LSAs.  Indicates an NSSA border router's ability to perform NSSA translation of type-7 LSAs into type-5 LSAs.
-        :param int32 AreaNssaTranslatorStabilityInterval :  The number of seconds after an elected translator determines its services are no longer required  The number of seconds after an elected translator determines its services are no longer required
+        :param string AreaId : A 32-bit integer uniquely identifying an area. Area ID 0.0.0.0 is used for the OSPF backbone. A 32-bit integer uniquely identifying an area. Area ID 0.0.0.0 is used for the OSPF backbone.
+        :param int32 AuthType : The authentication type specified for an area. The authentication type specified for an area.
+        :param int32 ImportAsExtern : Indicates if an area is a stub area Indicates if an area is a stub area
+        :param int32 AreaSummary : The variable ospfAreaSummary controls the import of summary LSAs into stub and NSSA areas. It has no effect on other areas.  If it is noAreaSummary The variable ospfAreaSummary controls the import of summary LSAs into stub and NSSA areas. It has no effect on other areas.  If it is noAreaSummary
+        :param int32 AreaNssaTranslatorRole : Indicates an NSSA border router's ability to perform NSSA translation of type-7 LSAs into type-5 LSAs. Indicates an NSSA border router's ability to perform NSSA translation of type-7 LSAs into type-5 LSAs.
+        :param int32 AreaNssaTranslatorStabilityInterval : The number of seconds after an elected translator determines its services are no longer required The number of seconds after an elected translator determines its services are no longer required
 
 	"""
     @processReturnCode
@@ -3274,13 +3285,13 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createBGPGlobal(self,
-        :param string RouterId :  Router id for BGP global config  Router id for BGP global config
-        :param uint32 ASNum :  Local AS for BGP global config  Local AS for BGP global config
-        :param SourcePolicyList Redistribution :  Provide redistribution policies for BGP from different sources  Provide redistribution policies for BGP from different sources
-        :param bool UseMultiplePaths :  Enable/disable ECMP for BGP  Enable/disable ECMP for BGP
-        :param uint32 EBGPMaxPaths :  Max ECMP paths from External BGP neighbors  Max ECMP paths from External BGP neighbors
-        :param bool EBGPAllowMultipleAS :  Enable/diable ECMP paths from multiple ASes  Enable/diable ECMP paths from multiple ASes
-        :param uint32 IBGPMaxPaths :  Max ECMP paths from Internal BGP neighbors  Max ECMP paths from Internal BGP neighbors
+        :param string RouterId : Router id for BGP global config Router id for BGP global config
+        :param uint32 ASNum : Local AS for BGP global config Local AS for BGP global config
+        :param SourcePolicyList Redistribution : Provide redistribution policies for BGP from different sources Provide redistribution policies for BGP from different sources
+        :param bool UseMultiplePaths : Enable/disable ECMP for BGP Enable/disable ECMP for BGP
+        :param uint32 EBGPMaxPaths : Max ECMP paths from External BGP neighbors Max ECMP paths from External BGP neighbors
+        :param bool EBGPAllowMultipleAS : Enable/diable ECMP paths from multiple ASes Enable/diable ECMP paths from multiple ASes
+        :param uint32 IBGPMaxPaths : Max ECMP paths from Internal BGP neighbors Max ECMP paths from Internal BGP neighbors
 
 	"""
     @processReturnCode
@@ -3451,8 +3462,8 @@ class FlexSwitch( object):
     """
     .. automethod :: createDhcpRelayIntf(self,
         :param int32 IfIndex : Interface index for which Relay Agent Config needs to be done Interface index for which Relay Agent Config needs to be done
-        :param bool Enable :  Enabling/Disabling relay agent per interface  Enabling/Disabling relay agent per interface
-        :param string ServerIp :  Dhcp Server(s) where relay agent can relay client dhcp requests  Dhcp Server(s) where relay agent can relay client dhcp requests
+        :param bool Enable : Enabling/Disabling relay agent per interface Enabling/Disabling relay agent per interface
+        :param string ServerIp : Dhcp Server(s) where relay agent can relay client dhcp requests Dhcp Server(s) where relay agent can relay client dhcp requests
 
 	"""
     @processReturnCode
@@ -3542,10 +3553,10 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createBGPPolicyDefinition(self,
-        :param string Name :  Name of the BGP policy definition  Name of the BGP policy definition
-        :param int32 Precedence :  Precedence of the policy definition  Precedence of the policy definition
-        :param string MatchType :  Match type for policy definition    Match type for policy definition  
-        :param BGPPolicyDefinitionStmtPrecedence StatementList :  Precedence of statements in the policy  Precedence of statements in the policy
+        :param string Name : Name of the BGP policy definition Name of the BGP policy definition
+        :param int32 Precedence : Precedence of the policy definition Precedence of the policy definition
+        :param string MatchType : Match type for policy definition Match type for policy definition
+        :param BGPPolicyDefinitionStmtPrecedence StatementList : Precedence of statements in the policy Precedence of statements in the policy
 
 	"""
     @processReturnCode
@@ -3669,13 +3680,13 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createIPv4Route(self,
-        :param string DestinationNw :  IP address of the route  IP address of the route
-        :param string NetworkMask :  mask of the route  mask of the route
-        :param string NextHopIp :  next hop ip of the route  next hop ip of the route
+        :param string DestinationNw : IP address of the route IP address of the route
+        :param string NetworkMask : mask of the route mask of the route
+        :param string NextHopIp : next hop ip of the route next hop ip of the route
         :param string OutgoingIntfType : Interface type of the next hop interface Interface type of the next hop interface
         :param string OutgoingInterface : Interface ID of the next hop interface Interface ID of the next hop interface
         :param string Protocol : Protocol type of the route Protocol type of the route
-        :param int32 Weight :  Weight of the next hop  Weight of the next hop
+        :param int32 Weight : Weight of the next hop Weight of the next hop
         :param uint32 Cost : Cost of this route Cost of this route
 
 	"""
@@ -3816,10 +3827,10 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createBGPPolicyStmt(self,
-        :param string Name :  Name of the BGP policy statement  Name of the BGP policy statement
-        :param string MatchConditions :  Match conditions all/any  Match conditions all/any
-        :param string Conditions :  List of conditions  List of conditions
-        :param string Actions :  List of actions  List of actions
+        :param string Name : Name of the BGP policy statement Name of the BGP policy statement
+        :param string MatchConditions : Match conditions all/any Match conditions all/any
+        :param string Conditions : List of conditions List of conditions
+        :param string Actions : List of actions List of actions
 
 	"""
     @processReturnCode
@@ -3919,11 +3930,11 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createPolicyCondition(self,
-        :param string Name :  PolicyConditionName  PolicyConditionName
-        :param string ConditionType :  Specifies the match criterion this condition defines  Specifies the match criterion this condition defines
-        :param string Protocol :  Protocol to match on if the ConditionType is set to MatchProtocol  Protocol to match on if the ConditionType is set to MatchProtocol
-        :param string IpPrefix :  Used in conjunction with MaskLengthRange to specify the IP Prefix to match on when the ConditionType is MatchDstIpPrefix/MatchSrcIpPrefix.  Used in conjunction with MaskLengthRange to specify the IP Prefix to match on when the ConditionType is MatchDstIpPrefix/MatchSrcIpPrefix.
-        :param string MaskLengthRange :  Used in conjuction with IpPrefix to specify specify the IP Prefix to match on when the ConditionType is MatchDstIpPrefix/MatchSrcIpPrefix.  Used in conjuction with IpPrefix to specify specify the IP Prefix to match on when the ConditionType is MatchDstIpPrefix/MatchSrcIpPrefix.
+        :param string Name : PolicyConditionName PolicyConditionName
+        :param string ConditionType : Specifies the match criterion this condition defines Specifies the match criterion this condition defines
+        :param string Protocol : Protocol to match on if the ConditionType is set to MatchProtocol Protocol to match on if the ConditionType is set to MatchProtocol
+        :param string IpPrefix : Used in conjunction with MaskLengthRange to specify the IP Prefix to match on when the ConditionType is MatchDstIpPrefix/MatchSrcIpPrefix. Used in conjunction with MaskLengthRange to specify the IP Prefix to match on when the ConditionType is MatchDstIpPrefix/MatchSrcIpPrefix.
+        :param string MaskLengthRange : Used in conjuction with IpPrefix to specify specify the IP Prefix to match on when the ConditionType is MatchDstIpPrefix/MatchSrcIpPrefix. Used in conjuction with IpPrefix to specify specify the IP Prefix to match on when the ConditionType is MatchDstIpPrefix/MatchSrcIpPrefix.
 
 	"""
     @processReturnCode
@@ -4053,15 +4064,15 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createVrrpIntf(self,
-        :param int32 VRID :  Virtual Router's Unique Identifier  Virtual Router's Unique Identifier
-        :param int32 IfIndex :  Interface index for which VRRP Config needs to be done  Interface index for which VRRP Config needs to be done
-        :param string VirtualIPv4Addr :  Virtual Router Identifier  Virtual Router Identifier
-        :param bool PreemptMode :  Controls whether a (starting or restarting) higher-priority Backup router preempts a lower-priority Master router  Controls whether a (starting or restarting) higher-priority Backup router preempts a lower-priority Master router
-        :param int32 Priority :  Sending VRRP router's priority for
-	   the virtual router  Sending VRRP router's priority for
+        :param int32 VRID : Virtual Router's Unique Identifier Virtual Router's Unique Identifier
+        :param int32 IfIndex : Interface index for which VRRP Config needs to be done Interface index for which VRRP Config needs to be done
+        :param string VirtualIPv4Addr : Virtual Router Identifier Virtual Router Identifier
+        :param bool PreemptMode : Controls whether a (starting or restarting) higher-priority Backup router preempts a lower-priority Master router Controls whether a (starting or restarting) higher-priority Backup router preempts a lower-priority Master router
+        :param int32 Priority : Sending VRRP router's priority for
+	   the virtual router Sending VRRP router's priority for
 	   the virtual router
-        :param int32 AdvertisementInterval :  Time interval between ADVERTISEMENTS  Time interval between ADVERTISEMENTS
-        :param bool AcceptMode :  Controls whether a virtual router in Master state will accept packets addressed to the address owner's IPvX address as its own if it is not the IPvX address owner.  Controls whether a virtual router in Master state will accept packets addressed to the address owner's IPvX address as its own if it is not the IPvX address owner.
+        :param int32 AdvertisementInterval : Time interval between ADVERTISEMENTS Time interval between ADVERTISEMENTS
+        :param bool AcceptMode : Controls whether a virtual router in Master state will accept packets addressed to the address owner's IPvX address as its own if it is not the IPvX address owner. Controls whether a virtual router in Master state will accept packets addressed to the address owner's IPvX address as its own if it is not the IPvX address owner.
 
 	"""
     @processReturnCode
@@ -4213,21 +4224,21 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createVxlanVtepInstances(self,
-        :param uint32 VtepId :  VTEP ID.  VTEP ID.
-        :param uint32 VxlanId :  VxLAN ID.  VxLAN ID.
-        :param string VtepName :  VTEP instance name.  VTEP instance name.
-        :param int32 SrcIfIndex :  Source physical interface ifIndex.  Source physical interface ifIndex.
-        :param uint16 TTL :  TTL of the Vxlan tunnel  TTL of the Vxlan tunnel
-        :param uint16 TOS :  Type of Service  Type of Service
-        :param int32 Learning :  specifies if unknown source link layer  addresses and IP addresses are entered into the VXLAN  device forwarding database.  specifies if unknown source link layer  addresses and IP addresses are entered into the VXLAN  device forwarding database.
-        :param int32 Rsc :  specifies if route short circuit is turned on.  specifies if route short circuit is turned on.
-        :param int32 L2miss :  specifies if netlink LLADDR miss notifications are generated.  specifies if netlink LLADDR miss notifications are generated.
-        :param int32 L3miss :  specifies if netlink IP ADDR miss notifications are generated.  specifies if netlink IP ADDR miss notifications are generated.
-        :param string DstIp :  Destination IP address for the static VxLAN tunnel  Destination IP address for the static VxLAN tunnel
-        :param string DstMac :  Destination MAC address for the static VxLAN tunnel  Destination MAC address for the static VxLAN tunnel
-        :param uint16 VlanId :  Vlan Id to encapsulate with the vtep tunnel ethernet header  Vlan Id to encapsulate with the vtep tunnel ethernet header
-        :param uint16 UDP :  vxlan udp port.  Deafult is the iana default udp port  vxlan udp port.  Deafult is the iana default udp port
-        :param int32 InnerVlanHandlingMode :  The inner vlan tag handling mode.  The inner vlan tag handling mode.
+        :param uint32 VtepId : VTEP ID. VTEP ID.
+        :param uint32 VxlanId : VxLAN ID. VxLAN ID.
+        :param string VtepName : VTEP instance name. VTEP instance name.
+        :param int32 SrcIfIndex : Source physical interface ifIndex. Source physical interface ifIndex.
+        :param uint16 TTL : TTL of the Vxlan tunnel TTL of the Vxlan tunnel
+        :param uint16 TOS : Type of Service Type of Service
+        :param int32 Learning : specifies if unknown source link layer  addresses and IP addresses are entered into the VXLAN  device forwarding database. specifies if unknown source link layer  addresses and IP addresses are entered into the VXLAN  device forwarding database.
+        :param int32 Rsc : specifies if route short circuit is turned on. specifies if route short circuit is turned on.
+        :param int32 L2miss : specifies if netlink LLADDR miss notifications are generated. specifies if netlink LLADDR miss notifications are generated.
+        :param int32 L3miss : specifies if netlink IP ADDR miss notifications are generated. specifies if netlink IP ADDR miss notifications are generated.
+        :param string DstIp : Destination IP address for the static VxLAN tunnel Destination IP address for the static VxLAN tunnel
+        :param string DstMac : Destination MAC address for the static VxLAN tunnel Destination MAC address for the static VxLAN tunnel
+        :param uint16 VlanId : Vlan Id to encapsulate with the vtep tunnel ethernet header Vlan Id to encapsulate with the vtep tunnel ethernet header
+        :param uint16 UDP : vxlan udp port.  Deafult is the iana default udp port vxlan udp port.  Deafult is the iana default udp port
+        :param int32 InnerVlanHandlingMode : The inner vlan tag handling mode. The inner vlan tag handling mode.
 
 	"""
     @processReturnCode
@@ -4437,11 +4448,11 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createBfdSession(self,
-        :param string IpAddr :  BFD neighbor IP address  BFD neighbor IP address
-        :param string Interface :  Name of the interface this session has to be established on  Name of the interface this session has to be established on
-        :param string Owner :  Module requesting BFD session configuration  Module requesting BFD session configuration
-        :param bool PerLink :  Run BFD sessions on individual link of a LAG if the neighbor is reachable through LAG  Run BFD sessions on individual link of a LAG if the neighbor is reachable through LAG
-        :param string ParamName :  Name of the session parameters object to be applied on this session  Name of the session parameters object to be applied on this session
+        :param string IpAddr : BFD neighbor IP address BFD neighbor IP address
+        :param string Interface : Name of the interface this session has to be established on Name of the interface this session has to be established on
+        :param string Owner : Module requesting BFD session configuration Module requesting BFD session configuration
+        :param bool PerLink : Run BFD sessions on individual link of a LAG if the neighbor is reachable through LAG Run BFD sessions on individual link of a LAG if the neighbor is reachable through LAG
+        :param string ParamName : Name of the session parameters object to be applied on this session Name of the session parameters object to be applied on this session
 
 	"""
     @processReturnCode
@@ -4635,10 +4646,10 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createVxlanInstance(self,
-        :param uint32 VxlanId :  VxLAN ID or VNI  VxLAN ID or VNI
-        :param string McDestIp :  VxLAN multicast IP address used when destination is uknown  VxLAN multicast IP address used when destination is uknown
-        :param uint16 VlanId :  Vlan associated with the Access targets.  Used in conjunction with a given VTEP inner-vlan-handling-mode  Vlan associated with the Access targets.  Used in conjunction with a given VTEP inner-vlan-handling-mode
-        :param uint32 Mtu :  Set the MTU to be applied to all VTEP within this VxLAN  Set the MTU to be applied to all VTEP within this VxLAN
+        :param uint32 VxlanId : VxLAN ID or VNI VxLAN ID or VNI
+        :param string McDestIp : VxLAN multicast IP address used when destination is uknown VxLAN multicast IP address used when destination is uknown
+        :param uint16 VlanId : Vlan associated with the Access targets.  Used in conjunction with a given VTEP inner-vlan-handling-mode Vlan associated with the Access targets.  Used in conjunction with a given VTEP inner-vlan-handling-mode
+        :param uint32 Mtu : Set the MTU to be applied to all VTEP within this VxLAN Set the MTU to be applied to all VTEP within this VxLAN
 
 	"""
     @processReturnCode
@@ -4738,16 +4749,16 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createLaPortChannel(self,
-        :param int32 LagId :  Id of the lag group  Id of the lag group
-        :param int32 LagType :  Sets the type of LAG  Sets the type of LAG
-        :param uint16 MinLinks :  Specifies the mininum number of member interfaces that must be active for the aggregate interface to be available  Specifies the mininum number of member interfaces that must be active for the aggregate interface to be available
-        :param string SystemIdMac :  The MAC address portion of the node's System ID. This is combined with the system priority to construct the 8-octet system-id  The MAC address portion of the node's System ID. This is combined with the system priority to construct the 8-octet system-id
-        :param uint16 SystemPriority :  Sytem priority used by the node on this LAG interface. Lower value is higher priority for determining which node is the controlling system.  Sytem priority used by the node on this LAG interface. Lower value is higher priority for determining which node is the controlling system.
-        :param string AdminState :  Convenient way to disable/enable a lag group.  The behaviour should be such that all traffic should stop.  LACP frames should continue to be processed  Convenient way to disable/enable a lag group.  The behaviour should be such that all traffic should stop.  LACP frames should continue to be processed
-        :param int32 Members :  List of current member interfaces for the aggregate  List of current member interfaces for the aggregate
-        :param int32 Interval :  Set the period between LACP messages -- uses the lacp-period-type enumeration.  Set the period between LACP messages -- uses the lacp-period-type enumeration.
-        :param int32 LagHash :  The tx hashing algorithm used by the lag group  The tx hashing algorithm used by the lag group
-        :param int32 LacpMode :  ACTIVE is to initiate the transmission of LACP packets. PASSIVE is to wait for peer to initiate the transmission of LACP packets.  ACTIVE is to initiate the transmission of LACP packets. PASSIVE is to wait for peer to initiate the transmission of LACP packets.
+        :param int32 LagId : Id of the lag group Id of the lag group
+        :param int32 LagType : Sets the type of LAG Sets the type of LAG
+        :param uint16 MinLinks : Specifies the mininum number of member interfaces that must be active for the aggregate interface to be available Specifies the mininum number of member interfaces that must be active for the aggregate interface to be available
+        :param string SystemIdMac : The MAC address portion of the node's System ID. This is combined with the system priority to construct the 8-octet system-id The MAC address portion of the node's System ID. This is combined with the system priority to construct the 8-octet system-id
+        :param uint16 SystemPriority : Sytem priority used by the node on this LAG interface. Lower value is higher priority for determining which node is the controlling system. Sytem priority used by the node on this LAG interface. Lower value is higher priority for determining which node is the controlling system.
+        :param string AdminState : Convenient way to disable/enable a lag group.  The behaviour should be such that all traffic should stop.  LACP frames should continue to be processed Convenient way to disable/enable a lag group.  The behaviour should be such that all traffic should stop.  LACP frames should continue to be processed
+        :param int32 Members : List of current member interfaces for the aggregate List of current member interfaces for the aggregate
+        :param int32 Interval : Set the period between LACP messages -- uses the lacp-period-type enumeration. Set the period between LACP messages -- uses the lacp-period-type enumeration.
+        :param int32 LagHash : The tx hashing algorithm used by the lag group The tx hashing algorithm used by the lag group
+        :param int32 LacpMode : ACTIVE is to initiate the transmission of LACP packets. PASSIVE is to wait for peer to initiate the transmission of LACP packets. ACTIVE is to initiate the transmission of LACP packets. PASSIVE is to wait for peer to initiate the transmission of LACP packets.
 
 	"""
     @processReturnCode
@@ -4907,8 +4918,8 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createIPv4Intf(self,
-        :param string IntfRef :  Interface name or ifindex of port/lag or vlan on which this IPv4 object is configured  Interface name or ifindex of port/lag or vlan on which this IPv4 object is configured
-        :param string IpAddr :  Interface IP/Net mask in CIDR format to provision on switch interface  Interface IP/Net mask in CIDR format to provision on switch interface
+        :param string IntfRef : Interface name or ifindex of port/lag or vlan on which this IPv4 object is configured Interface name or ifindex of port/lag or vlan on which this IPv4 object is configured
+        :param string IpAddr : Interface IP/Net mask in CIDR format to provision on switch interface Interface IP/Net mask in CIDR format to provision on switch interface
 
 	"""
     @processReturnCode
@@ -5102,21 +5113,21 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createOspfIfEntry(self,
-        :param string IfIpAddress :  The IP address of this OSPF interface.  The IP address of this OSPF interface.
-        :param int32 AddressLessIf :  For the purpose of easing the instancing of addressed and addressless interfaces; this variable takes the value 0 on interfaces with IP addresses and the corresponding value of ifIndex for interfaces having no IP address.  For the purpose of easing the instancing of addressed and addressless interfaces; this variable takes the value 0 on interfaces with IP addresses and the corresponding value of ifIndex for interfaces having no IP address.
-        :param string IfAreaId :  A 32-bit integer uniquely identifying the area to which the interface connects.  Area ID 0.0.0.0 is used for the OSPF backbone.  A 32-bit integer uniquely identifying the area to which the interface connects.  Area ID 0.0.0.0 is used for the OSPF backbone.
-        :param int32 IfType :  The OSPF interface type. By way of a default  The OSPF interface type. By way of a default
-        :param int32 IfAdminStat :  The OSPF interface's administrative status. The value formed on the interface  The OSPF interface's administrative status. The value formed on the interface
-        :param int32 IfRtrPriority :  The priority of this interface.  Used in multi-access networks  The priority of this interface.  Used in multi-access networks
-        :param int32 IfTransitDelay :  The estimated number of seconds it takes to transmit a link state update packet over this interface.  Note that the minimal value SHOULD be 1 second.  The estimated number of seconds it takes to transmit a link state update packet over this interface.  Note that the minimal value SHOULD be 1 second.
-        :param int32 IfRetransInterval :  The number of seconds between link state advertisement retransmissions  The number of seconds between link state advertisement retransmissions
-        :param int32 IfHelloInterval :  The length of time  The length of time
-        :param int32 IfRtrDeadInterval :  The number of seconds that a router's Hello packets have not been seen before its neighbors declare the router down. This should be some multiple of the Hello interval.  This value must be the same for all routers attached to a common network.  The number of seconds that a router's Hello packets have not been seen before its neighbors declare the router down. This should be some multiple of the Hello interval.  This value must be the same for all routers attached to a common network.
-        :param int32 IfPollInterval :  The larger time interval  The larger time interval
-        :param string IfAuthKey :  The cleartext password used as an OSPF authentication key when simplePassword security is enabled.  This object does not access any OSPF cryptogaphic (e.g.  The cleartext password used as an OSPF authentication key when simplePassword security is enabled.  This object does not access any OSPF cryptogaphic (e.g.
-        :param int32 IfMulticastForwarding :  The way multicasts should be forwarded on this interface  The way multicasts should be forwarded on this interface
-        :param bool IfDemand :  Indicates whether Demand OSPF procedures (hello suppression to FULL neighbors and setting the DoNotAge flag on propagated LSAs) should be performed on this interface.  Indicates whether Demand OSPF procedures (hello suppression to FULL neighbors and setting the DoNotAge flag on propagated LSAs) should be performed on this interface.
-        :param int32 IfAuthType :  The authentication type specified for an interface.  Note that this object can be used to engage in significant attacks against an OSPF router.  The authentication type specified for an interface.  Note that this object can be used to engage in significant attacks against an OSPF router.
+        :param string IfIpAddress : The IP address of this OSPF interface. The IP address of this OSPF interface.
+        :param int32 AddressLessIf : For the purpose of easing the instancing of addressed and addressless interfaces; this variable takes the value 0 on interfaces with IP addresses and the corresponding value of ifIndex for interfaces having no IP address. For the purpose of easing the instancing of addressed and addressless interfaces; this variable takes the value 0 on interfaces with IP addresses and the corresponding value of ifIndex for interfaces having no IP address.
+        :param string IfAreaId : A 32-bit integer uniquely identifying the area to which the interface connects.  Area ID 0.0.0.0 is used for the OSPF backbone. A 32-bit integer uniquely identifying the area to which the interface connects.  Area ID 0.0.0.0 is used for the OSPF backbone.
+        :param int32 IfType : The OSPF interface type. By way of a default The OSPF interface type. By way of a default
+        :param int32 IfAdminStat : The OSPF interface's administrative status. The value formed on the interface The OSPF interface's administrative status. The value formed on the interface
+        :param int32 IfRtrPriority : The priority of this interface.  Used in multi-access networks The priority of this interface.  Used in multi-access networks
+        :param int32 IfTransitDelay : The estimated number of seconds it takes to transmit a link state update packet over this interface.  Note that the minimal value SHOULD be 1 second. The estimated number of seconds it takes to transmit a link state update packet over this interface.  Note that the minimal value SHOULD be 1 second.
+        :param int32 IfRetransInterval : The number of seconds between link state advertisement retransmissions The number of seconds between link state advertisement retransmissions
+        :param int32 IfHelloInterval : The length of time The length of time
+        :param int32 IfRtrDeadInterval : The number of seconds that a router's Hello packets have not been seen before its neighbors declare the router down. This should be some multiple of the Hello interval.  This value must be the same for all routers attached to a common network. The number of seconds that a router's Hello packets have not been seen before its neighbors declare the router down. This should be some multiple of the Hello interval.  This value must be the same for all routers attached to a common network.
+        :param int32 IfPollInterval : The larger time interval The larger time interval
+        :param string IfAuthKey : The cleartext password used as an OSPF authentication key when simplePassword security is enabled.  This object does not access any OSPF cryptogaphic (e.g. The cleartext password used as an OSPF authentication key when simplePassword security is enabled.  This object does not access any OSPF cryptogaphic (e.g.
+        :param int32 IfMulticastForwarding : The way multicasts should be forwarded on this interface The way multicasts should be forwarded on this interface
+        :param bool IfDemand : Indicates whether Demand OSPF procedures (hello suppression to FULL neighbors and setting the DoNotAge flag on propagated LSAs) should be performed on this interface. Indicates whether Demand OSPF procedures (hello suppression to FULL neighbors and setting the DoNotAge flag on propagated LSAs) should be performed on this interface.
+        :param int32 IfAuthType : The authentication type specified for an interface.  Note that this object can be used to engage in significant attacks against an OSPF router. The authentication type specified for an interface.  Note that this object can be used to engage in significant attacks against an OSPF router.
 
 	"""
     @processReturnCode
@@ -5408,10 +5419,10 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createOspfStubAreaEntry(self,
-        :param int32 StubTOS :  The Type of Service associated with the metric.  On creation  The Type of Service associated with the metric.  On creation
-        :param string StubAreaId :  The 32-bit identifier for the stub area.  On creation  The 32-bit identifier for the stub area.  On creation
-        :param int32 StubMetric :  The metric value applied at the indicated Type of Service.  By default  The metric value applied at the indicated Type of Service.  By default
-        :param int32 StubMetricType :  This variable displays the type of metric advertised as a default route.  This variable displays the type of metric advertised as a default route.
+        :param int32 StubTOS : The Type of Service associated with the metric.  On creation The Type of Service associated with the metric.  On creation
+        :param string StubAreaId : The 32-bit identifier for the stub area.  On creation The 32-bit identifier for the stub area.  On creation
+        :param int32 StubMetric : The metric value applied at the indicated Type of Service.  By default The metric value applied at the indicated Type of Service.  By default
+        :param int32 StubMetricType : This variable displays the type of metric advertised as a default route. This variable displays the type of metric advertised as a default route.
 
 	"""
     @processReturnCode
@@ -5571,16 +5582,16 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createBfdSessionParam(self,
-        :param string Name :  Session parameters  Session parameters
-        :param uint32 RequiredMinRxInterval :  Required minimum rx interval in ms  Required minimum rx interval in ms
-        :param string AuthData :  Authentication password  Authentication password
-        :param bool DemandEnabled :  Enable or disable demand mode  Enable or disable demand mode
-        :param uint32 AuthKeyId :  Authentication key id  Authentication key id
-        :param string AuthType :  Authentication type  Authentication type
-        :param uint32 DesiredMinTxInterval :  Desired minimum tx interval in ms  Desired minimum tx interval in ms
-        :param bool AuthenticationEnabled :  Enable or disable authentication  Enable or disable authentication
-        :param uint32 RequiredMinEchoRxInterval :  Required minimum echo rx interval in ms  Required minimum echo rx interval in ms
-        :param uint32 LocalMultiplier :  Detection multiplier  Detection multiplier
+        :param string Name : Session parameters Session parameters
+        :param uint32 RequiredMinRxInterval : Required minimum rx interval in ms Required minimum rx interval in ms
+        :param string AuthData : Authentication password Authentication password
+        :param bool DemandEnabled : Enable or disable demand mode Enable or disable demand mode
+        :param uint32 AuthKeyId : Authentication key id Authentication key id
+        :param string AuthType : Authentication type Authentication type
+        :param uint32 DesiredMinTxInterval : Desired minimum tx interval in ms Desired minimum tx interval in ms
+        :param bool AuthenticationEnabled : Enable or disable authentication Enable or disable authentication
+        :param uint32 RequiredMinEchoRxInterval : Required minimum echo rx interval in ms Required minimum echo rx interval in ms
+        :param uint32 LocalMultiplier : Detection multiplier Detection multiplier
 
 	"""
     @processReturnCode
@@ -5740,16 +5751,16 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createPort(self,
-        :param int32 PortNum :  Front panel port number  Front panel port number
-        :param string PhyIntfType :  Type of internal phy interface  Type of internal phy interface
-        :param string AdminState :  Administrative state of this port  Administrative state of this port
-        :param string MacAddr :  Mac address associated with this port  Mac address associated with this port
-        :param int32 Speed :  Port speed in Mbps  Port speed in Mbps
-        :param string Duplex :  Duplex setting for this port  Duplex setting for this port
-        :param string Autoneg :  Autonegotiation setting for this port  Autonegotiation setting for this port
-        :param string MediaType :  Type of media inserted into this port  Type of media inserted into this port
-        :param int32 Mtu :  Maximum transmission unit size for this port  Maximum transmission unit size for this port
-        :param string Description :  User provided string description  User provided string description
+        :param int32 PortNum : Front panel port number Front panel port number
+        :param string PhyIntfType : Type of internal phy interface Type of internal phy interface
+        :param string AdminState : Administrative state of this port Administrative state of this port
+        :param string MacAddr : Mac address associated with this port Mac address associated with this port
+        :param int32 Speed : Port speed in Mbps Port speed in Mbps
+        :param string Duplex : Duplex setting for this port Duplex setting for this port
+        :param string Autoneg : Autonegotiation setting for this port Autonegotiation setting for this port
+        :param string MediaType : Type of media inserted into this port Type of media inserted into this port
+        :param int32 Mtu : Maximum transmission unit size for this port Maximum transmission unit size for this port
+        :param string Description : User provided string description User provided string description
 
 	"""
     @processReturnCode
@@ -5909,48 +5920,50 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createBGPNeighbor(self,
-        :param string NeighborAddress :  Address of the BGP neighbor  Address of the BGP neighbor
-        :param int32 IfIndex :  Interface of the BGP neighbor  Interface of the BGP neighbor
-        :param uint32 PeerAS :  Peer AS of the BGP neighbor  Peer AS of the BGP neighbor
-        :param bool BfdEnable :  Enable/Disable BFD for the BGP neighbor  Enable/Disable BFD for the BGP neighbor
-        :param string PeerGroup :  Peer group of the BGP neighbor  Peer group of the BGP neighbor
-        :param uint8 MultiHopTTL :  TTL for multi hop BGP neighbor  TTL for multi hop BGP neighbor
-        :param uint32 LocalAS :  Local AS of the BGP neighbor  Local AS of the BGP neighbor
-        :param uint32 KeepaliveTime :  Keep alive time for the BGP neighbor  Keep alive time for the BGP neighbor
-        :param bool AddPathsRx :  Receive additional paths from BGP neighbor  Receive additional paths from BGP neighbor
-        :param bool RouteReflectorClient :  Set/Clear BGP neighbor as a route reflector client  Set/Clear BGP neighbor as a route reflector client
-        :param uint8 MaxPrefixesRestartTimer :  Time in seconds to wait before we start BGP peer session when we receive max prefixes  Time in seconds to wait before we start BGP peer session when we receive max prefixes
-        :param string Description :  Description of the BGP neighbor  Description of the BGP neighbor
-        :param bool MultiHopEnable :  Enable/Disable multi hop for BGP neighbor  Enable/Disable multi hop for BGP neighbor
-        :param string AuthPassword :  Password to connect to the BGP neighbor  Password to connect to the BGP neighbor
-        :param uint32 RouteReflectorClusterId :  Cluster Id of the internal BGP neighbor route reflector client  Cluster Id of the internal BGP neighbor route reflector client
-        :param bool MaxPrefixesDisconnect :  Disconnect the BGP peer session when we receive the max prefixes from the neighbor  Disconnect the BGP peer session when we receive the max prefixes from the neighbor
-        :param uint8 AddPathsMaxTx :  Max number of additional paths that can be transmitted to BGP neighbor  Max number of additional paths that can be transmitted to BGP neighbor
-        :param uint32 MaxPrefixes :  Maximum number of prefixes that can be received from the BGP neighbor  Maximum number of prefixes that can be received from the BGP neighbor
-        :param uint8 MaxPrefixesThresholdPct :  The percentage of maximum prefixes before we start logging  The percentage of maximum prefixes before we start logging
-        :param string BfdSessionParam :  Bfd session param name to be applied  Bfd session param name to be applied
-        :param uint32 HoldTime :  Hold time for the BGP neighbor  Hold time for the BGP neighbor
-        :param uint32 ConnectRetryTime :  Connect retry time to connect to BGP neighbor after disconnect  Connect retry time to connect to BGP neighbor after disconnect
+        :param string NeighborAddress : Address of the BGP neighbor Address of the BGP neighbor
+        :param int32 IfIndex : Interface of the BGP neighbor Interface of the BGP neighbor
+        :param string UpdateSource : Source IP to connect to the BGP neighbor Source IP to connect to the BGP neighbor
+        :param string AuthPassword : Password to connect to the BGP neighbor Password to connect to the BGP neighbor
+        :param string Description : Description of the BGP neighbor Description of the BGP neighbor
+        :param string PeerGroup : Peer group of the BGP neighbor Peer group of the BGP neighbor
+        :param bool BfdEnable : Enable/Disable BFD for the BGP neighbor Enable/Disable BFD for the BGP neighbor
+        :param uint8 MultiHopTTL : TTL for multi hop BGP neighbor TTL for multi hop BGP neighbor
+        :param uint32 LocalAS : Local AS of the BGP neighbor Local AS of the BGP neighbor
+        :param uint32 KeepaliveTime : Keep alive time for the BGP neighbor Keep alive time for the BGP neighbor
+        :param bool AddPathsRx : Receive additional paths from BGP neighbor Receive additional paths from BGP neighbor
+        :param bool RouteReflectorClient : Set/Clear BGP neighbor as a route reflector client Set/Clear BGP neighbor as a route reflector client
+        :param uint8 MaxPrefixesRestartTimer : Time in seconds to wait before we start BGP peer session when we receive max prefixes Time in seconds to wait before we start BGP peer session when we receive max prefixes
+        :param bool MultiHopEnable : Enable/Disable multi hop for BGP neighbor Enable/Disable multi hop for BGP neighbor
+        :param uint32 RouteReflectorClusterId : Cluster Id of the internal BGP neighbor route reflector client Cluster Id of the internal BGP neighbor route reflector client
+        :param bool MaxPrefixesDisconnect : Disconnect the BGP peer session when we receive the max prefixes from the neighbor Disconnect the BGP peer session when we receive the max prefixes from the neighbor
+        :param uint32 PeerAS : Peer AS of the BGP neighbor Peer AS of the BGP neighbor
+        :param uint8 AddPathsMaxTx : Max number of additional paths that can be transmitted to BGP neighbor Max number of additional paths that can be transmitted to BGP neighbor
+        :param uint32 MaxPrefixes : Maximum number of prefixes that can be received from the BGP neighbor Maximum number of prefixes that can be received from the BGP neighbor
+        :param uint8 MaxPrefixesThresholdPct : The percentage of maximum prefixes before we start logging The percentage of maximum prefixes before we start logging
+        :param string BfdSessionParam : Bfd session param name to be applied Bfd session param name to be applied
+        :param uint32 HoldTime : Hold time for the BGP neighbor Hold time for the BGP neighbor
+        :param uint32 ConnectRetryTime : Connect retry time to connect to BGP neighbor after disconnect Connect retry time to connect to BGP neighbor after disconnect
 
 	"""
     @processReturnCode
     def createBGPNeighbor(self,
                           NeighborAddress,
                           IfIndex,
-                          PeerAS,
-                          BfdEnable=False,
+                          UpdateSource='',
+                          AuthPassword='',
+                          Description='',
                           PeerGroup='',
+                          BfdEnable=False,
                           MultiHopTTL=0,
                           LocalAS=0,
                           KeepaliveTime=60,
                           AddPathsRx=False,
                           RouteReflectorClient=False,
                           MaxPrefixesRestartTimer=0,
-                          Description='',
                           MultiHopEnable=False,
-                          AuthPassword='',
                           RouteReflectorClusterId=0,
                           MaxPrefixesDisconnect=False,
+                          PeerAS=0,
                           AddPathsMaxTx=0,
                           MaxPrefixes=0,
                           MaxPrefixesThresholdPct=80,
@@ -5960,20 +5973,21 @@ class FlexSwitch( object):
         obj =  { 
                 'NeighborAddress' : NeighborAddress,
                 'IfIndex' : int(IfIndex),
-                'PeerAS' : int(PeerAS),
-                'BfdEnable' : True if BfdEnable else False,
+                'UpdateSource' : UpdateSource,
+                'AuthPassword' : AuthPassword,
+                'Description' : Description,
                 'PeerGroup' : PeerGroup,
+                'BfdEnable' : True if BfdEnable else False,
                 'MultiHopTTL' : int(MultiHopTTL),
                 'LocalAS' : int(LocalAS),
                 'KeepaliveTime' : int(KeepaliveTime),
                 'AddPathsRx' : True if AddPathsRx else False,
                 'RouteReflectorClient' : True if RouteReflectorClient else False,
                 'MaxPrefixesRestartTimer' : int(MaxPrefixesRestartTimer),
-                'Description' : Description,
                 'MultiHopEnable' : True if MultiHopEnable else False,
-                'AuthPassword' : AuthPassword,
                 'RouteReflectorClusterId' : int(RouteReflectorClusterId),
                 'MaxPrefixesDisconnect' : True if MaxPrefixesDisconnect else False,
+                'PeerAS' : int(PeerAS),
                 'AddPathsMaxTx' : int(AddPathsMaxTx),
                 'MaxPrefixes' : int(MaxPrefixes),
                 'MaxPrefixesThresholdPct' : int(MaxPrefixesThresholdPct),
@@ -5989,20 +6003,21 @@ class FlexSwitch( object):
     def updateBGPNeighbor(self,
                           NeighborAddress,
                           IfIndex,
-                          PeerAS = None,
-                          BfdEnable = None,
+                          UpdateSource = None,
+                          AuthPassword = None,
+                          Description = None,
                           PeerGroup = None,
+                          BfdEnable = None,
                           MultiHopTTL = None,
                           LocalAS = None,
                           KeepaliveTime = None,
                           AddPathsRx = None,
                           RouteReflectorClient = None,
                           MaxPrefixesRestartTimer = None,
-                          Description = None,
                           MultiHopEnable = None,
-                          AuthPassword = None,
                           RouteReflectorClusterId = None,
                           MaxPrefixesDisconnect = None,
+                          PeerAS = None,
                           AddPathsMaxTx = None,
                           MaxPrefixes = None,
                           MaxPrefixesThresholdPct = None,
@@ -6016,14 +6031,20 @@ class FlexSwitch( object):
         if IfIndex != None :
             obj['IfIndex'] = int(IfIndex)
 
-        if PeerAS != None :
-            obj['PeerAS'] = int(PeerAS)
+        if UpdateSource != None :
+            obj['UpdateSource'] = UpdateSource
 
-        if BfdEnable != None :
-            obj['BfdEnable'] = True if BfdEnable else False
+        if AuthPassword != None :
+            obj['AuthPassword'] = AuthPassword
+
+        if Description != None :
+            obj['Description'] = Description
 
         if PeerGroup != None :
             obj['PeerGroup'] = PeerGroup
+
+        if BfdEnable != None :
+            obj['BfdEnable'] = True if BfdEnable else False
 
         if MultiHopTTL != None :
             obj['MultiHopTTL'] = int(MultiHopTTL)
@@ -6043,20 +6064,17 @@ class FlexSwitch( object):
         if MaxPrefixesRestartTimer != None :
             obj['MaxPrefixesRestartTimer'] = int(MaxPrefixesRestartTimer)
 
-        if Description != None :
-            obj['Description'] = Description
-
         if MultiHopEnable != None :
             obj['MultiHopEnable'] = True if MultiHopEnable else False
-
-        if AuthPassword != None :
-            obj['AuthPassword'] = AuthPassword
 
         if RouteReflectorClusterId != None :
             obj['RouteReflectorClusterId'] = int(RouteReflectorClusterId)
 
         if MaxPrefixesDisconnect != None :
             obj['MaxPrefixesDisconnect'] = True if MaxPrefixesDisconnect else False
+
+        if PeerAS != None :
+            obj['PeerAS'] = int(PeerAS)
 
         if AddPathsMaxTx != None :
             obj['AddPathsMaxTx'] = int(AddPathsMaxTx)
@@ -6083,20 +6101,21 @@ class FlexSwitch( object):
     @processReturnCode
     def updateBGPNeighborById(self,
                                objectId,
-                               PeerAS = None,
-                               BfdEnable = None,
+                               UpdateSource = None,
+                               AuthPassword = None,
+                               Description = None,
                                PeerGroup = None,
+                               BfdEnable = None,
                                MultiHopTTL = None,
                                LocalAS = None,
                                KeepaliveTime = None,
                                AddPathsRx = None,
                                RouteReflectorClient = None,
                                MaxPrefixesRestartTimer = None,
-                               Description = None,
                                MultiHopEnable = None,
-                               AuthPassword = None,
                                RouteReflectorClusterId = None,
                                MaxPrefixesDisconnect = None,
+                               PeerAS = None,
                                AddPathsMaxTx = None,
                                MaxPrefixes = None,
                                MaxPrefixesThresholdPct = None,
@@ -6104,14 +6123,20 @@ class FlexSwitch( object):
                                HoldTime = None,
                                ConnectRetryTime = None):
         obj =  {'objectId': objectId }
-        if PeerAS !=  None:
-            obj['PeerAS'] = PeerAS
+        if UpdateSource !=  None:
+            obj['UpdateSource'] = UpdateSource
 
-        if BfdEnable !=  None:
-            obj['BfdEnable'] = BfdEnable
+        if AuthPassword !=  None:
+            obj['AuthPassword'] = AuthPassword
+
+        if Description !=  None:
+            obj['Description'] = Description
 
         if PeerGroup !=  None:
             obj['PeerGroup'] = PeerGroup
+
+        if BfdEnable !=  None:
+            obj['BfdEnable'] = BfdEnable
 
         if MultiHopTTL !=  None:
             obj['MultiHopTTL'] = MultiHopTTL
@@ -6131,20 +6156,17 @@ class FlexSwitch( object):
         if MaxPrefixesRestartTimer !=  None:
             obj['MaxPrefixesRestartTimer'] = MaxPrefixesRestartTimer
 
-        if Description !=  None:
-            obj['Description'] = Description
-
         if MultiHopEnable !=  None:
             obj['MultiHopEnable'] = MultiHopEnable
-
-        if AuthPassword !=  None:
-            obj['AuthPassword'] = AuthPassword
 
         if RouteReflectorClusterId !=  None:
             obj['RouteReflectorClusterId'] = RouteReflectorClusterId
 
         if MaxPrefixesDisconnect !=  None:
             obj['MaxPrefixesDisconnect'] = MaxPrefixesDisconnect
+
+        if PeerAS !=  None:
+            obj['PeerAS'] = PeerAS
 
         if AddPathsMaxTx !=  None:
             obj['AddPathsMaxTx'] = AddPathsMaxTx
