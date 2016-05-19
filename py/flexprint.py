@@ -7,13 +7,17 @@ class FlexPrint( object):
     def  __init__ (self, ip, port):
         self.swtch = FlexSwitch(ip, port)
 
-    def printPorts(self, portNum=None):
+    def printPortState(self, PortNum):
+
+        self.printPortStates(PortNum=int(PortNum))
+
+    def printPortStates(self, PortNum=None):
 
         ports = self.swtch.getAllPortStates()
         for port in ports:
 
             p = port['Object']
-            if portNum == None or portNum == p['PortNum']:
+            if PortNum == None or PortNum == p['PortNum']:
                 print "PortNum : ", p['PortNum'], "IfIndex: ", p['IfIndex'], "Name: ", p['Name']
                 print "OperState: ", p['OperState']
                 print "Counters:"
@@ -29,8 +33,8 @@ class FlexPrint( object):
 
                 print 'Err-disable-Reason: ', p['ErrDisableReason']
 
-    def printRoutes(self):
-        routes = self.swtch.getObjects('IPv4RouteStates')
+    def printIPv4RouteStates(self):
+        routes = self.swtch.getAllIPv4RouteStates()
         if len(routes):
             print '\n\n---- Routes ----'
             print 'Network            Mask         NextHop         Cost       Protocol   IfType IfIndex'
@@ -42,6 +46,34 @@ class FlexPrint( object):
                                                             rt['Protocol'], 
                                                             rt['OutgoingIntfType'], 
                                                             rt['OutgoingInterface'])
+
+    def printIPv4IntfStates(self, Intf=None):
+        ipv4intfs = self.swtch.getAllIPv4IntfStates()
+        if len(ipv4intfs):
+            print '------Ip Info------\n'
+        for ipv4intf in ipv4intfs:
+            print 'address: %s' %(ipv4intf[''])
+
+
+    def printVlanState(self, VlanId):
+
+        found = self.printVlanStates(int(VlanId))
+        if not found:
+            print "VlanId %d NOT FOUND" % (VlanId,)
+
+    def printVlanStates(self, VlanId=None):
+        vlans = self.swtch.getAllVlanStates()
+        if len(vlans):
+            print '\n\n\t\t---- Vlans ----'
+            print '%13s%12s%15s%10s' %('Vlan','Name','OperState','IfIndex')
+        else:
+            return 0
+        for v in vlans:
+            vlan = v['Object']
+            if VlanId == None or vlan['VlanId'] == int(VlanId):
+                print '%13s%12s%15s%10s\n' %(vlan['VlanId'], vlan['VlanName'], vlan['OperState'], vlan['IfIndex'])
+
+        return 1
 
     def printPolicyStates (self) :
         policies = self.swtch.getObjects('PolicyDefinitionStates')
