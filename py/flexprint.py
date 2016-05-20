@@ -47,13 +47,16 @@ class FlexPrint( object):
                                                             rt['OutgoingIntfType'], 
                                                             rt['OutgoingInterface'])
 
-    def printIPv4IntfStates(self, Intf=None):
+    def printIPv4IntfStates(self, IntfRef=None):
         ipv4intfs = self.swtch.getAllIPv4IntfStates()
         if len(ipv4intfs):
             print '------Ip Info------\n'
         for ipv4intf in ipv4intfs:
-            print 'address: %s' %(ipv4intf[''])
+            if ipv4intf == IntfRef or IntfRef is None:
+                print 'address: %s' %(ipv4intf['IntfRef'])
 
+    def printIPv4IntfState(self, IntfRef):
+        self.printIPv4IntfStates(IntfRef)
 
     def printVlanState(self, VlanId):
 
