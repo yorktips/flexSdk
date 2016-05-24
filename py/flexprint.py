@@ -2,6 +2,41 @@ import requests
 import json
 import urllib2
 from flexswitchV2 import FlexSwitch
+from tablePrint import *
+
+def getLagGroups(ip, port):
+        currentMarker = 0
+        nextMarker = 0
+        count = 5
+        more = True
+
+        while more == True:
+            qry = 'http://%s:%s/public/v1/AggregationLacpStates?CurrentMarker=%d&NextMarker=%d&Count=%d' %(ip, port, currentMarker, nextMarker, count)
+            response = requests.get(qry)
+            data = response.json()
+            if currentMarker == 0: #Print the header only for first iteration
+                print 'Name      Ifindex      LagType   Description      Enabled   MinLinks   Interval   Mode          SystemIdMac            SystemPriority    HASH'
+
+
+            more =  data['MoreExist']
+            currentMarker =  data['NextMarker']
+            NextMarker    =  data['NextMarker']
+            if data['StateObjects']:
+                for d in data['StateObjects']:
+                    print '%7s  %7s    %7s  %15s    %8s   %2s     %8s      %6s   %20s         %s              %s' %(d['NameKey'],
+                                                                    d['Ifindex'],
+                                                                    "LACP" if int(d['LagType']) == 0 else "STATIC",
+                                                                    d['Description'],
+                                                                    "Enabled" if bool(d['Enabled']) else "Disabled",
+                                                                    d['MinLinks'],
+                                                                    "FAST" if int(d['Interval']) == 0 else "SLOW",
+                                                                    "ACTIVE" if int(d['LacpMode']) == 0 else "PASSIVE",
+                                                                    d['SystemIdMac'],
+                                                                    d['SystemPriority'],
+                                                                    d['LagHash'])
+            #import ipdb;ipdb.set_trace()
+
+
 
 class FlexPrint( object):
     def  __init__ (self, ip, port):
@@ -34,18 +69,24 @@ class FlexPrint( object):
                 print 'Err-disable-Reason: ', p['ErrDisableReason']
 
     def printIPv4RouteStates(self):
-        routes = self.swtch.getAllIPv4RouteStates()
-        if len(routes):
-            print '\n\n---- Routes ----'
-            print 'Network            Mask         NextHop         Cost       Protocol   IfType IfIndex'
-        for rt in routes:
-            print '%s %s %s %4d   %9s    %5s   %4s' %(rt['DestinationNw'].ljust(15), 
-                                                            rt['NetworkMask'].ljust(15),
-                                                            rt['NextHopIp'].ljust(15), 
-                                                            rt['Cost'], 
-                                                            rt['Protocol'], 
-                                                            rt['OutgoingIntfType'], 
-                                                            rt['OutgoingInterface'])
+        routes = self.swtch.getAllIPv4Routes()
+        print '\n\n---- Routes ----'
+        labels = ('Network', 'Mask', 'NextHop', 'Protocol', 'Reachability', 'Creation Time', 'Update Time', 'PolicyList')
+        rows = []
+        for r in routes:
+            rt = r['Object']
+            rows.append(("%s" %(rt['DestinationNw']),
+                        "%s" %(rt['NetworkMask']),
+                        "%s" %(rt['NextHopIp']),
+                        "%s" %(rt['Protocol']),
+                        "%s" %(rt['Reachability']),
+                        "%s" %(rt['RouteCreatedTime']),
+                        "%s" %(rt['RouteUpdatedTime']),
+                        "%s" %(rt['PolicyList'])))
+        width = 30
+        print indent([labels]+rows, hasHeader=True, separateRows=False,
+                     prefix=' ', postfix=' ', headerChar= '-', delim='    ',
+                     wrapfunc=lambda x: wrap_onspace_strict(x,width))
 
     def printIPv4IntfStates(self, IntfRef=None):
         ipv4intfs = self.swtch.getAllIPv4IntfStates()
@@ -480,38 +521,26 @@ class FlexPrint( object):
             except Exception as e:
                 print e
 
-def getLagGroups(ip, port):
-    currentMarker = 0
-    nextMarker = 0
-    count = 5
-    more = True
 
-    while more == True:
-        qry = 'http://%s:%s/public/v1/AggregationLacpStates?CurrentMarker=%d&NextMarker=%d&Count=%d' %(ip, port, currentMarker, nextMarker, count)
-        response = requests.get(qry)
-        data = response.json()
-        if currentMarker == 0: #Print the header only for first iteration
-            print 'Name      Ifindex      LagType   Description      Enabled   MinLinks   Interval   Mode          SystemIdMac            SystemPriority    HASH'
-
-
-        more =  data['MoreExist']
-        currentMarker =  data['NextMarker']
-        NextMarker    =  data['NextMarker']
-        if data['StateObjects']:
-            for d in data['StateObjects']:
-                print '%7s  %7s    %7s  %15s    %8s   %2s     %8s      %6s   %20s         %s              %s' %(d['NameKey'],
-                                                                d['Ifindex'],
-                                                                "LACP" if int(d['LagType']) == 0 else "STATIC",
-                                                                d['Description'],
-                                                                "Enabled" if bool(d['Enabled']) else "Disabled",
-                                                                d['MinLinks'],
-                                                                "FAST" if int(d['Interval']) == 0 else "SLOW",
-                                                                "ACTIVE" if int(d['LacpMode']) == 0 else "PASSIVE",
-                                                                d['SystemIdMac'],
-                                                                d['SystemPriority'],
-                                                                d['LagHash'])
-        #import ipdb;ipdb.set_trace()
-
+    # TODO fix cli so that the name is better
+    def printBGPRouteStateStates(self, ):
+        routes = self.swtch.getAllBGPRouteStates()
+        print '\n\n---- BGP Routes ----'
+        labels = ('Network', 'Mask', 'NextHop', 'Metric', 'LocalPref', 'Updated', 'Path')
+        rows = []
+        for r in routes:
+            rt = r['Object']
+            rows.append((rt['Network'],
+                        "%s" %(rt['CIDRLen']),
+                        "%s" %(rt['NextHop']),
+                        "%s" %(rt['Metric']),
+                        "%s" %(rt['LocalPref']),
+                        "%s" %(rt['UpdatedDuration'].split(".")[0]),
+                        "%s" %(rt['Path'])))
+        width = 30
+        print indent([labels]+rows, hasHeader=True, separateRows=False,
+                     prefix=' ', postfix=' ', headerChar= '-', delim='    ',
+                     wrapfunc=lambda x: wrap_onspace_strict(x,width))
 
 if __name__=='__main__':
     pass
