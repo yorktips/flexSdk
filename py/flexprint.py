@@ -544,7 +544,7 @@ class FlexPrint( object):
 
 
 
-   def printBGPNeighborStateStates(self):	   
+    def printBGPNeighborStateStates(self):	   
 		   sessionState=  {  1: "Idle",
 				     2: "Connect",
 				     3: "Active",
@@ -571,9 +571,6 @@ class FlexPrint( object):
 						 "%s" %(pr['TotalPrefixes'])))
 					
 					 
-					 
-					 pr['Description'],
-					 pr['TotalPrefixes'])
 
 if __name__=='__main__':
     pass
