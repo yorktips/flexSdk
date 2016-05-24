@@ -69,17 +69,16 @@ class FlexPrint( object):
                 print 'Err-disable-Reason: ', p['ErrDisableReason']
 
     def printIPv4RouteStates(self):
-        routes = self.swtch.getAllIPv4Routes()
+        routes = self.swtch.getAllIPv4RouteStates()
         print '\n\n---- Routes ----'
-        labels = ('Network', 'Mask', 'NextHop', 'Protocol', 'Reachability', 'Creation Time', 'Update Time', 'PolicyList')
+        labels = ('Network', 'NextHop', 'Protocol', 'Reachability', 'Creation Time', 'Update Time', 'PolicyList')
         rows = []
         for r in routes:
             rt = r['Object']
             rows.append(("%s" %(rt['DestinationNw']),
-                        "%s" %(rt['NetworkMask']),
-                        "%s" %(rt['NextHopIp']),
+                        "%s" %(rt['NextHopList']),
                         "%s" %(rt['Protocol']),
-                        "%s" %(rt['Reachability']),
+                        "%s" %(rt['IsNetworkReachable']),
                         "%s" %(rt['RouteCreatedTime']),
                         "%s" %(rt['RouteUpdatedTime']),
                         "%s" %(rt['PolicyList'])))
