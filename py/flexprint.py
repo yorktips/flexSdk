@@ -541,5 +541,39 @@ class FlexPrint( object):
                      prefix=' ', postfix=' ', headerChar= '-', delim='    ',
                      wrapfunc=lambda x: wrap_onspace_strict(x,width))
 
+
+
+
+   def printBGPNeighborStateStates(self):	   
+		   sessionState=  {  1: "Idle",
+				     2: "Connect",
+				     3: "Active",
+				     4: "OpenSent",
+				     5: "OpenConfirm",
+				     6: "Established"
+				   } 
+	
+		   peers = self.swtch.getAllBGPNeighborStates()
+		   if len(peers)>=0: 
+			   print '\n'
+			   labels = ('Neighbor','LocalAS','PeerAS','State','RxMsg','TxMsg','Description','TotalPrefixes')
+			   for p in peers:
+			       pr = p['Object']
+			       RXmsg = (pr['Messages']['Received']['Notification']) + (pr['Messages']['Received']['Update'])
+			       TXmsg = (pr['Messages']['Sent']['Notification']) + (pr['Messages']['Sent']['Update'])
+			       rows.append( (pr['NeighborAddress'],
+						 "%s" %(pr['LocalAS']),
+						 "%s" %(pr['PeerAS']),
+						 "%s" %(sessionState[pr['SessionState']]),
+						 "%s" %(RXmsg),
+						 "%s" %(TXmsg),
+						 "%s" %(pr['Description']),
+						 "%s" %(pr['TotalPrefixes'])))
+					
+					 
+					 
+					 pr['Description'],
+					 pr['TotalPrefixes'])
+
 if __name__=='__main__':
     pass
