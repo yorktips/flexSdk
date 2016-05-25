@@ -42,19 +42,24 @@ class FlexPrint( object):
     def  __init__ (self, ip, port):
         self.swtch = FlexSwitch(ip, port)
 
-    def printPortState(self, PortNum):
+    def printPortState(self, IntfRef):
 
-        self.printPortStates(PortNum=int(PortNum))
+        self.printPortStates(IntfRef=int(IntfRef))
 
-    def printPortStates(self, PortNum=None):
+    def printPortStates(self, IntfRef=None):
 
         ports = self.swtch.getAllPortStates()
         for port in ports:
 
             p = port['Object']
-            if PortNum == None or PortNum == p['PortNum']:
-                print "PortNum : ", p['PortNum'], "IfIndex: ", p['IfIndex'], "Name: ", p['Name']
+            if IntfRef == None or IntfRef == p['IntfRef']:
+                print "PortNum : ", p['IntfRef'], "IfIndex: ", p['IfIndex'], "Name: ", p['Name']
                 print "OperState: ", p['OperState']
+                print "NumUpEvents: ", p['NumUpEvents'],
+                print "LastUpEventTime: ", p['LastUpEventTime'],
+                print "NumDownEvents: ", p['NumDownEvents'],
+                print "LastDownEventTime: ", p["LastDownEventTime"],
+                print "Pvid: ", p["Pvid"]
                 print "Counters:"
                 print "\tIfInOctets:    ", p['IfInOctets']
                 print "\tIfInUcastPkts: ", p['IfInUcastPkts']
@@ -67,6 +72,8 @@ class FlexPrint( object):
                 print "\tIfOutErrors: ", p['IfOutErrors']
 
                 print 'Err-disable-Reason: ', p['ErrDisableReason']
+                print 'PresentInHW', p['PresentInHW']
+                print '------------------------------------------------------------------------------'
 
     def printIPv4RouteStates(self):
         routes = self.swtch.getAllIPv4RouteStates()
@@ -522,7 +529,7 @@ class FlexPrint( object):
 
 
     # TODO fix cli so that the name is better
-    def printBGPRouteStateStates(self, ):
+    def printBGPRouteStates(self, ):
         routes = self.swtch.getAllBGPRouteStates()
         print '\n\n---- BGP Routes ----'
         labels = ('Network', 'Mask', 'NextHop', 'Metric', 'LocalPref', 'Updated', 'Path')
@@ -541,10 +548,39 @@ class FlexPrint( object):
                      prefix=' ', postfix=' ', headerChar= '-', delim='    ',
                      wrapfunc=lambda x: wrap_onspace_strict(x,width))
 
+    def printIPv4IntfStates(self,):
+        ipintfs = self.swtch.getAllIPv4IntfStates()
+        print '\n\n---- IP Interfaces ----'
+        labels = ('Interface', 'IfIndex', 'Address', 'OperState', 'L2IntfType', 'L2IntfId')
+        rows = []
+        for i in ipintfs:
+            ip = i['Object']
+            rows.append((ip['IntfRef'],
+                        "%s" %(ip['IfIndex']),
+                        "%s" %(ip['IpAddr']),
+                        "%s" %(ip['OperState']),
+                        "%s" %(ip['L2IntfType']),
+                        "%s" %(ip['L2IntfId'])))
+        width = 20
+        print indent([labels]+rows, hasHeader=True, separateRows=False,
+                     prefix=' ', postfix=' ', headerChar= '-', delim='    ',
+                     wrapfunc=lambda x: wrap_onspace_strict(x,width))
+
+        labels = ('NumUpEvents', 'LastUpEventTime', 'NumDownEvents', 'LastDownEventtime')
+        rows = []
+        for i in ipintfs:
+            ip = i['Object']
+            rows.append(("%s" %(ip['NumUpEvents']),
+                        "%s" %(ip['LastUpEventTime']),
+                        "%s" %(ip['NumDownEvents']),
+                        "%s" %(ip['LastDownEventTime'])))
+        width = 20
+        print indent([labels]+rows, hasHeader=True, separateRows=False,
+                     prefix=' ', postfix=' ', headerChar= '-', delim='    ',
+                     wrapfunc=lambda x: wrap_onspace_strict(x,width))
 
 
-
-    def printBGPNeighborStateStates(self):	   
+    def printBGPNeighborState(self):	   
 		   sessionState=  {  1: "Idle",
 				     2: "Connect",
 				     3: "Active",
