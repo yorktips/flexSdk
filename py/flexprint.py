@@ -580,7 +580,7 @@ class FlexPrint( object):
                      wrapfunc=lambda x: wrap_onspace_strict(x,width))
 
 
-    def printBGPNeighborState(self):	   
+    def printBGPNeighborStates(self):	   
 		   sessionState=  {  1: "Idle",
 				     2: "Connect",
 				     3: "Active",
