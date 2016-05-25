@@ -46,36 +46,52 @@ class FlexPrint( object):
 
         self.printPortStates(IntfRef=int(IntfRef))
 
-    def printPortStates(self, IntfRef=None):
+    def printPortStatess(self, IntfRef=None):
 
         ports = self.swtch.getAllPortStates()
         for port in ports:
+        	p = port['Object']
 
-            p = port['Object']
-            if IntfRef == None or IntfRef == p['IntfRef']:
-                print "PortNum : ", p['IntfRef'], "IfIndex: ", p['IfIndex'], "Name: ", p['Name']
-                print "OperState: ", p['OperState']
-                print "NumUpEvents: ", p['NumUpEvents'],
-                print "LastUpEventTime: ", p['LastUpEventTime'],
-                print "NumDownEvents: ", p['NumDownEvents'],
-                print "LastDownEventTime: ", p["LastDownEventTime"],
-                print "Pvid: ", p["Pvid"]
-                print "Counters:"
-                print "\tIfInOctets:    ", p['IfInOctets']
-                print "\tIfInUcastPkts: ", p['IfInUcastPkts']
-                print "\tIfInDiscards: ", p['IfInDiscards']
-                print "\tIfInErrors: ", p['IfInErrors']
-                print "\tIfInUnknownProtos: ", p['IfInUnknownProtos']
-                print "\tIfOutOctets: ", p['IfOutOctets']
-                print "\tIfOutUcastPkts: ", p['IfOutUcastPkts']
-                print "\tIfOutDiscards: ", p['IfOutDiscards']
-                print "\tIfOutErrors: ", p['IfOutErrors']
-
-                print 'Err-disable-Reason: ', p['ErrDisableReason']
-                print 'PresentInHW', p['PresentInHW']
-                print '------------------------------------------------------------------------------'
-
-    def printIPv4RouteStates(self):
+        	if IntfRef == None or IntfRef == p['IntfRef']:
+        		port_config = self.swtch.getPort(p['IntfRef']).json()
+        		pc = port_config['Object'] 
+        		ipv4_state = self.swtch.getIPv4IntfState(p['IntfRef']).json()
+        		#print ipv4_state
+        		if ipv4_state.has_key('Error'):
+        			ipv4 = None
+        		else:
+        			ipv4 = ipv4_state['Object']
+        		if not p['LastDownEventTime']:
+        			lastdown="never"
+        		else:
+        			lastdown = p['LastDownEventTime']
+        		if not p['LastUpEventTime']:
+        			lastdown="never"
+        		else:
+        			lastdown = p['LastDownEventTime']
+        		
+        		print p['Name'], "is", p['OperState'], "Admin State is", pc['AdminState'] 
+        		if ipv4 is not None:
+        			print "  IPv4 Address is", ipv4['IpAddr']
+        		print "  PresentInHW:", p['PresentInHW']
+        		print "  PhyType:", pc['PhyIntfType'],",","Media Type:",pc['MediaType'],"," , "Address:", pc['MacAddr']
+        		print "  MTU",  pc['Mtu'],"Bytes"
+        		print " ",pc['Duplex'],",",pc['Speed'],"Mb/s"
+        		print "  Breakout Status:", pc['BreakOutMode']
+        		print "  Last link down:",p['LastDownEventTime']
+        		print "  Last link up:",   p['LastUpEventTime']
+        		print "  Number of Link flaps:", p['NumDownEvents']
+        		print "  ErrDisableReason:", p['ErrDisableReason']
+        		print "  RX"
+        		print "   ",p['IfInUcastPkts'],"unicast packets",p['IfInOctets'],"unicast octets"
+        		print "   ",p['IfInDiscards'],"input discards", p['IfInErrors'], "input errors"
+        		print "   ",p['IfInUnknownProtos'],"unknown protocol"
+        		print "  TX"
+        		print "   ",p['IfOutUcastPkts'],"unicast packets",p['IfOutOctets'],"unicast octets"
+        		print "   ",p['IfOutDiscards'],"output discards", p['IfOutErrors'], "output errors"					
+        		print '------------------------------------------------------------------------------'
+        		
+    def printIPv4RouteStatess(self):
         routes = self.swtch.getAllIPv4RouteStates()
         print '\n\n---- Routes ----'
         labels = ('Network', 'NextHop', 'Protocol', 'Reachability', 'Creation Time', 'Update Time', 'PolicyList')
