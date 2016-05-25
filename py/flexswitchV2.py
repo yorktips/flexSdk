@@ -53,7 +53,7 @@ class FlexSwitch( object):
         obj =  { 
                 'IpAddr' : IpAddr,
                 }
-        reqUrl =  self.cfgUrlBase+'ArpEntry'
+        reqUrl =  self.stateUrlBase+'ArpEntry'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -149,7 +149,7 @@ class FlexSwitch( object):
         obj =  { 
                 'Name' : Name,
                 }
-        reqUrl =  self.cfgUrlBase+'PolicyStmt'
+        reqUrl =  self.stateUrlBase+'PolicyStmt'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -234,7 +234,7 @@ class FlexSwitch( object):
         obj =  { 
                 'VlanId' : int(VlanId),
                 }
-        reqUrl =  self.cfgUrlBase+'Vlan'
+        reqUrl =  self.stateUrlBase+'Vlan'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -308,7 +308,7 @@ class FlexSwitch( object):
         obj =  { 
                 'Module' : Module,
                 }
-        reqUrl =  self.cfgUrlBase+'ComponentLogging'
+        reqUrl =  self.stateUrlBase+'ComponentLogging'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -326,7 +326,7 @@ class FlexSwitch( object):
         obj =  { 
                 'Index' : int(Index),
                 }
-        reqUrl =  self.cfgUrlBase+'IPv4Event'
+        reqUrl =  self.stateUrlBase+'IPv4Event'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -444,7 +444,7 @@ class FlexSwitch( object):
         obj =  { 
                 'AreaId' : AreaId,
                 }
-        reqUrl =  self.cfgUrlBase+'OspfAreaEntry'
+        reqUrl =  self.stateUrlBase+'OspfAreaEntry'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -462,7 +462,7 @@ class FlexSwitch( object):
         obj =  { 
                 'LagId' : int(LagId),
                 }
-        reqUrl =  self.cfgUrlBase+'LaPortChannel'
+        reqUrl =  self.stateUrlBase+'LaPortChannel'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -547,7 +547,7 @@ class FlexSwitch( object):
         obj =  { 
                 'IfIndex' : int(IfIndex),
                 }
-        reqUrl =  self.cfgUrlBase+'DhcpRelayIntf'
+        reqUrl =  self.stateUrlBase+'DhcpRelayIntf'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -567,7 +567,7 @@ class FlexSwitch( object):
                 'BrgIfIndex' : int(BrgIfIndex),
                 'IfIndex' : int(IfIndex),
                 }
-        reqUrl =  self.cfgUrlBase+'StpPort'
+        reqUrl =  self.stateUrlBase+'StpPort'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -729,7 +729,7 @@ class FlexSwitch( object):
         obj =  { 
                 'LagId' : int(LagId),
                 }
-        reqUrl =  self.cfgUrlBase+'LaPortChannel'
+        reqUrl =  self.stateUrlBase+'LaPortChannel'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -747,7 +747,7 @@ class FlexSwitch( object):
         obj =  { 
                 'Name' : Name,
                 }
-        reqUrl =  self.cfgUrlBase+'BGPPolicyCondition'
+        reqUrl =  self.stateUrlBase+'BGPPolicyCondition'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -765,7 +765,7 @@ class FlexSwitch( object):
         obj =  { 
                 'DestinationNw' : DestinationNw,
                 }
-        reqUrl =  self.cfgUrlBase+'IPv4RouteHw'
+        reqUrl =  self.stateUrlBase+'IPv4RouteHw'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -927,7 +927,7 @@ class FlexSwitch( object):
         obj =  { 
                 'Name' : Name,
                 }
-        reqUrl =  self.cfgUrlBase+'BfdSessionParam'
+        reqUrl =  self.stateUrlBase+'BfdSessionParam'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -1001,7 +1001,7 @@ class FlexSwitch( object):
         obj =  { 
                 'Vrf' : Vrf,
                 }
-        reqUrl =  self.cfgUrlBase+'ArpConfig'
+        reqUrl =  self.stateUrlBase+'ArpConfig'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -1021,7 +1021,7 @@ class FlexSwitch( object):
                 'NbrIpAddr' : NbrIpAddr,
                 'NbrAddressLessIndex' : int(NbrAddressLessIndex),
                 }
-        reqUrl =  self.cfgUrlBase+'OspfNbrEntry'
+        reqUrl =  self.stateUrlBase+'OspfNbrEntry'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -1039,7 +1039,7 @@ class FlexSwitch( object):
         obj =  { 
                 'IntfId' : int(IntfId),
                 }
-        reqUrl =  self.cfgUrlBase+'DhcpRelayIntf'
+        reqUrl =  self.stateUrlBase+'DhcpRelayIntf'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -1113,7 +1113,7 @@ class FlexSwitch( object):
         obj =  { 
                 'DhcpRelay' : DhcpRelay,
                 }
-        reqUrl =  self.cfgUrlBase+'DhcpRelayGlobal'
+        reqUrl =  self.stateUrlBase+'DhcpRelayGlobal'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -1131,7 +1131,7 @@ class FlexSwitch( object):
         obj =  { 
                 'Name' : Name,
                 }
-        reqUrl =  self.cfgUrlBase+'BfdSessionParam'
+        reqUrl =  self.stateUrlBase+'BfdSessionParam'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -1155,7 +1155,7 @@ class FlexSwitch( object):
                 'LsdbLsid' : LsdbLsid,
                 'LsdbRouterId' : LsdbRouterId,
                 }
-        reqUrl =  self.cfgUrlBase+'OspfLsdbEntry'
+        reqUrl =  self.stateUrlBase+'OspfLsdbEntry'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -1173,7 +1173,7 @@ class FlexSwitch( object):
         obj =  { 
                 'IpAddr' : IpAddr,
                 }
-        reqUrl =  self.cfgUrlBase+'ArpLinuxEntry'
+        reqUrl =  self.stateUrlBase+'ArpLinuxEntry'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -1269,7 +1269,7 @@ class FlexSwitch( object):
         obj =  { 
                 'Name' : Name,
                 }
-        reqUrl =  self.cfgUrlBase+'BGPPolicyCondition'
+        reqUrl =  self.stateUrlBase+'BGPPolicyCondition'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -1475,7 +1475,7 @@ class FlexSwitch( object):
         obj =  { 
                 'RouterId' : RouterId,
                 }
-        reqUrl =  self.cfgUrlBase+'OspfGlobal'
+        reqUrl =  self.stateUrlBase+'OspfGlobal'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -1493,7 +1493,7 @@ class FlexSwitch( object):
         obj =  { 
                 'MacAddr' : MacAddr,
                 }
-        reqUrl =  self.cfgUrlBase+'DhcpRelayHostDhcp'
+        reqUrl =  self.stateUrlBase+'DhcpRelayHostDhcp'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -1511,7 +1511,7 @@ class FlexSwitch( object):
         obj =  { 
                 'IntfId' : int(IntfId),
                 }
-        reqUrl =  self.cfgUrlBase+'DhcpRelayIntfServer'
+        reqUrl =  self.stateUrlBase+'DhcpRelayIntfServer'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -1529,7 +1529,7 @@ class FlexSwitch( object):
         obj =  { 
                 'IfIndex' : int(IfIndex),
                 }
-        reqUrl =  self.cfgUrlBase+'LLDPIntf'
+        reqUrl =  self.stateUrlBase+'LLDPIntf'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -1636,7 +1636,7 @@ class FlexSwitch( object):
         obj =  { 
                 'Name' : Name,
                 }
-        reqUrl =  self.cfgUrlBase+'PolicyDefinition'
+        reqUrl =  self.stateUrlBase+'PolicyDefinition'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -1656,7 +1656,7 @@ class FlexSwitch( object):
                 'VirtNbrRtrId' : VirtNbrRtrId,
                 'VirtNbrArea' : VirtNbrArea,
                 }
-        reqUrl =  self.cfgUrlBase+'OspfVirtNbrEntry'
+        reqUrl =  self.stateUrlBase+'OspfVirtNbrEntry'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -1851,7 +1851,7 @@ class FlexSwitch( object):
                 'BrgIfIndex' : int(BrgIfIndex),
                 'IfIndex' : int(IfIndex),
                 }
-        reqUrl =  self.cfgUrlBase+'StpPort'
+        reqUrl =  self.stateUrlBase+'StpPort'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -1869,7 +1869,7 @@ class FlexSwitch( object):
         obj =  { 
                 'Protocol' : Protocol,
                 }
-        reqUrl =  self.cfgUrlBase+'RouteDistance'
+        reqUrl =  self.stateUrlBase+'RouteDistance'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -1943,7 +1943,7 @@ class FlexSwitch( object):
         obj =  { 
                 'Name' : Name,
                 }
-        reqUrl =  self.cfgUrlBase+'LogicalIntf'
+        reqUrl =  self.stateUrlBase+'LogicalIntf'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -1961,7 +1961,7 @@ class FlexSwitch( object):
         obj =  { 
                 'MacAddr' : MacAddr,
                 }
-        reqUrl =  self.cfgUrlBase+'MacTableEntry'
+        reqUrl =  self.stateUrlBase+'MacTableEntry'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -2222,7 +2222,7 @@ class FlexSwitch( object):
         obj =  { 
                 'Name' : Name,
                 }
-        reqUrl =  self.cfgUrlBase+'BGPPeerGroup'
+        reqUrl =  self.stateUrlBase+'BGPPeerGroup'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -2350,7 +2350,7 @@ class FlexSwitch( object):
         obj =  { 
                 'Vrf' : Vrf,
                 }
-        reqUrl =  self.cfgUrlBase+'SystemParam'
+        reqUrl =  self.stateUrlBase+'SystemParam'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -2423,7 +2423,7 @@ class FlexSwitch( object):
         obj =  { 
                 'Vrf' : Vrf,
                 }
-        reqUrl =  self.cfgUrlBase+'BfdGlobal'
+        reqUrl =  self.stateUrlBase+'BfdGlobal'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -2519,7 +2519,7 @@ class FlexSwitch( object):
         obj =  { 
                 'Name' : Name,
                 }
-        reqUrl =  self.cfgUrlBase+'BGPPolicyStmt'
+        reqUrl =  self.stateUrlBase+'BGPPolicyStmt'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -2592,7 +2592,7 @@ class FlexSwitch( object):
         obj =  { 
                 'Vrf' : Vrf,
                 }
-        reqUrl =  self.cfgUrlBase+'ArpGlobal'
+        reqUrl =  self.stateUrlBase+'ArpGlobal'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -2610,7 +2610,7 @@ class FlexSwitch( object):
         obj =  { 
                 'Name' : Name,
                 }
-        reqUrl =  self.cfgUrlBase+'BGPPolicyStmt'
+        reqUrl =  self.stateUrlBase+'BGPPolicyStmt'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -2628,7 +2628,7 @@ class FlexSwitch( object):
         obj =  { 
                 'DestinationNw' : DestinationNw,
                 }
-        reqUrl =  self.cfgUrlBase+'IPv4Route'
+        reqUrl =  self.stateUrlBase+'IPv4Route'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -2646,7 +2646,7 @@ class FlexSwitch( object):
         obj =  { 
                 'Vrf' : Vrf,
                 }
-        reqUrl =  self.cfgUrlBase+'BfdGlobal'
+        reqUrl =  self.stateUrlBase+'BfdGlobal'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -2672,7 +2672,7 @@ class FlexSwitch( object):
                 'VirtLocalLsdbRouterId' : VirtLocalLsdbRouterId,
                 'VirtLocalLsdbTransitArea' : VirtLocalLsdbTransitArea,
                 }
-        reqUrl =  self.cfgUrlBase+'OspfVirtLocalLsdbEntry'
+        reqUrl =  self.stateUrlBase+'OspfVirtLocalLsdbEntry'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -2690,7 +2690,7 @@ class FlexSwitch( object):
         obj =  { 
                 'RouterId' : RouterId,
                 }
-        reqUrl =  self.cfgUrlBase+'BGPGlobal'
+        reqUrl =  self.stateUrlBase+'BGPGlobal'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -2708,7 +2708,7 @@ class FlexSwitch( object):
         obj =  { 
                 'IpAddr' : IpAddr,
                 }
-        reqUrl =  self.cfgUrlBase+'BfdSession'
+        reqUrl =  self.stateUrlBase+'BfdSession'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -2782,7 +2782,7 @@ class FlexSwitch( object):
         obj =  { 
                 'IfIndex' : int(IfIndex),
                 }
-        reqUrl =  self.cfgUrlBase+'LLDPIntf'
+        reqUrl =  self.stateUrlBase+'LLDPIntf'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -2878,7 +2878,7 @@ class FlexSwitch( object):
         obj =  { 
                 'DhcpConfigKey' : DhcpConfigKey,
                 }
-        reqUrl =  self.cfgUrlBase+'DhcpGlobalConfig'
+        reqUrl =  self.stateUrlBase+'DhcpGlobalConfig'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -2952,7 +2952,7 @@ class FlexSwitch( object):
         obj =  { 
                 'IntfRef' : IntfRef,
                 }
-        reqUrl =  self.cfgUrlBase+'IPv4Intf'
+        reqUrl =  self.stateUrlBase+'IPv4Intf'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -2970,7 +2970,7 @@ class FlexSwitch( object):
         obj =  { 
                 'Name' : Name,
                 }
-        reqUrl =  self.cfgUrlBase+'PolicyStmt'
+        reqUrl =  self.stateUrlBase+'PolicyStmt'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -2988,7 +2988,7 @@ class FlexSwitch( object):
         obj =  { 
                 'Vlan' : int(Vlan),
                 }
-        reqUrl =  self.cfgUrlBase+'StpBridge'
+        reqUrl =  self.stateUrlBase+'StpBridge'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -3084,7 +3084,7 @@ class FlexSwitch( object):
                 'StubTOS' : int(StubTOS),
                 'StubAreaId' : StubAreaId,
                 }
-        reqUrl =  self.cfgUrlBase+'OspfStubAreaEntry'
+        reqUrl =  self.stateUrlBase+'OspfStubAreaEntry'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -3235,7 +3235,7 @@ class FlexSwitch( object):
         obj =  { 
                 'IntfRef' : IntfRef,
                 }
-        reqUrl =  self.cfgUrlBase+'DhcpIntfConfig'
+        reqUrl =  self.stateUrlBase+'DhcpIntfConfig'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -3255,7 +3255,7 @@ class FlexSwitch( object):
                 'VRID' : int(VRID),
                 'IfIndex' : int(IfIndex),
                 }
-        reqUrl =  self.cfgUrlBase+'VrrpIntf'
+        reqUrl =  self.stateUrlBase+'VrrpIntf'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -3373,7 +3373,7 @@ class FlexSwitch( object):
         obj =  { 
                 'Name' : Name,
                 }
-        reqUrl =  self.cfgUrlBase+'IpTableAcl'
+        reqUrl =  self.stateUrlBase+'IpTableAcl'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -3590,7 +3590,7 @@ class FlexSwitch( object):
                 'IfIpAddress' : IfIpAddress,
                 'AddressLessIf' : int(AddressLessIf),
                 }
-        reqUrl =  self.cfgUrlBase+'OspfIfEntry'
+        reqUrl =  self.stateUrlBase+'OspfIfEntry'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -3719,7 +3719,7 @@ class FlexSwitch( object):
         obj =  { 
                 'RouterId' : RouterId,
                 }
-        reqUrl =  self.cfgUrlBase+'BGPGlobal'
+        reqUrl =  self.stateUrlBase+'BGPGlobal'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -3737,7 +3737,7 @@ class FlexSwitch( object):
         obj =  { 
                 'AreaId' : AreaId,
                 }
-        reqUrl =  self.cfgUrlBase+'OspfAreaEntry'
+        reqUrl =  self.stateUrlBase+'OspfAreaEntry'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -3844,7 +3844,7 @@ class FlexSwitch( object):
         obj =  { 
                 'IpAddr' : IpAddr,
                 }
-        reqUrl =  self.cfgUrlBase+'BfdSession'
+        reqUrl =  self.stateUrlBase+'BfdSession'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -3862,7 +3862,7 @@ class FlexSwitch( object):
         obj =  { 
                 'Name' : Name,
                 }
-        reqUrl =  self.cfgUrlBase+'PolicyCondition'
+        reqUrl =  self.stateUrlBase+'PolicyCondition'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -3993,7 +3993,7 @@ class FlexSwitch( object):
                 'VRID' : int(VRID),
                 'IfIndex' : int(IfIndex),
                 }
-        reqUrl =  self.cfgUrlBase+'VrrpIntf'
+        reqUrl =  self.stateUrlBase+'VrrpIntf'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -4100,7 +4100,7 @@ class FlexSwitch( object):
                 'IntfRef' : IntfRef,
                 'IpAddr' : IpAddr,
                 }
-        reqUrl =  self.cfgUrlBase+'SubIPv4Intf'
+        reqUrl =  self.stateUrlBase+'SubIPv4Intf'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -4118,7 +4118,7 @@ class FlexSwitch( object):
         obj =  { 
                 'Name' : Name,
                 }
-        reqUrl =  self.cfgUrlBase+'PolicyDefinition'
+        reqUrl =  self.stateUrlBase+'PolicyDefinition'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -4136,7 +4136,7 @@ class FlexSwitch( object):
         obj =  { 
                 'VlanId' : int(VlanId),
                 }
-        reqUrl =  self.cfgUrlBase+'Vlan'
+        reqUrl =  self.stateUrlBase+'Vlan'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -4154,7 +4154,7 @@ class FlexSwitch( object):
         obj =  { 
                 'Name' : Name,
                 }
-        reqUrl =  self.cfgUrlBase+'LogicalIntf'
+        reqUrl =  self.stateUrlBase+'LogicalIntf'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -4459,7 +4459,7 @@ class FlexSwitch( object):
                 'NeighborAddress' : NeighborAddress,
                 'IfIndex' : int(IfIndex),
                 }
-        reqUrl =  self.cfgUrlBase+'BGPNeighbor'
+        reqUrl =  self.stateUrlBase+'BGPNeighbor'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -4599,7 +4599,7 @@ class FlexSwitch( object):
         obj =  { 
                 'Vlan' : int(Vlan),
                 }
-        reqUrl =  self.cfgUrlBase+'StpBridgeInstance'
+        reqUrl =  self.stateUrlBase+'StpBridgeInstance'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -4617,7 +4617,7 @@ class FlexSwitch( object):
         obj =  { 
                 'IfIndex' : int(IfIndex),
                 }
-        reqUrl =  self.cfgUrlBase+'LaPortChannelMember'
+        reqUrl =  self.stateUrlBase+'LaPortChannelMember'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -4757,7 +4757,7 @@ class FlexSwitch( object):
                 'VirtIfNeighbor' : VirtIfNeighbor,
                 'VirtIfAreaId' : VirtIfAreaId,
                 }
-        reqUrl =  self.cfgUrlBase+'OspfVirtIfEntry'
+        reqUrl =  self.stateUrlBase+'OspfVirtIfEntry'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -4830,7 +4830,7 @@ class FlexSwitch( object):
         obj =  { 
                 'Vrf' : Vrf,
                 }
-        reqUrl =  self.cfgUrlBase+'SystemLogging'
+        reqUrl =  self.stateUrlBase+'SystemLogging'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -4848,7 +4848,7 @@ class FlexSwitch( object):
         obj =  { 
                 'Name' : Name,
                 }
-        reqUrl =  self.cfgUrlBase+'BGPPolicyAction'
+        reqUrl =  self.stateUrlBase+'BGPPolicyAction'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -4944,7 +4944,7 @@ class FlexSwitch( object):
         obj =  { 
                 'VxlanId' : int(VxlanId),
                 }
-        reqUrl =  self.cfgUrlBase+'VxlanInstance'
+        reqUrl =  self.stateUrlBase+'VxlanInstance'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -4962,7 +4962,7 @@ class FlexSwitch( object):
         obj =  { 
                 'Name' : Name,
                 }
-        reqUrl =  self.cfgUrlBase+'BGPPolicyDefinition'
+        reqUrl =  self.stateUrlBase+'BGPPolicyDefinition'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -4980,7 +4980,7 @@ class FlexSwitch( object):
         obj =  { 
                 'IntfRef' : IntfRef,
                 }
-        reqUrl =  self.cfgUrlBase+'IPv4Intf'
+        reqUrl =  self.stateUrlBase+'IPv4Intf'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -4998,7 +4998,7 @@ class FlexSwitch( object):
         obj =  { 
                 'IntfRef' : IntfRef,
                 }
-        reqUrl =  self.cfgUrlBase+'Port'
+        reqUrl =  self.stateUrlBase+'Port'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -5094,7 +5094,7 @@ class FlexSwitch( object):
                 'IfMetricTOS' : int(IfMetricTOS),
                 'IfMetricIpAddress' : IfMetricIpAddress,
                 }
-        reqUrl =  self.cfgUrlBase+'OspfIfMetricEntry'
+        reqUrl =  self.stateUrlBase+'OspfIfMetricEntry'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -5311,7 +5311,7 @@ class FlexSwitch( object):
                 'VtepId' : int(VtepId),
                 'VxlanId' : int(VxlanId),
                 }
-        reqUrl =  self.cfgUrlBase+'VxlanVtepInstances'
+        reqUrl =  self.stateUrlBase+'VxlanVtepInstances'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -5407,7 +5407,7 @@ class FlexSwitch( object):
         obj =  { 
                 'Name' : Name,
                 }
-        reqUrl =  self.cfgUrlBase+'BGPPolicyAction'
+        reqUrl =  self.stateUrlBase+'BGPPolicyAction'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -5425,7 +5425,7 @@ class FlexSwitch( object):
         obj =  { 
                 'Name' : Name,
                 }
-        reqUrl =  self.cfgUrlBase+'Daemon'
+        reqUrl =  self.stateUrlBase+'Daemon'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -5443,7 +5443,7 @@ class FlexSwitch( object):
         obj =  { 
                 'Vrf' : Vrf,
                 }
-        reqUrl =  self.cfgUrlBase+'SystemParam'
+        reqUrl =  self.stateUrlBase+'SystemParam'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -5465,7 +5465,7 @@ class FlexSwitch( object):
                 'NextHop' : NextHop,
                 'CIDRLen' : int(CIDRLen),
                 }
-        reqUrl =  self.cfgUrlBase+'BGPRoute'
+        reqUrl =  self.stateUrlBase+'BGPRoute'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -5583,7 +5583,7 @@ class FlexSwitch( object):
                 'DestinationNw' : DestinationNw,
                 'NetworkMask' : NetworkMask,
                 }
-        reqUrl =  self.cfgUrlBase+'IPv4Route'
+        reqUrl =  self.stateUrlBase+'IPv4Route'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -5601,7 +5601,7 @@ class FlexSwitch( object):
         obj =  { 
                 'IpAddr' : IpAddr,
                 }
-        reqUrl =  self.cfgUrlBase+'ArpEntryHw'
+        reqUrl =  self.stateUrlBase+'ArpEntryHw'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -5619,7 +5619,7 @@ class FlexSwitch( object):
         obj =  { 
                 'RouterId' : RouterId,
                 }
-        reqUrl =  self.cfgUrlBase+'OspfGlobal'
+        reqUrl =  self.stateUrlBase+'OspfGlobal'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -5639,7 +5639,7 @@ class FlexSwitch( object):
                 'NeighborAddress' : NeighborAddress,
                 'IfIndex' : int(IfIndex),
                 }
-        reqUrl =  self.cfgUrlBase+'BGPNeighbor'
+        reqUrl =  self.stateUrlBase+'BGPNeighbor'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -5659,7 +5659,7 @@ class FlexSwitch( object):
                 'VRID' : int(VRID),
                 'IfIndex' : int(IfIndex),
                 }
-        reqUrl =  self.cfgUrlBase+'VrrpVrid'
+        reqUrl =  self.stateUrlBase+'VrrpVrid'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -5755,7 +5755,7 @@ class FlexSwitch( object):
         obj =  { 
                 'Name' : Name,
                 }
-        reqUrl =  self.cfgUrlBase+'BGPPolicyDefinition'
+        reqUrl =  self.stateUrlBase+'BGPPolicyDefinition'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -5862,7 +5862,7 @@ class FlexSwitch( object):
         obj =  { 
                 'Name' : Name,
                 }
-        reqUrl =  self.cfgUrlBase+'PolicyCondition'
+        reqUrl =  self.stateUrlBase+'PolicyCondition'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -6046,7 +6046,7 @@ class FlexSwitch( object):
         obj =  { 
                 'IntfRef' : IntfRef,
                 }
-        reqUrl =  self.cfgUrlBase+'Port'
+        reqUrl =  self.stateUrlBase+'Port'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
@@ -6066,7 +6066,7 @@ class FlexSwitch( object):
                 'IfIpAddress' : IfIpAddress,
                 'AddressLessIf' : int(AddressLessIf),
                 }
-        reqUrl =  self.cfgUrlBase+'OspfIfEntry'
+        reqUrl =  self.stateUrlBase+'OspfIfEntry'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
