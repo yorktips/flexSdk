@@ -46,7 +46,7 @@ class FlexPrint( object):
 
         self.printPortStates(IntfRef=int(IntfRef))
 
-    def printPortStatess(self, IntfRef=None):
+    def printPortStates(self, IntfRef=None):
 
         ports = self.swtch.getAllPortStates()
         for port in ports:
@@ -91,7 +91,7 @@ class FlexPrint( object):
         		print "   ",p['IfOutDiscards'],"output discards", p['IfOutErrors'], "output errors"					
         		print '------------------------------------------------------------------------------'
         		
-    def printIPv4RouteStatess(self):
+    def printIPv4RouteStates(self):
         routes = self.swtch.getAllIPv4RouteStates()
         print '\n\n---- Routes ----'
         labels = ('Network', 'NextHop', 'Protocol', 'Reachability', 'Creation Time', 'Update Time', 'PolicyList')
