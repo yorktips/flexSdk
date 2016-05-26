@@ -609,6 +609,7 @@ class FlexPrint( object):
 		   if len(peers)>=0: 
 			   print '\n'
 			   labels = ('Neighbor','LocalAS','PeerAS','State','RxMsg','TxMsg','Description','TotalPrefixes')
+			   rows=[]
 			   for p in peers:
 			       pr = p['Object']
 			       RXmsg = (pr['Messages']['Received']['Notification']) + (pr['Messages']['Received']['Update'])
@@ -621,6 +622,10 @@ class FlexPrint( object):
 						 "%s" %(TXmsg),
 						 "%s" %(pr['Description']),
 						 "%s" %(pr['TotalPrefixes'])))
+			   width = 20
+			   print indent([labels]+rows, hasHeader=True, separateRows=False,
+                     		prefix=' ', postfix=' ', headerChar= '-', delim='    ',
+                     		wrapfunc=lambda x: wrap_onspace_strict(x,width))
 					
 					 
 

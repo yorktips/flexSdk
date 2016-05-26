@@ -6046,7 +6046,7 @@ class FlexSwitch( object):
         obj =  { 
                 'IntfRef' : IntfRef,
                 }
-        reqUrl =  self.stateUrlBase+'Port'
+        reqUrl =  self.cfgUrlBase+'Port'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
