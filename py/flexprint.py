@@ -92,23 +92,23 @@ class FlexPrint( object):
         		print '------------------------------------------------------------------------------'
         		
     def printIPv4RouteStates(self):
-        routes = self.swtch.getAllIPv4RouteStates()
-        print '\n\n---- Routes ----'
-        labels = ('Network', 'NextHop', 'Protocol', 'Reachability', 'Creation Time', 'Update Time', 'PolicyList')
-        rows = []
+        routes = self.swtch.getAllIPv4RouteStates()     
+        print "IP Route Table"
+        print "'[x/y]' denotes [preference/metric]"
+        print "\n"    	
         for r in routes:
             rt = r['Object']
-            rows.append(("%s" %(rt['DestinationNw']),
-                        "%s" %(rt['NextHopList']),
-                        "%s" %(rt['Protocol']),
-                        "%s" %(rt['IsNetworkReachable']),
-                        "%s" %(rt['RouteCreatedTime']),
-                        "%s" %(rt['RouteUpdatedTime']),
-                        "%s" %(rt['PolicyList'])))
-        width = 30
-        print indent([labels]+rows, hasHeader=True, separateRows=False,
-                     prefix=' ', postfix=' ', headerChar= '-', delim='    ',
-                     wrapfunc=lambda x: wrap_onspace_strict(x,width))
+            rt_spec = self.swtch.getIPv4RouteState(rt['DestinationNw']).json()
+            rt_next=rt_spec['Object']
+            rt_count = len(rt_next['NextHopList'])  
+            route_distance = self.swtch.getRouteDistanceState(rt['Protocol']).json()
+            rd = route_distance['Object']          
+            print rt['DestinationNw'], "ubest/mbest: 1/0"+",", "Policy:",rt['PolicyList']
+            while rt_count > 0:
+                print "   via", rt_next['NextHopList'][rt_count-1]['NextHopIp'],",","["+str(rd['Distance'])+"/"+str(rt_next['NextHopList'][rt_count-1]['Weight'])+"]"+",",rt['RouteCreatedTime']+",",rt['Protocol']
+                rt_count-=1
+
+     
 
     def printIPv4IntfStates(self, IntfRef=None):
         ipv4intfs = self.swtch.getAllIPv4IntfStates()
