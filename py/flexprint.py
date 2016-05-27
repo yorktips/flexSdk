@@ -102,10 +102,18 @@ class FlexPrint( object):
             rt_next=rt_spec['Object']
             rt_count = len(rt_next['NextHopList'])  
             route_distance = self.swtch.getRouteDistanceState(rt['Protocol']).json()
-            rd = route_distance['Object']          
-            print rt['DestinationNw'], "ubest/mbest: 1/0"+",", "Policy:",rt['PolicyList']
+            rd = route_distance['Object']    
+            if rt['PolicyList'] is None:
+            	policy=rt['PolicyList']
+            else:
+                policy = str(rt['PolicyList']).split("[")[1].split()[1]
+            print rt['DestinationNw'], "ubest/mbest: 1/0"+",", "Policy:", policy
             while rt_count > 0:
-                print "   via", rt_next['NextHopList'][rt_count-1]['NextHopIp'],",","["+str(rd['Distance'])+"/"+str(rt_next['NextHopList'][rt_count-1]['Weight'])+"]"+",",rt['RouteCreatedTime']+",",rt['Protocol']
+            	if rt['Protocol'] == "CONNECTED":
+            		ip_int = self.swtch.getIPv4IntfState(rt_next['NextHopList'][rt_count-1]['NextHopIntRef']).json()	
+                	print "   via",ip_int['Object']['IpAddr'].split("/")[0] +", "+rt_next['NextHopList'][rt_count-1]['NextHopIntRef']+", "+"["+str(rd['Distance'])+"/"+str(rt_next['NextHopList'][rt_count-1]['Weight'])+"]"+",",rt['RouteCreatedTime']+",",rt['Protocol']            		
+            	else:  
+                	print "   via", rt_next['NextHopList'][rt_count-1]['NextHopIp']+", "+rt_next['NextHopList'][rt_count-1]['NextHopIntRef']+", "+"["+str(rd['Distance'])+"/"+str(rt_next['NextHopList'][rt_count-1]['Weight'])+"]"+",",rt['RouteCreatedTime']+",",rt['Protocol']
                 rt_count-=1
 
      
@@ -548,17 +556,20 @@ class FlexPrint( object):
     def printBGPRouteStates(self, ):
         routes = self.swtch.getAllBGPRouteStates()
         print '\n\n---- BGP Routes ----'
-        labels = ('Network', 'Mask', 'NextHop', 'Metric', 'LocalPref', 'Updated', 'Path')
+        labels = ('Network', 'NextHop', 'Metric', 'LocalPref', 'Updated', 'Path')
         rows = []
         for r in routes:
             rt = r['Object']
-            rows.append((rt['Network'],
-                        "%s" %(rt['CIDRLen']),
+            if rt['Path'] is None:
+               bgp_path =  rt['Path']
+            else:
+               bgp_path = [x.encode('utf-8') for x in rt['Path']]
+            rows.append((rt['Network']+"/"+str(rt['CIDRLen']),
                         "%s" %(rt['NextHop']),
                         "%s" %(rt['Metric']),
                         "%s" %(rt['LocalPref']),
                         "%s" %(rt['UpdatedDuration'].split(".")[0]),
-                        "%s" %(rt['Path'])))
+                        "%s" %( bgp_path )))
         width = 30
         print indent([labels]+rows, hasHeader=True, separateRows=False,
                      prefix=' ', postfix=' ', headerChar= '-', delim='    ',
@@ -608,7 +619,7 @@ class FlexPrint( object):
 		   peers = self.swtch.getAllBGPNeighborStates()
 		   if len(peers)>=0: 
 			   print '\n'
-			   labels = ('Neighbor','LocalAS','PeerAS','State','RxMsg','TxMsg','Description','TotalPrefixes')
+			   labels = ('Neighbor','LocalAS','PeerAS','State','RxMsg','TxMsg','Description','Prefixes_Rcvd')
 			   rows=[]
 			   for p in peers:
 			       pr = p['Object']
