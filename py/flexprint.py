@@ -608,37 +608,57 @@ class FlexPrint( object):
 
 
     def printBGPNeighborStates(self):	   
-		   sessionState=  {  1: "Idle",
-				     2: "Connect",
-				     3: "Active",
-				     4: "OpenSent",
-				     5: "OpenConfirm",
-				     6: "Established"
-				   } 
-	
-		   peers = self.swtch.getAllBGPNeighborStates()
-		   if len(peers)>=0: 
-			   print '\n'
-			   labels = ('Neighbor','LocalAS','PeerAS','State','RxMsg','TxMsg','Description','Prefixes_Rcvd')
-			   rows=[]
-			   for p in peers:
-			       pr = p['Object']
-			       RXmsg = (pr['Messages']['Received']['Notification']) + (pr['Messages']['Received']['Update'])
-			       TXmsg = (pr['Messages']['Sent']['Notification']) + (pr['Messages']['Sent']['Update'])
-			       rows.append( (pr['NeighborAddress'],
-						 "%s" %(pr['LocalAS']),
-						 "%s" %(pr['PeerAS']),
-						 "%s" %(sessionState[pr['SessionState']]),
-						 "%s" %(RXmsg),
-						 "%s" %(TXmsg),
-						 "%s" %(pr['Description']),
-						 "%s" %(pr['TotalPrefixes'])))
-			   width = 20
-			   print indent([labels]+rows, hasHeader=True, separateRows=False,
-                     		prefix=' ', postfix=' ', headerChar= '-', delim='    ',
-                     		wrapfunc=lambda x: wrap_onspace_strict(x,width))
-					
-					 
+       sessionState=  {  1: "Idle",
+                 2: "Connect",
+                 3: "Active",
+                 4: "OpenSent",
+                 5: "OpenConfirm",
+                 6: "Established"
+               }
+
+       peers = self.swtch.getAllBGPNeighborStates()
+       if len(peers)>=0:
+           print '\n'
+           labels = ('Neighbor','LocalAS','PeerAS','State','RxMsg','TxMsg','Description','Prefixes_Rcvd')
+           rows=[]
+           for p in peers:
+               pr = p['Object']
+               RXmsg = (pr['Messages']['Received']['Notification']) + (pr['Messages']['Received']['Update'])
+               TXmsg = (pr['Messages']['Sent']['Notification']) + (pr['Messages']['Sent']['Update'])
+               rows.append( (pr['NeighborAddress'],
+                     "%s" %(pr['LocalAS']),
+                     "%s" %(pr['PeerAS']),
+                     "%s" %(sessionState[pr['SessionState']]),
+                     "%s" %(RXmsg),
+                     "%s" %(TXmsg),
+                     "%s" %(pr['Description']),
+                     "%s" %(pr['TotalPrefixes'])))
+           width = 20
+           print indent([labels]+rows, hasHeader=True, separateRows=False,
+                        prefix=' ', postfix=' ', headerChar= '-', delim='    ',
+                        wrapfunc=lambda x: wrap_onspace_strict(x,width))
+
+    def printSystemSwVersionStates(self):
+
+        httpSuccessCodes = [200, 201, 202, 204]
+
+        r = self.swtch.getSystemSwVersionState("")
+        if r.status_code in httpSuccessCodes:
+            obj = r.json()
+            o = obj['Object']
+            print "flexswitch version: %s\n" %(o['FlexswitchVersion'])
+            print "git repo details:\n"
+            labels = ('Repo Name','Git Commit Shal','Branch Name','Build Time')
+            rows=[]
+            for repo in o['Repos']:
+                rows.append( (repo['Name'],
+                         "%s" %(repo['Sha1']),
+                         "%s" %(repo['Branch']),
+                         "%s" %(repo['Time'])) )
+            width = 20
+            print indent([labels]+rows, hasHeader=True, separateRows=True,
+                 prefix='| ', postfix=' |',
+                 wrapfunc=lambda x: wrap_onspace_strict(x,width))
 
 if __name__=='__main__':
     pass
