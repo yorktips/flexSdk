@@ -638,6 +638,32 @@ class FlexPrint( object):
                         prefix=' ', postfix=' ', headerChar= '-', delim='    ',
                         wrapfunc=lambda x: wrap_onspace_strict(x,width))
 
+    def printBfdSessionStates(self):
+	    peers = self.swtch.getAllBfdSessionStates()
+	    if len(peers)>=0:
+	    	print '\n'
+	    	labels = ('NeighAddr','LD/RD','Protocols','Multi','TxInt','RxInt','State','Int','TxPkts','RxPkts')
+	    	rows=[]
+	    	for p in peers:
+	    	    pr = p['Object']
+	    	    desc = pr['LocalDiscriminator']+"/"+ pr['RemoteDiscriminator']
+	    	    multi = pr['DetectionMultiplier']
+	    	    rows.append( (pr['IpAddr'],
+	    	          "%s" %(desc),
+	    	          "%s" %(pr['RegisteredProtocols']),
+	    	          "%s" %(pr['DetectionMultiplier']),
+	    	          "%s" %(pr['DesiredMinTxInterval']),
+	    	          "%s" %(pr['RequiredMinRxInterval']),
+	    	          "%s" %(pr['RemoteSessionState']),
+	    	          "%s" %(pr['IfIndex']),
+	    	          "%s" %(pr['NumTxPackets']),
+	    	          "%s" %(pr['NumRxPackets'])))
+	    	width = 20
+	    	print indent([labels]+rows, hasHeader=True, separateRows=False,
+                        prefix=' ', postfix=' ', headerChar= '-', delim='    ',
+                        wrapfunc=lambda x: wrap_onspace_strict(x,width))               
+       
+
     def printSystemSwVersionStates(self):
 
         httpSuccessCodes = [200, 201, 202, 204]
