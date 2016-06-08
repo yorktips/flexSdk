@@ -92,23 +92,31 @@ class FlexPrint( object):
         		print '------------------------------------------------------------------------------'
         		
     def printIPv4RouteStates(self):
-        routes = self.swtch.getAllIPv4RouteStates()
-        print '\n\n---- Routes ----'
-        labels = ('Network', 'NextHop', 'Protocol', 'Reachability', 'Creation Time', 'Update Time', 'PolicyList')
-        rows = []
+        routes = self.swtch.getAllIPv4RouteStates()     
+        print "IP Route Table"
+        print "'[x/y]' denotes [preference/metric]"
+        print "\n"    	
         for r in routes:
             rt = r['Object']
-            rows.append(("%s" %(rt['DestinationNw']),
-                        "%s" %(rt['NextHopList']),
-                        "%s" %(rt['Protocol']),
-                        "%s" %(rt['IsNetworkReachable']),
-                        "%s" %(rt['RouteCreatedTime']),
-                        "%s" %(rt['RouteUpdatedTime']),
-                        "%s" %(rt['PolicyList'])))
-        width = 30
-        print indent([labels]+rows, hasHeader=True, separateRows=False,
-                     prefix=' ', postfix=' ', headerChar= '-', delim='    ',
-                     wrapfunc=lambda x: wrap_onspace_strict(x,width))
+            rt_spec = self.swtch.getIPv4RouteState(rt['DestinationNw']).json()
+            rt_next=rt_spec['Object']
+            rt_count = len(rt_next['NextHopList'])  
+            route_distance = self.swtch.getRouteDistanceState(rt['Protocol']).json()
+            rd = route_distance['Object']    
+            if rt['PolicyList'] is None:
+            	policy=rt['PolicyList']
+            else:
+                policy = str(rt['PolicyList']).split("[")[1].split()[1]
+            print rt['DestinationNw'], "ubest/mbest: 1/0"+",", "Policy:", policy
+            while rt_count > 0:
+            	if rt['Protocol'] == "CONNECTED":
+            		ip_int = self.swtch.getIPv4IntfState(rt_next['NextHopList'][rt_count-1]['NextHopIntRef']).json()	
+                	print "   via",ip_int['Object']['IpAddr'].split("/")[0] +", "+rt_next['NextHopList'][rt_count-1]['NextHopIntRef']+", "+"["+str(rd['Distance'])+"/"+str(rt_next['NextHopList'][rt_count-1]['Weight'])+"]"+",",rt['RouteCreatedTime']+",",rt['Protocol']            		
+            	else:  
+                	print "   via", rt_next['NextHopList'][rt_count-1]['NextHopIp']+", "+rt_next['NextHopList'][rt_count-1]['NextHopIntRef']+", "+"["+str(rd['Distance'])+"/"+str(rt_next['NextHopList'][rt_count-1]['Weight'])+"]"+",",rt['RouteCreatedTime']+",",rt['Protocol']
+                rt_count-=1
+
+     
 
     def printIPv4IntfStates(self, IntfRef=None):
         ipv4intfs = self.swtch.getAllIPv4IntfStates()
@@ -548,17 +556,20 @@ class FlexPrint( object):
     def printBGPRouteStates(self, ):
         routes = self.swtch.getAllBGPRouteStates()
         print '\n\n---- BGP Routes ----'
-        labels = ('Network', 'Mask', 'NextHop', 'Metric', 'LocalPref', 'Updated', 'Path')
+        labels = ('Network', 'NextHop', 'Metric', 'LocalPref', 'Updated', 'Path')
         rows = []
         for r in routes:
             rt = r['Object']
-            rows.append((rt['Network'],
-                        "%s" %(rt['CIDRLen']),
+            if rt['Path'] is None:
+               bgp_path =  rt['Path']
+            else:
+               bgp_path = [x.encode('utf-8') for x in rt['Path']]
+            rows.append((rt['Network']+"/"+str(rt['CIDRLen']),
                         "%s" %(rt['NextHop']),
                         "%s" %(rt['Metric']),
                         "%s" %(rt['LocalPref']),
                         "%s" %(rt['UpdatedDuration'].split(".")[0]),
-                        "%s" %(rt['Path'])))
+                        "%s" %( bgp_path )))
         width = 30
         print indent([labels]+rows, hasHeader=True, separateRows=False,
                      prefix=' ', postfix=' ', headerChar= '-', delim='    ',
@@ -597,37 +608,83 @@ class FlexPrint( object):
 
 
     def printBGPNeighborStates(self):	   
-		   sessionState=  {  1: "Idle",
-				     2: "Connect",
-				     3: "Active",
-				     4: "OpenSent",
-				     5: "OpenConfirm",
-				     6: "Established"
-				   } 
-	
-		   peers = self.swtch.getAllBGPNeighborStates()
-		   if len(peers)>=0: 
-			   print '\n'
-			   labels = ('Neighbor','LocalAS','PeerAS','State','RxMsg','TxMsg','Description','TotalPrefixes')
-			   rows=[]
-			   for p in peers:
-			       pr = p['Object']
-			       RXmsg = (pr['Messages']['Received']['Notification']) + (pr['Messages']['Received']['Update'])
-			       TXmsg = (pr['Messages']['Sent']['Notification']) + (pr['Messages']['Sent']['Update'])
-			       rows.append( (pr['NeighborAddress'],
-						 "%s" %(pr['LocalAS']),
-						 "%s" %(pr['PeerAS']),
-						 "%s" %(sessionState[pr['SessionState']]),
-						 "%s" %(RXmsg),
-						 "%s" %(TXmsg),
-						 "%s" %(pr['Description']),
-						 "%s" %(pr['TotalPrefixes'])))
-			   width = 20
-			   print indent([labels]+rows, hasHeader=True, separateRows=False,
-                     		prefix=' ', postfix=' ', headerChar= '-', delim='    ',
-                     		wrapfunc=lambda x: wrap_onspace_strict(x,width))
-					
-					 
+       sessionState=  {  1: "Idle",
+                 2: "Connect",
+                 3: "Active",
+                 4: "OpenSent",
+                 5: "OpenConfirm",
+                 6: "Established"
+               }
+
+       peers = self.swtch.getAllBGPNeighborStates()
+       if len(peers)>=0:
+           print '\n'
+           labels = ('Neighbor','LocalAS','PeerAS','State','RxMsg','TxMsg','Description','Prefixes_Rcvd')
+           rows=[]
+           for p in peers:
+               pr = p['Object']
+               RXmsg = (pr['Messages']['Received']['Notification']) + (pr['Messages']['Received']['Update'])
+               TXmsg = (pr['Messages']['Sent']['Notification']) + (pr['Messages']['Sent']['Update'])
+               rows.append( (pr['NeighborAddress'],
+                     "%s" %(pr['LocalAS']),
+                     "%s" %(pr['PeerAS']),
+                     "%s" %(sessionState[pr['SessionState']]),
+                     "%s" %(RXmsg),
+                     "%s" %(TXmsg),
+                     "%s" %(pr['Description']),
+                     "%s" %(pr['TotalPrefixes'])))
+           width = 20
+           print indent([labels]+rows, hasHeader=True, separateRows=False,
+                        prefix=' ', postfix=' ', headerChar= '-', delim='    ',
+                        wrapfunc=lambda x: wrap_onspace_strict(x,width))
+
+    def printBfdSessionStates(self):
+	    peers = self.swtch.getAllBfdSessionStates()
+	    if len(peers)>=0:
+	    	print '\n'
+	    	labels = ('NeighAddr','LD/RD','Protocols','Multi','TxInt','RxInt','State','Int','TxPkts','RxPkts')
+	    	rows=[]
+	    	for p in peers:
+	    	    pr = p['Object']
+	    	    desc = pr['LocalDiscriminator']+"/"+ pr['RemoteDiscriminator']
+	    	    multi = pr['DetectionMultiplier']
+	    	    rows.append( (pr['IpAddr'],
+	    	          "%s" %(desc),
+	    	          "%s" %(pr['RegisteredProtocols']),
+	    	          "%s" %(pr['DetectionMultiplier']),
+	    	          "%s" %(pr['DesiredMinTxInterval']),
+	    	          "%s" %(pr['RequiredMinRxInterval']),
+	    	          "%s" %(pr['RemoteSessionState']),
+	    	          "%s" %(pr['IfIndex']),
+	    	          "%s" %(pr['NumTxPackets']),
+	    	          "%s" %(pr['NumRxPackets'])))
+	    	width = 20
+	    	print indent([labels]+rows, hasHeader=True, separateRows=False,
+                        prefix=' ', postfix=' ', headerChar= '-', delim='    ',
+                        wrapfunc=lambda x: wrap_onspace_strict(x,width))               
+       
+
+    def printSystemSwVersionStates(self):
+
+        httpSuccessCodes = [200, 201, 202, 204]
+
+        r = self.swtch.getSystemSwVersionState("")
+        if r.status_code in httpSuccessCodes:
+            obj = r.json()
+            o = obj['Object']
+            print "flexswitch version: %s\n" %(o['FlexswitchVersion'])
+            print "git repo details:\n"
+            labels = ('Repo Name','Git Commit Shal','Branch Name','Build Time')
+            rows=[]
+            for repo in o['Repos']:
+                rows.append( (repo['Name'],
+                         "%s" %(repo['Sha1']),
+                         "%s" %(repo['Branch']),
+                         "%s" %(repo['Time'])) )
+            width = 20
+            print indent([labels]+rows, hasHeader=True, separateRows=True,
+                 prefix='| ', postfix=' |',
+                 wrapfunc=lambda x: wrap_onspace_strict(x,width))
 
 if __name__=='__main__':
     pass
