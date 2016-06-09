@@ -3233,7 +3233,7 @@ class FlexSwitch( object):
         :param int32 AddressLessIf : For the purpose of easing the instancing of addressed and addressless interfaces; this variable takes the value 0 on interfaces with IP addresses and the corresponding value of ifIndex for interfaces having no IP address. For the purpose of easing the instancing of addressed and addressless interfaces; this variable takes the value 0 on interfaces with IP addresses and the corresponding value of ifIndex for interfaces having no IP address.
         :param int32 IfAdminStat : Indiacates if OSPF is enabled on this interface Indiacates if OSPF is enabled on this interface
         :param string IfAreaId : A 32-bit integer uniquely identifying the area to which the interface connects.  Area ID 0.0.0.0 is used for the OSPF backbone. A 32-bit integer uniquely identifying the area to which the interface connects.  Area ID 0.0.0.0 is used for the OSPF backbone.
-        :param int32 IfType : The OSPF interface type. By way of a default The OSPF interface type. By way of a default
+        :param string IfType : The OSPF interface type. By way of a default The OSPF interface type. By way of a default
         :param int32 IfRtrPriority : The priority of this interface.  Used in multi-access networks The priority of this interface.  Used in multi-access networks
         :param int32 IfTransitDelay : The estimated number of seconds it takes to transmit a link state update packet over this interface.  Note that the minimal value SHOULD be 1 second. The estimated number of seconds it takes to transmit a link state update packet over this interface.  Note that the minimal value SHOULD be 1 second.
         :param int32 IfRetransInterval : The number of seconds between link state advertisement retransmissions The number of seconds between link state advertisement retransmissions
@@ -3263,7 +3263,7 @@ class FlexSwitch( object):
                 'AddressLessIf' : int(AddressLessIf),
                 'IfAdminStat' : int(IfAdminStat),
                 'IfAreaId' : IfAreaId,
-                'IfType' : int(IfType),
+                'IfType' : IfType,
                 'IfRtrPriority' : int(IfRtrPriority),
                 'IfTransitDelay' : int(IfTransitDelay),
                 'IfRetransInterval' : int(IfRetransInterval),
@@ -3305,7 +3305,7 @@ class FlexSwitch( object):
             obj['IfAreaId'] = IfAreaId
 
         if IfType != None :
-            obj['IfType'] = int(IfType)
+            obj['IfType'] = IfType
 
         if IfRtrPriority != None :
             obj['IfRtrPriority'] = int(IfRtrPriority)
@@ -5873,43 +5873,43 @@ class FlexSwitch( object):
         :param string IntfRef : Front panel port name or system assigned interface id Front panel port name or system assigned interface id
         :param int32 IfIndex : System assigned interface id for this port. Read only attribute System assigned interface id for this port. Read only attribute
         :param string PhyIntfType : Type of internal phy interface Type of internal phy interface
+        :param string AdminState : Administrative state of this port Administrative state of this port
         :param string MacAddr : Mac address associated with this port Mac address associated with this port
         :param int32 Speed : Port speed in Mbps Port speed in Mbps
         :param string Duplex : Duplex setting for this port Duplex setting for this port
+        :param string Autoneg : Autonegotiation setting for this port Autonegotiation setting for this port
         :param string MediaType : Type of media inserted into this port Type of media inserted into this port
         :param int32 Mtu : Maximum transmission unit size for this port Maximum transmission unit size for this port
         :param string BreakOutMode : Break out mode for the port. Only applicable on ports that support breakout. Valid modes - 1x40 Break out mode for the port. Only applicable on ports that support breakout. Valid modes - 1x40
         :param string Description : User provided string description User provided string description
-        :param string AdminState : Administrative state of this port Administrative state of this port
-        :param string Autoneg : Autonegotiation setting for this port Autonegotiation setting for this port
 
 	"""
     def createPort(self,
                    IntfRef,
                    IfIndex,
                    PhyIntfType,
+                   AdminState,
                    MacAddr,
                    Speed,
                    Duplex,
+                   Autoneg,
                    MediaType,
                    Mtu,
                    BreakOutMode,
-                   Description='FP Port',
-                   AdminState='DOWN',
-                   Autoneg='OFF'):
+                   Description='FP Port'):
         obj =  { 
                 'IntfRef' : IntfRef,
                 'IfIndex' : int(IfIndex),
                 'PhyIntfType' : PhyIntfType,
+                'AdminState' : AdminState,
                 'MacAddr' : MacAddr,
                 'Speed' : int(Speed),
                 'Duplex' : Duplex,
+                'Autoneg' : Autoneg,
                 'MediaType' : MediaType,
                 'Mtu' : int(Mtu),
                 'BreakOutMode' : BreakOutMode,
                 'Description' : Description,
-                'AdminState' : AdminState,
-                'Autoneg' : Autoneg,
                 }
         reqUrl =  self.cfgUrlBase+'Port'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -5919,15 +5919,15 @@ class FlexSwitch( object):
                    IntfRef,
                    IfIndex = None,
                    PhyIntfType = None,
+                   AdminState = None,
                    MacAddr = None,
                    Speed = None,
                    Duplex = None,
+                   Autoneg = None,
                    MediaType = None,
                    Mtu = None,
                    BreakOutMode = None,
-                   Description = None,
-                   AdminState = None,
-                   Autoneg = None):
+                   Description = None):
         obj =  {}
         if IntfRef != None :
             obj['IntfRef'] = IntfRef
@@ -5938,6 +5938,9 @@ class FlexSwitch( object):
         if PhyIntfType != None :
             obj['PhyIntfType'] = PhyIntfType
 
+        if AdminState != None :
+            obj['AdminState'] = AdminState
+
         if MacAddr != None :
             obj['MacAddr'] = MacAddr
 
@@ -5946,6 +5949,9 @@ class FlexSwitch( object):
 
         if Duplex != None :
             obj['Duplex'] = Duplex
+
+        if Autoneg != None :
+            obj['Autoneg'] = Autoneg
 
         if MediaType != None :
             obj['MediaType'] = MediaType
@@ -5959,12 +5965,6 @@ class FlexSwitch( object):
         if Description != None :
             obj['Description'] = Description
 
-        if AdminState != None :
-            obj['AdminState'] = AdminState
-
-        if Autoneg != None :
-            obj['Autoneg'] = Autoneg
-
         reqUrl =  self.cfgUrlBase+'Port'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
@@ -5973,21 +5973,24 @@ class FlexSwitch( object):
                         objectId,
                         IfIndex = None,
                         PhyIntfType = None,
+                        AdminState = None,
                         MacAddr = None,
                         Speed = None,
                         Duplex = None,
+                        Autoneg = None,
                         MediaType = None,
                         Mtu = None,
                         BreakOutMode = None,
-                        Description = None,
-                        AdminState = None,
-                        Autoneg = None):
+                        Description = None):
         obj =  {'objectId': objectId }
         if IfIndex !=  None:
             obj['IfIndex'] = IfIndex
 
         if PhyIntfType !=  None:
             obj['PhyIntfType'] = PhyIntfType
+
+        if AdminState !=  None:
+            obj['AdminState'] = AdminState
 
         if MacAddr !=  None:
             obj['MacAddr'] = MacAddr
@@ -5997,6 +6000,9 @@ class FlexSwitch( object):
 
         if Duplex !=  None:
             obj['Duplex'] = Duplex
+
+        if Autoneg !=  None:
+            obj['Autoneg'] = Autoneg
 
         if MediaType !=  None:
             obj['MediaType'] = MediaType
@@ -6009,12 +6015,6 @@ class FlexSwitch( object):
 
         if Description !=  None:
             obj['Description'] = Description
-
-        if AdminState !=  None:
-            obj['AdminState'] = AdminState
-
-        if Autoneg !=  None:
-            obj['Autoneg'] = Autoneg
 
         reqUrl =  self.cfgUrlBase+'Port'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
