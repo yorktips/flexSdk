@@ -577,28 +577,14 @@ class FlexPrint( object):
 
     def printIPv4IntfStates(self,):
         ipintfs = self.swtch.getAllIPv4IntfStates()
-        print '\n\n---- IP Interfaces ----'
-        labels = ('Interface', 'IfIndex', 'Address', 'OperState', 'L2IntfType', 'L2IntfId')
+        print '\n'
+        labels = ('Interface', 'IP Address', 'OperState', 'DownEvents','Last Flap')
         rows = []
         for i in ipintfs:
             ip = i['Object']
             rows.append((ip['IntfRef'],
-                        "%s" %(ip['IfIndex']),
                         "%s" %(ip['IpAddr']),
                         "%s" %(ip['OperState']),
-                        "%s" %(ip['L2IntfType']),
-                        "%s" %(ip['L2IntfId'])))
-        width = 20
-        print indent([labels]+rows, hasHeader=True, separateRows=False,
-                     prefix=' ', postfix=' ', headerChar= '-', delim='    ',
-                     wrapfunc=lambda x: wrap_onspace_strict(x,width))
-
-        labels = ('NumUpEvents', 'LastUpEventTime', 'NumDownEvents', 'LastDownEventtime')
-        rows = []
-        for i in ipintfs:
-            ip = i['Object']
-            rows.append(("%s" %(ip['NumUpEvents']),
-                        "%s" %(ip['LastUpEventTime']),
                         "%s" %(ip['NumDownEvents']),
                         "%s" %(ip['LastDownEventTime'])))
         width = 20
@@ -646,7 +632,7 @@ class FlexPrint( object):
 	    	rows=[]
 	    	for p in peers:
 	    	    pr = p['Object']
-	    	    desc = pr['LocalDiscriminator']+"/"+ pr['RemoteDiscriminator']
+	    	    desc = str(pr['LocalDiscriminator'])+"/"+str(pr['RemoteDiscriminator'])
 	    	    multi = pr['DetectionMultiplier']
 	    	    rows.append( (pr['IpAddr'],
 	    	          "%s" %(desc),
