@@ -648,7 +648,7 @@ class FlexPrint( object):
             o = obj['Object']
             print "flexswitch version: %s\n" %(o['FlexswitchVersion'])
             print "git repo details:\n"
-            labels = ('Repo Name','Git Commit Shal','Branch Name','Build Time')
+            labels = ('Repo Name','Git Commit Sha1','Branch Name','Build Time')
             rows=[]
             for repo in o['Repos']:
                 rows.append( (repo['Name'],
