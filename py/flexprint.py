@@ -136,19 +136,36 @@ class FlexPrint( object):
             print "VlanId %d NOT FOUND" % (VlanId,)
 
     def printVlanStates(self, VlanId=None):
-        vlans = self.swtch.getAllVlanStates()
-        if len(vlans):
-            print '\n\n\t\t---- Vlans ----'
-            print '%13s%12s%15s%10s' %('Vlan','Name','OperState','IfIndex')
-        else:
-            return 0
-        for v in vlans:
-            vlan = v['Object']
-            if VlanId == None or vlan['VlanId'] == int(VlanId):
-                print '%13s%12s%15s%10s\n' %(vlan['VlanId'], vlan['VlanName'], vlan['OperState'], vlan['IfIndex'])
-
-        return 1
-
+        vlans = self.swtch.getAllVlans()
+        if len(vlans)>=0:
+        	print '\n'
+        	labels = ('VLAN','Name','Status','Ports')
+        	rows=[]
+        	for v in vlans:
+        	    vl = v['Object']
+        	    #vlan_state = self.swtch.getVlanState(vl['VlanId'])
+        	    #vls = vlan_state['Object']
+        	    #operstate = vls['OperState']
+        	    operstate = 'UP'
+        	    if vl['UntagIntfList'] is not None:
+        	    	untag_ports = ', '.join(vl['UntagIntfList'])
+        	    else:
+        	    	untag_ports = ""
+        	    if vl['IntfList']is not None:
+        	    	tag_ports = ', '.join(vl['IntfList'])
+        	    else:
+        	    	tag_ports = ""
+        	    port = untag_ports + tag_ports
+        	    name = "None"
+        	    rows.append( (str(vl['VlanId']),
+        	          "%s" %(name),
+        	          "%s" %(operstate),
+        	          "%s" %(str(port))))
+        	width = 20
+        	print indent([labels]+rows, hasHeader=True, separateRows=False,
+                        prefix=' ', postfix=' ', headerChar= '-', delim='    ',
+                        wrapfunc=lambda x: wrap_onspace_strict(x,width))       
+			
     def printPolicyStates (self) :
         policies = self.swtch.getObjects('PolicyDefinitionStates')
         if len(policies) :
@@ -199,6 +216,8 @@ class FlexPrint( object):
                                                vlan ['IfIndexList'],
                                                vlan ['UntagIfIndexList'],
                                                vlan ['OperState'])
+
+
 
     def printVrrpIntfState (self):
         vrids = self.swtch.getObjects('VrrpIntfStates')
