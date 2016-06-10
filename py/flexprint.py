@@ -136,19 +136,36 @@ class FlexPrint( object):
             print "VlanId %d NOT FOUND" % (VlanId,)
 
     def printVlanStates(self, VlanId=None):
-        vlans = self.swtch.getAllVlanStates()
-        if len(vlans):
-            print '\n\n\t\t---- Vlans ----'
-            print '%13s%12s%15s%10s' %('Vlan','Name','OperState','IfIndex')
-        else:
-            return 0
-        for v in vlans:
-            vlan = v['Object']
-            if VlanId == None or vlan['VlanId'] == int(VlanId):
-                print '%13s%12s%15s%10s\n' %(vlan['VlanId'], vlan['VlanName'], vlan['OperState'], vlan['IfIndex'])
-
-        return 1
-
+        vlans = self.swtch.getAllVlans()
+        if len(vlans)>=0:
+        	print '\n'
+        	labels = ('VLAN','Name','Status','Ports')
+        	rows=[]
+        	for v in vlans:
+        	    vl = v['Object']
+        	    #vlan_state = self.swtch.getVlanState(vl['VlanId'])
+        	    #vls = vlan_state['Object']
+        	    #operstate = vls['OperState']
+        	    operstate = 'UP'
+        	    if vl['UntagIntfList'] is not None:
+        	    	untag_ports = ', '.join(vl['UntagIntfList'])
+        	    else:
+        	    	untag_ports = ""
+        	    if vl['IntfList']is not None:
+        	    	tag_ports = ', '.join(vl['IntfList'])
+        	    else:
+        	    	tag_ports = ""
+        	    port = untag_ports + tag_ports
+        	    name = "None"
+        	    rows.append( (str(vl['VlanId']),
+        	          "%s" %(name),
+        	          "%s" %(operstate),
+        	          "%s" %(str(port))))
+        	width = 20
+        	print indent([labels]+rows, hasHeader=True, separateRows=False,
+                        prefix=' ', postfix=' ', headerChar= '-', delim='    ',
+                        wrapfunc=lambda x: wrap_onspace_strict(x,width))       
+			
     def printPolicyStates (self) :
         policies = self.swtch.getObjects('PolicyDefinitionStates')
         if len(policies) :
@@ -199,6 +216,8 @@ class FlexPrint( object):
                                                vlan ['IfIndexList'],
                                                vlan ['UntagIfIndexList'],
                                                vlan ['OperState'])
+
+
 
     def printVrrpIntfState (self):
         vrids = self.swtch.getObjects('VrrpIntfStates')
@@ -577,28 +596,14 @@ class FlexPrint( object):
 
     def printIPv4IntfStates(self,):
         ipintfs = self.swtch.getAllIPv4IntfStates()
-        print '\n\n---- IP Interfaces ----'
-        labels = ('Interface', 'IfIndex', 'Address', 'OperState', 'L2IntfType', 'L2IntfId')
+        print '\n'
+        labels = ('Interface', 'IP Address', 'OperState', 'DownEvents','Last Flap')
         rows = []
         for i in ipintfs:
             ip = i['Object']
             rows.append((ip['IntfRef'],
-                        "%s" %(ip['IfIndex']),
                         "%s" %(ip['IpAddr']),
                         "%s" %(ip['OperState']),
-                        "%s" %(ip['L2IntfType']),
-                        "%s" %(ip['L2IntfId'])))
-        width = 20
-        print indent([labels]+rows, hasHeader=True, separateRows=False,
-                     prefix=' ', postfix=' ', headerChar= '-', delim='    ',
-                     wrapfunc=lambda x: wrap_onspace_strict(x,width))
-
-        labels = ('NumUpEvents', 'LastUpEventTime', 'NumDownEvents', 'LastDownEventtime')
-        rows = []
-        for i in ipintfs:
-            ip = i['Object']
-            rows.append(("%s" %(ip['NumUpEvents']),
-                        "%s" %(ip['LastUpEventTime']),
                         "%s" %(ip['NumDownEvents']),
                         "%s" %(ip['LastDownEventTime'])))
         width = 20
@@ -646,7 +651,7 @@ class FlexPrint( object):
 	    	rows=[]
 	    	for p in peers:
 	    	    pr = p['Object']
-	    	    desc = pr['LocalDiscriminator']+"/"+ pr['RemoteDiscriminator']
+	    	    desc = str(pr['LocalDiscriminator'])+"/"+str(pr['RemoteDiscriminator'])
 	    	    multi = pr['DetectionMultiplier']
 	    	    rows.append( (pr['IpAddr'],
 	    	          "%s" %(desc),
@@ -674,7 +679,7 @@ class FlexPrint( object):
             o = obj['Object']
             print "flexswitch version: %s\n" %(o['FlexswitchVersion'])
             print "git repo details:\n"
-            labels = ('Repo Name','Git Commit Shal','Branch Name','Build Time')
+            labels = ('Repo Name','Git Commit Sha1','Branch Name','Build Time')
             rows=[]
             for repo in o['Repos']:
                 rows.append( (repo['Name'],

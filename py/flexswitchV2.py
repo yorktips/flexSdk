@@ -5390,6 +5390,91 @@ class FlexSwitch( object):
         return self.getObjects( 'SystemParam', self.stateUrlBase)
 
 
+    """
+    .. automethod :: createDaemon(self,
+        :param string Name : Daemon name Daemon name
+        :param bool WatchDog : Enable watchdog for daemon Enable watchdog for daemon
+        :param bool Enable : Enable the flexswitch daemon Enable the flexswitch daemon
+
+	"""
+    def createDaemon(self,
+                     Name,
+                     WatchDog=True,
+                     Enable=True):
+        obj =  { 
+                'Name' : Name,
+                'WatchDog' : True if WatchDog else False,
+                'Enable' : True if Enable else False,
+                }
+        reqUrl =  self.cfgUrlBase+'Daemon'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateDaemon(self,
+                     Name,
+                     WatchDog = None,
+                     Enable = None):
+        obj =  {}
+        if Name != None :
+            obj['Name'] = Name
+
+        if WatchDog != None :
+            obj['WatchDog'] = True if WatchDog else False
+
+        if Enable != None :
+            obj['Enable'] = True if Enable else False
+
+        reqUrl =  self.cfgUrlBase+'Daemon'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateDaemonById(self,
+                          objectId,
+                          WatchDog = None,
+                          Enable = None):
+        obj =  {'objectId': objectId }
+        if WatchDog !=  None:
+            obj['WatchDog'] = WatchDog
+
+        if Enable !=  None:
+            obj['Enable'] = Enable
+
+        reqUrl =  self.cfgUrlBase+'Daemon'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteDaemon(self,
+                     Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.cfgUrlBase+'Daemon'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteDaemonById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'Daemon'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getDaemon(self,
+                  Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.cfgUrlBase + 'Daemon'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getDaemonById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'Daemon'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllDaemons(self):
+        return self.getObjects( 'Daemon', self.cfgUrlBase)
+
+
     def getBGPRouteState(self,
                          Network,
                          NextHop,
