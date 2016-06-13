@@ -581,6 +581,79 @@ class FlexSwitch( object):
 
 
     """
+    .. automethod :: createFMgrGlobal(self,
+        :param string Vrf : System Vrf System Vrf
+        :param bool Enable : Enable Fault Manager Enable Fault Manager
+
+	"""
+    def createFMgrGlobal(self,
+                         Enable):
+        obj =  { 
+                'Vrf' : 'default',
+                'Enable' : True if Enable else False,
+                }
+        reqUrl =  self.cfgUrlBase+'FMgrGlobal'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateFMgrGlobal(self,
+                         Vrf,
+                         Enable = None):
+        obj =  {}
+        if Vrf != None :
+            obj['Vrf'] = Vrf
+
+        if Enable != None :
+            obj['Enable'] = True if Enable else False
+
+        reqUrl =  self.cfgUrlBase+'FMgrGlobal'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateFMgrGlobalById(self,
+                              objectId,
+                              Enable = None):
+        obj =  {'objectId': objectId }
+        if Enable !=  None:
+            obj['Enable'] = Enable
+
+        reqUrl =  self.cfgUrlBase+'FMgrGlobal'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteFMgrGlobal(self,
+                         Vrf):
+        obj =  { 
+                'Vrf' : Vrf,
+                }
+        reqUrl =  self.cfgUrlBase+'FMgrGlobal'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteFMgrGlobalById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'FMgrGlobal'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getFMgrGlobal(self,
+                      Vrf):
+        obj =  { 
+                'Vrf' : Vrf,
+                }
+        reqUrl =  self.cfgUrlBase + 'FMgrGlobal'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getFMgrGlobalById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'FMgrGlobal'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllFMgrGlobals(self):
+        return self.getObjects( 'FMgrGlobal', self.cfgUrlBase)
+
+
+    """
     .. automethod :: createLaPortChannel(self,
         :param int32 LagId : Id of the lag group Id of the lag group
         :param int32 LagType : Sets the type of LAG Sets the type of LAG
