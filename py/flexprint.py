@@ -2,6 +2,7 @@ import requests
 import json
 import urllib2
 from flexswitchV2 import FlexSwitch
+from flexprintV2 import FlexSwitchShow
 from tablePrint import *
 
 def getLagGroups(ip, port):
@@ -38,7 +39,7 @@ def getLagGroups(ip, port):
 
 
 
-class FlexPrint( object):
+class FlexPrint( FlexSwitchShow):
     def  __init__ (self, ip, port):
         self.swtch = FlexSwitch(ip, port)
 
@@ -336,8 +337,8 @@ class FlexPrint( object):
 
         brgs = self.swtch.getAllStpBridgeStates()
 
+        print '\n\n---- STP Bridge DB----'
         if len(brgs):
-            print '\n\n---- STP Bridge DB----'
 
             count = 0
             for data in brgs:
@@ -361,6 +362,8 @@ class FlexPrint( object):
                 print "Forwarding Delay: ", obj["ForwardDelay"]
                 print "Bridge Vlan: ", obj["Vlan"] if obj["Vlan"] != 0 else "DEFAULT"
                 print "=====================================================================================\n\n"
+        else:
+            print 'No Spanning Tree Instances provisioned\n'
 
     def printStpPorts(self):
         stateDict = {
@@ -427,7 +430,8 @@ class FlexPrint( object):
                 print "BDM           %20s%20s" %(obj["BdmCurrState"], obj["BdmPrevState"])
                 print "TCM           %20s%20s" %(obj["TcmCurrState"], obj["TcmPrevState"])
                 print "====================================================================="
-
+        else:
+            print 'No Data To Display for %s' %('StpPortStates')
 
     def printLaPortChannelStates(self, brief=False):
 
@@ -515,6 +519,10 @@ class FlexPrint( object):
 
         portchannels = self.swtch.getAllLaPortChannelStates()
         members = self.swtch.getAllLaPortChannelMemberStates()
+
+        if not portchannels:
+            print 'No Data To Display for %s' %('LaPortChannelState')
+
         for portchannel in portchannels:
             lag = portchannel['Object']
 
@@ -537,6 +545,9 @@ class FlexPrint( object):
 
             # TODO dump the LAG group info
             if not brief:
+                if not members:
+                    print 'No Data To Display for %s' %('LaPortChannelMemberState')
+
                 for d in [m['Object'] for m in members if m['Object']['LagId'] == lag['LagId']]:
 
                     print '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n'
