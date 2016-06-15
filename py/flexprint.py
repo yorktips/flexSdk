@@ -47,50 +47,49 @@ class FlexPrint( FlexSwitchShow):
 
         self.printPortStates(IntfRef=int(IntfRef))
 
-    def printPortStates(self, IntfRef=None):
+    def printPortStates(self):
 
         ports = self.swtch.getAllPortStates()
         for port in ports:
             p = port['Object']
 
-            if IntfRef == None or IntfRef == p['IntfRef']:
-                port_config = self.swtch.getPort(p['IntfRef']).json()
-                pc = port_config['Object']
-                ipv4_state = self.swtch.getIPv4IntfState(p['IntfRef']).json()
-                #print ipv4_state
-                if ipv4_state.has_key('Error'):
-                    ipv4 = None
-                else:
-                    ipv4 = ipv4_state['Object']
-                if not p['LastDownEventTime']:
-                    lastdown="never"
-                else:
-                    lastdown = p['LastDownEventTime']
-                if not p['LastUpEventTime']:
-                    lastdown="never"
-                else:
-                    lastdown = p['LastDownEventTime']
+            port_config = self.swtch.getPort(p['IntfRef']).json()
+            pc = port_config['Object']
+            ipv4_state = self.swtch.getIPv4IntfState(p['IntfRef']).json()
+            #print ipv4_state
+            if ipv4_state.has_key('Error'):
+                ipv4 = None
+            else:
+                ipv4 = ipv4_state['Object']
+            if not p['LastDownEventTime']:
+                lastdown="never"
+            else:
+                lastdown = p['LastDownEventTime']
+            if not p['LastUpEventTime']:
+                lastdown="never"
+            else:
+                lastdown = p['LastDownEventTime']
 
-                print p['Name'], "is", p['OperState'], "Admin State is", pc['AdminState']
-                if ipv4 is not None:
-                    print "  IPv4 Address is", ipv4['IpAddr']
-                print "  PresentInHW:", p['PresentInHW']
-                print "  PhyType:", pc['PhyIntfType'],",","Media Type:",pc['MediaType'],"," , "Address:", pc['MacAddr']
-                print "  MTU",  pc['Mtu'],"Bytes"
-                print " ",pc['Duplex'],",",pc['Speed'],"Mb/s"
-                print "  Breakout Status:", pc['BreakOutMode']
-                print "  Last link down:",p['LastDownEventTime']
-                print "  Last link up:",   p['LastUpEventTime']
-                print "  Number of Link flaps:", p['NumDownEvents']
-                print "  ErrDisableReason:", p['ErrDisableReason']
-                print "  RX"
-                print "   ",p['IfInUcastPkts'],"unicast packets",p['IfInOctets'],"unicast octets"
-                print "   ",p['IfInDiscards'],"input discards", p['IfInErrors'], "input errors"
-                print "   ",p['IfInUnknownProtos'],"unknown protocol"
-                print "  TX"
-                print "   ",p['IfOutUcastPkts'],"unicast packets",p['IfOutOctets'],"unicast octets"
-                print "   ",p['IfOutDiscards'],"output discards", p['IfOutErrors'], "output errors"
-                print '------------------------------------------------------------------------------'
+            print p['Name'], "is", p['OperState'], "Admin State is", pc['AdminState']
+            if ipv4 is not None:
+                print "  IPv4 Address is", ipv4['IpAddr']
+            print "  PresentInHW:", p['PresentInHW']
+            print "  PhyType:", pc['PhyIntfType'],",","Media Type:",pc['MediaType'],"," , "Address:", pc['MacAddr']
+            print "  MTU",  pc['Mtu'],"Bytes"
+            print " ",pc['Duplex'],",",pc['Speed'],"Mb/s"
+            print "  Breakout Status:", pc['BreakOutMode']
+            print "  Last link down:",p['LastDownEventTime']
+            print "  Last link up:",   p['LastUpEventTime']
+            print "  Number of Link flaps:", p['NumDownEvents']
+            print "  ErrDisableReason:", p['ErrDisableReason']
+            print "  RX"
+            print "   ",p['IfInUcastPkts'],"unicast packets",p['IfInOctets'],"unicast octets"
+            print "   ",p['IfInDiscards'],"input discards", p['IfInErrors'], "input errors"
+            print "   ",p['IfInUnknownProtos'],"unknown protocol"
+            print "  TX"
+            print "   ",p['IfOutUcastPkts'],"unicast packets",p['IfOutOctets'],"unicast octets"
+            print "   ",p['IfOutDiscards'],"output discards", p['IfOutErrors'], "output errors"
+            print '------------------------------------------------------------------------------'
 
     def printIPv4RouteStates(self):
         routes = self.swtch.getAllIPv4RouteStates()     
@@ -117,16 +116,12 @@ class FlexPrint( FlexSwitchShow):
                     print "   via", rt_next['NextHopList'][rt_count-1]['NextHopIp']+", "+rt_next['NextHopList'][rt_count-1]['NextHopIntRef']+", "+"["+str(rd['Distance'])+"/"+str(rt_next['NextHopList'][rt_count-1]['Weight'])+"]"+",",rt['RouteCreatedTime']+",",rt['Protocol']
                 rt_count-=1
 
-    def printIPv4IntfStates(self, IntfRef=None):
+    def printIPv4IntfStates(self):
         ipv4intfs = self.swtch.getAllIPv4IntfStates()
         if len(ipv4intfs):
             print '------Ip Info------\n'
         for ipv4intf in ipv4intfs:
-            if ipv4intf == IntfRef or IntfRef is None:
-                print 'address: %s' %(ipv4intf['IntfRef'])
-
-    def printIPv4IntfState(self, IntfRef):
-        self.printIPv4IntfStates(IntfRef)
+            print 'address: %s' %(ipv4intf['IntfRef'])
 
     def printVlanState(self, VlanId):
 
@@ -165,8 +160,8 @@ class FlexPrint( FlexSwitchShow):
                         prefix=' ', postfix=' ', headerChar= '-', delim='    ',
                         wrapfunc=lambda x: wrap_onspace_strict(x,width))
 
-    def printPolicyStates (self) :
-        policies = self.swtch.getObjects('PolicyDefinitionStates')
+    def printPolicyDefinitionStates(self) :
+        policies = self.swtch.getAllPolicyDefinitionStates()
         if len(policies) :
             print '\n\n---- Policies----'
             print 'Name            Hit Counter     Affected Routes'
@@ -178,8 +173,8 @@ class FlexPrint( FlexSwitchShow):
                                 plcy['HitCounter'],
                                 routes)
                                 
-    def printDHCPHostStates (self) :
-        hosts = self.swtch.getObjects('DhcpRelayHostDhcpStates')
+    def printDhcpRelayHostDhcpStates(self) :
+        hosts = self.swtch.getAllDhcpRelayHostDhcpStates()
         if len(hosts) :
             print '\n\n---- Hosts ----'
             print 'MacAddress  ServerIP   DiscoverSent@   OfferReceived@  RequestSent@  AckReceived@   OfferedIP   RequestedIP   AcceptedIP    GWIP   ClntTx  ClntRx  SvrRx  SvrTx'
@@ -203,8 +198,8 @@ class FlexPrint( FlexSwitchShow):
 
 
 
-    def printVlans (self):
-        vlans = self.swtch.getObjects('Vlans')
+    def printVlanStates (self):
+        vlans = self.swtch.getAllVlanStates()
         if len(vlans):
             print '\n\n---- Vlans ----'
             print 'VlanId  Name   IfIndex   TaggedPorts     UntaggedPorts       Status'
@@ -219,7 +214,7 @@ class FlexPrint( FlexSwitchShow):
 
 
     def printVrrpIntfState (self):
-        vrids = self.swtch.getObjects('VrrpIntfStates')
+        vrids = self.swtch.getAllVrrpIntfStates()
         '''
 	entry.IfIndex = gblInfo.IntfConfig.IfIndex
 	entry.VRID = gblInfo.IntfConfig.VRID
@@ -251,8 +246,8 @@ class FlexPrint( FlexSwitchShow):
                                                                    entry ['MasterDownTimer'])
             print ''
 
-    def printOspfLsdb(self) :
-        lsas = self.swtch.getObjects('OspfLsdbEntryStates')
+    def printOspfLsdbEntryStates(self) :
+        lsas = self.swtch.getAllOspfLsdbEntryStates()
         if len(lsas) :
             print '\n\n---- Link State DB----'
             print 'LSA Type LS Checksum     LS Age      LS AreaId       LS ID       LS Sequence     LS RouterId     LS Advertisement'
@@ -333,7 +328,7 @@ class FlexPrint( FlexSwitchShow):
                     
             print ''
 
-    def printStpBridgeInstanceStates(self):
+    def printStpBridgeStates(self):
 
         brgs = self.swtch.getAllStpBridgeStates()
 
@@ -365,7 +360,7 @@ class FlexPrint( FlexSwitchShow):
         else:
             print 'No Spanning Tree Instances provisioned\n'
 
-    def printStpPorts(self):
+    def printStpPortStates(self):
         stateDict = {
             1 : "Disabled",
             2 : "Blocked",
@@ -379,7 +374,7 @@ class FlexPrint( FlexSwitchShow):
             1 : "P2P",
         }
 
-        ports = self.swtch.getObjects('StpPortStates')
+        ports = self.swtch.getAllStpPortStates()
 
         if len(ports):
             print '\n\n---- STP PORT DB----'
@@ -525,13 +520,12 @@ class FlexPrint( FlexSwitchShow):
 
         for portchannel in portchannels:
             lag = portchannel['Object']
-
             print 'LagId: %s' %(lag['LagId']) + ' IfIndex: %s' %(lag['IfIndex']) + ' Name: %s' %(lag['Name'])
             labels = ('LagType','Interval','Mode','System Id', 'System Priority', 'Hash Mode', 'OperState', 'Members', 'Members Up in Bundle')
             rows=[]
-            rows.append( (lag['LagType'],
+            rows.append( ("%s" %(lag['LagType']),
                          "%s" %(lag['Interval']),
-                         "%s" %(lag['Mode']),
+                         "%s" %(lag['LacpMode']),
                          "%s" %(lag['SystemIdMac']),
                          "%s" %(lag["SystemPriority"]),
                          "%s" %(lag['LagHash']),
@@ -698,9 +692,9 @@ class FlexPrint( FlexSwitchShow):
                         prefix=' ', postfix=' ', headerChar= '-', delim='    ',
                         wrapfunc=lambda x: wrap_onspace_strict(x,width))
 
-    def printInterfaceStates(self):
+    def printInterfaces(self):
 
-        print "CODE NEEDED FOR printInterfaceStates in flexprint.py"
+        print "CODE NEEDED FOR printInterfaces in flexprint.py"
 
     def printSystemSwVersionStates(self):
 
