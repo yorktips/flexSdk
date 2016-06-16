@@ -595,7 +595,6 @@ class FlexPrint( FlexSwitchShow):
                         print e
 
 
-    # TODO fix cli so that the name is better
     def printBGPRouteStates(self, ):
         routes = self.swtch.getAllBGPRouteStates()
         print '\n\n---- BGP Routes ----'
@@ -603,16 +602,18 @@ class FlexPrint( FlexSwitchShow):
         rows = []
         for r in routes:
             rt = r['Object']
-            if rt['Path'] is None:
-               bgp_path =  rt['Path']
-            else:
-               bgp_path = [x.encode('utf-8') for x in rt['Path']]
-            rows.append((rt['Network']+"/"+str(rt['CIDRLen']),
-                        "%s" %(rt['NextHop']),
-                        "%s" %(rt['Metric']),
-                        "%s" %(rt['LocalPref']),
-                        "%s" %(rt['UpdatedDuration'].split(".")[0]),
-                        "%s" %( bgp_path )))
+            for p in rt['Paths']:
+                if p['Path'] is None:
+                    bgp_path = p['Path']
+                else:
+                    bgp_path = [x.encode('utf-8') for x in p['Path']]
+
+                rows.append((rt['Network']+"/"+str(rt['CIDRLen']),
+                            "%s" %(p['NextHop']),
+                            "%s" %(p['Metric']),
+                            "%s" %(p['LocalPref']),
+                            "%s" %(p['UpdatedDuration'].split(".")[0]),
+                            "%s" %(bgp_path)))
         width = 30
         print indent([labels]+rows, hasHeader=True, separateRows=False,
                      prefix=' ', postfix=' ', headerChar= '-', delim='    ',

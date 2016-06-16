@@ -5353,13 +5353,11 @@ class FlexSwitch( object):
 
 
     def getBGPRouteState(self,
-                         Network,
-                         NextHop,
-                         CIDRLen):
+                         CIDRLen,
+                         Network):
         obj =  { 
-                'Network' : Network,
-                'NextHop' : NextHop,
                 'CIDRLen' : int(CIDRLen),
+                'Network' : Network,
                 }
         reqUrl =  self.stateUrlBase + 'BGPRoute'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
