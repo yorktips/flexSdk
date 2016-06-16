@@ -2248,29 +2248,17 @@ class FlexSwitchShow( object):
     def printBGPRouteStates(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
-            header.append('Network')
-            header.append('NextHop')
             header.append('CIDRLen')
-            header.append('Metric')
-            header.append('LocalPref')
-            header.append('Path')
-            header.append('UpdatedTime')
-            header.append('UpdatedDuration')
-            header.append('PathId')
+            header.append('Network')
+            header.append('Paths')
 
         objs = self.swtch.getAllBGPRouteStates()
         for obj in objs:
             o = obj['Object']
             values = []
-            values.append('%s' % o['Network'])
-            values.append('%s' % o['NextHop'])
             values.append('%s' % o['CIDRLen'])
-            values.append('%s' % o['Metric'])
-            values.append('%s' % o['LocalPref'])
-            values.append('%s' % o['Path'])
-            values.append('%s' % o['UpdatedTime'])
-            values.append('%s' % o['UpdatedDuration'])
-            values.append('%s' % o['PathId'])
+            values.append('%s' % o['Network'])
+            values.append('%s' % o['Paths'])
             rows.append(values)
         self.tblPrintObject('BGPRouteState', header, rows)
 
