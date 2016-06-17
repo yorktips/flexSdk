@@ -47,8 +47,8 @@ class FlexPrint( FlexSwitchShow):
 
         self.printPortStates(IntfRef=int(IntfRef))
 
-    def printPortStates(self):
-
+    #def printPortStates(self):
+    def printInterfaces(self):
         ports = self.swtch.getAllPortStates()
         for port in ports:
             p = port['Object']
@@ -198,19 +198,49 @@ class FlexPrint( FlexSwitchShow):
 
 
 
-    def printVlanStates (self):
-        vlans = self.swtch.getAllVlanStates()
-        if len(vlans):
-            print '\n\n---- Vlans ----'
-            print 'VlanId  Name   IfIndex   TaggedPorts     UntaggedPorts       Status'
-        for vlan in vlans:
-            print '%s   %s  %s  %s   %s  %s' %(vlan ['VlanId'],
-                                               vlan ['VlanName'],
-                                               vlan ['IfIndex'],
-                                               vlan ['IfIndexList'],
-                                               vlan ['UntagIfIndexList'],
-                                               vlan ['OperState'])
+#    def printVlanStates (self):
+#        vlans = self.swtch.getAllVlanStates()
+#        if len(vlans):
+#            print '\n\n---- Vlans ----'
+#            print 'VlanId  Name   IfIndex   TaggedPorts     UntaggedPorts       Status'
+#        for vlan in vlans:
+#            print '%s   %s  %s  %s   %s  %s' %(vlan ['VlanId'],
+#                                               vlan ['VlanName'],
+#                                               vlan ['IfIndex'],
+#                                               vlan ['IfIndexList'],
+#                                               vlan ['UntagIfIndexList'],
+#                                               vlan ['OperState'])
 
+    def printVlanStates(self, VlanId=None):
+        vlans = self.swtch.getAllVlans()
+        if len(vlans)>=0:
+            print '\n'
+            labels = ('VLAN','Name','Status','Ports')
+            rows=[]
+            for v in vlans:
+                vl = v['Object']
+                #vlan_state = self.swtch.getVlanState(vl['VlanId'])
+                #vls = vlan_state['Object']
+                #operstate = vls['OperState']
+                operstate = 'UP'
+                if vl['UntagIntfList'] is not None:
+                    untag_ports = ', '.join(vl['UntagIntfList'])
+                else:
+                    untag_ports = ""
+                if vl['IntfList']is not None:
+                    tag_ports = ', '.join(vl['IntfList'])
+                else:
+                    tag_ports = ""
+                port = untag_ports + tag_ports
+                name = "None"
+                rows.append( (str(vl['VlanId']),
+                      "%s" %(name),
+                      "%s" %(operstate),
+                      "%s" %(str(port))))
+            width = 20
+            print indent([labels]+rows, hasHeader=True, separateRows=False,
+                        prefix=' ', postfix=' ', headerChar= '-', delim='    ',
+                        wrapfunc=lambda x: wrap_onspace_strict(x,width))
 
 
     def printVrrpIntfState (self):
@@ -693,9 +723,9 @@ class FlexPrint( FlexSwitchShow):
                         prefix=' ', postfix=' ', headerChar= '-', delim='    ',
                         wrapfunc=lambda x: wrap_onspace_strict(x,width))
 
-    def printInterfaces(self):
+   # def printInterfaces(self):
 
-        print "CODE NEEDED FOR printInterfaces in flexprint.py"
+    #    print "CODE NEEDED FOR printInterfaces in flexprint.py"
 
     def printSystemSwVersionStates(self):
 
