@@ -612,7 +612,7 @@ class FlexPrint( FlexSwitchShow):
                             "%s" %(p['NextHop']),
                             "%s" %(p['Metric']),
                             "%s" %(p['LocalPref']),
-                            "%s" %(p['UpdatedDuration'].split(".")[0]),
+                            "%s" %(p['UpdatedTime'].split(".")[0]),
                             "%s" %(bgp_path)))
         width = 30
         print indent([labels]+rows, hasHeader=True, separateRows=False,
