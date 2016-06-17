@@ -1,6 +1,7 @@
 #!/user/lib/python
 import cStringIO,operator
-
+# Code taken from
+# http://code.activestate.com/recipes/267662-table-indentation/
 
 def indent(rows, hasHeader=False, headerChar='-', delim=' | ', justify='left',
            separateRows=False, prefix='', postfix='', wrapfunc=lambda x:x):
@@ -40,7 +41,8 @@ def indent(rows, hasHeader=False, headerChar='-', delim=' | ', justify='left',
                 prefix \
                 + delim.join([justify(str(item),width) for (item,width) in zip(row,maxWidths)]) \
                 + postfix
-        if separateRows or hasHeader: print >> output, rowSeparator; hasHeader=False
+        # SNAPROUTE change, don't want to seperate rows for help display
+        if hasHeader: print >> output, rowSeparator; hasHeader=False
     return output.getvalue()
 
 # written by Mike Brown

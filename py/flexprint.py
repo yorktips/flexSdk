@@ -2,6 +2,7 @@ import requests
 import json
 import urllib2
 from flexswitchV2 import FlexSwitch
+from flexprintV2 import FlexSwitchShow
 from tablePrint import *
 
 def getLagGroups(ip, port):
@@ -38,7 +39,7 @@ def getLagGroups(ip, port):
 
 
 
-class FlexPrint( object):
+class FlexPrint( FlexSwitchShow):
     def  __init__ (self, ip, port):
         self.swtch = FlexSwitch(ip, port)
 
@@ -46,51 +47,50 @@ class FlexPrint( object):
 
         self.printPortStates(IntfRef=int(IntfRef))
 
-    def printPortStates(self, IntfRef=None):
-
+    #def printPortStates(self):
+    def printInterfaces(self):
         ports = self.swtch.getAllPortStates()
         for port in ports:
-        	p = port['Object']
+            p = port['Object']
 
-        	if IntfRef == None or IntfRef == p['IntfRef']:
-        		port_config = self.swtch.getPort(p['IntfRef']).json()
-        		pc = port_config['Object'] 
-        		ipv4_state = self.swtch.getIPv4IntfState(p['IntfRef']).json()
-        		#print ipv4_state
-        		if ipv4_state.has_key('Error'):
-        			ipv4 = None
-        		else:
-        			ipv4 = ipv4_state['Object']
-        		if not p['LastDownEventTime']:
-        			lastdown="never"
-        		else:
-        			lastdown = p['LastDownEventTime']
-        		if not p['LastUpEventTime']:
-        			lastdown="never"
-        		else:
-        			lastdown = p['LastDownEventTime']
-        		
-        		print p['Name'], "is", p['OperState'], "Admin State is", pc['AdminState'] 
-        		if ipv4 is not None:
-        			print "  IPv4 Address is", ipv4['IpAddr']
-        		print "  PresentInHW:", p['PresentInHW']
-        		print "  PhyType:", pc['PhyIntfType'],",","Media Type:",pc['MediaType'],"," , "Address:", pc['MacAddr']
-        		print "  MTU",  pc['Mtu'],"Bytes"
-        		print " ",pc['Duplex'],",",pc['Speed'],"Mb/s"
-        		print "  Breakout Status:", pc['BreakOutMode']
-        		print "  Last link down:",p['LastDownEventTime']
-        		print "  Last link up:",   p['LastUpEventTime']
-        		print "  Number of Link flaps:", p['NumDownEvents']
-        		print "  ErrDisableReason:", p['ErrDisableReason']
-        		print "  RX"
-        		print "   ",p['IfInUcastPkts'],"unicast packets",p['IfInOctets'],"unicast octets"
-        		print "   ",p['IfInDiscards'],"input discards", p['IfInErrors'], "input errors"
-        		print "   ",p['IfInUnknownProtos'],"unknown protocol"
-        		print "  TX"
-        		print "   ",p['IfOutUcastPkts'],"unicast packets",p['IfOutOctets'],"unicast octets"
-        		print "   ",p['IfOutDiscards'],"output discards", p['IfOutErrors'], "output errors"					
-        		print '------------------------------------------------------------------------------'
-        		
+            port_config = self.swtch.getPort(p['IntfRef']).json()
+            pc = port_config['Object']
+            ipv4_state = self.swtch.getIPv4IntfState(p['IntfRef']).json()
+            #print ipv4_state
+            if ipv4_state.has_key('Error'):
+                ipv4 = None
+            else:
+                ipv4 = ipv4_state['Object']
+            if not p['LastDownEventTime']:
+                lastdown="never"
+            else:
+                lastdown = p['LastDownEventTime']
+            if not p['LastUpEventTime']:
+                lastdown="never"
+            else:
+                lastdown = p['LastDownEventTime']
+
+            print p['Name'], "is", p['OperState'], "Admin State is", pc['AdminState']
+            if ipv4 is not None:
+                print "  IPv4 Address is", ipv4['IpAddr']
+            print "  PresentInHW:", p['PresentInHW']
+            print "  PhyType:", pc['PhyIntfType'],",","Media Type:",pc['MediaType'],"," , "Address:", pc['MacAddr']
+            print "  MTU",  pc['Mtu'],"Bytes"
+            print " ",pc['Duplex'],",",pc['Speed'],"Mb/s"
+            print "  Breakout Status:", pc['BreakOutMode']
+            print "  Last link down:",p['LastDownEventTime']
+            print "  Last link up:",   p['LastUpEventTime']
+            print "  Number of Link flaps:", p['NumDownEvents']
+            print "  ErrDisableReason:", p['ErrDisableReason']
+            print "  RX"
+            print "   ",p['IfInUcastPkts'],"unicast packets",p['IfInOctets'],"unicast octets"
+            print "   ",p['IfInDiscards'],"input discards", p['IfInErrors'], "input errors"
+            print "   ",p['IfInUnknownProtos'],"unknown protocol"
+            print "  TX"
+            print "   ",p['IfOutUcastPkts'],"unicast packets",p['IfOutOctets'],"unicast octets"
+            print "   ",p['IfOutDiscards'],"output discards", p['IfOutErrors'], "output errors"
+            print '------------------------------------------------------------------------------'
+
     def printIPv4RouteStates(self):
         routes = self.swtch.getAllIPv4RouteStates()     
         print "IP Route Table"
@@ -104,30 +104,24 @@ class FlexPrint( object):
             route_distance = self.swtch.getRouteDistanceState(rt['Protocol']).json()
             rd = route_distance['Object']    
             if rt['PolicyList'] is None:
-            	policy=rt['PolicyList']
+                policy=rt['PolicyList']
             else:
                 policy = str(rt['PolicyList']).split("[")[1].split()[1]
             print rt['DestinationNw'], "ubest/mbest: 1/0"+",", "Policy:", policy
             while rt_count > 0:
-            	if rt['Protocol'] == "CONNECTED":
-            		ip_int = self.swtch.getIPv4IntfState(rt_next['NextHopList'][rt_count-1]['NextHopIntRef']).json()	
-                	print "   via",ip_int['Object']['IpAddr'].split("/")[0] +", "+rt_next['NextHopList'][rt_count-1]['NextHopIntRef']+", "+"["+str(rd['Distance'])+"/"+str(rt_next['NextHopList'][rt_count-1]['Weight'])+"]"+",",rt['RouteCreatedTime']+",",rt['Protocol']            		
-            	else:  
-                	print "   via", rt_next['NextHopList'][rt_count-1]['NextHopIp']+", "+rt_next['NextHopList'][rt_count-1]['NextHopIntRef']+", "+"["+str(rd['Distance'])+"/"+str(rt_next['NextHopList'][rt_count-1]['Weight'])+"]"+",",rt['RouteCreatedTime']+",",rt['Protocol']
+                if rt['Protocol'] == "CONNECTED":
+                    ip_int = self.swtch.getIPv4IntfState(rt_next['NextHopList'][rt_count-1]['NextHopIntRef']).json()
+                    print "   via",ip_int['Object']['IpAddr'].split("/")[0] +", "+rt_next['NextHopList'][rt_count-1]['NextHopIntRef']+", "+"["+str(rd['Distance'])+"/"+str(rt_next['NextHopList'][rt_count-1]['Weight'])+"]"+",",rt['RouteCreatedTime']+",",rt['Protocol']
+                else:
+                    print "   via", rt_next['NextHopList'][rt_count-1]['NextHopIp']+", "+rt_next['NextHopList'][rt_count-1]['NextHopIntRef']+", "+"["+str(rd['Distance'])+"/"+str(rt_next['NextHopList'][rt_count-1]['Weight'])+"]"+",",rt['RouteCreatedTime']+",",rt['Protocol']
                 rt_count-=1
 
-     
-
-    def printIPv4IntfStates(self, IntfRef=None):
+    def printIPv4IntfStates(self):
         ipv4intfs = self.swtch.getAllIPv4IntfStates()
         if len(ipv4intfs):
             print '------Ip Info------\n'
         for ipv4intf in ipv4intfs:
-            if ipv4intf == IntfRef or IntfRef is None:
-                print 'address: %s' %(ipv4intf['IntfRef'])
-
-    def printIPv4IntfState(self, IntfRef):
-        self.printIPv4IntfStates(IntfRef)
+            print 'address: %s' %(ipv4intf['IntfRef'])
 
     def printVlanState(self, VlanId):
 
@@ -138,36 +132,36 @@ class FlexPrint( object):
     def printVlanStates(self, VlanId=None):
         vlans = self.swtch.getAllVlans()
         if len(vlans)>=0:
-        	print '\n'
-        	labels = ('VLAN','Name','Status','Ports')
-        	rows=[]
-        	for v in vlans:
-        	    vl = v['Object']
-        	    #vlan_state = self.swtch.getVlanState(vl['VlanId'])
-        	    #vls = vlan_state['Object']
-        	    #operstate = vls['OperState']
-        	    operstate = 'UP'
-        	    if vl['UntagIntfList'] is not None:
-        	    	untag_ports = ', '.join(vl['UntagIntfList'])
-        	    else:
-        	    	untag_ports = ""
-        	    if vl['IntfList']is not None:
-        	    	tag_ports = ', '.join(vl['IntfList'])
-        	    else:
-        	    	tag_ports = ""
-        	    port = untag_ports + tag_ports
-        	    name = "None"
-        	    rows.append( (str(vl['VlanId']),
-        	          "%s" %(name),
-        	          "%s" %(operstate),
-        	          "%s" %(str(port))))
-        	width = 20
-        	print indent([labels]+rows, hasHeader=True, separateRows=False,
+            print '\n'
+            labels = ('VLAN','Name','Status','Ports')
+            rows=[]
+            for v in vlans:
+                vl = v['Object']
+                #vlan_state = self.swtch.getVlanState(vl['VlanId'])
+                #vls = vlan_state['Object']
+                #operstate = vls['OperState']
+                operstate = 'UP'
+                if vl['UntagIntfList'] is not None:
+                    untag_ports = ', '.join(vl['UntagIntfList'])
+                else:
+                    untag_ports = ""
+                if vl['IntfList']is not None:
+                    tag_ports = ', '.join(vl['IntfList'])
+                else:
+                    tag_ports = ""
+                port = untag_ports + tag_ports
+                name = "None"
+                rows.append( (str(vl['VlanId']),
+                      "%s" %(name),
+                      "%s" %(operstate),
+                      "%s" %(str(port))))
+            width = 20
+            print indent([labels]+rows, hasHeader=True, separateRows=False,
                         prefix=' ', postfix=' ', headerChar= '-', delim='    ',
-                        wrapfunc=lambda x: wrap_onspace_strict(x,width))       
-			
-    def printPolicyStates (self) :
-        policies = self.swtch.getObjects('PolicyDefinitionStates')
+                        wrapfunc=lambda x: wrap_onspace_strict(x,width))
+
+    def printPolicyDefinitionStates(self) :
+        policies = self.swtch.getAllPolicyDefinitionStates()
         if len(policies) :
             print '\n\n---- Policies----'
             print 'Name            Hit Counter     Affected Routes'
@@ -179,8 +173,8 @@ class FlexPrint( object):
                                 plcy['HitCounter'],
                                 routes)
                                 
-    def printDHCPHostStates (self) :
-        hosts = self.swtch.getObjects('DhcpRelayHostDhcpStates')
+    def printDhcpRelayHostDhcpStates(self) :
+        hosts = self.swtch.getAllDhcpRelayHostDhcpStates()
         if len(hosts) :
             print '\n\n---- Hosts ----'
             print 'MacAddress  ServerIP   DiscoverSent@   OfferReceived@  RequestSent@  AckReceived@   OfferedIP   RequestedIP   AcceptedIP    GWIP   ClntTx  ClntRx  SvrRx  SvrTx'
@@ -204,23 +198,53 @@ class FlexPrint( object):
 
 
 
-    def printVlans (self):
-        vlans = self.swtch.getObjects('Vlans')
-        if len(vlans):
-            print '\n\n---- Vlans ----'
-            print 'VlanId  Name   IfIndex   TaggedPorts     UntaggedPorts       Status'
-        for vlan in vlans:
-            print '%s   %s  %s  %s   %s  %s' %(vlan ['VlanId'],
-                                               vlan ['VlanName'],
-                                               vlan ['IfIndex'],
-                                               vlan ['IfIndexList'],
-                                               vlan ['UntagIfIndexList'],
-                                               vlan ['OperState'])
+#    def printVlanStates (self):
+#        vlans = self.swtch.getAllVlanStates()
+#        if len(vlans):
+#            print '\n\n---- Vlans ----'
+#            print 'VlanId  Name   IfIndex   TaggedPorts     UntaggedPorts       Status'
+#        for vlan in vlans:
+#            print '%s   %s  %s  %s   %s  %s' %(vlan ['VlanId'],
+#                                               vlan ['VlanName'],
+#                                               vlan ['IfIndex'],
+#                                               vlan ['IfIndexList'],
+#                                               vlan ['UntagIfIndexList'],
+#                                               vlan ['OperState'])
 
+    def printVlanStates(self, VlanId=None):
+        vlans = self.swtch.getAllVlans()
+        if len(vlans)>=0:
+            print '\n'
+            labels = ('VLAN','Name','Status','Ports')
+            rows=[]
+            for v in vlans:
+                vl = v['Object']
+                #vlan_state = self.swtch.getVlanState(vl['VlanId'])
+                #vls = vlan_state['Object']
+                #operstate = vls['OperState']
+                operstate = 'UP'
+                if vl['UntagIntfList'] is not None:
+                    untag_ports = ', '.join(vl['UntagIntfList'])
+                else:
+                    untag_ports = ""
+                if vl['IntfList']is not None:
+                    tag_ports = ', '.join(vl['IntfList'])
+                else:
+                    tag_ports = ""
+                port = untag_ports + tag_ports
+                name = "None"
+                rows.append( (str(vl['VlanId']),
+                      "%s" %(name),
+                      "%s" %(operstate),
+                      "%s" %(str(port))))
+            width = 20
+            print indent([labels]+rows, hasHeader=True, separateRows=False,
+                        prefix=' ', postfix=' ', headerChar= '-', delim='    ',
+                        wrapfunc=lambda x: wrap_onspace_strict(x,width))
 
 
     def printVrrpIntfState (self):
-        vrids = self.swtch.getObjects('VrrpIntfStates')
+        vrids = self.swtch.getAllVrrpIntfStates()
         '''
 	entry.IfIndex = gblInfo.IntfConfig.IfIndex
 	entry.VRID = gblInfo.IntfConfig.VRID
@@ -252,8 +276,8 @@ class FlexPrint( object):
                                                                    entry ['MasterDownTimer'])
             print ''
 
-    def printOspfLsdb(self) :
-        lsas = self.swtch.getObjects('OspfLsdbEntryStates')
+    def printOspfLsdbEntryStates(self) :
+        lsas = self.swtch.getAllOspfLsdbEntryStates()
         if len(lsas) :
             print '\n\n---- Link State DB----'
             print 'LSA Type LS Checksum     LS Age      LS AreaId       LS ID       LS Sequence     LS RouterId     LS Advertisement'
@@ -334,12 +358,12 @@ class FlexPrint( object):
                     
             print ''
 
-    def printStpBridges(self):
+    def printStpBridgeStates(self):
 
-        brgs = self.swtch.getObjects('StpBridgeStates')
+        brgs = self.swtch.getAllStpBridgeStates()
 
+        print '\n\n---- STP Bridge DB----'
         if len(brgs):
-            print '\n\n---- STP Bridge DB----'
 
             count = 0
             for data in brgs:
@@ -363,8 +387,10 @@ class FlexPrint( object):
                 print "Forwarding Delay: ", obj["ForwardDelay"]
                 print "Bridge Vlan: ", obj["Vlan"] if obj["Vlan"] != 0 else "DEFAULT"
                 print "=====================================================================================\n\n"
+        else:
+            print 'No Spanning Tree Instances provisioned\n'
 
-    def printStpPorts(self):
+    def printStpPortStates(self):
         stateDict = {
             1 : "Disabled",
             2 : "Blocked",
@@ -378,7 +404,7 @@ class FlexPrint( object):
             1 : "P2P",
         }
 
-        ports = self.swtch.getObjects('StpPortStates')
+        ports = self.swtch.getAllStpPortStates()
 
         if len(ports):
             print '\n\n---- STP PORT DB----'
@@ -429,9 +455,10 @@ class FlexPrint( object):
                 print "BDM           %20s%20s" %(obj["BdmCurrState"], obj["BdmPrevState"])
                 print "TCM           %20s%20s" %(obj["TcmCurrState"], obj["TcmPrevState"])
                 print "====================================================================="
+        else:
+            print 'No Data To Display for %s' %('StpPortStates')
 
-
-    def printLaPortChannelMembers(self):
+    def printLaPortChannelStates(self, brief=False):
 
         # YANG MODEL REPRESENTATION
         RxMachineStateDict = {
@@ -515,63 +542,89 @@ class FlexPrint( object):
         //LacpErrors uint64
         '''
 
+        portchannels = self.swtch.getAllLaPortChannelStates()
         members = self.swtch.getAllLaPortChannelMemberStates()
 
-        for data in members:
-            d = data['Object']
+        if not portchannels:
+            print 'No Data To Display for %s' %('LaPortChannelState')
 
-            print '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n'
-            print 'IfIndex: ' + "%s" % d['IfIndex'] + 'LagId: ' + "%s" %d['LagId'] + 'LagIfIndex: ' + "%s" %d['LagIfIndex']
-            print 'OperState: ' + d['OperState']
-            #print 'lagtype: ' + ('LACP' if not d['LagType'] else 'STATIC')
-            print 'operkey: %s' % d['OperKey']
-            #print 'mode: ' + ('ACTIVE' if not d['LacpMode'] else 'PASSIVE')
-            #print 'interval: %s' % (('SLOW' if d['Interval'] else 'FAST'))
-            #print 'system:\n'
-            #print '\tsystemmac: %s' % d['SystemIdMac']
-            #print '\tsysteprio: %s' % d['SystemPriority']
-            #print '\tsystemId: %s' % d['SystemId']
-            print 'actor:'
-            stateStr = '\tstate: '
-            for s in ('Activity', 'Timeout', 'Aggregatable', 'Synchronization', 'Collecting', 'Distributing', 'Defaulted'):
-                if s == 'Synchronization' and not d[s]:
-                    stateStr += s + ', '
-                elif s == 'Activity' and not d[s]:
-                    stateStr += s + ', '
-                elif s in ('Activity', 'Synchronization'):
-                    continue
-                elif d[s]:
-                    stateStr += s + ', '
-            print stateStr.rstrip(',')
+        for portchannel in portchannels:
+            lag = portchannel['Object']
+            print 'LagId: %s' %(lag['LagId']) + ' IfIndex: %s' %(lag['IfIndex']) + ' Name: %s' %(lag['Name'])
+            labels = ('LagType','Interval','Mode','System Id', 'System Priority', 'Hash Mode', 'OperState', 'Members', 'Members Up in Bundle')
+            rows=[]
+            rows.append( ("%s" %(lag['LagType']),
+                         "%s" %(lag['Interval']),
+                         "%s" %(lag['LacpMode']),
+                         "%s" %(lag['SystemIdMac']),
+                         "%s" %(lag["SystemPriority"]),
+                         "%s" %(lag['LagHash']),
+                         "%s" %(lag['OperState']),
+                         "%s" %(lag['Members']),
+                          "%s" %(lag['MembersUpInBundle'])))
+            width = 20
+            print indent([labels]+rows, hasHeader=False, separateRows=True,
+                 prefix='| ', postfix=' |',
+                 wrapfunc=lambda x: wrap_onspace_strict(x,width))
 
-            print '\tstats:'
-            for s in ('LacpInPkts', 'LacpOutPkts', 'LacpRxErrors', 'LacpTxErrors', 'LacpUnknownErrors', 'LacpErrors', 'LampInPdu', 'LampOutPdu', 'LampInResponsePdu', 'LampOutResponsePdu'):
-                print '\t' + s, ': ', d[s]
+            # TODO dump the LAG group info
+            if not brief:
+                if not members:
+                    print 'No Data To Display for %s' %('LaPortChannelMemberState')
 
-            print 'partner:\n'
-            print '\t' + 'key: %s' % d['PartnerKey']
-            print '\t' + 'partnerid: ' + d['PartnerId']
+                for d in [m['Object'] for m in members if m['Object']['LagId'] == lag['LagId']]:
 
-            print 'debug:\n'
-            try:
-                print '\t' + 'debugId: %s' % d['DebugId']
-                print '\t' + 'RxMachineState: %s' % RxMachineStateDict[d['RxMachine']]
-                print '\t' + 'RxTime (rx pkt rcv): %s' % d['RxTime']
-                print '\t' + 'MuxMachineState: %s' % MuxMachineStateDict[d['MuxMachine']]
-                print '\t' + 'MuxReason: %s' % d['MuxReason']
-                print '\t' + 'Actor Churn State: %s' % ChurnMachineStateDict[d['ActorChurnMachine']]
-                print '\t' + 'Partner Churn State: %s' % ChurnMachineStateDict[d['PartnerChurnMachine']]
-                print '\t' + 'Actor Churn Count: %s' % d['ActorChurnCount']
-                print '\t' + 'Partner Churn Count: %s' % d['PartnerChurnCount']
-                print '\t' + 'Actor Sync Transition Count: %s' % d['ActorSyncTransitionCount']
-                print '\t' + 'Partner Sync Transition Count: %s' % d['PartnerSyncTransitionCount']
-                print '\t' + 'Actor LAG ID change Count: %s' % d['ActorChangeCount']
-                print '\t' + 'Partner LAG ID change Count: %s' % d['PartnerChangeCount']
-            except Exception as e:
-                print e
+                    print '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n'
+                    print 'IfIndex: ' + "%s" % d['IfIndex'] + 'LagId: ' + "%s" %d['LagId'] + 'LagIfIndex: ' + "%s" %d['LagIfIndex']
+                    print 'OperState: ' + d['OperState']
+                    #print 'lagtype: ' + ('LACP' if not d['LagType'] else 'STATIC')
+                    print 'operkey: %s' % d['OperKey']
+                    #print 'mode: ' + ('ACTIVE' if not d['LacpMode'] else 'PASSIVE')
+                    #print 'interval: %s' % (('SLOW' if d['Interval'] else 'FAST'))
+                    #print 'system:\n'
+                    #print '\tsystemmac: %s' % d['SystemIdMac']
+                    #print '\tsysteprio: %s' % d['SystemPriority']
+                    #print '\tsystemId: %s' % d['SystemId']
+                    print 'actor:'
+                    stateStr = '\tstate: '
+                    for s in ('Activity', 'Timeout', 'Aggregatable', 'Synchronization', 'Collecting', 'Distributing', 'Defaulted'):
+                        if s == 'Synchronization' and not d[s]:
+                            stateStr += s + ', '
+                        elif s == 'Activity' and not d[s]:
+                            stateStr += s + ', '
+                        elif s in ('Activity', 'Synchronization'):
+                            continue
+                        elif d[s]:
+                            stateStr += s + ', '
+                    print stateStr.rstrip(',')
+
+                    print '\tstats:'
+                    for s in ('LacpInPkts', 'LacpOutPkts', 'LacpRxErrors', 'LacpTxErrors', 'LacpUnknownErrors', 'LacpErrors', 'LampInPdu', 'LampOutPdu', 'LampInResponsePdu', 'LampOutResponsePdu'):
+                        print '\t' + s, ': ', d[s]
+
+                    print 'partner:\n'
+                    print '\t' + 'key: %s' % d['PartnerKey']
+                    print '\t' + 'partnerid: ' + d['PartnerId']
+
+                    print 'debug:\n'
+                    try:
+                        print '\t' + 'debugId: %s' % d['DebugId']
+                        print '\t' + 'RxMachineState: %s' % RxMachineStateDict[d['RxMachine']]
+                        print '\t' + 'RxTime (rx pkt rcv): %s' % d['RxTime']
+                        print '\t' + 'MuxMachineState: %s' % MuxMachineStateDict[d['MuxMachine']]
+                        print '\t' + 'MuxReason: %s' % d['MuxReason']
+                        print '\t' + 'Actor Churn State: %s' % ChurnMachineStateDict[d['ActorChurnMachine']]
+                        print '\t' + 'Partner Churn State: %s' % ChurnMachineStateDict[d['PartnerChurnMachine']]
+                        print '\t' + 'Actor Churn Count: %s' % d['ActorChurnCount']
+                        print '\t' + 'Partner Churn Count: %s' % d['PartnerChurnCount']
+                        print '\t' + 'Actor Sync Transition Count: %s' % d['ActorSyncTransitionCount']
+                        print '\t' + 'Partner Sync Transition Count: %s' % d['PartnerSyncTransitionCount']
+                        print '\t' + 'Actor LAG ID change Count: %s' % d['ActorChangeCount']
+                        print '\t' + 'Partner LAG ID change Count: %s' % d['PartnerChangeCount']
+                    except Exception as e:
+                        print e
 
 
-    # TODO fix cli so that the name is better
     def printBGPRouteStates(self, ):
         routes = self.swtch.getAllBGPRouteStates()
         print '\n\n---- BGP Routes ----'
@@ -579,16 +632,18 @@ class FlexPrint( object):
         rows = []
         for r in routes:
             rt = r['Object']
-            if rt['Path'] is None:
-               bgp_path =  rt['Path']
-            else:
-               bgp_path = [x.encode('utf-8') for x in rt['Path']]
-            rows.append((rt['Network']+"/"+str(rt['CIDRLen']),
-                        "%s" %(rt['NextHop']),
-                        "%s" %(rt['Metric']),
-                        "%s" %(rt['LocalPref']),
-                        "%s" %(rt['UpdatedDuration'].split(".")[0]),
-                        "%s" %( bgp_path )))
+            for p in rt['Paths']:
+                if p['Path'] is None:
+                    bgp_path = p['Path']
+                else:
+                    bgp_path = [x.encode('utf-8') for x in p['Path']]
+
+                rows.append((rt['Network']+"/"+str(rt['CIDRLen']),
+                            "%s" %(p['NextHop']),
+                            "%s" %(p['Metric']),
+                            "%s" %(p['LocalPref']),
+                            "%s" %(p['UpdatedTime'].split(".")[0]),
+                            "%s" %(bgp_path)))
         width = 30
         print indent([labels]+rows, hasHeader=True, separateRows=False,
                      prefix=' ', postfix=' ', headerChar= '-', delim='    ',
@@ -644,30 +699,33 @@ class FlexPrint( object):
                         wrapfunc=lambda x: wrap_onspace_strict(x,width))
 
     def printBfdSessionStates(self):
-	    peers = self.swtch.getAllBfdSessionStates()
-	    if len(peers)>=0:
-	    	print '\n'
-	    	labels = ('NeighAddr','LD/RD','Protocols','Multi','TxInt','RxInt','State','Int','TxPkts','RxPkts')
-	    	rows=[]
-	    	for p in peers:
-	    	    pr = p['Object']
-	    	    desc = str(pr['LocalDiscriminator'])+"/"+str(pr['RemoteDiscriminator'])
-	    	    multi = pr['DetectionMultiplier']
-	    	    rows.append( (pr['IpAddr'],
-	    	          "%s" %(desc),
-	    	          "%s" %(pr['RegisteredProtocols']),
-	    	          "%s" %(pr['DetectionMultiplier']),
-	    	          "%s" %(pr['DesiredMinTxInterval']),
-	    	          "%s" %(pr['RequiredMinRxInterval']),
-	    	          "%s" %(pr['RemoteSessionState']),
-	    	          "%s" %(pr['IfIndex']),
-	    	          "%s" %(pr['NumTxPackets']),
-	    	          "%s" %(pr['NumRxPackets'])))
-	    	width = 20
-	    	print indent([labels]+rows, hasHeader=True, separateRows=False,
+        peers = self.swtch.getAllBfdSessionStates()
+        if len(peers)>=0:
+            print '\n'
+            labels = ('NeighAddr','LD/RD','Protocols','Multi','TxInt','RxInt','State','Int','TxPkts','RxPkts')
+            rows=[]
+            for p in peers:
+                pr = p['Object']
+                desc = str(pr['LocalDiscriminator'])+"/"+str(pr['RemoteDiscriminator'])
+                multi = pr['DetectionMultiplier']
+                rows.append( (pr['IpAddr'],
+                      "%s" %(desc),
+                      "%s" %(pr['RegisteredProtocols']),
+                      "%s" %(pr['DetectionMultiplier']),
+                      "%s" %(pr['DesiredMinTxInterval']),
+                      "%s" %(pr['RequiredMinRxInterval']),
+                      "%s" %(pr['RemoteSessionState']),
+                      "%s" %(pr['IfIndex']),
+                      "%s" %(pr['NumTxPackets']),
+                      "%s" %(pr['NumRxPackets'])))
+            width = 20
+            print indent([labels]+rows, hasHeader=True, separateRows=False,
                         prefix=' ', postfix=' ', headerChar= '-', delim='    ',
-                        wrapfunc=lambda x: wrap_onspace_strict(x,width))               
-       
+                        wrapfunc=lambda x: wrap_onspace_strict(x,width))
+
+   # def printInterfaces(self):
+
+    #    print "CODE NEEDED FOR printInterfaces in flexprint.py"
 
     def printSystemSwVersionStates(self):
 
