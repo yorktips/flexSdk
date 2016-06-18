@@ -555,15 +555,16 @@ class FlexPrint( FlexSwitchShow):
             print 'LagId: %s' %(lag['LagId']) + ' IfIndex: %s' %(lag['IfIndex']) + ' Name: %s' %(lag['Name'])
             labels = ('LagType','Interval','Mode','System Id', 'System Priority', 'Hash Mode', 'OperState', 'Members', 'Members Up in Bundle')
             rows=[]
-            rows.append( ("%s" %(lag['LagType']),
-                         "%s" %(lag['Interval']),
-                         "%s" %(lag['LacpMode']),
+
+            rows.append(("LACP" if int(lag['LagType']) == 0 else "STATIC",
+                         "FAST" if int(lag['Interval']) == 0 else "SLOW",
+                         "ACTIVE" if int(lag['LacpMode']) == 0 else "PASSIVE",
                          "%s" %(lag['SystemIdMac']),
                          "%s" %(lag["SystemPriority"]),
                          "%s" %(lag['LagHash']),
                          "%s" %(lag['OperState']),
                          "%s" %(lag['Members']),
-                          "%s" %(lag['MembersUpInBundle'])))
+                         "%s" %(lag['MembersUpInBundle'])))
             width = 20
             print indent([labels]+rows, hasHeader=False, separateRows=True,
                  prefix='| ', postfix=' |',
