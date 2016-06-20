@@ -163,6 +163,40 @@ class FlexSwitchShow( object):
         self.tblPrintObject('OspfAreaEntry', header, rows)
 
 
+    def printVxlanVtepInstances(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('Intf')
+            header.append('IntfRef')
+            header.append('Vni')
+            header.append('DstIp')
+            header.append('VlanId')
+            header.append('TOS')
+            header.append('Mtu')
+            header.append('InnerVlanHandlingMode')
+            header.append('TTL')
+            header.append('SrcIp')
+            header.append('DstUDP')
+
+        objs = self.swtch.getAllVxlanVtepInstances()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['Intf'])
+            values.append('%s' % o['IntfRef'])
+            values.append('%s' % o['Vni'])
+            values.append('%s' % o['DstIp'])
+            values.append('%s' % o['VlanId'])
+            values.append('%s' % o['TOS'])
+            values.append('%s' % o['Mtu'])
+            values.append('%s' % o['InnerVlanHandlingMode'])
+            values.append('%s' % o['TTL'])
+            values.append('%s' % o['SrcIp'])
+            values.append('%s' % o['DstUDP'])
+            rows.append(values)
+        self.tblPrintObject('VxlanVtepInstance', header, rows)
+
+
     def printLaPortChannelStates(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
@@ -1974,19 +2008,15 @@ class FlexSwitchShow( object):
     def printVxlanInstances(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
-            header.append('VxlanId')
-            header.append('McDestIp')
+            header.append('Vni')
             header.append('VlanId')
-            header.append('Mtu')
 
         objs = self.swtch.getAllVxlanInstances()
         for obj in objs:
             o = obj['Object']
             values = []
-            values.append('%s' % o['VxlanId'])
-            values.append('%s' % o['McDestIp'])
+            values.append('%s' % o['Vni'])
             values.append('%s' % o['VlanId'])
-            values.append('%s' % o['Mtu'])
             rows.append(values)
         self.tblPrintObject('VxlanInstance', header, rows)
 
@@ -2111,48 +2141,6 @@ class FlexSwitchShow( object):
             values.append('%s' % o['IfMetricValue'])
             rows.append(values)
         self.tblPrintObject('OspfIfMetricEntry', header, rows)
-
-
-    def printVxlanVtepInstancess(self, addHeader=True, brief=None):
-        header = []; rows = []
-        if addHeader:
-            header.append('VtepId')
-            header.append('VxlanId')
-            header.append('VtepName')
-            header.append('SrcIfIndex')
-            header.append('TTL')
-            header.append('TOS')
-            header.append('Learning')
-            header.append('Rsc')
-            header.append('L2miss')
-            header.append('L3miss')
-            header.append('DstIp')
-            header.append('DstMac')
-            header.append('VlanId')
-            header.append('UDP')
-            header.append('InnerVlanHandlingMode')
-
-        objs = self.swtch.getAllVxlanVtepInstancess()
-        for obj in objs:
-            o = obj['Object']
-            values = []
-            values.append('%s' % o['VtepId'])
-            values.append('%s' % o['VxlanId'])
-            values.append('%s' % o['VtepName'])
-            values.append('%s' % o['SrcIfIndex'])
-            values.append('%s' % o['TTL'])
-            values.append('%s' % o['TOS'])
-            values.append('%s' % o['Learning'])
-            values.append('%s' % o['Rsc'])
-            values.append('%s' % o['L2miss'])
-            values.append('%s' % o['L3miss'])
-            values.append('%s' % o['DstIp'])
-            values.append('%s' % o['DstMac'])
-            values.append('%s' % o['VlanId'])
-            values.append('%s' % o['UDP'])
-            values.append('%s' % o['InnerVlanHandlingMode'])
-            rows.append(values)
-        self.tblPrintObject('VxlanVtepInstances', header, rows)
 
 
     def printBGPPolicyActions(self, addHeader=True, brief=None):
