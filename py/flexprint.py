@@ -630,11 +630,13 @@ class FlexPrint( FlexSwitchShow):
 
     def printBGPRouteStates(self, ):
         routes = self.swtch.getAllBGPRouteStates()
-        print '\n\n---- BGP Routes ----'
-        labels = ('Network', 'NextHop', 'Metric', 'LocalPref', 'Updated', 'Path')
+        bgpglobal = self.swtch.getAllBGPGlobals()
+        labels = ('Network', 'NextHop','BP', 'MP', 'Metric', 'LocalPref', 'Updated', 'Path')
         rows = []
         for r in routes:
             rt = r['Object']
+            if rt['Paths'] is None:
+            	continue
             for p in rt['Paths']:
                 if p['Path'] is None:
                     bgp_path = p['Path']
@@ -643,6 +645,8 @@ class FlexPrint( FlexSwitchShow):
 
                 rows.append((rt['Network']+"/"+str(rt['CIDRLen']),
                             "%s" %(p['NextHop']),
+                            "%s" %(p['BestPath']),
+                            "%s" %(p['MultiPath']),
                             "%s" %(p['Metric']),
                             "%s" %(p['LocalPref']),
                             "%s" %(p['UpdatedTime'].split(".")[0]),
