@@ -118,13 +118,6 @@ class FlexPrint( FlexSwitchShow):
                     print "   via", rt_next['NextHopList'][rt_count-1]['NextHopIp']+", "+rt_next['NextHopList'][rt_count-1]['NextHopIntRef']+", "+"["+str(rd['Distance'])+"/"+str(rt_next['NextHopList'][rt_count-1]['Weight'])+"]"+",",rt['RouteCreatedTime']+",",rt['Protocol']
                 rt_count-=1
 
-    def printIPv4IntfStates(self):
-        ipv4intfs = self.swtch.getAllIPv4IntfStates()
-        if len(ipv4intfs):
-            print '------Ip Info------\n'
-        for ipv4intf in ipv4intfs:
-            print 'address: %s' %(ipv4intf['IntfRef'])
-
     def printVlanState(self, VlanId):
 
         found = self.printVlanStates(int(VlanId))
@@ -657,21 +650,67 @@ class FlexPrint( FlexSwitchShow):
                      wrapfunc=lambda x: wrap_onspace_strict(x,width))
 
     def printIPv4IntfStates(self,):
+
+        self.printEthIPv4IntfStates()
+        print '\n'
+        self.printSviIPv4IntfStates()
+        print '\n'
+        self.printLagIPv4IntfStates()
+        print '\n'
+
+    def printEthIPv4IntfStates(self,):
         ipintfs = self.swtch.getAllIPv4IntfStates()
         print '\n'
         labels = ('Interface', 'IP Address', 'OperState', 'DownEvents','Last Flap')
         rows = []
         for i in ipintfs:
             ip = i['Object']
-            rows.append((ip['IntfRef'],
+            if ip['L2IntfType'] == 'Port':
+                rows.append((ip['IntfRef'],
                         "%s" %(ip['IpAddr']),
                         "%s" %(ip['OperState']),
                         "%s" %(ip['NumDownEvents']),
                         "%s" %(ip['LastDownEventTime'])))
-        width = 20
-        print indent([labels]+rows, hasHeader=True, separateRows=False,
-                     prefix=' ', postfix=' ', headerChar= '-', delim='    ',
-                     wrapfunc=lambda x: wrap_onspace_strict(x,width))
+
+        self.tblPrintObject('EthIPv4IntfStates',
+                            labels,
+                            rows)
+
+    def printSviIPv4IntfStates(self,):
+        ipintfs = self.swtch.getAllIPv4IntfStates()
+        print '\n'
+        labels = ('Interface', 'IP Address', 'OperState', 'DownEvents','Last Flap')
+        rows = []
+        for i in ipintfs:
+            ip = i['Object']
+            if ip['L2IntfType'] == 'Vlan':
+                rows.append((ip['IntfRef'],
+                        "%s" %(ip['IpAddr']),
+                        "%s" %(ip['OperState']),
+                        "%s" %(ip['NumDownEvents']),
+                        "%s" %(ip['LastDownEventTime'])))
+
+        self.tblPrintObject('SviIPv4IntfStates',
+                            labels,
+                            rows)
+
+    def printLagIPv4IntfStates(self,):
+        ipintfs = self.swtch.getAllIPv4IntfStates()
+        print '\n'
+        labels = ('Interface', 'IP Address', 'OperState', 'DownEvents','Last Flap')
+        rows = []
+        for i in ipintfs:
+            ip = i['Object']
+            if ip['L2IntfType'] == 'Lag':
+                rows.append((ip['IntfRef'],
+                            "%s" %(ip['IpAddr']),
+                            "%s" %(ip['OperState']),
+                            "%s" %(ip['NumDownEvents']),
+                            "%s" %(ip['LastDownEventTime'])))
+
+        self.tblPrintObject('LagIPv4IntfStates',
+                            labels,
+                            rows)
 
 
     def printBGPNeighborStates(self):	   
@@ -700,10 +739,16 @@ class FlexPrint( FlexSwitchShow):
                      "%s" %(TXmsg),
                      "%s" %(pr['Description']),
                      "%s" %(pr['TotalPrefixes'])))
-           width = 20
-           print indent([labels]+rows, hasHeader=True, separateRows=False,
-                        prefix=' ', postfix=' ', headerChar= '-', delim='    ',
-                        wrapfunc=lambda x: wrap_onspace_strict(x,width))
+
+
+           self.tblPrintObject('BGPNeighborStates',
+                            labels,
+                            rows)
+
+           #width = 20
+           #print indent([labels]+rows, hasHeader=True, separateRows=False,
+           #             prefix=' ', postfix=' ', headerChar= '-', delim='    ',
+           #             wrapfunc=lambda x: wrap_onspace_strict(x,width))
 
     def printBfdSessionStates(self):
         peers = self.swtch.getAllBfdSessionStates()
@@ -725,10 +770,15 @@ class FlexPrint( FlexSwitchShow):
                       "%s" %(pr['IfIndex']),
                       "%s" %(pr['NumTxPackets']),
                       "%s" %(pr['NumRxPackets'])))
-            width = 20
-            print indent([labels]+rows, hasHeader=True, separateRows=False,
-                        prefix=' ', postfix=' ', headerChar= '-', delim='    ',
-                        wrapfunc=lambda x: wrap_onspace_strict(x,width))
+
+            self.tblPrintObject('BfdSessionStates',
+                            labels,
+                            rows)
+
+            #width = 20
+            #print indent([labels]+rows, hasHeader=True, separateRows=False,
+            #            prefix=' ', postfix=' ', headerChar= '-', delim='    ',
+            #            wrapfunc=lambda x: wrap_onspace_strict(x,width))
 
    # def printInterfaces(self):
 
@@ -751,10 +801,15 @@ class FlexPrint( FlexSwitchShow):
                          "%s" %(repo['Sha1']),
                          "%s" %(repo['Branch']),
                          "%s" %(repo['Time'])) )
-            width = 20
-            print indent([labels]+rows, hasHeader=True, separateRows=True,
-                 prefix='| ', postfix=' |',
-                 wrapfunc=lambda x: wrap_onspace_strict(x,width))
+
+            self.tblPrintObject('SystemSwVersionState',
+                            labels,
+                            rows)
+
+            #width = 20
+            #print indent([labels]+rows, hasHeader=True, separateRows=True,
+            #     prefix='| ', postfix=' |',
+            #     wrapfunc=lambda x: wrap_onspace_strict(x,width))
 
 if __name__=='__main__':
     pass
