@@ -457,6 +457,179 @@ class FlexSwitch( object):
         return self.getObjects( 'OspfAreaEntry', self.cfgUrlBase)
 
 
+    """
+    .. automethod :: createVxlanVtepInstance(self,
+        :param string Intf : VTEP instance identifier name. should be defined as either vtep<id#> or <id#> if the later then 'vtep' will be prepended to the <id#> example VTEP instance identifier name. should be defined as either vtep<id#> or <id#> if the later then 'vtep' will be prepended to the <id#> example
+        :param string IntfRef : Source interface where the source ip will be derived from.  If an interface is not supplied the src-ip will be used. This attribute takes presedence over src-ip attribute. Source interface where the source ip will be derived from.  If an interface is not supplied the src-ip will be used. This attribute takes presedence over src-ip attribute.
+        :param uint32 Vni : Reference to the vxlan domain that this vtep is attached to Reference to the vxlan domain that this vtep is attached to
+        :param string DstIp : Destination IP address for the static VxLAN tunnel Destination IP address for the static VxLAN tunnel
+        :param uint16 VlanId : Vlan Id to encapsulate with the vtep tunnel ethernet header Vlan Id to encapsulate with the vtep tunnel ethernet header
+        :param uint16 TOS : Type of Service Type of Service
+        :param uint32 Mtu : Set the MTU to be applied to all VTEP within this VxLAN Set the MTU to be applied to all VTEP within this VxLAN
+        :param int32 InnerVlanHandlingMode : The inner vlan tag handling mode. The inner vlan tag handling mode.
+        :param uint16 TTL : TTL of the Vxlan tunnel TTL of the Vxlan tunnel
+        :param string SrcIp : Source IP address for the VxLAN tunnel Source IP address for the VxLAN tunnel
+        :param uint16 DstUDP : vxlan udp port.  Deafult is the iana default udp port vxlan udp port.  Deafult is the iana default udp port
+
+	"""
+    def createVxlanVtepInstance(self,
+                                Intf,
+                                IntfRef,
+                                Vni,
+                                DstIp,
+                                VlanId,
+                                TOS=0,
+                                Mtu=1550,
+                                InnerVlanHandlingMode=0,
+                                TTL=255,
+                                SrcIp='0.0.0.0',
+                                DstUDP=4789):
+        obj =  { 
+                'Intf' : Intf,
+                'IntfRef' : IntfRef,
+                'Vni' : int(Vni),
+                'DstIp' : DstIp,
+                'VlanId' : int(VlanId),
+                'TOS' : int(TOS),
+                'Mtu' : int(Mtu),
+                'InnerVlanHandlingMode' : int(InnerVlanHandlingMode),
+                'TTL' : int(TTL),
+                'SrcIp' : SrcIp,
+                'DstUDP' : int(DstUDP),
+                }
+        reqUrl =  self.cfgUrlBase+'VxlanVtepInstance'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateVxlanVtepInstance(self,
+                                Intf,
+                                IntfRef = None,
+                                Vni = None,
+                                DstIp = None,
+                                VlanId = None,
+                                TOS = None,
+                                Mtu = None,
+                                InnerVlanHandlingMode = None,
+                                TTL = None,
+                                SrcIp = None,
+                                DstUDP = None):
+        obj =  {}
+        if Intf != None :
+            obj['Intf'] = Intf
+
+        if IntfRef != None :
+            obj['IntfRef'] = IntfRef
+
+        if Vni != None :
+            obj['Vni'] = int(Vni)
+
+        if DstIp != None :
+            obj['DstIp'] = DstIp
+
+        if VlanId != None :
+            obj['VlanId'] = int(VlanId)
+
+        if TOS != None :
+            obj['TOS'] = int(TOS)
+
+        if Mtu != None :
+            obj['Mtu'] = int(Mtu)
+
+        if InnerVlanHandlingMode != None :
+            obj['InnerVlanHandlingMode'] = int(InnerVlanHandlingMode)
+
+        if TTL != None :
+            obj['TTL'] = int(TTL)
+
+        if SrcIp != None :
+            obj['SrcIp'] = SrcIp
+
+        if DstUDP != None :
+            obj['DstUDP'] = int(DstUDP)
+
+        reqUrl =  self.cfgUrlBase+'VxlanVtepInstance'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateVxlanVtepInstanceById(self,
+                                     objectId,
+                                     IntfRef = None,
+                                     Vni = None,
+                                     DstIp = None,
+                                     VlanId = None,
+                                     TOS = None,
+                                     Mtu = None,
+                                     InnerVlanHandlingMode = None,
+                                     TTL = None,
+                                     SrcIp = None,
+                                     DstUDP = None):
+        obj =  {'objectId': objectId }
+        if IntfRef !=  None:
+            obj['IntfRef'] = IntfRef
+
+        if Vni !=  None:
+            obj['Vni'] = Vni
+
+        if DstIp !=  None:
+            obj['DstIp'] = DstIp
+
+        if VlanId !=  None:
+            obj['VlanId'] = VlanId
+
+        if TOS !=  None:
+            obj['TOS'] = TOS
+
+        if Mtu !=  None:
+            obj['Mtu'] = Mtu
+
+        if InnerVlanHandlingMode !=  None:
+            obj['InnerVlanHandlingMode'] = InnerVlanHandlingMode
+
+        if TTL !=  None:
+            obj['TTL'] = TTL
+
+        if SrcIp !=  None:
+            obj['SrcIp'] = SrcIp
+
+        if DstUDP !=  None:
+            obj['DstUDP'] = DstUDP
+
+        reqUrl =  self.cfgUrlBase+'VxlanVtepInstance'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteVxlanVtepInstance(self,
+                                Intf):
+        obj =  { 
+                'Intf' : Intf,
+                }
+        reqUrl =  self.cfgUrlBase+'VxlanVtepInstance'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteVxlanVtepInstanceById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'VxlanVtepInstance'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getVxlanVtepInstance(self,
+                             Intf):
+        obj =  { 
+                'Intf' : Intf,
+                }
+        reqUrl =  self.cfgUrlBase + 'VxlanVtepInstance'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getVxlanVtepInstanceById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'VxlanVtepInstance'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllVxlanVtepInstances(self):
+        return self.getObjects( 'VxlanVtepInstance', self.cfgUrlBase)
+
+
     def getLaPortChannelState(self,
                               LagId):
         obj =  { 
@@ -4364,9 +4537,9 @@ class FlexSwitch( object):
 	"""
     def createStpBridgeInstance(self,
                                 Vlan,
-                                HelloTime=200,
-                                ForwardDelay=1500,
-                                MaxAge=2000,
+                                HelloTime=2,
+                                ForwardDelay=15,
+                                MaxAge=20,
                                 TxHoldCount=6,
                                 Priority=4096,
                                 ForceVersion=2,
@@ -4741,44 +4914,30 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createVxlanInstance(self,
-        :param uint32 VxlanId : VxLAN ID or VNI VxLAN ID or VNI
-        :param string McDestIp : VxLAN multicast IP address used when destination is uknown VxLAN multicast IP address used when destination is uknown
+        :param uint32 Vni : VNI domain VNI domain
         :param uint16 VlanId : Vlan associated with the Access targets.  Used in conjunction with a given VTEP inner-vlan-handling-mode Vlan associated with the Access targets.  Used in conjunction with a given VTEP inner-vlan-handling-mode
-        :param uint32 Mtu : Set the MTU to be applied to all VTEP within this VxLAN Set the MTU to be applied to all VTEP within this VxLAN
 
 	"""
     def createVxlanInstance(self,
-                            VxlanId,
-                            McDestIp,
-                            VlanId,
-                            Mtu=1500):
+                            Vni,
+                            VlanId):
         obj =  { 
-                'VxlanId' : int(VxlanId),
-                'McDestIp' : McDestIp,
+                'Vni' : int(Vni),
                 'VlanId' : int(VlanId),
-                'Mtu' : int(Mtu),
                 }
         reqUrl =  self.cfgUrlBase+'VxlanInstance'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     def updateVxlanInstance(self,
-                            VxlanId,
-                            McDestIp = None,
-                            VlanId = None,
-                            Mtu = None):
+                            Vni,
+                            VlanId = None):
         obj =  {}
-        if VxlanId != None :
-            obj['VxlanId'] = int(VxlanId)
-
-        if McDestIp != None :
-            obj['McDestIp'] = McDestIp
+        if Vni != None :
+            obj['Vni'] = int(Vni)
 
         if VlanId != None :
             obj['VlanId'] = int(VlanId)
-
-        if Mtu != None :
-            obj['Mtu'] = int(Mtu)
 
         reqUrl =  self.cfgUrlBase+'VxlanInstance'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -4786,27 +4945,19 @@ class FlexSwitch( object):
 
     def updateVxlanInstanceById(self,
                                  objectId,
-                                 McDestIp = None,
-                                 VlanId = None,
-                                 Mtu = None):
+                                 VlanId = None):
         obj =  {'objectId': objectId }
-        if McDestIp !=  None:
-            obj['McDestIp'] = McDestIp
-
         if VlanId !=  None:
             obj['VlanId'] = VlanId
-
-        if Mtu !=  None:
-            obj['Mtu'] = Mtu
 
         reqUrl =  self.cfgUrlBase+'VxlanInstance'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     def deleteVxlanInstance(self,
-                            VxlanId):
+                            Vni):
         obj =  { 
-                'VxlanId' : VxlanId,
+                'Vni' : Vni,
                 }
         reqUrl =  self.cfgUrlBase+'VxlanInstance'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -4818,9 +4969,9 @@ class FlexSwitch( object):
         return r
 
     def getVxlanInstance(self,
-                         VxlanId):
+                         Vni):
         obj =  { 
-                'VxlanId' : int(VxlanId),
+                'Vni' : int(Vni),
                 }
         reqUrl =  self.cfgUrlBase + 'VxlanInstance'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -4983,223 +5134,6 @@ class FlexSwitch( object):
 
     def getAllOspfIfMetricEntrys(self):
         return self.getObjects( 'OspfIfMetricEntry', self.cfgUrlBase)
-
-
-    """
-    .. automethod :: createVxlanVtepInstances(self,
-        :param uint32 VtepId : VTEP ID. VTEP ID.
-        :param uint32 VxlanId : VxLAN ID. VxLAN ID.
-        :param string VtepName : VTEP instance name. VTEP instance name.
-        :param int32 SrcIfIndex : Source physical interface ifIndex. Source physical interface ifIndex.
-        :param uint16 TTL : TTL of the Vxlan tunnel TTL of the Vxlan tunnel
-        :param uint16 TOS : Type of Service Type of Service
-        :param int32 Learning : specifies if unknown source link layer  addresses and IP addresses are entered into the VXLAN  device forwarding database. specifies if unknown source link layer  addresses and IP addresses are entered into the VXLAN  device forwarding database.
-        :param int32 Rsc : specifies if route short circuit is turned on. specifies if route short circuit is turned on.
-        :param int32 L2miss : specifies if netlink LLADDR miss notifications are generated. specifies if netlink LLADDR miss notifications are generated.
-        :param int32 L3miss : specifies if netlink IP ADDR miss notifications are generated. specifies if netlink IP ADDR miss notifications are generated.
-        :param string DstIp : Destination IP address for the static VxLAN tunnel Destination IP address for the static VxLAN tunnel
-        :param string DstMac : Destination MAC address for the static VxLAN tunnel Destination MAC address for the static VxLAN tunnel
-        :param uint16 VlanId : Vlan Id to encapsulate with the vtep tunnel ethernet header Vlan Id to encapsulate with the vtep tunnel ethernet header
-        :param uint16 UDP : vxlan udp port.  Deafult is the iana default udp port vxlan udp port.  Deafult is the iana default udp port
-        :param int32 InnerVlanHandlingMode : The inner vlan tag handling mode. The inner vlan tag handling mode.
-
-	"""
-    def createVxlanVtepInstances(self,
-                                 VtepId,
-                                 VxlanId,
-                                 VtepName,
-                                 SrcIfIndex,
-                                 TTL,
-                                 TOS,
-                                 Learning,
-                                 Rsc,
-                                 L2miss,
-                                 L3miss,
-                                 DstIp,
-                                 DstMac,
-                                 VlanId,
-                                 UDP=4789,
-                                 InnerVlanHandlingMode=0):
-        obj =  { 
-                'VtepId' : int(VtepId),
-                'VxlanId' : int(VxlanId),
-                'VtepName' : VtepName,
-                'SrcIfIndex' : int(SrcIfIndex),
-                'TTL' : int(TTL),
-                'TOS' : int(TOS),
-                'Learning' : int(Learning),
-                'Rsc' : int(Rsc),
-                'L2miss' : int(L2miss),
-                'L3miss' : int(L3miss),
-                'DstIp' : DstIp,
-                'DstMac' : DstMac,
-                'VlanId' : int(VlanId),
-                'UDP' : int(UDP),
-                'InnerVlanHandlingMode' : int(InnerVlanHandlingMode),
-                }
-        reqUrl =  self.cfgUrlBase+'VxlanVtepInstances'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    def updateVxlanVtepInstances(self,
-                                 VtepId,
-                                 VxlanId,
-                                 VtepName = None,
-                                 SrcIfIndex = None,
-                                 TTL = None,
-                                 TOS = None,
-                                 Learning = None,
-                                 Rsc = None,
-                                 L2miss = None,
-                                 L3miss = None,
-                                 DstIp = None,
-                                 DstMac = None,
-                                 VlanId = None,
-                                 UDP = None,
-                                 InnerVlanHandlingMode = None):
-        obj =  {}
-        if VtepId != None :
-            obj['VtepId'] = int(VtepId)
-
-        if VxlanId != None :
-            obj['VxlanId'] = int(VxlanId)
-
-        if VtepName != None :
-            obj['VtepName'] = VtepName
-
-        if SrcIfIndex != None :
-            obj['SrcIfIndex'] = int(SrcIfIndex)
-
-        if TTL != None :
-            obj['TTL'] = int(TTL)
-
-        if TOS != None :
-            obj['TOS'] = int(TOS)
-
-        if Learning != None :
-            obj['Learning'] = int(Learning)
-
-        if Rsc != None :
-            obj['Rsc'] = int(Rsc)
-
-        if L2miss != None :
-            obj['L2miss'] = int(L2miss)
-
-        if L3miss != None :
-            obj['L3miss'] = int(L3miss)
-
-        if DstIp != None :
-            obj['DstIp'] = DstIp
-
-        if DstMac != None :
-            obj['DstMac'] = DstMac
-
-        if VlanId != None :
-            obj['VlanId'] = int(VlanId)
-
-        if UDP != None :
-            obj['UDP'] = int(UDP)
-
-        if InnerVlanHandlingMode != None :
-            obj['InnerVlanHandlingMode'] = int(InnerVlanHandlingMode)
-
-        reqUrl =  self.cfgUrlBase+'VxlanVtepInstances'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    def updateVxlanVtepInstancesById(self,
-                                      objectId,
-                                      VtepName = None,
-                                      SrcIfIndex = None,
-                                      TTL = None,
-                                      TOS = None,
-                                      Learning = None,
-                                      Rsc = None,
-                                      L2miss = None,
-                                      L3miss = None,
-                                      DstIp = None,
-                                      DstMac = None,
-                                      VlanId = None,
-                                      UDP = None,
-                                      InnerVlanHandlingMode = None):
-        obj =  {'objectId': objectId }
-        if VtepName !=  None:
-            obj['VtepName'] = VtepName
-
-        if SrcIfIndex !=  None:
-            obj['SrcIfIndex'] = SrcIfIndex
-
-        if TTL !=  None:
-            obj['TTL'] = TTL
-
-        if TOS !=  None:
-            obj['TOS'] = TOS
-
-        if Learning !=  None:
-            obj['Learning'] = Learning
-
-        if Rsc !=  None:
-            obj['Rsc'] = Rsc
-
-        if L2miss !=  None:
-            obj['L2miss'] = L2miss
-
-        if L3miss !=  None:
-            obj['L3miss'] = L3miss
-
-        if DstIp !=  None:
-            obj['DstIp'] = DstIp
-
-        if DstMac !=  None:
-            obj['DstMac'] = DstMac
-
-        if VlanId !=  None:
-            obj['VlanId'] = VlanId
-
-        if UDP !=  None:
-            obj['UDP'] = UDP
-
-        if InnerVlanHandlingMode !=  None:
-            obj['InnerVlanHandlingMode'] = InnerVlanHandlingMode
-
-        reqUrl =  self.cfgUrlBase+'VxlanVtepInstances'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    def deleteVxlanVtepInstances(self,
-                                 VtepId,
-                                 VxlanId):
-        obj =  { 
-                'VtepId' : VtepId,
-                'VxlanId' : VxlanId,
-                }
-        reqUrl =  self.cfgUrlBase+'VxlanVtepInstances'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    def deleteVxlanVtepInstancesById(self, objectId ):
-        reqUrl =  self.cfgUrlBase+'VxlanVtepInstances'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getVxlanVtepInstances(self,
-                              VtepId,
-                              VxlanId):
-        obj =  { 
-                'VtepId' : int(VtepId),
-                'VxlanId' : int(VxlanId),
-                }
-        reqUrl =  self.cfgUrlBase + 'VxlanVtepInstances'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    def getVxlanVtepInstancesById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'VxlanVtepInstances'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllVxlanVtepInstancess(self):
-        return self.getObjects( 'VxlanVtepInstances', self.cfgUrlBase)
 
 
     """

@@ -47,8 +47,10 @@ class FlexPrint( FlexSwitchShow):
 
         self.printPortStates(IntfRef=int(IntfRef))
 
-    #def printPortStates(self):
     def printInterfaces(self):
+        self.printPortStates()
+
+    def printPortStates(self):
         ports = self.swtch.getAllPortStates()
         for port in ports:
             p = port['Object']
@@ -553,15 +555,16 @@ class FlexPrint( FlexSwitchShow):
             print 'LagId: %s' %(lag['LagId']) + ' IfIndex: %s' %(lag['IfIndex']) + ' Name: %s' %(lag['Name'])
             labels = ('LagType','Interval','Mode','System Id', 'System Priority', 'Hash Mode', 'OperState', 'Members', 'Members Up in Bundle')
             rows=[]
-            rows.append( ("%s" %(lag['LagType']),
-                         "%s" %(lag['Interval']),
-                         "%s" %(lag['LacpMode']),
+
+            rows.append(("LACP" if int(lag['LagType']) == 0 else "STATIC",
+                         "FAST" if int(lag['Interval']) == 0 else "SLOW",
+                         "ACTIVE" if int(lag['LacpMode']) == 0 else "PASSIVE",
                          "%s" %(lag['SystemIdMac']),
                          "%s" %(lag["SystemPriority"]),
                          "%s" %(lag['LagHash']),
                          "%s" %(lag['OperState']),
                          "%s" %(lag['Members']),
-                          "%s" %(lag['MembersUpInBundle'])))
+                         "%s" %(lag['MembersUpInBundle'])))
             width = 20
             print indent([labels]+rows, hasHeader=False, separateRows=True,
                  prefix='| ', postfix=' |',
@@ -627,11 +630,13 @@ class FlexPrint( FlexSwitchShow):
 
     def printBGPRouteStates(self, ):
         routes = self.swtch.getAllBGPRouteStates()
-        print '\n\n---- BGP Routes ----'
-        labels = ('Network', 'NextHop', 'Metric', 'LocalPref', 'Updated', 'Path')
+        bgpglobal = self.swtch.getAllBGPGlobals()
+        labels = ('Network', 'NextHop','BP', 'MP', 'Metric', 'LocalPref', 'Updated', 'Path')
         rows = []
         for r in routes:
             rt = r['Object']
+            if rt['Paths'] is None:
+            	continue
             for p in rt['Paths']:
                 if p['Path'] is None:
                     bgp_path = p['Path']
@@ -640,6 +645,8 @@ class FlexPrint( FlexSwitchShow):
 
                 rows.append((rt['Network']+"/"+str(rt['CIDRLen']),
                             "%s" %(p['NextHop']),
+                            "%s" %(p['BestPath']),
+                            "%s" %(p['MultiPath']),
                             "%s" %(p['Metric']),
                             "%s" %(p['LocalPref']),
                             "%s" %(p['UpdatedTime'].split(".")[0]),
