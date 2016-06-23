@@ -829,38 +829,38 @@ class FlexSwitch( object):
     """
     .. automethod :: createLaPortChannel(self,
         :param int32 LagId : Id of the lag group Id of the lag group
-        :param int32 LagType : Sets the type of LAG Sets the type of LAG
-        :param uint16 MinLinks : Specifies the mininum number of member interfaces that must be active for the aggregate interface to be available Specifies the mininum number of member interfaces that must be active for the aggregate interface to be available
-        :param string SystemIdMac : The MAC address portion of the node's System ID. This is combined with the system priority to construct the 8-octet system-id The MAC address portion of the node's System ID. This is combined with the system priority to construct the 8-octet system-id
-        :param uint16 SystemPriority : Sytem priority used by the node on this LAG interface. Lower value is higher priority for determining which node is the controlling system. Sytem priority used by the node on this LAG interface. Lower value is higher priority for determining which node is the controlling system.
-        :param string AdminState : Convenient way to disable/enable a lag group.  The behaviour should be such that all traffic should stop.  LACP frames should continue to be processed Convenient way to disable/enable a lag group.  The behaviour should be such that all traffic should stop.  LACP frames should continue to be processed
         :param int32 Members : List of current member interfaces for the aggregate List of current member interfaces for the aggregate
+        :param string SystemIdMac : The MAC address portion of the node's System ID. This is combined with the system priority to construct the 8-octet system-id The MAC address portion of the node's System ID. This is combined with the system priority to construct the 8-octet system-id
+        :param uint16 MinLinks : Specifies the mininum number of member interfaces that must be active for the aggregate interface to be available Specifies the mininum number of member interfaces that must be active for the aggregate interface to be available
+        :param uint16 SystemPriority : Sytem priority used by the node on this LAG interface. Lower value is higher priority for determining which node is the controlling system. Sytem priority used by the node on this LAG interface. Lower value is higher priority for determining which node is the controlling system.
         :param int32 Interval : Set the period between LACP messages -- uses the lacp-period-type enumeration. Set the period between LACP messages -- uses the lacp-period-type enumeration.
         :param int32 LagHash : The tx hashing algorithm used by the lag group The tx hashing algorithm used by the lag group
+        :param string AdminState : Convenient way to disable/enable a lag group.  The behaviour should be such that all traffic should stop.  LACP frames should continue to be processed Convenient way to disable/enable a lag group.  The behaviour should be such that all traffic should stop.  LACP frames should continue to be processed
+        :param int32 LagType : Sets the type of LAG Sets the type of LAG
         :param int32 LacpMode : ACTIVE is to initiate the transmission of LACP packets. PASSIVE is to wait for peer to initiate the transmission of LACP packets. ACTIVE is to initiate the transmission of LACP packets. PASSIVE is to wait for peer to initiate the transmission of LACP packets.
 
 	"""
     def createLaPortChannel(self,
                             LagId,
-                            LagType,
-                            MinLinks,
-                            SystemIdMac,
-                            SystemPriority,
-                            AdminState,
                             Members,
+                            SystemIdMac='00',
+                            MinLinks=1,
+                            SystemPriority=32768,
                             Interval=1,
                             LagHash=0,
+                            AdminState='enable',
+                            LagType=0,
                             LacpMode=0):
         obj =  { 
                 'LagId' : int(LagId),
-                'LagType' : int(LagType),
-                'MinLinks' : int(MinLinks),
-                'SystemIdMac' : SystemIdMac,
-                'SystemPriority' : int(SystemPriority),
-                'AdminState' : AdminState,
                 'Members' : Members,
+                'SystemIdMac' : SystemIdMac,
+                'MinLinks' : int(MinLinks),
+                'SystemPriority' : int(SystemPriority),
                 'Interval' : int(Interval),
                 'LagHash' : int(LagHash),
+                'AdminState' : AdminState,
+                'LagType' : int(LagType),
                 'LacpMode' : int(LacpMode),
                 }
         reqUrl =  self.cfgUrlBase+'LaPortChannel'
@@ -869,42 +869,42 @@ class FlexSwitch( object):
 
     def updateLaPortChannel(self,
                             LagId,
-                            LagType = None,
-                            MinLinks = None,
-                            SystemIdMac = None,
-                            SystemPriority = None,
-                            AdminState = None,
                             Members = None,
+                            SystemIdMac = None,
+                            MinLinks = None,
+                            SystemPriority = None,
                             Interval = None,
                             LagHash = None,
+                            AdminState = None,
+                            LagType = None,
                             LacpMode = None):
         obj =  {}
         if LagId != None :
             obj['LagId'] = int(LagId)
 
-        if LagType != None :
-            obj['LagType'] = int(LagType)
-
-        if MinLinks != None :
-            obj['MinLinks'] = int(MinLinks)
+        if Members != None :
+            obj['Members'] = Members
 
         if SystemIdMac != None :
             obj['SystemIdMac'] = SystemIdMac
 
+        if MinLinks != None :
+            obj['MinLinks'] = int(MinLinks)
+
         if SystemPriority != None :
             obj['SystemPriority'] = int(SystemPriority)
-
-        if AdminState != None :
-            obj['AdminState'] = AdminState
-
-        if Members != None :
-            obj['Members'] = Members
 
         if Interval != None :
             obj['Interval'] = int(Interval)
 
         if LagHash != None :
             obj['LagHash'] = int(LagHash)
+
+        if AdminState != None :
+            obj['AdminState'] = AdminState
+
+        if LagType != None :
+            obj['LagType'] = int(LagType)
 
         if LacpMode != None :
             obj['LacpMode'] = int(LacpMode)
@@ -915,39 +915,39 @@ class FlexSwitch( object):
 
     def updateLaPortChannelById(self,
                                  objectId,
-                                 LagType = None,
-                                 MinLinks = None,
-                                 SystemIdMac = None,
-                                 SystemPriority = None,
-                                 AdminState = None,
                                  Members = None,
+                                 SystemIdMac = None,
+                                 MinLinks = None,
+                                 SystemPriority = None,
                                  Interval = None,
                                  LagHash = None,
+                                 AdminState = None,
+                                 LagType = None,
                                  LacpMode = None):
         obj =  {'objectId': objectId }
-        if LagType !=  None:
-            obj['LagType'] = LagType
-
-        if MinLinks !=  None:
-            obj['MinLinks'] = MinLinks
+        if Members !=  None:
+            obj['Members'] = Members
 
         if SystemIdMac !=  None:
             obj['SystemIdMac'] = SystemIdMac
 
+        if MinLinks !=  None:
+            obj['MinLinks'] = MinLinks
+
         if SystemPriority !=  None:
             obj['SystemPriority'] = SystemPriority
-
-        if AdminState !=  None:
-            obj['AdminState'] = AdminState
-
-        if Members !=  None:
-            obj['Members'] = Members
 
         if Interval !=  None:
             obj['Interval'] = Interval
 
         if LagHash !=  None:
             obj['LagHash'] = LagHash
+
+        if AdminState !=  None:
+            obj['AdminState'] = AdminState
+
+        if LagType !=  None:
+            obj['LagType'] = LagType
 
         if LacpMode !=  None:
             obj['LacpMode'] = LacpMode
@@ -4541,7 +4541,7 @@ class FlexSwitch( object):
                                 ForwardDelay=15,
                                 MaxAge=20,
                                 TxHoldCount=6,
-                                Priority=4096,
+                                Priority=32768,
                                 ForceVersion=2,
                                 Address='00'):
         obj =  { 
