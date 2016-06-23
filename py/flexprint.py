@@ -811,5 +811,33 @@ class FlexPrint( FlexSwitchShow):
             #     prefix='| ', postfix=' |',
             #     wrapfunc=lambda x: wrap_onspace_strict(x,width))
 
+    def printSystemStatusStates(self):
+        header = []; rows = []
+        header.append('Name')
+        header.append('Ready')
+        header.append('Reason')
+        header.append('UpTime')
+        header.append('NumCreateCalls')
+        header.append('NumDeleteCalls')
+        header.append('NumUpdateCalls')
+        header.append('NumGetCalls')
+        header.append('NumActionCalls')
+
+        r = self.swtch.getSystemStatusState("")
+        obj = r.json()
+        o = obj['Object']
+        values = []
+        values.append('%s' % o['Name'])
+        values.append('%s' % o['Ready'])
+        values.append('%s' % o['Reason'])
+        values.append('%s' % o['UpTime'])
+        values.append('%s' % o['NumCreateCalls'])
+        values.append('%s' % o['NumDeleteCalls'])
+        values.append('%s' % o['NumUpdateCalls'])
+        values.append('%s' % o['NumGetCalls'])
+        values.append('%s' % o['NumActionCalls'])
+        rows.append(values)
+        self.tblPrintObject('SystemStatusState', header, rows)
+
 if __name__=='__main__':
     pass
