@@ -66,6 +66,28 @@ class FlexSwitch( object):
         return self.getObjects( 'ArpEntry', self.stateUrlBase)
 
 
+    def getOspfIPv4RouteState(self,
+                              DestId,
+                              DestType,
+                              AddrMask):
+        obj =  { 
+                'DestId' : DestId,
+                'DestType' : DestType,
+                'AddrMask' : AddrMask,
+                }
+        reqUrl =  self.stateUrlBase + 'OspfIPv4Route'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getOspfIPv4RouteStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'OspfIPv4Route'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllOspfIPv4RouteStates(self):
+        return self.getObjects( 'OspfIPv4Route', self.stateUrlBase)
+
+
     """
     .. automethod :: createPolicyStmt(self,
         :param string Name : Policy Statement Name Policy Statement Name
@@ -1004,28 +1026,6 @@ class FlexSwitch( object):
 
     def getAllBGPPolicyConditionStates(self):
         return self.getObjects( 'BGPPolicyCondition', self.stateUrlBase)
-
-
-    def getOspfIPv4Routes(self,
-                          DestId,
-                          DestType,
-                          AddrMask):
-        obj =  { 
-                'DestId' : DestId,
-                'DestType' : DestType,
-                'AddrMask' : AddrMask,
-                }
-        reqUrl =  self.stateUrlBase + 'OspfIPv4Routes'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    def getOspfIPv4RoutesById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'OspfIPv4Routes'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllOspfIPv4Routess(self):
-        return self.getObjects( 'OspfIPv4Routes', self.stateUrlBase)
 
 
     def getIPv4RouteHwState(self,
@@ -2799,6 +2799,24 @@ class FlexSwitch( object):
 
     def getAllBfdSessionStates(self):
         return self.getObjects( 'BfdSession', self.stateUrlBase)
+
+
+    def getOspfEventState(self,
+                          Index):
+        obj =  { 
+                'Index' : int(Index),
+                }
+        reqUrl =  self.stateUrlBase + 'OspfEvent'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getOspfEventStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'OspfEvent'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllOspfEventStates(self):
+        return self.getObjects( 'OspfEvent', self.stateUrlBase)
 
 
     """
@@ -5498,6 +5516,32 @@ class FlexSwitch( object):
 
     def getAllVrrpVridStates(self):
         return self.getObjects( 'VrrpVrid', self.stateUrlBase)
+
+
+    def getFaultState(self,
+                      EventId,
+                      EventName,
+                      SrcObjName,
+                      OwnerName,
+                      OwnerId):
+        obj =  { 
+                'EventId' : int(EventId),
+                'EventName' : EventName,
+                'SrcObjName' : SrcObjName,
+                'OwnerName' : OwnerName,
+                'OwnerId' : int(OwnerId),
+                }
+        reqUrl =  self.stateUrlBase + 'Fault'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getFaultStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'Fault'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllFaultStates(self):
+        return self.getObjects( 'Fault', self.stateUrlBase)
 
 
     """
