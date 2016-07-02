@@ -67,6 +67,40 @@ class FlexSwitchShow( object):
         self.tblPrintObject('ArpEntryState', header, rows)
 
 
+    def printOspfIPv4RouteStates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('DestId')
+            header.append('DestType')
+            header.append('AddrMask')
+            header.append('OptCapabilities')
+            header.append('AreaId')
+            header.append('PathType')
+            header.append('Cost')
+            header.append('Type2Cost')
+            header.append('NumOfPaths')
+            header.append('NextHops')
+            header.append('LSOrigin')
+
+        objs = self.swtch.getAllOspfIPv4RouteStates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['DestId'])
+            values.append('%s' % o['DestType'])
+            values.append('%s' % o['AddrMask'])
+            values.append('%s' % o['OptCapabilities'])
+            values.append('%s' % o['AreaId'])
+            values.append('%s' % o['PathType'])
+            values.append('%s' % o['Cost'])
+            values.append('%s' % o['Type2Cost'])
+            values.append('%s' % o['NumOfPaths'])
+            values.append('%s' % o['NextHops'])
+            values.append('%s' % o['LSOrigin'])
+            rows.append(values)
+        self.tblPrintObject('OspfIPv4RouteState', header, rows)
+
+
     def printPolicyStmts(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
@@ -457,40 +491,6 @@ class FlexSwitchShow( object):
             values.append('%s' % o['PolicyStmtList'])
             rows.append(values)
         self.tblPrintObject('BGPPolicyConditionState', header, rows)
-
-
-    def printOspfIPv4Routess(self, addHeader=True, brief=None):
-        header = []; rows = []
-        if addHeader:
-            header.append('DestId')
-            header.append('DestType')
-            header.append('AddrMask')
-            header.append('OptCapabilities')
-            header.append('AreaId')
-            header.append('PathType')
-            header.append('Cost')
-            header.append('Type2Cost')
-            header.append('NumOfPaths')
-            header.append('NextHops')
-            header.append('LSOrigin')
-
-        objs = self.swtch.getAllOspfIPv4Routess()
-        for obj in objs:
-            o = obj['Object']
-            values = []
-            values.append('%s' % o['DestId'])
-            values.append('%s' % o['DestType'])
-            values.append('%s' % o['AddrMask'])
-            values.append('%s' % o['OptCapabilities'])
-            values.append('%s' % o['AreaId'])
-            values.append('%s' % o['PathType'])
-            values.append('%s' % o['Cost'])
-            values.append('%s' % o['Type2Cost'])
-            values.append('%s' % o['NumOfPaths'])
-            values.append('%s' % o['NextHops'])
-            values.append('%s' % o['LSOrigin'])
-            rows.append(values)
-        self.tblPrintObject('OspfIPv4Routes', header, rows)
 
 
     def printIPv4RouteHwStates(self, addHeader=True, brief=None):
@@ -1251,6 +1251,26 @@ class FlexSwitchShow( object):
             values.append('%s' % o['NumRxPackets'])
             rows.append(values)
         self.tblPrintObject('BfdSessionState', header, rows)
+
+
+    def printOspfEventStates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('Index')
+            header.append('TimeStamp')
+            header.append('EventType')
+            header.append('EventInfo')
+
+        objs = self.swtch.getAllOspfEventStates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['Index'])
+            values.append('%s' % o['TimeStamp'])
+            values.append('%s' % o['EventType'])
+            values.append('%s' % o['EventInfo'])
+            rows.append(values)
+        self.tblPrintObject('OspfEventState', header, rows)
 
 
     def printLLDPIntfs(self, addHeader=True, brief=None):
@@ -2415,6 +2435,36 @@ class FlexSwitchShow( object):
             values.append('%s' % o['TransitionReason'])
             rows.append(values)
         self.tblPrintObject('VrrpVridState', header, rows)
+
+
+    def printFaultStates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('EventId')
+            header.append('EventName')
+            header.append('SrcObjName')
+            header.append('OwnerName')
+            header.append('OwnerId')
+            header.append('Description')
+            header.append('OccuranceTime')
+            header.append('SrcObjKey')
+            header.append('ResolutionTime')
+
+        objs = self.swtch.getAllFaultStates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['EventId'])
+            values.append('%s' % o['EventName'])
+            values.append('%s' % o['SrcObjName'])
+            values.append('%s' % o['OwnerName'])
+            values.append('%s' % o['OwnerId'])
+            values.append('%s' % o['Description'])
+            values.append('%s' % o['OccuranceTime'])
+            values.append('%s' % o['SrcObjKey'])
+            values.append('%s' % o['ResolutionTime'])
+            rows.append(values)
+        self.tblPrintObject('FaultState', header, rows)
 
 
     def printBGPPolicyDefinitions(self, addHeader=True, brief=None):
