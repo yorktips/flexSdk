@@ -155,6 +155,24 @@ class FlexSwitchShow( object):
         self.tblPrintObject('ComponentLogging', header, rows)
 
 
+    def printFans(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('FanId')
+            header.append('AdminSpeed')
+            header.append('AdminDirection')
+
+        objs = self.swtch.getAllFans()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['FanId'])
+            values.append('%s' % o['AdminSpeed'])
+            values.append('%s' % o['AdminDirection'])
+            rows.append(values)
+        self.tblPrintObject('Fan', header, rows)
+
+
     def printIPv4EventStates(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
@@ -171,6 +189,76 @@ class FlexSwitchShow( object):
             values.append('%s' % o['EventInfo'])
             rows.append(values)
         self.tblPrintObject('IPv4EventState', header, rows)
+
+
+    def printSubIPv6Intfs(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('IntfRef')
+            header.append('IpAddr')
+            header.append('Type')
+            header.append('MacAddr')
+            header.append('Enable')
+
+        objs = self.swtch.getAllSubIPv6Intfs()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['IntfRef'])
+            values.append('%s' % o['IpAddr'])
+            values.append('%s' % o['Type'])
+            values.append('%s' % o['MacAddr'])
+            values.append('%s' % o['Enable'])
+            rows.append(values)
+        self.tblPrintObject('SubIPv6Intf', header, rows)
+
+
+    def printIPv6RouteStates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('DestinationNw')
+            header.append('Protocol')
+            header.append('IsNetworkReachable')
+            header.append('RouteCreatedTime')
+            header.append('RouteUpdatedTime')
+            header.append('NextHopList')
+            header.append('PolicyList')
+
+        objs = self.swtch.getAllIPv6RouteStates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['DestinationNw'])
+            values.append('%s' % o['Protocol'])
+            values.append('%s' % o['IsNetworkReachable'])
+            values.append('%s' % o['RouteCreatedTime'])
+            values.append('%s' % o['RouteUpdatedTime'])
+            values.append('%s' % o['NextHopList'])
+            values.append('%s' % o['PolicyList'])
+            rows.append(values)
+        self.tblPrintObject('IPv6RouteState', header, rows)
+
+
+    def printNDPEntryStates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('IpAddr')
+            header.append('MacAddr')
+            header.append('Vlan')
+            header.append('Intf')
+            header.append('ExpiryTimeLeft')
+
+        objs = self.swtch.getAllNDPEntryStates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['IpAddr'])
+            values.append('%s' % o['MacAddr'])
+            values.append('%s' % o['Vlan'])
+            values.append('%s' % o['Intf'])
+            values.append('%s' % o['ExpiryTimeLeft'])
+            rows.append(values)
+        self.tblPrintObject('NDPEntryState', header, rows)
 
 
     def printOspfAreaEntrys(self, addHeader=True, brief=None):
@@ -269,6 +357,38 @@ class FlexSwitchShow( object):
             values.append('%s' % o['LacpMode'])
             rows.append(values)
         self.tblPrintObject('LaPortChannelState', header, rows)
+
+
+    def printIPv6IntfStates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('IntfRef')
+            header.append('IfIndex')
+            header.append('IpAddr')
+            header.append('OperState')
+            header.append('NumUpEvents')
+            header.append('LastUpEventTime')
+            header.append('NumDownEvents')
+            header.append('LastDownEventTime')
+            header.append('L2IntfType')
+            header.append('L2IntfId')
+
+        objs = self.swtch.getAllIPv6IntfStates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['IntfRef'])
+            values.append('%s' % o['IfIndex'])
+            values.append('%s' % o['IpAddr'])
+            values.append('%s' % o['OperState'])
+            values.append('%s' % o['NumUpEvents'])
+            values.append('%s' % o['LastUpEventTime'])
+            values.append('%s' % o['NumDownEvents'])
+            values.append('%s' % o['LastDownEventTime'])
+            values.append('%s' % o['L2IntfType'])
+            values.append('%s' % o['L2IntfId'])
+            rows.append(values)
+        self.tblPrintObject('IPv6IntfState', header, rows)
 
 
     def printDhcpRelayIntfs(self, addHeader=True, brief=None):
@@ -1133,6 +1253,24 @@ class FlexSwitchShow( object):
         self.tblPrintObject('IPv4RouteState', header, rows)
 
 
+    def printBGPAggregates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('IpPrefix')
+            header.append('SendSummaryOnly')
+            header.append('GenerateASSet')
+
+        objs = self.swtch.getAllBGPAggregates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['IpPrefix'])
+            values.append('%s' % o['SendSummaryOnly'])
+            values.append('%s' % o['GenerateASSet'])
+            rows.append(values)
+        self.tblPrintObject('BGPAggregate', header, rows)
+
+
     def printBfdGlobalStates(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
@@ -1155,6 +1293,48 @@ class FlexSwitchShow( object):
             values.append('%s' % o['NumAdminDownSessions'])
             rows.append(values)
         self.tblPrintObject('BfdGlobalState', header, rows)
+
+
+    def printPlatformSystemStates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('ObjName')
+            header.append('SerialNum')
+
+        objs = self.swtch.getAllPlatformSystemStates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['ObjName'])
+            values.append('%s' % o['SerialNum'])
+            rows.append(values)
+        self.tblPrintObject('PlatformSystemState', header, rows)
+
+
+    def printFanStates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('FanId')
+            header.append('OperMode')
+            header.append('OperSpeed')
+            header.append('OperDirection')
+            header.append('Status')
+            header.append('Model')
+            header.append('SerialNum')
+
+        objs = self.swtch.getAllFanStates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['FanId'])
+            values.append('%s' % o['OperMode'])
+            values.append('%s' % o['OperSpeed'])
+            values.append('%s' % o['OperDirection'])
+            values.append('%s' % o['Status'])
+            values.append('%s' % o['Model'])
+            values.append('%s' % o['SerialNum'])
+            rows.append(values)
+        self.tblPrintObject('FanState', header, rows)
 
 
     def printBGPGlobalStates(self, addHeader=True, brief=None):
@@ -1345,6 +1525,30 @@ class FlexSwitchShow( object):
             values.append('%s' % o['PolicyList'])
             rows.append(values)
         self.tblPrintObject('PolicyStmtState', header, rows)
+
+
+    def printIPv6Routes(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('DestinationNw')
+            header.append('NetworkMask')
+            header.append('NextHop')
+            header.append('Protocol')
+            header.append('NullRoute')
+            header.append('Cost')
+
+        objs = self.swtch.getAllIPv6Routes()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['DestinationNw'])
+            values.append('%s' % o['NetworkMask'])
+            values.append('%s' % o['NextHop'])
+            values.append('%s' % o['Protocol'])
+            values.append('%s' % o['NullRoute'])
+            values.append('%s' % o['Cost'])
+            rows.append(values)
+        self.tblPrintObject('IPv6Route', header, rows)
 
 
     def printStpBridgeStates(self, addHeader=True, brief=None):
@@ -1601,6 +1805,22 @@ class FlexSwitchShow( object):
             values.append('%s' % o['AreaLsaCount'])
             rows.append(values)
         self.tblPrintObject('OspfAreaEntryState', header, rows)
+
+
+    def printNDPGlobals(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('Vrf')
+            header.append('Enable')
+
+        objs = self.swtch.getAllNDPGlobals()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['Vrf'])
+            values.append('%s' % o['Enable'])
+            rows.append(values)
+        self.tblPrintObject('NDPGlobal', header, rows)
 
 
     def printBfdSessions(self, addHeader=True, brief=None):
@@ -2403,6 +2623,22 @@ class FlexSwitchShow( object):
             values.append('%s' % o['TotalPrefixes'])
             rows.append(values)
         self.tblPrintObject('BGPNeighborState', header, rows)
+
+
+    def printIPv6Intfs(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('IntfRef')
+            header.append('IpAddr')
+
+        objs = self.swtch.getAllIPv6Intfs()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['IntfRef'])
+            values.append('%s' % o['IpAddr'])
+            rows.append(values)
+        self.tblPrintObject('IPv6Intf', header, rows)
 
 
     def printVrrpVridStates(self, addHeader=True, brief=None):
