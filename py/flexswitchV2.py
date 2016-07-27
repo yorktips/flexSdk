@@ -343,6 +343,90 @@ class FlexSwitch( object):
         return self.getObjects( 'ComponentLogging', self.cfgUrlBase)
 
 
+    """
+    .. automethod :: createFan(self,
+        :param int32 FanId : Fan unit id Fan unit id
+        :param int32 AdminSpeed : Fan admin speed in rpm Fan admin speed in rpm
+        :param string AdminDirection : Air flow caused because of fan rotation Air flow caused because of fan rotation
+
+	"""
+    def createFan(self,
+                  AdminSpeed,
+                  AdminDirection='B2F'):
+        obj =  { 
+                'FanId' : int(0),
+                'AdminSpeed' : int(AdminSpeed),
+                'AdminDirection' : AdminDirection,
+                }
+        reqUrl =  self.cfgUrlBase+'Fan'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateFan(self,
+                  FanId,
+                  AdminSpeed = None,
+                  AdminDirection = None):
+        obj =  {}
+        if FanId != None :
+            obj['FanId'] = int(FanId)
+
+        if AdminSpeed != None :
+            obj['AdminSpeed'] = int(AdminSpeed)
+
+        if AdminDirection != None :
+            obj['AdminDirection'] = AdminDirection
+
+        reqUrl =  self.cfgUrlBase+'Fan'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateFanById(self,
+                       objectId,
+                       AdminSpeed = None,
+                       AdminDirection = None):
+        obj =  {'objectId': objectId }
+        if AdminSpeed !=  None:
+            obj['AdminSpeed'] = AdminSpeed
+
+        if AdminDirection !=  None:
+            obj['AdminDirection'] = AdminDirection
+
+        reqUrl =  self.cfgUrlBase+'Fan'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteFan(self,
+                  FanId):
+        obj =  { 
+                'FanId' : FanId,
+                }
+        reqUrl =  self.cfgUrlBase+'Fan'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteFanById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'Fan'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getFan(self,
+               FanId):
+        obj =  { 
+                'FanId' : int(FanId),
+                }
+        reqUrl =  self.cfgUrlBase + 'Fan'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getFanById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'Fan'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllFans(self):
+        return self.getObjects( 'Fan', self.cfgUrlBase)
+
+
     def getIPv4EventState(self,
                           Index):
         obj =  { 
@@ -359,6 +443,149 @@ class FlexSwitch( object):
 
     def getAllIPv4EventStates(self):
         return self.getObjects( 'IPv4Event', self.stateUrlBase)
+
+
+    """
+    .. automethod :: createSubIPv6Intf(self,
+        :param string IntfRef : Intf name of system generated id (ifindex) of the ipv4Intf where sub interface is to be configured Intf name of system generated id (ifindex) of the ipv4Intf where sub interface is to be configured
+        :param string IpAddr : Ip Address for the interface Ip Address for the interface
+        :param string Type : Type of interface Type of interface
+        :param string MacAddr : Mac address to be used for the sub interface. If none specified IPv4Intf mac address will be used Mac address to be used for the sub interface. If none specified IPv4Intf mac address will be used
+        :param bool Enable : Enable or disable this interface Enable or disable this interface
+
+	"""
+    def createSubIPv6Intf(self,
+                          IntfRef,
+                          IpAddr,
+                          Type,
+                          MacAddr,
+                          Enable=False):
+        obj =  { 
+                'IntfRef' : IntfRef,
+                'IpAddr' : IpAddr,
+                'Type' : Type,
+                'MacAddr' : MacAddr,
+                'Enable' : True if Enable else False,
+                }
+        reqUrl =  self.cfgUrlBase+'SubIPv6Intf'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateSubIPv6Intf(self,
+                          IntfRef,
+                          IpAddr,
+                          Type = None,
+                          MacAddr = None,
+                          Enable = None):
+        obj =  {}
+        if IntfRef != None :
+            obj['IntfRef'] = IntfRef
+
+        if IpAddr != None :
+            obj['IpAddr'] = IpAddr
+
+        if Type != None :
+            obj['Type'] = Type
+
+        if MacAddr != None :
+            obj['MacAddr'] = MacAddr
+
+        if Enable != None :
+            obj['Enable'] = True if Enable else False
+
+        reqUrl =  self.cfgUrlBase+'SubIPv6Intf'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateSubIPv6IntfById(self,
+                               objectId,
+                               Type = None,
+                               MacAddr = None,
+                               Enable = None):
+        obj =  {'objectId': objectId }
+        if Type !=  None:
+            obj['Type'] = Type
+
+        if MacAddr !=  None:
+            obj['MacAddr'] = MacAddr
+
+        if Enable !=  None:
+            obj['Enable'] = Enable
+
+        reqUrl =  self.cfgUrlBase+'SubIPv6Intf'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteSubIPv6Intf(self,
+                          IntfRef,
+                          IpAddr):
+        obj =  { 
+                'IntfRef' : IntfRef,
+                'IpAddr' : IpAddr,
+                }
+        reqUrl =  self.cfgUrlBase+'SubIPv6Intf'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteSubIPv6IntfById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'SubIPv6Intf'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getSubIPv6Intf(self,
+                       IntfRef,
+                       IpAddr):
+        obj =  { 
+                'IntfRef' : IntfRef,
+                'IpAddr' : IpAddr,
+                }
+        reqUrl =  self.cfgUrlBase + 'SubIPv6Intf'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getSubIPv6IntfById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'SubIPv6Intf'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllSubIPv6Intfs(self):
+        return self.getObjects( 'SubIPv6Intf', self.cfgUrlBase)
+
+
+    def getIPv6RouteState(self,
+                          DestinationNw):
+        obj =  { 
+                'DestinationNw' : DestinationNw,
+                }
+        reqUrl =  self.stateUrlBase + 'IPv6Route'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getIPv6RouteStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'IPv6Route'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllIPv6RouteStates(self):
+        return self.getObjects( 'IPv6Route', self.stateUrlBase)
+
+
+    def getNDPEntryState(self,
+                         IpAddr):
+        obj =  { 
+                'IpAddr' : IpAddr,
+                }
+        reqUrl =  self.stateUrlBase + 'NDPEntry'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getNDPEntryStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'NDPEntry'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllNDPEntryStates(self):
+        return self.getObjects( 'NDPEntry', self.stateUrlBase)
 
 
     """
@@ -668,6 +895,24 @@ class FlexSwitch( object):
 
     def getAllLaPortChannelStates(self):
         return self.getObjects( 'LaPortChannel', self.stateUrlBase)
+
+
+    def getIPv6IntfState(self,
+                         IntfRef):
+        obj =  { 
+                'IntfRef' : IntfRef,
+                }
+        reqUrl =  self.stateUrlBase + 'IPv6Intf'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getIPv6IntfStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'IPv6Intf'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllIPv6IntfStates(self):
+        return self.getObjects( 'IPv6Intf', self.stateUrlBase)
 
 
     """
@@ -2747,6 +2992,91 @@ class FlexSwitch( object):
         return self.getObjects( 'IPv4Route', self.stateUrlBase)
 
 
+    """
+    .. automethod :: createBGPAggregate(self,
+        :param string IpPrefix : IP Prefix in CIDR format to match IP Prefix in CIDR format to match
+        :param bool SendSummaryOnly : Send summary route only when aggregating routes Send summary route only when aggregating routes
+        :param bool GenerateASSet : Generate AS set when aggregating routes Generate AS set when aggregating routes
+
+	"""
+    def createBGPAggregate(self,
+                           IpPrefix,
+                           SendSummaryOnly=False,
+                           GenerateASSet=False):
+        obj =  { 
+                'IpPrefix' : IpPrefix,
+                'SendSummaryOnly' : True if SendSummaryOnly else False,
+                'GenerateASSet' : True if GenerateASSet else False,
+                }
+        reqUrl =  self.cfgUrlBase+'BGPAggregate'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateBGPAggregate(self,
+                           IpPrefix,
+                           SendSummaryOnly = None,
+                           GenerateASSet = None):
+        obj =  {}
+        if IpPrefix != None :
+            obj['IpPrefix'] = IpPrefix
+
+        if SendSummaryOnly != None :
+            obj['SendSummaryOnly'] = True if SendSummaryOnly else False
+
+        if GenerateASSet != None :
+            obj['GenerateASSet'] = True if GenerateASSet else False
+
+        reqUrl =  self.cfgUrlBase+'BGPAggregate'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateBGPAggregateById(self,
+                                objectId,
+                                SendSummaryOnly = None,
+                                GenerateASSet = None):
+        obj =  {'objectId': objectId }
+        if SendSummaryOnly !=  None:
+            obj['SendSummaryOnly'] = SendSummaryOnly
+
+        if GenerateASSet !=  None:
+            obj['GenerateASSet'] = GenerateASSet
+
+        reqUrl =  self.cfgUrlBase+'BGPAggregate'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteBGPAggregate(self,
+                           IpPrefix):
+        obj =  { 
+                'IpPrefix' : IpPrefix,
+                }
+        reqUrl =  self.cfgUrlBase+'BGPAggregate'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteBGPAggregateById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'BGPAggregate'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getBGPAggregate(self,
+                        IpPrefix):
+        obj =  { 
+                'IpPrefix' : IpPrefix,
+                }
+        reqUrl =  self.cfgUrlBase + 'BGPAggregate'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getBGPAggregateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'BGPAggregate'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllBGPAggregates(self):
+        return self.getObjects( 'BGPAggregate', self.cfgUrlBase)
+
+
     def getBfdGlobalState(self,
                           Vrf):
         obj =  { 
@@ -2763,6 +3093,42 @@ class FlexSwitch( object):
 
     def getAllBfdGlobalStates(self):
         return self.getObjects( 'BfdGlobal', self.stateUrlBase)
+
+
+    def getPlatformSystemState(self,
+                               ObjName):
+        obj =  { 
+                'ObjName' : ObjName,
+                }
+        reqUrl =  self.stateUrlBase + 'PlatformSystem'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getPlatformSystemStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'PlatformSystem'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllPlatformSystemStates(self):
+        return self.getObjects( 'PlatformSystem', self.stateUrlBase)
+
+
+    def getFanState(self,
+                    FanId):
+        obj =  { 
+                'FanId' : int(FanId),
+                }
+        reqUrl =  self.stateUrlBase + 'Fan'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getFanStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'Fan'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllFanStates(self):
+        return self.getObjects( 'Fan', self.stateUrlBase)
 
 
     def getBGPGlobalState(self,
@@ -3079,6 +3445,124 @@ class FlexSwitch( object):
 
     def getAllPolicyStmtStates(self):
         return self.getObjects( 'PolicyStmt', self.stateUrlBase)
+
+
+    """
+    .. automethod :: createIPv6Route(self,
+        :param string DestinationNw : IP address of the route IP address of the route
+        :param string NetworkMask : mask of the route mask of the route
+        :param NextHopInfo NextHop :  
+        :param string Protocol : Protocol type of the route Protocol type of the route
+        :param bool NullRoute : Specify if this is a null route Specify if this is a null route
+        :param uint32 Cost : Cost of this route Cost of this route
+
+	"""
+    def createIPv6Route(self,
+                        DestinationNw,
+                        NetworkMask,
+                        NextHop,
+                        Protocol='STATIC',
+                        NullRoute=False,
+                        Cost=0):
+        obj =  { 
+                'DestinationNw' : DestinationNw,
+                'NetworkMask' : NetworkMask,
+                'NextHop' : NextHop,
+                'Protocol' : Protocol,
+                'NullRoute' : True if NullRoute else False,
+                'Cost' : int(Cost),
+                }
+        reqUrl =  self.cfgUrlBase+'IPv6Route'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateIPv6Route(self,
+                        DestinationNw,
+                        NetworkMask,
+                        NextHop = None,
+                        Protocol = None,
+                        NullRoute = None,
+                        Cost = None):
+        obj =  {}
+        if DestinationNw != None :
+            obj['DestinationNw'] = DestinationNw
+
+        if NetworkMask != None :
+            obj['NetworkMask'] = NetworkMask
+
+        if NextHop != None :
+            obj['NextHop'] = NextHop
+
+        if Protocol != None :
+            obj['Protocol'] = Protocol
+
+        if NullRoute != None :
+            obj['NullRoute'] = True if NullRoute else False
+
+        if Cost != None :
+            obj['Cost'] = int(Cost)
+
+        reqUrl =  self.cfgUrlBase+'IPv6Route'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateIPv6RouteById(self,
+                             objectId,
+                             NextHop = None,
+                             Protocol = None,
+                             NullRoute = None,
+                             Cost = None):
+        obj =  {'objectId': objectId }
+        if NextHop !=  None:
+            obj['NextHop'] = NextHop
+
+        if Protocol !=  None:
+            obj['Protocol'] = Protocol
+
+        if NullRoute !=  None:
+            obj['NullRoute'] = NullRoute
+
+        if Cost !=  None:
+            obj['Cost'] = Cost
+
+        reqUrl =  self.cfgUrlBase+'IPv6Route'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteIPv6Route(self,
+                        DestinationNw,
+                        NetworkMask):
+        obj =  { 
+                'DestinationNw' : DestinationNw,
+                'NetworkMask' : NetworkMask,
+                }
+        reqUrl =  self.cfgUrlBase+'IPv6Route'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteIPv6RouteById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'IPv6Route'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getIPv6Route(self,
+                     DestinationNw,
+                     NetworkMask):
+        obj =  { 
+                'DestinationNw' : DestinationNw,
+                'NetworkMask' : NetworkMask,
+                }
+        reqUrl =  self.cfgUrlBase + 'IPv6Route'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getIPv6RouteById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'IPv6Route'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllIPv6Routes(self):
+        return self.getObjects( 'IPv6Route', self.cfgUrlBase)
 
 
     def getStpBridgeState(self,
@@ -3746,6 +4230,79 @@ class FlexSwitch( object):
 
     def getAllOspfAreaEntryStates(self):
         return self.getObjects( 'OspfAreaEntry', self.stateUrlBase)
+
+
+    """
+    .. automethod :: createNDPGlobal(self,
+        :param string Vrf : System Vrf System Vrf
+        :param string Enable : Enable/Diable Neighbor Discovery Globally Enable/Diable Neighbor Discovery Globally
+
+	"""
+    def createNDPGlobal(self,
+                        Enable='true'):
+        obj =  { 
+                'Vrf' : 'default',
+                'Enable' : Enable,
+                }
+        reqUrl =  self.cfgUrlBase+'NDPGlobal'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateNDPGlobal(self,
+                        Vrf,
+                        Enable = None):
+        obj =  {}
+        if Vrf != None :
+            obj['Vrf'] = Vrf
+
+        if Enable != None :
+            obj['Enable'] = Enable
+
+        reqUrl =  self.cfgUrlBase+'NDPGlobal'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateNDPGlobalById(self,
+                             objectId,
+                             Enable = None):
+        obj =  {'objectId': objectId }
+        if Enable !=  None:
+            obj['Enable'] = Enable
+
+        reqUrl =  self.cfgUrlBase+'NDPGlobal'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteNDPGlobal(self,
+                        Vrf):
+        obj =  { 
+                'Vrf' : Vrf,
+                }
+        reqUrl =  self.cfgUrlBase+'NDPGlobal'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteNDPGlobalById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'NDPGlobal'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getNDPGlobal(self,
+                     Vrf):
+        obj =  { 
+                'Vrf' : Vrf,
+                }
+        reqUrl =  self.cfgUrlBase + 'NDPGlobal'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getNDPGlobalById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'NDPGlobal'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllNDPGlobals(self):
+        return self.getObjects( 'NDPGlobal', self.cfgUrlBase)
 
 
     """
@@ -5496,6 +6053,80 @@ class FlexSwitch( object):
 
     def getAllBGPNeighborStates(self):
         return self.getObjects( 'BGPNeighbor', self.stateUrlBase)
+
+
+    """
+    .. automethod :: createIPv6Intf(self,
+        :param string IntfRef : Interface name or ifindex of port/lag or vlan on which this IPv4 object is configured Interface name or ifindex of port/lag or vlan on which this IPv4 object is configured
+        :param string IpAddr : Interface IP Address/Prefix-Length to provision on switch interface Interface IP Address/Prefix-Length to provision on switch interface
+
+	"""
+    def createIPv6Intf(self,
+                       IntfRef,
+                       IpAddr):
+        obj =  { 
+                'IntfRef' : IntfRef,
+                'IpAddr' : IpAddr,
+                }
+        reqUrl =  self.cfgUrlBase+'IPv6Intf'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateIPv6Intf(self,
+                       IntfRef,
+                       IpAddr = None):
+        obj =  {}
+        if IntfRef != None :
+            obj['IntfRef'] = IntfRef
+
+        if IpAddr != None :
+            obj['IpAddr'] = IpAddr
+
+        reqUrl =  self.cfgUrlBase+'IPv6Intf'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateIPv6IntfById(self,
+                            objectId,
+                            IpAddr = None):
+        obj =  {'objectId': objectId }
+        if IpAddr !=  None:
+            obj['IpAddr'] = IpAddr
+
+        reqUrl =  self.cfgUrlBase+'IPv6Intf'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteIPv6Intf(self,
+                       IntfRef):
+        obj =  { 
+                'IntfRef' : IntfRef,
+                }
+        reqUrl =  self.cfgUrlBase+'IPv6Intf'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteIPv6IntfById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'IPv6Intf'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getIPv6Intf(self,
+                    IntfRef):
+        obj =  { 
+                'IntfRef' : IntfRef,
+                }
+        reqUrl =  self.cfgUrlBase + 'IPv6Intf'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getIPv6IntfById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'IPv6Intf'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllIPv6Intfs(self):
+        return self.getObjects( 'IPv6Intf', self.cfgUrlBase)
 
 
     def getVrrpVridState(self,
