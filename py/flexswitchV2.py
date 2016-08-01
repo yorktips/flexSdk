@@ -30,7 +30,7 @@ class FlexSwitch( object):
     def getObjects(self, objName, urlPath):
         currentMarker = 0                                                                                                  
         nextMarker = 0                                                                                                     
-        count = 10
+        count = 100
         more = True                                                                                                        
         entries = []                                                                                                       
         while more == True:                                                                                                
@@ -86,6 +86,102 @@ class FlexSwitch( object):
 
     def getAllOspfIPv4RouteStates(self):
         return self.getObjects( 'OspfIPv4Route', self.stateUrlBase)
+
+
+    """
+    .. automethod :: createOspfIfMetricEntry(self,
+        :param int32 IfMetricAddressLessIf : For the purpose of easing the instancing of addressed and addressless interfaces; this variable takes the value 0 on interfaces with IP addresses and the value of ifIndex for interfaces having no IP address.  On row creation For the purpose of easing the instancing of addressed and addressless interfaces; this variable takes the value 0 on interfaces with IP addresses and the value of ifIndex for interfaces having no IP address.  On row creation
+        :param int32 IfMetricTOS : The Type of Service metric being referenced. On row creation The Type of Service metric being referenced. On row creation
+        :param string IfMetricIpAddress : The IP address of this OSPF interface.  On row creation The IP address of this OSPF interface.  On row creation
+        :param int32 IfMetricValue : The metric of using this Type of Service on this interface.  The default value of the TOS 0 metric is 10^8 / ifSpeed. The metric of using this Type of Service on this interface.  The default value of the TOS 0 metric is 10^8 / ifSpeed.
+
+	"""
+    def createOspfIfMetricEntry(self,
+                                IfMetricAddressLessIf,
+                                IfMetricTOS,
+                                IfMetricIpAddress,
+                                IfMetricValue):
+        obj =  { 
+                'IfMetricAddressLessIf' : int(IfMetricAddressLessIf),
+                'IfMetricTOS' : int(IfMetricTOS),
+                'IfMetricIpAddress' : IfMetricIpAddress,
+                'IfMetricValue' : int(IfMetricValue),
+                }
+        reqUrl =  self.cfgUrlBase+'OspfIfMetricEntry'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateOspfIfMetricEntry(self,
+                                IfMetricAddressLessIf,
+                                IfMetricTOS,
+                                IfMetricIpAddress,
+                                IfMetricValue = None):
+        obj =  {}
+        if IfMetricAddressLessIf != None :
+            obj['IfMetricAddressLessIf'] = int(IfMetricAddressLessIf)
+
+        if IfMetricTOS != None :
+            obj['IfMetricTOS'] = int(IfMetricTOS)
+
+        if IfMetricIpAddress != None :
+            obj['IfMetricIpAddress'] = IfMetricIpAddress
+
+        if IfMetricValue != None :
+            obj['IfMetricValue'] = int(IfMetricValue)
+
+        reqUrl =  self.cfgUrlBase+'OspfIfMetricEntry'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateOspfIfMetricEntryById(self,
+                                     objectId,
+                                     IfMetricValue = None):
+        obj =  {'objectId': objectId }
+        if IfMetricValue !=  None:
+            obj['IfMetricValue'] = IfMetricValue
+
+        reqUrl =  self.cfgUrlBase+'OspfIfMetricEntry'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteOspfIfMetricEntry(self,
+                                IfMetricAddressLessIf,
+                                IfMetricTOS,
+                                IfMetricIpAddress):
+        obj =  { 
+                'IfMetricAddressLessIf' : IfMetricAddressLessIf,
+                'IfMetricTOS' : IfMetricTOS,
+                'IfMetricIpAddress' : IfMetricIpAddress,
+                }
+        reqUrl =  self.cfgUrlBase+'OspfIfMetricEntry'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteOspfIfMetricEntryById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'OspfIfMetricEntry'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getOspfIfMetricEntry(self,
+                             IfMetricAddressLessIf,
+                             IfMetricTOS,
+                             IfMetricIpAddress):
+        obj =  { 
+                'IfMetricAddressLessIf' : int(IfMetricAddressLessIf),
+                'IfMetricTOS' : int(IfMetricTOS),
+                'IfMetricIpAddress' : IfMetricIpAddress,
+                }
+        reqUrl =  self.cfgUrlBase + 'OspfIfMetricEntry'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getOspfIfMetricEntryById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'OspfIfMetricEntry'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllOspfIfMetricEntrys(self):
+        return self.getObjects( 'OspfIfMetricEntry', self.cfgUrlBase)
 
 
     """
@@ -346,17 +442,17 @@ class FlexSwitch( object):
     """
     .. automethod :: createFan(self,
         :param int32 FanId : Fan unit id Fan unit id
-        :param int32 AdminSpeed : Fan admin speed in rpm Fan admin speed in rpm
-        :param string AdminDirection : Air flow caused because of fan rotation Air flow caused because of fan rotation
+        :param string AdminState : Fan admin ON/OFF Fan admin ON/OFF
+        :param int32 AdminSpeed : Fan set speed in rpm Fan set speed in rpm
 
 	"""
     def createFan(self,
-                  AdminSpeed,
-                  AdminDirection='B2F'):
+                  AdminState,
+                  AdminSpeed):
         obj =  { 
                 'FanId' : int(0),
+                'AdminState' : AdminState,
                 'AdminSpeed' : int(AdminSpeed),
-                'AdminDirection' : AdminDirection,
                 }
         reqUrl =  self.cfgUrlBase+'Fan'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -364,17 +460,17 @@ class FlexSwitch( object):
 
     def updateFan(self,
                   FanId,
-                  AdminSpeed = None,
-                  AdminDirection = None):
+                  AdminState = None,
+                  AdminSpeed = None):
         obj =  {}
         if FanId != None :
             obj['FanId'] = int(FanId)
 
+        if AdminState != None :
+            obj['AdminState'] = AdminState
+
         if AdminSpeed != None :
             obj['AdminSpeed'] = int(AdminSpeed)
-
-        if AdminDirection != None :
-            obj['AdminDirection'] = AdminDirection
 
         reqUrl =  self.cfgUrlBase+'Fan'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -382,14 +478,14 @@ class FlexSwitch( object):
 
     def updateFanById(self,
                        objectId,
-                       AdminSpeed = None,
-                       AdminDirection = None):
+                       AdminState = None,
+                       AdminSpeed = None):
         obj =  {'objectId': objectId }
+        if AdminState !=  None:
+            obj['AdminState'] = AdminState
+
         if AdminSpeed !=  None:
             obj['AdminSpeed'] = AdminSpeed
-
-        if AdminDirection !=  None:
-            obj['AdminDirection'] = AdminDirection
 
         reqUrl =  self.cfgUrlBase+'Fan'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -570,6 +666,79 @@ class FlexSwitch( object):
         return self.getObjects( 'IPv6Route', self.stateUrlBase)
 
 
+    """
+    .. automethod :: createPsu(self,
+        :param int32 PsuId : PSU id PSU id
+        :param string AdminState : Admin UP/DOWN PSU Admin UP/DOWN PSU
+
+	"""
+    def createPsu(self,
+                  AdminState):
+        obj =  { 
+                'PsuId' : int(0),
+                'AdminState' : AdminState,
+                }
+        reqUrl =  self.cfgUrlBase+'Psu'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updatePsu(self,
+                  PsuId,
+                  AdminState = None):
+        obj =  {}
+        if PsuId != None :
+            obj['PsuId'] = int(PsuId)
+
+        if AdminState != None :
+            obj['AdminState'] = AdminState
+
+        reqUrl =  self.cfgUrlBase+'Psu'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updatePsuById(self,
+                       objectId,
+                       AdminState = None):
+        obj =  {'objectId': objectId }
+        if AdminState !=  None:
+            obj['AdminState'] = AdminState
+
+        reqUrl =  self.cfgUrlBase+'Psu'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deletePsu(self,
+                  PsuId):
+        obj =  { 
+                'PsuId' : PsuId,
+                }
+        reqUrl =  self.cfgUrlBase+'Psu'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deletePsuById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'Psu'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getPsu(self,
+               PsuId):
+        obj =  { 
+                'PsuId' : int(PsuId),
+                }
+        reqUrl =  self.cfgUrlBase + 'Psu'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getPsuById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'Psu'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllPsus(self):
+        return self.getObjects( 'Psu', self.cfgUrlBase)
+
+
     def getNDPEntryState(self,
                          IpAddr):
         obj =  { 
@@ -586,6 +755,24 @@ class FlexSwitch( object):
 
     def getAllNDPEntryStates(self):
         return self.getObjects( 'NDPEntry', self.stateUrlBase)
+
+
+    def getDaemonState(self,
+                       Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.stateUrlBase + 'Daemon'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getDaemonStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'Daemon'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllDaemonStates(self):
+        return self.getObjects( 'Daemon', self.stateUrlBase)
 
 
     """
@@ -1565,6 +1752,24 @@ class FlexSwitch( object):
         return self.getObjects( 'DhcpRelayGlobal', self.cfgUrlBase)
 
 
+    def getPlatformState(self,
+                         ObjName):
+        obj =  { 
+                'ObjName' : ObjName,
+                }
+        reqUrl =  self.stateUrlBase + 'Platform'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getPlatformStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'Platform'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllPlatformStates(self):
+        return self.getObjects( 'Platform', self.stateUrlBase)
+
+
     def getBfdSessionParamState(self,
                                 Name):
         obj =  { 
@@ -1902,6 +2107,90 @@ class FlexSwitch( object):
 
     def getAllLLDPIntfStates(self):
         return self.getObjects( 'LLDPIntf', self.stateUrlBase)
+
+
+    """
+    .. automethod :: createLed(self,
+        :param int32 LedId : LED id LED id
+        :param string LedAdmin : LED ON/OFF LED ON/OFF
+        :param string LedSetColor : LED set color LED set color
+
+	"""
+    def createLed(self,
+                  LedAdmin,
+                  LedSetColor):
+        obj =  { 
+                'LedId' : int(0),
+                'LedAdmin' : LedAdmin,
+                'LedSetColor' : LedSetColor,
+                }
+        reqUrl =  self.cfgUrlBase+'Led'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateLed(self,
+                  LedId,
+                  LedAdmin = None,
+                  LedSetColor = None):
+        obj =  {}
+        if LedId != None :
+            obj['LedId'] = int(LedId)
+
+        if LedAdmin != None :
+            obj['LedAdmin'] = LedAdmin
+
+        if LedSetColor != None :
+            obj['LedSetColor'] = LedSetColor
+
+        reqUrl =  self.cfgUrlBase+'Led'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateLedById(self,
+                       objectId,
+                       LedAdmin = None,
+                       LedSetColor = None):
+        obj =  {'objectId': objectId }
+        if LedAdmin !=  None:
+            obj['LedAdmin'] = LedAdmin
+
+        if LedSetColor !=  None:
+            obj['LedSetColor'] = LedSetColor
+
+        reqUrl =  self.cfgUrlBase+'Led'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteLed(self,
+                  LedId):
+        obj =  { 
+                'LedId' : LedId,
+                }
+        reqUrl =  self.cfgUrlBase+'Led'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteLedById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'Led'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getLed(self,
+               LedId):
+        obj =  { 
+                'LedId' : int(LedId),
+                }
+        reqUrl =  self.cfgUrlBase + 'Led'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getLedById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'Led'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllLeds(self):
+        return self.getObjects( 'Led', self.cfgUrlBase)
 
 
     """
@@ -3095,24 +3384,6 @@ class FlexSwitch( object):
         return self.getObjects( 'BfdGlobal', self.stateUrlBase)
 
 
-    def getPlatformSystemState(self,
-                               ObjName):
-        obj =  { 
-                'ObjName' : ObjName,
-                }
-        reqUrl =  self.stateUrlBase + 'PlatformSystem'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    def getPlatformSystemStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'PlatformSystem'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllPlatformSystemStates(self):
-        return self.getObjects( 'PlatformSystem', self.stateUrlBase)
-
-
     def getFanState(self,
                     FanId):
         obj =  { 
@@ -3147,24 +3418,6 @@ class FlexSwitch( object):
 
     def getAllBGPGlobalStates(self):
         return self.getObjects( 'BGPGlobal', self.stateUrlBase)
-
-
-    def getBfdSessionState(self,
-                           IpAddr):
-        obj =  { 
-                'IpAddr' : IpAddr,
-                }
-        reqUrl =  self.stateUrlBase + 'BfdSession'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    def getBfdSessionStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BfdSession'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllBfdSessionStates(self):
-        return self.getObjects( 'BfdSession', self.stateUrlBase)
 
 
     def getOspfEventState(self,
@@ -3257,6 +3510,24 @@ class FlexSwitch( object):
 
     def getAllLLDPIntfs(self):
         return self.getObjects( 'LLDPIntf', self.cfgUrlBase)
+
+
+    def getBufferGlobalStatState(self,
+                                 DeviceId):
+        obj =  { 
+                'DeviceId' : int(DeviceId),
+                }
+        reqUrl =  self.stateUrlBase + 'BufferGlobalStat'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getBufferGlobalStatStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'BufferGlobalStat'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllBufferGlobalStatStates(self):
+        return self.getObjects( 'BufferGlobalStat', self.stateUrlBase)
 
 
     """
@@ -4085,6 +4356,24 @@ class FlexSwitch( object):
         return self.getObjects( 'OspfIfEntry', self.cfgUrlBase)
 
 
+    def getBufferPortStatState(self,
+                               IntfRef):
+        obj =  { 
+                'IntfRef' : IntfRef,
+                }
+        reqUrl =  self.stateUrlBase + 'BufferPortStat'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getBufferPortStatStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'BufferPortStat'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllBufferPortStatStates(self):
+        return self.getObjects( 'BufferPortStat', self.stateUrlBase)
+
+
     """
     .. automethod :: createBGPGlobal(self,
         :param string RouterId : Router id for BGP global config Router id for BGP global config
@@ -4303,6 +4592,24 @@ class FlexSwitch( object):
 
     def getAllNDPGlobals(self):
         return self.getObjects( 'NDPGlobal', self.cfgUrlBase)
+
+
+    def getPsuState(self,
+                    PsuId):
+        obj =  { 
+                'PsuId' : int(PsuId),
+                }
+        reqUrl =  self.stateUrlBase + 'Psu'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getPsuStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'Psu'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllPsuStates(self):
+        return self.getObjects( 'Psu', self.stateUrlBase)
 
 
     """
@@ -4739,6 +5046,24 @@ class FlexSwitch( object):
         return self.getObjects( 'SubIPv4Intf', self.cfgUrlBase)
 
 
+    def getSfpState(self,
+                    SfpId):
+        obj =  { 
+                'SfpId' : int(SfpId),
+                }
+        reqUrl =  self.stateUrlBase + 'Sfp'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getSfpStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'Sfp'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllSfpStates(self):
+        return self.getObjects( 'Sfp', self.stateUrlBase)
+
+
     def getPolicyDefinitionState(self,
                                  Name):
         obj =  { 
@@ -4791,6 +5116,24 @@ class FlexSwitch( object):
 
     def getAllLogicalIntfStates(self):
         return self.getObjects( 'LogicalIntf', self.stateUrlBase)
+
+
+    def getThermalState(self,
+                        ThermalId):
+        obj =  { 
+                'ThermalId' : int(ThermalId),
+                }
+        reqUrl =  self.stateUrlBase + 'Thermal'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getThermalStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'Thermal'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllThermalStates(self):
+        return self.getObjects( 'Thermal', self.stateUrlBase)
 
 
     """
@@ -5579,6 +5922,24 @@ class FlexSwitch( object):
         return self.getObjects( 'BGPPolicyDefinition', self.stateUrlBase)
 
 
+    def getLedState(self,
+                    LedId):
+        obj =  { 
+                'LedId' : int(LedId),
+                }
+        reqUrl =  self.stateUrlBase + 'Led'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getLedStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'Led'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllLedStates(self):
+        return self.getObjects( 'Led', self.stateUrlBase)
+
+
     def getIPv4IntfState(self,
                          IntfRef):
         obj =  { 
@@ -5616,99 +5977,76 @@ class FlexSwitch( object):
 
 
     """
-    .. automethod :: createOspfIfMetricEntry(self,
-        :param int32 IfMetricAddressLessIf : For the purpose of easing the instancing of addressed and addressless interfaces; this variable takes the value 0 on interfaces with IP addresses and the value of ifIndex for interfaces having no IP address.  On row creation For the purpose of easing the instancing of addressed and addressless interfaces; this variable takes the value 0 on interfaces with IP addresses and the value of ifIndex for interfaces having no IP address.  On row creation
-        :param int32 IfMetricTOS : The Type of Service metric being referenced. On row creation The Type of Service metric being referenced. On row creation
-        :param string IfMetricIpAddress : The IP address of this OSPF interface.  On row creation The IP address of this OSPF interface.  On row creation
-        :param int32 IfMetricValue : The metric of using this Type of Service on this interface.  The default value of the TOS 0 metric is 10^8 / ifSpeed. The metric of using this Type of Service on this interface.  The default value of the TOS 0 metric is 10^8 / ifSpeed.
+    .. automethod :: createSfp(self,
+        :param int32 SfpId : SFP id SFP id
+        :param string AdminState : Admin PORT UP/DOWN(TX OFF) Admin PORT UP/DOWN(TX OFF)
 
 	"""
-    def createOspfIfMetricEntry(self,
-                                IfMetricAddressLessIf,
-                                IfMetricTOS,
-                                IfMetricIpAddress,
-                                IfMetricValue):
+    def createSfp(self,
+                  AdminState):
         obj =  { 
-                'IfMetricAddressLessIf' : int(IfMetricAddressLessIf),
-                'IfMetricTOS' : int(IfMetricTOS),
-                'IfMetricIpAddress' : IfMetricIpAddress,
-                'IfMetricValue' : int(IfMetricValue),
+                'SfpId' : int(0),
+                'AdminState' : AdminState,
                 }
-        reqUrl =  self.cfgUrlBase+'OspfIfMetricEntry'
+        reqUrl =  self.cfgUrlBase+'Sfp'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
-    def updateOspfIfMetricEntry(self,
-                                IfMetricAddressLessIf,
-                                IfMetricTOS,
-                                IfMetricIpAddress,
-                                IfMetricValue = None):
+    def updateSfp(self,
+                  SfpId,
+                  AdminState = None):
         obj =  {}
-        if IfMetricAddressLessIf != None :
-            obj['IfMetricAddressLessIf'] = int(IfMetricAddressLessIf)
+        if SfpId != None :
+            obj['SfpId'] = int(SfpId)
 
-        if IfMetricTOS != None :
-            obj['IfMetricTOS'] = int(IfMetricTOS)
+        if AdminState != None :
+            obj['AdminState'] = AdminState
 
-        if IfMetricIpAddress != None :
-            obj['IfMetricIpAddress'] = IfMetricIpAddress
-
-        if IfMetricValue != None :
-            obj['IfMetricValue'] = int(IfMetricValue)
-
-        reqUrl =  self.cfgUrlBase+'OspfIfMetricEntry'
+        reqUrl =  self.cfgUrlBase+'Sfp'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
-    def updateOspfIfMetricEntryById(self,
-                                     objectId,
-                                     IfMetricValue = None):
+    def updateSfpById(self,
+                       objectId,
+                       AdminState = None):
         obj =  {'objectId': objectId }
-        if IfMetricValue !=  None:
-            obj['IfMetricValue'] = IfMetricValue
+        if AdminState !=  None:
+            obj['AdminState'] = AdminState
 
-        reqUrl =  self.cfgUrlBase+'OspfIfMetricEntry'
+        reqUrl =  self.cfgUrlBase+'Sfp'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
-    def deleteOspfIfMetricEntry(self,
-                                IfMetricAddressLessIf,
-                                IfMetricTOS,
-                                IfMetricIpAddress):
+    def deleteSfp(self,
+                  SfpId):
         obj =  { 
-                'IfMetricAddressLessIf' : IfMetricAddressLessIf,
-                'IfMetricTOS' : IfMetricTOS,
-                'IfMetricIpAddress' : IfMetricIpAddress,
+                'SfpId' : SfpId,
                 }
-        reqUrl =  self.cfgUrlBase+'OspfIfMetricEntry'
+        reqUrl =  self.cfgUrlBase+'Sfp'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
-    def deleteOspfIfMetricEntryById(self, objectId ):
-        reqUrl =  self.cfgUrlBase+'OspfIfMetricEntry'+"/%s"%(objectId)
+    def deleteSfpById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'Sfp'+"/%s"%(objectId)
         r = requests.delete(reqUrl, data=None, headers=headers) 
         return r
 
-    def getOspfIfMetricEntry(self,
-                             IfMetricAddressLessIf,
-                             IfMetricTOS,
-                             IfMetricIpAddress):
+    def getSfp(self,
+               SfpId):
         obj =  { 
-                'IfMetricAddressLessIf' : int(IfMetricAddressLessIf),
-                'IfMetricTOS' : int(IfMetricTOS),
-                'IfMetricIpAddress' : IfMetricIpAddress,
+                'SfpId' : int(SfpId),
                 }
-        reqUrl =  self.cfgUrlBase + 'OspfIfMetricEntry'
+        reqUrl =  self.cfgUrlBase + 'Sfp'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
-    def getOspfIfMetricEntryById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'OspfIfMetricEntry'+"/%s"%(objectId)
+    def getSfpById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'Sfp'+"/%s"%(objectId)
         r = requests.get(reqUrl, data=None, headers=headers) 
         return r
 
-    def getAllOspfIfMetricEntrys(self):
-        return self.getObjects( 'OspfIfMetricEntry', self.cfgUrlBase)
+    def getAllSfps(self):
+        return self.getObjects( 'Sfp', self.cfgUrlBase)
 
 
     """
@@ -5825,22 +6163,22 @@ class FlexSwitch( object):
         return self.getObjects( 'SystemSwVersion', self.stateUrlBase)
 
 
-    def getDaemonState(self,
-                       Name):
+    def getBfdSessionState(self,
+                           IpAddr):
         obj =  { 
-                'Name' : Name,
+                'IpAddr' : IpAddr,
                 }
-        reqUrl =  self.stateUrlBase + 'Daemon'
+        reqUrl =  self.stateUrlBase + 'BfdSession'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
-    def getDaemonStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'Daemon'+"/%s"%(objectId)
+    def getBfdSessionStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'BfdSession'+"/%s"%(objectId)
         r = requests.get(reqUrl, data=None, headers=headers) 
         return r
 
-    def getAllDaemonStates(self):
-        return self.getObjects( 'Daemon', self.stateUrlBase)
+    def getAllBfdSessionStates(self):
+        return self.getObjects( 'BfdSession', self.stateUrlBase)
 
 
     def getSystemParamState(self,
