@@ -51,10 +51,10 @@ class FlexPrint( FlexSwitchShow):
         pc = port_config['Object']
         ipv4_state = self.swtch.getIPv4IntfState(p['IntfRef']).json()
         #print ipv4_state
-        if ipv4_state.has_key('Error'):
+        if ipv4_state.has_key('Result') and 'Error' in ipv4_state['Result']:
             ipv4 = None
         else:
-            ipv4 = ipv4_state['Object']
+            ipv4 = ipv4_state['Result']['Object']
         if not p['LastDownEventTime']:
             lastdown="never"
         else:
@@ -97,10 +97,10 @@ class FlexPrint( FlexSwitchShow):
             pc = port_config['Object']
             ipv4_state = self.swtch.getIPv4IntfState(p['IntfRef']).json()
             #print ipv4_state
-            if ipv4_state.has_key('Error'):
+            if ipv4_state.has_key('Result') and 'Error' in ipv4_state['Result']:
                 ipv4 = None
             else:
-                ipv4 = ipv4_state['Object']
+                ipv4 = ipv4_state['Result']['Object']
             if not p['LastDownEventTime']:
                 lastdown="never"
             else:
