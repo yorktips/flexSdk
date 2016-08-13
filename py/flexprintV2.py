@@ -121,6 +121,26 @@ class FlexSwitchShow( object):
         self.tblPrintObject('OspfIfMetricEntry', header, rows)
 
 
+    def printNdpEntryHwStates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('IpAddr')
+            header.append('MacAddr')
+            header.append('Vlan')
+            header.append('Port')
+
+        objs = self.swtch.getAllNdpEntryHwStates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['IpAddr'])
+            values.append('%s' % o['MacAddr'])
+            values.append('%s' % o['Vlan'])
+            values.append('%s' % o['Port'])
+            rows.append(values)
+        self.tblPrintObject('NdpEntryHwState', header, rows)
+
+
     def printPolicyStmts(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
@@ -170,6 +190,7 @@ class FlexSwitchShow( object):
             header.append('DiffEncoding')
             header.append('TxPulseShapeFltrType')
             header.append('TxPower')
+            header.append('AdminState')
             header.append('ModulationFmt')
 
         objs = self.swtch.getAllDWDMModuleNwIntfs()
@@ -184,6 +205,7 @@ class FlexSwitchShow( object):
             values.append('%s' % o['DiffEncoding'])
             values.append('%s' % o['TxPulseShapeFltrType'])
             values.append('%s' % o['TxPower'])
+            values.append('%s' % o['AdminState'])
             values.append('%s' % o['ModulationFmt'])
             rows.append(values)
         self.tblPrintObject('DWDMModuleNwIntf', header, rows)
@@ -1453,7 +1475,9 @@ class FlexSwitchShow( object):
             header.append('Description')
             header.append('OccuranceTime')
             header.append('SrcObjKey')
+            header.append('SrcObjUUID')
             header.append('ResolutionTime')
+            header.append('ResolutionReason')
 
         objs = self.swtch.getAllAlarmStates()
         for obj in objs:
@@ -1468,7 +1492,9 @@ class FlexSwitchShow( object):
             values.append('%s' % o['Description'])
             values.append('%s' % o['OccuranceTime'])
             values.append('%s' % o['SrcObjKey'])
+            values.append('%s' % o['SrcObjUUID'])
             values.append('%s' % o['ResolutionTime'])
+            values.append('%s' % o['ResolutionReason'])
             rows.append(values)
         self.tblPrintObject('AlarmState', header, rows)
 
@@ -1884,6 +1910,7 @@ class FlexSwitchShow( object):
             header.append('HostTxEqCtle')
             header.append('HostTxEqLfCtle')
             header.append('TXFECDecDisable')
+            header.append('AdminState')
             header.append('RXFECDecDisable')
             header.append('HostRxSerializerTap0Gain')
 
@@ -1901,6 +1928,7 @@ class FlexSwitchShow( object):
             values.append('%s' % o['HostTxEqCtle'])
             values.append('%s' % o['HostTxEqLfCtle'])
             values.append('%s' % o['TXFECDecDisable'])
+            values.append('%s' % o['AdminState'])
             values.append('%s' % o['RXFECDecDisable'])
             values.append('%s' % o['HostRxSerializerTap0Gain'])
             rows.append(values)
@@ -3033,11 +3061,35 @@ class FlexSwitchShow( object):
         self.tblPrintObject('SystemParamState', header, rows)
 
 
+    def printDWDMModuleNwIntfPMStates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('Resource')
+            header.append('NwIntfId')
+            header.append('Type')
+            header.append('Class')
+            header.append('ModuleId')
+            header.append('Data')
+
+        objs = self.swtch.getAllDWDMModuleNwIntfPMStates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['Resource'])
+            values.append('%s' % o['NwIntfId'])
+            values.append('%s' % o['Type'])
+            values.append('%s' % o['Class'])
+            values.append('%s' % o['ModuleId'])
+            values.append('%s' % o['Data'])
+            rows.append(values)
+        self.tblPrintObject('DWDMModuleNwIntfPMState', header, rows)
+
+
     def printDWDMModules(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
             header.append('ModuleId')
-            header.append('ModuleReset')
+            header.append('AdminState')
             header.append('IndependentLaneMode')
 
         objs = self.swtch.getAllDWDMModules()
@@ -3045,7 +3097,7 @@ class FlexSwitchShow( object):
             o = obj['Object']
             values = []
             values.append('%s' % o['ModuleId'])
-            values.append('%s' % o['ModuleReset'])
+            values.append('%s' % o['AdminState'])
             values.append('%s' % o['IndependentLaneMode'])
             rows.append(values)
         self.tblPrintObject('DWDMModule', header, rows)
@@ -3262,7 +3314,9 @@ class FlexSwitchShow( object):
             header.append('Description')
             header.append('OccuranceTime')
             header.append('SrcObjKey')
+            header.append('SrcObjUUID')
             header.append('ResolutionTime')
+            header.append('ResolutionReason')
 
         objs = self.swtch.getAllFaultStates()
         for obj in objs:
@@ -3276,7 +3330,9 @@ class FlexSwitchShow( object):
             values.append('%s' % o['Description'])
             values.append('%s' % o['OccuranceTime'])
             values.append('%s' % o['SrcObjKey'])
+            values.append('%s' % o['SrcObjUUID'])
             values.append('%s' % o['ResolutionTime'])
+            values.append('%s' % o['ResolutionReason'])
             rows.append(values)
         self.tblPrintObject('FaultState', header, rows)
 

@@ -184,6 +184,24 @@ class FlexSwitch( object):
         return self.getObjects( 'OspfIfMetricEntry', self.cfgUrlBase)
 
 
+    def getNdpEntryHwState(self,
+                           IpAddr):
+        obj =  { 
+                'IpAddr' : IpAddr,
+                }
+        reqUrl =  self.stateUrlBase + 'NdpEntryHw'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getNdpEntryHwStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'NdpEntryHw'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllNdpEntryHwStates(self):
+        return self.getObjects( 'NdpEntryHw', self.stateUrlBase)
+
+
     """
     .. automethod :: createPolicyStmt(self,
         :param string Name : Policy Statement Name Policy Statement Name
@@ -375,6 +393,7 @@ class FlexSwitch( object):
         :param bool DiffEncoding : Control to enable/disable DWDM Module network interface encoding type Control to enable/disable DWDM Module network interface encoding type
         :param string TxPulseShapeFltrType : TX pulse shaping filter type TX pulse shaping filter type
         :param float64 TxPower : Transmit output power for this network interface in dBm Transmit output power for this network interface in dBm
+        :param string AdminState : Administrative state of this network interface Administrative state of this network interface
         :param string ModulationFmt : Modulation format to use for this network interface Modulation format to use for this network interface
 
 	"""
@@ -387,6 +406,7 @@ class FlexSwitch( object):
                                DiffEncoding=True,
                                TxPulseShapeFltrType='RootRaisedCos',
                                TxPower='0',
+                               AdminState='UP',
                                ModulationFmt='16QAM'):
         obj =  { 
                 'NwIntfId' : int(NwIntfId),
@@ -397,6 +417,7 @@ class FlexSwitch( object):
                 'DiffEncoding' : True if DiffEncoding else False,
                 'TxPulseShapeFltrType' : TxPulseShapeFltrType,
                 'TxPower' : TxPower,
+                'AdminState' : AdminState,
                 'ModulationFmt' : ModulationFmt,
                 }
         reqUrl =  self.cfgUrlBase+'DWDMModuleNwIntf'
@@ -412,6 +433,7 @@ class FlexSwitch( object):
                                DiffEncoding = None,
                                TxPulseShapeFltrType = None,
                                TxPower = None,
+                               AdminState = None,
                                ModulationFmt = None):
         obj =  {}
         if NwIntfId != None :
@@ -438,6 +460,9 @@ class FlexSwitch( object):
         if TxPower != None :
             obj['TxPower'] = TxPower
 
+        if AdminState != None :
+            obj['AdminState'] = AdminState
+
         if ModulationFmt != None :
             obj['ModulationFmt'] = ModulationFmt
 
@@ -453,6 +478,7 @@ class FlexSwitch( object):
                                     DiffEncoding = None,
                                     TxPulseShapeFltrType = None,
                                     TxPower = None,
+                                    AdminState = None,
                                     ModulationFmt = None):
         obj =  {'objectId': objectId }
         if WaveLength !=  None:
@@ -472,6 +498,9 @@ class FlexSwitch( object):
 
         if TxPower !=  None:
             obj['TxPower'] = TxPower
+
+        if AdminState !=  None:
+            obj['AdminState'] = AdminState
 
         if ModulationFmt !=  None:
             obj['ModulationFmt'] = ModulationFmt
@@ -4425,6 +4454,7 @@ class FlexSwitch( object):
         :param uint8 HostTxEqCtle : Host interface TX deserializer equalization. LELRC CTLE LE gain code. Host interface TX deserializer equalization. LELRC CTLE LE gain code.
         :param uint8 HostTxEqLfCtle : Host interface TX deserializer equalization. LELPZRC LF-CTLE LFPZ gain code. Host interface TX deserializer equalization. LELPZRC LF-CTLE LFPZ gain code.
         :param bool TXFECDecDisable : 802.3bj FEC decoder enable/disable state for traffic from Host to DWDM Module 802.3bj FEC decoder enable/disable state for traffic from Host to DWDM Module
+        :param string AdminState : Administrative state of this client interface Administrative state of this client interface
         :param bool RXFECDecDisable : 802.3bj FEC decoder enable/disable state for traffic from DWDM module to Host 802.3bj FEC decoder enable/disable state for traffic from DWDM module to Host
         :param uint8 HostRxSerializerTap0Gain : Host RX Serializer tap 0 control Host RX Serializer tap 0 control
 
@@ -4440,6 +4470,7 @@ class FlexSwitch( object):
                                  HostTxEqCtle=18,
                                  HostTxEqLfCtle=0,
                                  TXFECDecDisable=False,
+                                 AdminState='UP',
                                  RXFECDecDisable=False,
                                  HostRxSerializerTap0Gain=7):
         obj =  { 
@@ -4453,6 +4484,7 @@ class FlexSwitch( object):
                 'HostTxEqCtle' : int(HostTxEqCtle),
                 'HostTxEqLfCtle' : int(HostTxEqLfCtle),
                 'TXFECDecDisable' : True if TXFECDecDisable else False,
+                'AdminState' : AdminState,
                 'RXFECDecDisable' : True if RXFECDecDisable else False,
                 'HostRxSerializerTap0Gain' : int(HostRxSerializerTap0Gain),
                 }
@@ -4471,6 +4503,7 @@ class FlexSwitch( object):
                                  HostTxEqCtle = None,
                                  HostTxEqLfCtle = None,
                                  TXFECDecDisable = None,
+                                 AdminState = None,
                                  RXFECDecDisable = None,
                                  HostRxSerializerTap0Gain = None):
         obj =  {}
@@ -4504,6 +4537,9 @@ class FlexSwitch( object):
         if TXFECDecDisable != None :
             obj['TXFECDecDisable'] = True if TXFECDecDisable else False
 
+        if AdminState != None :
+            obj['AdminState'] = AdminState
+
         if RXFECDecDisable != None :
             obj['RXFECDecDisable'] = True if RXFECDecDisable else False
 
@@ -4524,6 +4560,7 @@ class FlexSwitch( object):
                                       HostTxEqCtle = None,
                                       HostTxEqLfCtle = None,
                                       TXFECDecDisable = None,
+                                      AdminState = None,
                                       RXFECDecDisable = None,
                                       HostRxSerializerTap0Gain = None):
         obj =  {'objectId': objectId }
@@ -4550,6 +4587,9 @@ class FlexSwitch( object):
 
         if TXFECDecDisable !=  None:
             obj['TXFECDecDisable'] = TXFECDecDisable
+
+        if AdminState !=  None:
+            obj['AdminState'] = AdminState
 
         if RXFECDecDisable !=  None:
             obj['RXFECDecDisable'] = RXFECDecDisable
@@ -7012,20 +7052,46 @@ class FlexSwitch( object):
         return self.getObjects( 'SystemParam', self.stateUrlBase)
 
 
+    def getDWDMModuleNwIntfPMState(self,
+                                   Resource,
+                                   NwIntfId,
+                                   Type,
+                                   Class,
+                                   ModuleId):
+        obj =  { 
+                'Resource' : Resource,
+                'NwIntfId' : int(NwIntfId),
+                'Type' : Type,
+                'Class' : Class,
+                'ModuleId' : int(ModuleId),
+                }
+        reqUrl =  self.stateUrlBase + 'DWDMModuleNwIntfPM'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getDWDMModuleNwIntfPMStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'DWDMModuleNwIntfPM'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllDWDMModuleNwIntfPMStates(self):
+        return self.getObjects( 'DWDMModuleNwIntfPM', self.stateUrlBase)
+
+
     """
     .. automethod :: createDWDMModule(self,
         :param uint8 ModuleId : DWDM Module identifier DWDM Module identifier
-        :param bool ModuleReset : Reset state of this dwdm module (false (Reset deasserted) Reset state of this dwdm module (false (Reset deasserted)
+        :param string AdminState : Reset state of this dwdm module (false (Reset deasserted) Reset state of this dwdm module (false (Reset deasserted)
         :param bool IndependentLaneMode : Network lane configuration for the DWDM Module. true-Independent lanes Network lane configuration for the DWDM Module. true-Independent lanes
 
 	"""
     def createDWDMModule(self,
                          ModuleId,
-                         ModuleReset=False,
+                         AdminState='DOWN',
                          IndependentLaneMode=True):
         obj =  { 
                 'ModuleId' : int(ModuleId),
-                'ModuleReset' : True if ModuleReset else False,
+                'AdminState' : AdminState,
                 'IndependentLaneMode' : True if IndependentLaneMode else False,
                 }
         reqUrl =  self.cfgUrlBase+'DWDMModule'
@@ -7034,14 +7100,14 @@ class FlexSwitch( object):
 
     def updateDWDMModule(self,
                          ModuleId,
-                         ModuleReset = None,
+                         AdminState = None,
                          IndependentLaneMode = None):
         obj =  {}
         if ModuleId != None :
             obj['ModuleId'] = int(ModuleId)
 
-        if ModuleReset != None :
-            obj['ModuleReset'] = True if ModuleReset else False
+        if AdminState != None :
+            obj['AdminState'] = AdminState
 
         if IndependentLaneMode != None :
             obj['IndependentLaneMode'] = True if IndependentLaneMode else False
@@ -7052,11 +7118,11 @@ class FlexSwitch( object):
 
     def updateDWDMModuleById(self,
                               objectId,
-                              ModuleReset = None,
+                              AdminState = None,
                               IndependentLaneMode = None):
         obj =  {'objectId': objectId }
-        if ModuleReset !=  None:
-            obj['ModuleReset'] = ModuleReset
+        if AdminState !=  None:
+            obj['AdminState'] = AdminState
 
         if IndependentLaneMode !=  None:
             obj['IndependentLaneMode'] = IndependentLaneMode
