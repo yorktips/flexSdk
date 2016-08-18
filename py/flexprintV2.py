@@ -184,14 +184,22 @@ class FlexSwitchShow( object):
         if addHeader:
             header.append('NwIntfId')
             header.append('ModuleId')
-            header.append('WaveLength')
-            header.append('FECMode')
+            header.append('ClntIntfIdToTributary0Map')
+            header.append('ClntIntfIdToTributary1Map')
+            header.append('EnableRxPRBSChecker')
             header.append('TxPulseShapeFltrRollOff')
-            header.append('DiffEncoding')
-            header.append('TxPulseShapeFltrType')
             header.append('TxPower')
+            header.append('RxPRBSInvertPattern')
+            header.append('EnableTxPRBS')
+            header.append('TxPRBSInvertPattern')
             header.append('AdminState')
+            header.append('ChannelNumber')
+            header.append('FECMode')
             header.append('ModulationFmt')
+            header.append('TxPulseShapeFltrType')
+            header.append('RxPRBSPattern')
+            header.append('TxPRBSPattern')
+            header.append('DiffEncoding')
 
         objs = self.swtch.getAllDWDMModuleNwIntfs()
         for obj in objs:
@@ -199,14 +207,22 @@ class FlexSwitchShow( object):
             values = []
             values.append('%s' % o['NwIntfId'])
             values.append('%s' % o['ModuleId'])
-            values.append('%s' % o['WaveLength'])
-            values.append('%s' % o['FECMode'])
+            values.append('%s' % o['ClntIntfIdToTributary0Map'])
+            values.append('%s' % o['ClntIntfIdToTributary1Map'])
+            values.append('%s' % o['EnableRxPRBSChecker'])
             values.append('%s' % o['TxPulseShapeFltrRollOff'])
-            values.append('%s' % o['DiffEncoding'])
-            values.append('%s' % o['TxPulseShapeFltrType'])
             values.append('%s' % o['TxPower'])
+            values.append('%s' % o['RxPRBSInvertPattern'])
+            values.append('%s' % o['EnableTxPRBS'])
+            values.append('%s' % o['TxPRBSInvertPattern'])
             values.append('%s' % o['AdminState'])
+            values.append('%s' % o['ChannelNumber'])
+            values.append('%s' % o['FECMode'])
             values.append('%s' % o['ModulationFmt'])
+            values.append('%s' % o['TxPulseShapeFltrType'])
+            values.append('%s' % o['RxPRBSPattern'])
+            values.append('%s' % o['TxPRBSPattern'])
+            values.append('%s' % o['DiffEncoding'])
             rows.append(values)
         self.tblPrintObject('DWDMModuleNwIntf', header, rows)
 
@@ -295,6 +311,7 @@ class FlexSwitchShow( object):
             header.append('RouteUpdatedTime')
             header.append('NextHopList')
             header.append('PolicyList')
+            header.append('NextBestRoute')
 
         objs = self.swtch.getAllIPv6RouteStates()
         for obj in objs:
@@ -307,6 +324,7 @@ class FlexSwitchShow( object):
             values.append('%s' % o['RouteUpdatedTime'])
             values.append('%s' % o['NextHopList'])
             values.append('%s' % o['PolicyList'])
+            values.append('%s' % o['NextBestRoute'])
             rows.append(values)
         self.tblPrintObject('IPv6RouteState', header, rows)
 
@@ -327,26 +345,70 @@ class FlexSwitchShow( object):
         self.tblPrintObject('Psu', header, rows)
 
 
-    def printNDPEntryStates(self, addHeader=True, brief=None):
+    def printBGPv4NeighborStates(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
-            header.append('IpAddr')
-            header.append('MacAddr')
-            header.append('Vlan')
-            header.append('Intf')
-            header.append('ExpiryTimeLeft')
+            header.append('IntfRef')
+            header.append('NeighborAddress')
+            header.append('Description')
+            header.append('PeerGroup')
+            header.append('PeerType')
+            header.append('SessionState')
+            header.append('PeerAS')
+            header.append('LocalAS')
+            header.append('UpdateSource')
+            header.append('AuthPassword')
+            header.append('RouteReflectorClusterId')
+            header.append('RouteReflectorClient')
+            header.append('MultiHopEnable')
+            header.append('MultiHopTTL')
+            header.append('ConnectRetryTime')
+            header.append('HoldTime')
+            header.append('KeepaliveTime')
+            header.append('AddPathsRx')
+            header.append('AddPathsMaxTx')
+            header.append('BfdNeighborState')
+            header.append('MaxPrefixes')
+            header.append('MaxPrefixesThresholdPct')
+            header.append('MaxPrefixesDisconnect')
+            header.append('MaxPrefixesRestartTimer')
+            header.append('TotalPrefixes')
+            header.append('Messages')
+            header.append('Queues')
 
-        objs = self.swtch.getAllNDPEntryStates()
+        objs = self.swtch.getAllBGPv4NeighborStates()
         for obj in objs:
             o = obj['Object']
             values = []
-            values.append('%s' % o['IpAddr'])
-            values.append('%s' % o['MacAddr'])
-            values.append('%s' % o['Vlan'])
-            values.append('%s' % o['Intf'])
-            values.append('%s' % o['ExpiryTimeLeft'])
+            values.append('%s' % o['IntfRef'])
+            values.append('%s' % o['NeighborAddress'])
+            values.append('%s' % o['Description'])
+            values.append('%s' % o['PeerGroup'])
+            values.append('%s' % o['PeerType'])
+            values.append('%s' % o['SessionState'])
+            values.append('%s' % o['PeerAS'])
+            values.append('%s' % o['LocalAS'])
+            values.append('%s' % o['UpdateSource'])
+            values.append('%s' % o['AuthPassword'])
+            values.append('%s' % o['RouteReflectorClusterId'])
+            values.append('%s' % o['RouteReflectorClient'])
+            values.append('%s' % o['MultiHopEnable'])
+            values.append('%s' % o['MultiHopTTL'])
+            values.append('%s' % o['ConnectRetryTime'])
+            values.append('%s' % o['HoldTime'])
+            values.append('%s' % o['KeepaliveTime'])
+            values.append('%s' % o['AddPathsRx'])
+            values.append('%s' % o['AddPathsMaxTx'])
+            values.append('%s' % o['BfdNeighborState'])
+            values.append('%s' % o['MaxPrefixes'])
+            values.append('%s' % o['MaxPrefixesThresholdPct'])
+            values.append('%s' % o['MaxPrefixesDisconnect'])
+            values.append('%s' % o['MaxPrefixesRestartTimer'])
+            values.append('%s' % o['TotalPrefixes'])
+            values.append('%s' % o['Messages'])
+            values.append('%s' % o['Queues'])
             rows.append(values)
-        self.tblPrintObject('NDPEntryState', header, rows)
+        self.tblPrintObject('BGPv4NeighborState', header, rows)
 
 
     def printOspfAreaEntrys(self, addHeader=True, brief=None):
@@ -485,64 +547,62 @@ class FlexSwitchShow( object):
         self.tblPrintObject('DhcpRelayIntf', header, rows)
 
 
-    def printDistributedRelayStates(self, addHeader=True, brief=None):
+    def printBGPv4Neighbors(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
-            header.append('Name')
-            header.append('DrniId')
+            header.append('IntfRef')
+            header.append('NeighborAddress')
             header.append('Description')
-            header.append('PortalAddress')
-            header.append('PortalPriority')
-            header.append('ThreePortalSystem')
-            header.append('PortalSystemNumber')
-            header.append('IntraPortalLinkList')
-            header.append('LagId')
-            header.append('ConvAdminGateway')
-            header.append('NeighborAdminConvGatewayListDigest')
-            header.append('NeighborAdminConvPortListDigest')
-            header.append('GatewayAlgorithm')
-            header.append('NeighborGatewayAlgorithm')
-            header.append('PortAlgorithm')
-            header.append('NeighborAdminDRCPState')
-            header.append('EncapMethod')
-            header.append('IPLEncapMap')
-            header.append('NetEncapMap')
-            header.append('DRPortConversationPasses')
-            header.append('DRGatewayConversationPasses')
-            header.append('PSI')
-            header.append('PortConversationControl')
-            header.append('IntraPortalPortProtocolDA')
+            header.append('PeerGroup')
+            header.append('UpdateSource')
+            header.append('AuthPassword')
+            header.append('BfdEnable')
+            header.append('MultiHopTTL')
+            header.append('LocalAS')
+            header.append('KeepaliveTime')
+            header.append('AddPathsRx')
+            header.append('RouteReflectorClient')
+            header.append('MaxPrefixesRestartTimer')
+            header.append('MultiHopEnable')
+            header.append('RouteReflectorClusterId')
+            header.append('MaxPrefixesDisconnect')
+            header.append('PeerAS')
+            header.append('AddPathsMaxTx')
+            header.append('MaxPrefixes')
+            header.append('MaxPrefixesThresholdPct')
+            header.append('BfdSessionParam')
+            header.append('HoldTime')
+            header.append('ConnectRetryTime')
 
-        objs = self.swtch.getAllDistributedRelayStates()
+        objs = self.swtch.getAllBGPv4Neighbors()
         for obj in objs:
             o = obj['Object']
             values = []
-            values.append('%s' % o['Name'])
-            values.append('%s' % o['DrniId'])
+            values.append('%s' % o['IntfRef'])
+            values.append('%s' % o['NeighborAddress'])
             values.append('%s' % o['Description'])
-            values.append('%s' % o['PortalAddress'])
-            values.append('%s' % o['PortalPriority'])
-            values.append('%s' % o['ThreePortalSystem'])
-            values.append('%s' % o['PortalSystemNumber'])
-            values.append('%s' % o['IntraPortalLinkList'])
-            values.append('%s' % o['LagId'])
-            values.append('%s' % o['ConvAdminGateway'])
-            values.append('%s' % o['NeighborAdminConvGatewayListDigest'])
-            values.append('%s' % o['NeighborAdminConvPortListDigest'])
-            values.append('%s' % o['GatewayAlgorithm'])
-            values.append('%s' % o['NeighborGatewayAlgorithm'])
-            values.append('%s' % o['PortAlgorithm'])
-            values.append('%s' % o['NeighborAdminDRCPState'])
-            values.append('%s' % o['EncapMethod'])
-            values.append('%s' % o['IPLEncapMap'])
-            values.append('%s' % o['NetEncapMap'])
-            values.append('%s' % o['DRPortConversationPasses'])
-            values.append('%s' % o['DRGatewayConversationPasses'])
-            values.append('%s' % o['PSI'])
-            values.append('%s' % o['PortConversationControl'])
-            values.append('%s' % o['IntraPortalPortProtocolDA'])
+            values.append('%s' % o['PeerGroup'])
+            values.append('%s' % o['UpdateSource'])
+            values.append('%s' % o['AuthPassword'])
+            values.append('%s' % o['BfdEnable'])
+            values.append('%s' % o['MultiHopTTL'])
+            values.append('%s' % o['LocalAS'])
+            values.append('%s' % o['KeepaliveTime'])
+            values.append('%s' % o['AddPathsRx'])
+            values.append('%s' % o['RouteReflectorClient'])
+            values.append('%s' % o['MaxPrefixesRestartTimer'])
+            values.append('%s' % o['MultiHopEnable'])
+            values.append('%s' % o['RouteReflectorClusterId'])
+            values.append('%s' % o['MaxPrefixesDisconnect'])
+            values.append('%s' % o['PeerAS'])
+            values.append('%s' % o['AddPathsMaxTx'])
+            values.append('%s' % o['MaxPrefixes'])
+            values.append('%s' % o['MaxPrefixesThresholdPct'])
+            values.append('%s' % o['BfdSessionParam'])
+            values.append('%s' % o['HoldTime'])
+            values.append('%s' % o['ConnectRetryTime'])
             rows.append(values)
-        self.tblPrintObject('DistributedRelayState', header, rows)
+        self.tblPrintObject('BGPv4Neighbor', header, rows)
 
 
     def printStpPortStates(self, addHeader=True, brief=None):
@@ -699,6 +759,26 @@ class FlexSwitchShow( object):
         self.tblPrintObject('FMgrGlobal', header, rows)
 
 
+    def printNotifierEnables(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('Vrf')
+            header.append('AlarmEnable')
+            header.append('FaultEnable')
+            header.append('EventEnable')
+
+        objs = self.swtch.getAllNotifierEnables()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['Vrf'])
+            values.append('%s' % o['AlarmEnable'])
+            values.append('%s' % o['FaultEnable'])
+            values.append('%s' % o['EventEnable'])
+            rows.append(values)
+        self.tblPrintObject('NotifierEnable', header, rows)
+
+
     def printLaPortChannels(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
@@ -801,34 +881,72 @@ class FlexSwitchShow( object):
         self.tblPrintObject('BfdSessionParam', header, rows)
 
 
-    def printDaemonStates(self, addHeader=True, brief=None):
+    def printBfdSessionStates(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
-            header.append('Name')
-            header.append('Enable')
-            header.append('State')
-            header.append('Reason')
-            header.append('StartTime')
-            header.append('KeepAlive')
-            header.append('RestartCount')
-            header.append('RestartTime')
-            header.append('RestartReason')
+            header.append('IpAddr')
+            header.append('SessionId')
+            header.append('ParamName')
+            header.append('IfIndex')
+            header.append('InterfaceSpecific')
+            header.append('IfName')
+            header.append('PerLinkSession')
+            header.append('LocalMacAddr')
+            header.append('RemoteMacAddr')
+            header.append('RegisteredProtocols')
+            header.append('SessionState')
+            header.append('RemoteSessionState')
+            header.append('LocalDiscriminator')
+            header.append('RemoteDiscriminator')
+            header.append('LocalDiagType')
+            header.append('DesiredMinTxInterval')
+            header.append('RequiredMinRxInterval')
+            header.append('RemoteMinRxInterval')
+            header.append('DetectionMultiplier')
+            header.append('RemoteDetectionMultiplier')
+            header.append('DemandMode')
+            header.append('RemoteDemandMode')
+            header.append('AuthSeqKnown')
+            header.append('AuthType')
+            header.append('ReceivedAuthSeq')
+            header.append('SentAuthSeq')
+            header.append('NumTxPackets')
+            header.append('NumRxPackets')
 
-        objs = self.swtch.getAllDaemonStates()
+        objs = self.swtch.getAllBfdSessionStates()
         for obj in objs:
             o = obj['Object']
             values = []
-            values.append('%s' % o['Name'])
-            values.append('%s' % o['Enable'])
-            values.append('%s' % o['State'])
-            values.append('%s' % o['Reason'])
-            values.append('%s' % o['StartTime'])
-            values.append('%s' % o['KeepAlive'])
-            values.append('%s' % o['RestartCount'])
-            values.append('%s' % o['RestartTime'])
-            values.append('%s' % o['RestartReason'])
+            values.append('%s' % o['IpAddr'])
+            values.append('%s' % o['SessionId'])
+            values.append('%s' % o['ParamName'])
+            values.append('%s' % o['IfIndex'])
+            values.append('%s' % o['InterfaceSpecific'])
+            values.append('%s' % o['IfName'])
+            values.append('%s' % o['PerLinkSession'])
+            values.append('%s' % o['LocalMacAddr'])
+            values.append('%s' % o['RemoteMacAddr'])
+            values.append('%s' % o['RegisteredProtocols'])
+            values.append('%s' % o['SessionState'])
+            values.append('%s' % o['RemoteSessionState'])
+            values.append('%s' % o['LocalDiscriminator'])
+            values.append('%s' % o['RemoteDiscriminator'])
+            values.append('%s' % o['LocalDiagType'])
+            values.append('%s' % o['DesiredMinTxInterval'])
+            values.append('%s' % o['RequiredMinRxInterval'])
+            values.append('%s' % o['RemoteMinRxInterval'])
+            values.append('%s' % o['DetectionMultiplier'])
+            values.append('%s' % o['RemoteDetectionMultiplier'])
+            values.append('%s' % o['DemandMode'])
+            values.append('%s' % o['RemoteDemandMode'])
+            values.append('%s' % o['AuthSeqKnown'])
+            values.append('%s' % o['AuthType'])
+            values.append('%s' % o['ReceivedAuthSeq'])
+            values.append('%s' % o['SentAuthSeq'])
+            values.append('%s' % o['NumTxPackets'])
+            values.append('%s' % o['NumRxPackets'])
             rows.append(values)
-        self.tblPrintObject('DaemonState', header, rows)
+        self.tblPrintObject('BfdSessionState', header, rows)
 
 
     def printDWDMModuleStates(self, addHeader=True, brief=None):
@@ -1017,54 +1135,54 @@ class FlexSwitchShow( object):
         self.tblPrintObject('ArpLinuxEntryState', header, rows)
 
 
-    def printDistributedRelays(self, addHeader=True, brief=None):
+    def printStpBridgeStates(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
-            header.append('Name')
-            header.append('PortalSystemNumber')
-            header.append('IntraPortalLinkList')
-            header.append('LagId')
-            header.append('ConvAdminGateway')
-            header.append('NeighborAdminConvGatewayListDigest')
-            header.append('NeighborAdminConvPortListDigest')
-            header.append('IPLEncapMap')
-            header.append('NetEncapMap')
-            header.append('PortalPriority')
-            header.append('NeighborPortAlgorithm')
-            header.append('PortalAddress')
-            header.append('IntraPortalPortProtocolDA')
-            header.append('NeighborAdminDRCPState')
-            header.append('NeighborGatewayAlgorithm')
-            header.append('PortConversationControl')
-            header.append('GatewayAlgorithm')
-            header.append('ThreePortalSystem')
-            header.append('EncapMethod')
+            header.append('Vlan')
+            header.append('IfIndex')
+            header.append('Address')
+            header.append('Priority')
+            header.append('ProtocolSpecification')
+            header.append('TimeSinceTopologyChange')
+            header.append('TopChanges')
+            header.append('DesignatedRoot')
+            header.append('RootCost')
+            header.append('RootPort')
+            header.append('MaxAge')
+            header.append('HelloTime')
+            header.append('HoldTime')
+            header.append('ForwardDelay')
+            header.append('BridgeMaxAge')
+            header.append('BridgeHelloTime')
+            header.append('BridgeHoldTime')
+            header.append('BridgeForwardDelay')
+            header.append('TxHoldCount')
 
-        objs = self.swtch.getAllDistributedRelays()
+        objs = self.swtch.getAllStpBridgeStates()
         for obj in objs:
             o = obj['Object']
             values = []
-            values.append('%s' % o['Name'])
-            values.append('%s' % o['PortalSystemNumber'])
-            values.append('%s' % o['IntraPortalLinkList'])
-            values.append('%s' % o['LagId'])
-            values.append('%s' % o['ConvAdminGateway'])
-            values.append('%s' % o['NeighborAdminConvGatewayListDigest'])
-            values.append('%s' % o['NeighborAdminConvPortListDigest'])
-            values.append('%s' % o['IPLEncapMap'])
-            values.append('%s' % o['NetEncapMap'])
-            values.append('%s' % o['PortalPriority'])
-            values.append('%s' % o['NeighborPortAlgorithm'])
-            values.append('%s' % o['PortalAddress'])
-            values.append('%s' % o['IntraPortalPortProtocolDA'])
-            values.append('%s' % o['NeighborAdminDRCPState'])
-            values.append('%s' % o['NeighborGatewayAlgorithm'])
-            values.append('%s' % o['PortConversationControl'])
-            values.append('%s' % o['GatewayAlgorithm'])
-            values.append('%s' % o['ThreePortalSystem'])
-            values.append('%s' % o['EncapMethod'])
+            values.append('%s' % o['Vlan'])
+            values.append('%s' % o['IfIndex'])
+            values.append('%s' % o['Address'])
+            values.append('%s' % o['Priority'])
+            values.append('%s' % o['ProtocolSpecification'])
+            values.append('%s' % o['TimeSinceTopologyChange'])
+            values.append('%s' % o['TopChanges'])
+            values.append('%s' % o['DesignatedRoot'])
+            values.append('%s' % o['RootCost'])
+            values.append('%s' % o['RootPort'])
+            values.append('%s' % o['MaxAge'])
+            values.append('%s' % o['HelloTime'])
+            values.append('%s' % o['HoldTime'])
+            values.append('%s' % o['ForwardDelay'])
+            values.append('%s' % o['BridgeMaxAge'])
+            values.append('%s' % o['BridgeHelloTime'])
+            values.append('%s' % o['BridgeHoldTime'])
+            values.append('%s' % o['BridgeForwardDelay'])
+            values.append('%s' % o['TxHoldCount'])
             rows.append(values)
-        self.tblPrintObject('DistributedRelay', header, rows)
+        self.tblPrintObject('StpBridgeState', header, rows)
 
 
     def printBGPPolicyConditions(self, addHeader=True, brief=None):
@@ -1274,6 +1392,10 @@ class FlexSwitchShow( object):
         if addHeader:
             header.append('ClntIntfId')
             header.append('ModuleId')
+            header.append('PRBSTxErrCntLane0')
+            header.append('PRBSTxErrCntLane1')
+            header.append('PRBSTxErrCntLane2')
+            header.append('PRBSTxErrCntLane3')
 
         objs = self.swtch.getAllDWDMModuleClntIntfStates()
         for obj in objs:
@@ -1281,46 +1403,36 @@ class FlexSwitchShow( object):
             values = []
             values.append('%s' % o['ClntIntfId'])
             values.append('%s' % o['ModuleId'])
+            values.append('%s' % o['PRBSTxErrCntLane0'])
+            values.append('%s' % o['PRBSTxErrCntLane1'])
+            values.append('%s' % o['PRBSTxErrCntLane2'])
+            values.append('%s' % o['PRBSTxErrCntLane3'])
             rows.append(values)
         self.tblPrintObject('DWDMModuleClntIntfState', header, rows)
 
 
-    def printStpPorts(self, addHeader=True, brief=None):
+    def printRouteStatStates(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
-            header.append('BrgIfIndex')
-            header.append('IfIndex')
-            header.append('BpduGuardInterval')
-            header.append('PathCost')
-            header.append('Priority')
-            header.append('AdminEdgePort')
-            header.append('Enable')
-            header.append('ProtocolMigration')
-            header.append('BridgeAssurance')
-            header.append('BpduGuard')
-            header.append('AdminPointToPoint')
-            header.append('AdminPathCost')
-            header.append('PathCost32')
+            header.append('Vrf')
+            header.append('TotalRouteCount')
+            header.append('ECMPRouteCount')
+            header.append('V4RouteCount')
+            header.append('V6RouteCount')
+            header.append('PerProtocolRouteCountList')
 
-        objs = self.swtch.getAllStpPorts()
+        objs = self.swtch.getAllRouteStatStates()
         for obj in objs:
             o = obj['Object']
             values = []
-            values.append('%s' % o['BrgIfIndex'])
-            values.append('%s' % o['IfIndex'])
-            values.append('%s' % o['BpduGuardInterval'])
-            values.append('%s' % o['PathCost'])
-            values.append('%s' % o['Priority'])
-            values.append('%s' % o['AdminEdgePort'])
-            values.append('%s' % o['Enable'])
-            values.append('%s' % o['ProtocolMigration'])
-            values.append('%s' % o['BridgeAssurance'])
-            values.append('%s' % o['BpduGuard'])
-            values.append('%s' % o['AdminPointToPoint'])
-            values.append('%s' % o['AdminPathCost'])
-            values.append('%s' % o['PathCost32'])
+            values.append('%s' % o['Vrf'])
+            values.append('%s' % o['TotalRouteCount'])
+            values.append('%s' % o['ECMPRouteCount'])
+            values.append('%s' % o['V4RouteCount'])
+            values.append('%s' % o['V6RouteCount'])
+            values.append('%s' % o['PerProtocolRouteCountList'])
             rows.append(values)
-        self.tblPrintObject('StpPort', header, rows)
+        self.tblPrintObject('RouteStatState', header, rows)
 
 
     def printRouteDistanceStates(self, addHeader=True, brief=None):
@@ -1353,6 +1465,70 @@ class FlexSwitchShow( object):
             values.append('%s' % o['Type'])
             rows.append(values)
         self.tblPrintObject('LogicalIntf', header, rows)
+
+
+    def printBGPv6NeighborStates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('IntfRef')
+            header.append('NeighborAddress')
+            header.append('Description')
+            header.append('PeerGroup')
+            header.append('PeerType')
+            header.append('SessionState')
+            header.append('PeerAS')
+            header.append('LocalAS')
+            header.append('UpdateSource')
+            header.append('RouteReflectorClusterId')
+            header.append('RouteReflectorClient')
+            header.append('MultiHopEnable')
+            header.append('MultiHopTTL')
+            header.append('ConnectRetryTime')
+            header.append('HoldTime')
+            header.append('KeepaliveTime')
+            header.append('AddPathsRx')
+            header.append('AddPathsMaxTx')
+            header.append('BfdNeighborState')
+            header.append('MaxPrefixes')
+            header.append('MaxPrefixesThresholdPct')
+            header.append('MaxPrefixesDisconnect')
+            header.append('MaxPrefixesRestartTimer')
+            header.append('TotalPrefixes')
+            header.append('Messages')
+            header.append('Queues')
+
+        objs = self.swtch.getAllBGPv6NeighborStates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['IntfRef'])
+            values.append('%s' % o['NeighborAddress'])
+            values.append('%s' % o['Description'])
+            values.append('%s' % o['PeerGroup'])
+            values.append('%s' % o['PeerType'])
+            values.append('%s' % o['SessionState'])
+            values.append('%s' % o['PeerAS'])
+            values.append('%s' % o['LocalAS'])
+            values.append('%s' % o['UpdateSource'])
+            values.append('%s' % o['RouteReflectorClusterId'])
+            values.append('%s' % o['RouteReflectorClient'])
+            values.append('%s' % o['MultiHopEnable'])
+            values.append('%s' % o['MultiHopTTL'])
+            values.append('%s' % o['ConnectRetryTime'])
+            values.append('%s' % o['HoldTime'])
+            values.append('%s' % o['KeepaliveTime'])
+            values.append('%s' % o['AddPathsRx'])
+            values.append('%s' % o['AddPathsMaxTx'])
+            values.append('%s' % o['BfdNeighborState'])
+            values.append('%s' % o['MaxPrefixes'])
+            values.append('%s' % o['MaxPrefixesThresholdPct'])
+            values.append('%s' % o['MaxPrefixesDisconnect'])
+            values.append('%s' % o['MaxPrefixesRestartTimer'])
+            values.append('%s' % o['TotalPrefixes'])
+            values.append('%s' % o['Messages'])
+            values.append('%s' % o['Queues'])
+            rows.append(values)
+        self.tblPrintObject('BGPv6NeighborState', header, rows)
 
 
     def printMacTableEntryStates(self, addHeader=True, brief=None):
@@ -1555,6 +1731,56 @@ class FlexSwitchShow( object):
         self.tblPrintObject('BGPPolicyStmtState', header, rows)
 
 
+    def printBGPv4PeerGroups(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('Name')
+            header.append('UpdateSource')
+            header.append('AuthPassword')
+            header.append('Description')
+            header.append('MaxPrefixesRestartTimer')
+            header.append('RouteReflectorClient')
+            header.append('MultiHopTTL')
+            header.append('MaxPrefixesDisconnect')
+            header.append('LocalAS')
+            header.append('KeepaliveTime')
+            header.append('RouteReflectorClusterId')
+            header.append('MaxPrefixes')
+            header.append('AddPathsMaxTx')
+            header.append('MultiHopEnable')
+            header.append('AddPathsRx')
+            header.append('MaxPrefixesThresholdPct')
+            header.append('HoldTime')
+            header.append('PeerAS')
+            header.append('ConnectRetryTime')
+
+        objs = self.swtch.getAllBGPv4PeerGroups()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['Name'])
+            values.append('%s' % o['UpdateSource'])
+            values.append('%s' % o['AuthPassword'])
+            values.append('%s' % o['Description'])
+            values.append('%s' % o['MaxPrefixesRestartTimer'])
+            values.append('%s' % o['RouteReflectorClient'])
+            values.append('%s' % o['MultiHopTTL'])
+            values.append('%s' % o['MaxPrefixesDisconnect'])
+            values.append('%s' % o['LocalAS'])
+            values.append('%s' % o['KeepaliveTime'])
+            values.append('%s' % o['RouteReflectorClusterId'])
+            values.append('%s' % o['MaxPrefixes'])
+            values.append('%s' % o['AddPathsMaxTx'])
+            values.append('%s' % o['MultiHopEnable'])
+            values.append('%s' % o['AddPathsRx'])
+            values.append('%s' % o['MaxPrefixesThresholdPct'])
+            values.append('%s' % o['HoldTime'])
+            values.append('%s' % o['PeerAS'])
+            values.append('%s' % o['ConnectRetryTime'])
+            rows.append(values)
+        self.tblPrintObject('BGPv4PeerGroup', header, rows)
+
+
     def printIPv4RouteStates(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
@@ -1565,6 +1791,7 @@ class FlexSwitchShow( object):
             header.append('RouteUpdatedTime')
             header.append('NextHopList')
             header.append('PolicyList')
+            header.append('NextBestRoute')
 
         objs = self.swtch.getAllIPv4RouteStates()
         for obj in objs:
@@ -1577,6 +1804,7 @@ class FlexSwitchShow( object):
             values.append('%s' % o['RouteUpdatedTime'])
             values.append('%s' % o['NextHopList'])
             values.append('%s' % o['PolicyList'])
+            values.append('%s' % o['NextBestRoute'])
             rows.append(values)
         self.tblPrintObject('IPv4RouteState', header, rows)
 
@@ -1847,54 +2075,26 @@ class FlexSwitchShow( object):
         self.tblPrintObject('IPv6Route', header, rows)
 
 
-    def printStpBridgeStates(self, addHeader=True, brief=None):
+    def printNDPEntryStates(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
+            header.append('IpAddr')
+            header.append('MacAddr')
             header.append('Vlan')
-            header.append('IfIndex')
-            header.append('Address')
-            header.append('Priority')
-            header.append('ProtocolSpecification')
-            header.append('TimeSinceTopologyChange')
-            header.append('TopChanges')
-            header.append('DesignatedRoot')
-            header.append('RootCost')
-            header.append('RootPort')
-            header.append('MaxAge')
-            header.append('HelloTime')
-            header.append('HoldTime')
-            header.append('ForwardDelay')
-            header.append('BridgeMaxAge')
-            header.append('BridgeHelloTime')
-            header.append('BridgeHoldTime')
-            header.append('BridgeForwardDelay')
-            header.append('TxHoldCount')
+            header.append('Intf')
+            header.append('ExpiryTimeLeft')
 
-        objs = self.swtch.getAllStpBridgeStates()
+        objs = self.swtch.getAllNDPEntryStates()
         for obj in objs:
             o = obj['Object']
             values = []
+            values.append('%s' % o['IpAddr'])
+            values.append('%s' % o['MacAddr'])
             values.append('%s' % o['Vlan'])
-            values.append('%s' % o['IfIndex'])
-            values.append('%s' % o['Address'])
-            values.append('%s' % o['Priority'])
-            values.append('%s' % o['ProtocolSpecification'])
-            values.append('%s' % o['TimeSinceTopologyChange'])
-            values.append('%s' % o['TopChanges'])
-            values.append('%s' % o['DesignatedRoot'])
-            values.append('%s' % o['RootCost'])
-            values.append('%s' % o['RootPort'])
-            values.append('%s' % o['MaxAge'])
-            values.append('%s' % o['HelloTime'])
-            values.append('%s' % o['HoldTime'])
-            values.append('%s' % o['ForwardDelay'])
-            values.append('%s' % o['BridgeMaxAge'])
-            values.append('%s' % o['BridgeHelloTime'])
-            values.append('%s' % o['BridgeHoldTime'])
-            values.append('%s' % o['BridgeForwardDelay'])
-            values.append('%s' % o['TxHoldCount'])
+            values.append('%s' % o['Intf'])
+            values.append('%s' % o['ExpiryTimeLeft'])
             rows.append(values)
-        self.tblPrintObject('StpBridgeState', header, rows)
+        self.tblPrintObject('NDPEntryState', header, rows)
 
 
     def printDWDMModuleClntIntfs(self, addHeader=True, brief=None):
@@ -1902,17 +2102,24 @@ class FlexSwitchShow( object):
         if addHeader:
             header.append('ClntIntfId')
             header.append('ModuleId')
+            header.append('NwLaneTributaryToClntIntfMap')
             header.append('HostTxEqDfe')
             header.append('HostRxSerializerTap1Gain')
+            header.append('RxPRBSPattern')
             header.append('HostRxSerializerTap2Delay')
             header.append('HostRxSerializerTap2Gain')
             header.append('HostRxSerializerTap0Delay')
             header.append('HostTxEqCtle')
+            header.append('TxPRBSPattern')
             header.append('HostTxEqLfCtle')
-            header.append('TXFECDecDisable')
             header.append('AdminState')
             header.append('RXFECDecDisable')
+            header.append('EnableTxPRBSChecker')
+            header.append('EnableHostLoopback')
             header.append('HostRxSerializerTap0Gain')
+            header.append('TXFECDecDisable')
+            header.append('EnableRxPRBS')
+            header.append('EnableIntSerdesNWLoopback')
 
         objs = self.swtch.getAllDWDMModuleClntIntfs()
         for obj in objs:
@@ -1920,19 +2127,44 @@ class FlexSwitchShow( object):
             values = []
             values.append('%s' % o['ClntIntfId'])
             values.append('%s' % o['ModuleId'])
+            values.append('%s' % o['NwLaneTributaryToClntIntfMap'])
             values.append('%s' % o['HostTxEqDfe'])
             values.append('%s' % o['HostRxSerializerTap1Gain'])
+            values.append('%s' % o['RxPRBSPattern'])
             values.append('%s' % o['HostRxSerializerTap2Delay'])
             values.append('%s' % o['HostRxSerializerTap2Gain'])
             values.append('%s' % o['HostRxSerializerTap0Delay'])
             values.append('%s' % o['HostTxEqCtle'])
+            values.append('%s' % o['TxPRBSPattern'])
             values.append('%s' % o['HostTxEqLfCtle'])
-            values.append('%s' % o['TXFECDecDisable'])
             values.append('%s' % o['AdminState'])
             values.append('%s' % o['RXFECDecDisable'])
+            values.append('%s' % o['EnableTxPRBSChecker'])
+            values.append('%s' % o['EnableHostLoopback'])
             values.append('%s' % o['HostRxSerializerTap0Gain'])
+            values.append('%s' % o['TXFECDecDisable'])
+            values.append('%s' % o['EnableRxPRBS'])
+            values.append('%s' % o['EnableIntSerdesNWLoopback'])
             rows.append(values)
         self.tblPrintObject('DWDMModuleClntIntf', header, rows)
+
+
+    def printRouteStatsPerInterfaceStates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('Intfref')
+            header.append('V4Routes')
+            header.append('V6Routes')
+
+        objs = self.swtch.getAllRouteStatsPerInterfaceStates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['Intfref'])
+            values.append('%s' % o['V4Routes'])
+            values.append('%s' % o['V6Routes'])
+            rows.append(values)
+        self.tblPrintObject('RouteStatsPerInterfaceState', header, rows)
 
 
     def printDhcpIntfConfigs(self, addHeader=True, brief=None):
@@ -2081,38 +2313,6 @@ class FlexSwitchShow( object):
         self.tblPrintObject('IpTableAcl', header, rows)
 
 
-    def printIppLinkStates(self, addHeader=True, brief=None):
-        header = []; rows = []
-        if addHeader:
-            header.append('IntfRef')
-            header.append('DrNameRef')
-            header.append('IPPID')
-            header.append('PortConversationPasses')
-            header.append('GatewayConversationDirection')
-            header.append('DRCPDUsRx')
-            header.append('DRCPDUsTx')
-            header.append('DRCPRxState')
-            header.append('LastRxTime')
-            header.append('DiffPortalReason')
-
-        objs = self.swtch.getAllIppLinkStates()
-        for obj in objs:
-            o = obj['Object']
-            values = []
-            values.append('%s' % o['IntfRef'])
-            values.append('%s' % o['DrNameRef'])
-            values.append('%s' % o['IPPID'])
-            values.append('%s' % o['PortConversationPasses'])
-            values.append('%s' % o['GatewayConversationDirection'])
-            values.append('%s' % o['DRCPDUsRx'])
-            values.append('%s' % o['DRCPDUsTx'])
-            values.append('%s' % o['DRCPRxState'])
-            values.append('%s' % o['LastRxTime'])
-            values.append('%s' % o['DiffPortalReason'])
-            rows.append(values)
-        self.tblPrintObject('IppLinkState', header, rows)
-
-
     def printDWDMModuleNwIntfStates(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
@@ -2125,6 +2325,7 @@ class FlexSwitchShow( object):
             header.append('MaxBEROverPMInterval')
             header.append('CurrUncorrectableFECBlkCnt')
             header.append('UncorrectableFECBlkCntOverPMInt')
+            header.append('PRBSRxErrCnt')
 
         objs = self.swtch.getAllDWDMModuleNwIntfStates()
         for obj in objs:
@@ -2139,6 +2340,7 @@ class FlexSwitchShow( object):
             values.append('%s' % o['MaxBEROverPMInterval'])
             values.append('%s' % o['CurrUncorrectableFECBlkCnt'])
             values.append('%s' % o['UncorrectableFECBlkCntOverPMInt'])
+            values.append('%s' % o['PRBSRxErrCnt'])
             rows.append(values)
         self.tblPrintObject('DWDMModuleNwIntfState', header, rows)
 
@@ -2969,72 +3171,34 @@ class FlexSwitchShow( object):
         self.tblPrintObject('SystemSwVersionState', header, rows)
 
 
-    def printBfdSessionStates(self, addHeader=True, brief=None):
+    def printDaemonStates(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
-            header.append('IpAddr')
-            header.append('SessionId')
-            header.append('ParamName')
-            header.append('IfIndex')
-            header.append('InterfaceSpecific')
-            header.append('IfName')
-            header.append('PerLinkSession')
-            header.append('LocalMacAddr')
-            header.append('RemoteMacAddr')
-            header.append('RegisteredProtocols')
-            header.append('SessionState')
-            header.append('RemoteSessionState')
-            header.append('LocalDiscriminator')
-            header.append('RemoteDiscriminator')
-            header.append('LocalDiagType')
-            header.append('DesiredMinTxInterval')
-            header.append('RequiredMinRxInterval')
-            header.append('RemoteMinRxInterval')
-            header.append('DetectionMultiplier')
-            header.append('RemoteDetectionMultiplier')
-            header.append('DemandMode')
-            header.append('RemoteDemandMode')
-            header.append('AuthSeqKnown')
-            header.append('AuthType')
-            header.append('ReceivedAuthSeq')
-            header.append('SentAuthSeq')
-            header.append('NumTxPackets')
-            header.append('NumRxPackets')
+            header.append('Name')
+            header.append('Enable')
+            header.append('State')
+            header.append('Reason')
+            header.append('StartTime')
+            header.append('KeepAlive')
+            header.append('RestartCount')
+            header.append('RestartTime')
+            header.append('RestartReason')
 
-        objs = self.swtch.getAllBfdSessionStates()
+        objs = self.swtch.getAllDaemonStates()
         for obj in objs:
             o = obj['Object']
             values = []
-            values.append('%s' % o['IpAddr'])
-            values.append('%s' % o['SessionId'])
-            values.append('%s' % o['ParamName'])
-            values.append('%s' % o['IfIndex'])
-            values.append('%s' % o['InterfaceSpecific'])
-            values.append('%s' % o['IfName'])
-            values.append('%s' % o['PerLinkSession'])
-            values.append('%s' % o['LocalMacAddr'])
-            values.append('%s' % o['RemoteMacAddr'])
-            values.append('%s' % o['RegisteredProtocols'])
-            values.append('%s' % o['SessionState'])
-            values.append('%s' % o['RemoteSessionState'])
-            values.append('%s' % o['LocalDiscriminator'])
-            values.append('%s' % o['RemoteDiscriminator'])
-            values.append('%s' % o['LocalDiagType'])
-            values.append('%s' % o['DesiredMinTxInterval'])
-            values.append('%s' % o['RequiredMinRxInterval'])
-            values.append('%s' % o['RemoteMinRxInterval'])
-            values.append('%s' % o['DetectionMultiplier'])
-            values.append('%s' % o['RemoteDetectionMultiplier'])
-            values.append('%s' % o['DemandMode'])
-            values.append('%s' % o['RemoteDemandMode'])
-            values.append('%s' % o['AuthSeqKnown'])
-            values.append('%s' % o['AuthType'])
-            values.append('%s' % o['ReceivedAuthSeq'])
-            values.append('%s' % o['SentAuthSeq'])
-            values.append('%s' % o['NumTxPackets'])
-            values.append('%s' % o['NumRxPackets'])
+            values.append('%s' % o['Name'])
+            values.append('%s' % o['Enable'])
+            values.append('%s' % o['State'])
+            values.append('%s' % o['Reason'])
+            values.append('%s' % o['StartTime'])
+            values.append('%s' % o['KeepAlive'])
+            values.append('%s' % o['RestartCount'])
+            values.append('%s' % o['RestartTime'])
+            values.append('%s' % o['RestartReason'])
             rows.append(values)
-        self.tblPrintObject('BfdSessionState', header, rows)
+        self.tblPrintObject('DaemonState', header, rows)
 
 
     def printSystemParamStates(self, addHeader=True, brief=None):
@@ -3089,6 +3253,8 @@ class FlexSwitchShow( object):
         header = []; rows = []
         if addHeader:
             header.append('ModuleId')
+            header.append('EnableExtPMTickSrc')
+            header.append('PMInterval')
             header.append('AdminState')
             header.append('IndependentLaneMode')
 
@@ -3097,10 +3263,106 @@ class FlexSwitchShow( object):
             o = obj['Object']
             values = []
             values.append('%s' % o['ModuleId'])
+            values.append('%s' % o['EnableExtPMTickSrc'])
+            values.append('%s' % o['PMInterval'])
             values.append('%s' % o['AdminState'])
             values.append('%s' % o['IndependentLaneMode'])
             rows.append(values)
         self.tblPrintObject('DWDMModule', header, rows)
+
+
+    def printBGPv6Neighbors(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('IntfRef')
+            header.append('NeighborAddress')
+            header.append('Description')
+            header.append('PeerGroup')
+            header.append('UpdateSource')
+            header.append('BfdEnable')
+            header.append('MultiHopTTL')
+            header.append('LocalAS')
+            header.append('KeepaliveTime')
+            header.append('AddPathsRx')
+            header.append('RouteReflectorClient')
+            header.append('MaxPrefixesRestartTimer')
+            header.append('MultiHopEnable')
+            header.append('RouteReflectorClusterId')
+            header.append('MaxPrefixesDisconnect')
+            header.append('PeerAS')
+            header.append('AddPathsMaxTx')
+            header.append('MaxPrefixes')
+            header.append('MaxPrefixesThresholdPct')
+            header.append('BfdSessionParam')
+            header.append('HoldTime')
+            header.append('ConnectRetryTime')
+
+        objs = self.swtch.getAllBGPv6Neighbors()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['IntfRef'])
+            values.append('%s' % o['NeighborAddress'])
+            values.append('%s' % o['Description'])
+            values.append('%s' % o['PeerGroup'])
+            values.append('%s' % o['UpdateSource'])
+            values.append('%s' % o['BfdEnable'])
+            values.append('%s' % o['MultiHopTTL'])
+            values.append('%s' % o['LocalAS'])
+            values.append('%s' % o['KeepaliveTime'])
+            values.append('%s' % o['AddPathsRx'])
+            values.append('%s' % o['RouteReflectorClient'])
+            values.append('%s' % o['MaxPrefixesRestartTimer'])
+            values.append('%s' % o['MultiHopEnable'])
+            values.append('%s' % o['RouteReflectorClusterId'])
+            values.append('%s' % o['MaxPrefixesDisconnect'])
+            values.append('%s' % o['PeerAS'])
+            values.append('%s' % o['AddPathsMaxTx'])
+            values.append('%s' % o['MaxPrefixes'])
+            values.append('%s' % o['MaxPrefixesThresholdPct'])
+            values.append('%s' % o['BfdSessionParam'])
+            values.append('%s' % o['HoldTime'])
+            values.append('%s' % o['ConnectRetryTime'])
+            rows.append(values)
+        self.tblPrintObject('BGPv6Neighbor', header, rows)
+
+
+    def printStpPorts(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('BrgIfIndex')
+            header.append('IfIndex')
+            header.append('BpduGuardInterval')
+            header.append('PathCost')
+            header.append('Priority')
+            header.append('AdminEdgePort')
+            header.append('Enable')
+            header.append('ProtocolMigration')
+            header.append('BridgeAssurance')
+            header.append('BpduGuard')
+            header.append('AdminPointToPoint')
+            header.append('AdminPathCost')
+            header.append('PathCost32')
+
+        objs = self.swtch.getAllStpPorts()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['BrgIfIndex'])
+            values.append('%s' % o['IfIndex'])
+            values.append('%s' % o['BpduGuardInterval'])
+            values.append('%s' % o['PathCost'])
+            values.append('%s' % o['Priority'])
+            values.append('%s' % o['AdminEdgePort'])
+            values.append('%s' % o['Enable'])
+            values.append('%s' % o['ProtocolMigration'])
+            values.append('%s' % o['BridgeAssurance'])
+            values.append('%s' % o['BpduGuard'])
+            values.append('%s' % o['AdminPointToPoint'])
+            values.append('%s' % o['AdminPathCost'])
+            values.append('%s' % o['PathCost32'])
+            rows.append(values)
+        self.tblPrintObject('StpPort', header, rows)
 
 
     def printBGPRouteStates(self, addHeader=True, brief=None):
@@ -3143,6 +3405,54 @@ class FlexSwitchShow( object):
             values.append('%s' % o['Cost'])
             rows.append(values)
         self.tblPrintObject('IPv4Route', header, rows)
+
+
+    def printBGPv6PeerGroups(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('Name')
+            header.append('UpdateSource')
+            header.append('Description')
+            header.append('MaxPrefixesRestartTimer')
+            header.append('RouteReflectorClient')
+            header.append('MultiHopTTL')
+            header.append('MaxPrefixesDisconnect')
+            header.append('LocalAS')
+            header.append('KeepaliveTime')
+            header.append('RouteReflectorClusterId')
+            header.append('AddPathsMaxTx')
+            header.append('MultiHopEnable')
+            header.append('AddPathsRx')
+            header.append('MaxPrefixesThresholdPct')
+            header.append('HoldTime')
+            header.append('MaxPrefixes')
+            header.append('PeerAS')
+            header.append('ConnectRetryTime')
+
+        objs = self.swtch.getAllBGPv6PeerGroups()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['Name'])
+            values.append('%s' % o['UpdateSource'])
+            values.append('%s' % o['Description'])
+            values.append('%s' % o['MaxPrefixesRestartTimer'])
+            values.append('%s' % o['RouteReflectorClient'])
+            values.append('%s' % o['MultiHopTTL'])
+            values.append('%s' % o['MaxPrefixesDisconnect'])
+            values.append('%s' % o['LocalAS'])
+            values.append('%s' % o['KeepaliveTime'])
+            values.append('%s' % o['RouteReflectorClusterId'])
+            values.append('%s' % o['AddPathsMaxTx'])
+            values.append('%s' % o['MultiHopEnable'])
+            values.append('%s' % o['AddPathsRx'])
+            values.append('%s' % o['MaxPrefixesThresholdPct'])
+            values.append('%s' % o['HoldTime'])
+            values.append('%s' % o['MaxPrefixes'])
+            values.append('%s' % o['PeerAS'])
+            values.append('%s' % o['ConnectRetryTime'])
+            rows.append(values)
+        self.tblPrintObject('BGPv6PeerGroup', header, rows)
 
 
     def printArpEntryHwStates(self, addHeader=True, brief=None):
@@ -3260,6 +3570,7 @@ class FlexSwitchShow( object):
         if addHeader:
             header.append('IntfRef')
             header.append('IpAddr')
+            header.append('LinkIp')
 
         objs = self.swtch.getAllIPv6Intfs()
         for obj in objs:
@@ -3267,8 +3578,27 @@ class FlexSwitchShow( object):
             values = []
             values.append('%s' % o['IntfRef'])
             values.append('%s' % o['IpAddr'])
+            values.append('%s' % o['LinkIp'])
             rows.append(values)
         self.tblPrintObject('IPv6Intf', header, rows)
+
+
+    def printRouteStatsPerProtocolStates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('Protocol')
+            header.append('V4Routes')
+            header.append('V6Routes')
+
+        objs = self.swtch.getAllRouteStatsPerProtocolStates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['Protocol'])
+            values.append('%s' % o['V4Routes'])
+            values.append('%s' % o['V6Routes'])
+            rows.append(values)
+        self.tblPrintObject('RouteStatsPerProtocolState', header, rows)
 
 
     def printVrrpVridStates(self, addHeader=True, brief=None):
@@ -3443,4 +3773,22 @@ class FlexSwitchShow( object):
             values.append('%s' % o['IfBackupDesignatedRouterId'])
             rows.append(values)
         self.tblPrintObject('OspfIfEntryState', header, rows)
+
+
+    def printRIBEventStates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('Index')
+            header.append('TimeStamp')
+            header.append('EventInfo')
+
+        objs = self.swtch.getAllRIBEventStates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['Index'])
+            values.append('%s' % o['TimeStamp'])
+            values.append('%s' % o['EventInfo'])
+            rows.append(values)
+        self.tblPrintObject('RIBEventState', header, rows)
 
