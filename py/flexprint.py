@@ -45,7 +45,47 @@ class FlexPrint( FlexSwitchShow):
 
     def printPortState(self, IntfRef):
 
-        self.printPortStates(IntfRef=int(IntfRef))
+        port = self.swtch.getPortState(IntfRef).json()
+        p = port['Object']
+        port_config = self.swtch.getPort(p['IntfRef']).json()
+        pc = port_config['Object']
+        ipv4_state = self.swtch.getIPv4IntfState(p['IntfRef']).json()
+        #print ipv4_state
+        ipv4 = None
+        if ipv4_state.has_key('Result') and 'Error' in ipv4_state['Result']:
+            ipv4 = {'IpAddr': ipv4_state['Result']}
+        elif ipv4_state.has_key('Object'):
+            ipv4 = ipv4_state['Object']
+
+        if not p['LastDownEventTime']:
+            lastdown="never"
+        else:
+            lastdown = p['LastDownEventTime']
+        if not p['LastUpEventTime']:
+            lastdown="never"
+        else:
+            lastdown = p['LastDownEventTime']
+
+        print p['Name'], "is", p['OperState'], "Admin State is", pc['AdminState']
+        if ipv4 is not None:
+            print "  IPv4 Address is", ipv4['IpAddr']
+        print "  PresentInHW:", p['PresentInHW']
+        print "  PhyType:", pc['PhyIntfType'],",","Media Type:",pc['MediaType'],"," , "Address:", pc['MacAddr']
+        print "  MTU",  pc['Mtu'],"Bytes"
+        print " ",pc['Duplex'],",",pc['Speed'],"Mb/s"
+        print "  Breakout Status:", pc['BreakOutMode']
+        print "  Last link down:",p['LastDownEventTime']
+        print "  Last link up:",   p['LastUpEventTime']
+        print "  Number of Link flaps:", p['NumDownEvents']
+        print "  ErrDisableReason:", p['ErrDisableReason']
+        print "  RX"
+        print "   ",p['IfInUcastPkts'],"unicast packets",p['IfInOctets'],"unicast octets"
+        print "   ",p['IfInDiscards'],"input discards", p['IfInErrors'], "input errors"
+        print "   ",p['IfInUnknownProtos'],"unknown protocol"
+        print "  TX"
+        print "   ",p['IfOutUcastPkts'],"unicast packets",p['IfOutOctets'],"unicast octets"
+        print "   ",p['IfOutDiscards'],"output discards", p['IfOutErrors'], "output errors"
+        print '------------------------------------------------------------------------------'
 
     def printInterfaces(self):
         self.printPortStates()
@@ -59,10 +99,12 @@ class FlexPrint( FlexSwitchShow):
             pc = port_config['Object']
             ipv4_state = self.swtch.getIPv4IntfState(p['IntfRef']).json()
             #print ipv4_state
-            if ipv4_state.has_key('Error'):
-                ipv4 = None
-            else:
+            ipv4 = None
+            if ipv4_state.has_key('Result') and 'Error' in ipv4_state['Result']:
+                ipv4 = {'IpAddr': ipv4_state['Result']}
+            elif ipv4_state.has_key('Object'):
                 ipv4 = ipv4_state['Object']
+
             if not p['LastDownEventTime']:
                 lastdown="never"
             else:
@@ -120,36 +162,38 @@ class FlexPrint( FlexSwitchShow):
 
     def printVlanState(self, VlanId):
 
-        found = self.printVlanStates(int(VlanId))
-        if not found:
-            print "VlanId %d NOT FOUND" % (VlanId,)
+        self.printVlanStates(int(VlanId))
 
     def printVlanStates(self, VlanId=None):
-        vlans = self.swtch.getAllVlans()
+        if VlanId is not None:
+            vlans = [self.swtch.getVlan(VlanId).json()]
+        else:
+            vlans = self.swtch.getAllVlans()
         if len(vlans)>=0:
             print '\n'
             labels = ('VLAN','Name','Status','Ports')
             rows=[]
             for v in vlans:
                 vl = v['Object']
-                #vlan_state = self.swtch.getVlanState(vl['VlanId'])
-                #vls = vlan_state['Object']
-                #operstate = vls['OperState']
-                operstate = 'UP'
-                if vl['UntagIntfList'] is not None:
-                    untag_ports = ', '.join(vl['UntagIntfList'])
-                else:
-                    untag_ports = ""
-                if vl['IntfList']is not None:
-                    tag_ports = ', '.join(vl['IntfList'])
-                else:
-                    tag_ports = ""
-                port = untag_ports + tag_ports
-                name = "None"
-                rows.append( (str(vl['VlanId']),
-                      "%s" %(name),
-                      "%s" %(operstate),
-                      "%s" %(str(port))))
+                if int(vl['VlanId']) == VlanId or VlanId is None:
+                    vlan_state = self.swtch.getVlanState(vl['VlanId']).json()
+                    vls = vlan_state['Object']
+                    operstate = vls['OperState']
+                    #operstate = 'UP'
+                    if vl['UntagIntfList'] is not None:
+                        untag_ports = ', '.join(vl['UntagIntfList'])
+                    else:
+                        untag_ports = ""
+                    if vl['IntfList']is not None:
+                        tag_ports = ', '.join(vl['IntfList'])
+                    else:
+                        tag_ports = ""
+                    port = untag_ports + tag_ports
+                    name = vls['VlanName']
+                    rows.append( (str(vl['VlanId']),
+                          "%s" %(name),
+                          "%s" %(operstate),
+                          "%s" %(str(port))))
             width = 20
             print indent([labels]+rows, hasHeader=True, separateRows=False,
                         prefix=' ', postfix=' ', headerChar= '-', delim='    ',
@@ -205,38 +249,6 @@ class FlexPrint( FlexSwitchShow):
 #                                               vlan ['IfIndexList'],
 #                                               vlan ['UntagIfIndexList'],
 #                                               vlan ['OperState'])
-
-    def printVlanStates(self, VlanId=None):
-        vlans = self.swtch.getAllVlans()
-        if len(vlans)>=0:
-            print '\n'
-            labels = ('VLAN','Name','Status','Ports')
-            rows=[]
-            for v in vlans:
-                vl = v['Object']
-                #vlan_state = self.swtch.getVlanState(vl['VlanId'])
-                #vls = vlan_state['Object']
-                #operstate = vls['OperState']
-                operstate = 'UP'
-                if vl['UntagIntfList'] is not None:
-                    untag_ports = ', '.join(vl['UntagIntfList'])
-                else:
-                    untag_ports = ""
-                if vl['IntfList']is not None:
-                    tag_ports = ', '.join(vl['IntfList'])
-                else:
-                    tag_ports = ""
-                port = untag_ports + tag_ports
-                name = "None"
-                rows.append( (str(vl['VlanId']),
-                      "%s" %(name),
-                      "%s" %(operstate),
-                      "%s" %(str(port))))
-            width = 20
-            print indent([labels]+rows, hasHeader=True, separateRows=False,
-                        prefix=' ', postfix=' ', headerChar= '-', delim='    ',
-                        wrapfunc=lambda x: wrap_onspace_strict(x,width))
-
 
     def printVrrpIntfState (self):
         vrids = self.swtch.getAllVrrpIntfStates()
@@ -629,7 +641,7 @@ class FlexPrint( FlexSwitchShow):
         for r in routes:
             rt = r['Object']
             if rt['Paths'] is None:
-            	continue
+                continue
             for p in rt['Paths']:
                 if p['Path'] is None:
                     bgp_path = p['Path']
@@ -709,6 +721,70 @@ class FlexPrint( FlexSwitchShow):
                             "%s" %(ip['LastDownEventTime'])))
 
         self.tblPrintObject('LagIPv4IntfStates',
+                            labels,
+                            rows)
+
+
+    def printIPv6IntfStates(self,):
+
+        self.printEthIPv6IntfStates()
+        print '\n'
+        self.printSviIPv6IntfStates()
+        print '\n'
+        self.printLagIPv6IntfStates()
+        print '\n'
+
+    def printEthIPv6IntfStates(self,):
+        ipintfs = self.swtch.getAllIPv6IntfStates()
+        print '\n'
+        labels = ('Interface', 'IP Address', 'OperState', 'DownEvents','Last Flap')
+        rows = []
+        for i in ipintfs:
+            ip = i['Object']
+            if ip['L2IntfType'] == 'Port':
+                rows.append((ip['IntfRef'],
+                        "%s" %(ip['IpAddr']),
+                        "%s" %(ip['OperState']),
+                        "%s" %(ip['NumDownEvents']),
+                        "%s" %(ip['LastDownEventTime'])))
+
+        self.tblPrintObject('EthIPv6IntfStates',
+                            labels,
+                            rows)
+
+    def printSviIPv6IntfStates(self,):
+        ipintfs = self.swtch.getAllIPv6IntfStates()
+        print '\n'
+        labels = ('Interface', 'IP Address', 'OperState', 'DownEvents','Last Flap')
+        rows = []
+        for i in ipintfs:
+            ip = i['Object']
+            if ip['L2IntfType'] == 'Vlan':
+                rows.append((ip['IntfRef'],
+                        "%s" %(ip['IpAddr']),
+                        "%s" %(ip['OperState']),
+                        "%s" %(ip['NumDownEvents']),
+                        "%s" %(ip['LastDownEventTime'])))
+
+        self.tblPrintObject('SviIPv6IntfStates',
+                            labels,
+                            rows)
+
+    def printLagIPv6IntfStates(self,):
+        ipintfs = self.swtch.getAllIPv6IntfStates()
+        print '\n'
+        labels = ('Interface', 'IP Address', 'OperState', 'DownEvents','Last Flap')
+        rows = []
+        for i in ipintfs:
+            ip = i['Object']
+            if ip['L2IntfType'] == 'Lag':
+                rows.append((ip['IntfRef'],
+                            "%s" %(ip['IpAddr']),
+                            "%s" %(ip['OperState']),
+                            "%s" %(ip['NumDownEvents']),
+                            "%s" %(ip['LastDownEventTime'])))
+
+        self.tblPrintObject('LagIPv6IntfStates',
                             labels,
                             rows)
 
