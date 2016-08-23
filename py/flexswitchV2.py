@@ -184,6 +184,24 @@ class FlexSwitch( object):
         return self.getObjects( 'OspfIfMetricEntry', self.cfgUrlBase)
 
 
+    def getNdpEntryHwState(self,
+                           IpAddr):
+        obj =  { 
+                'IpAddr' : IpAddr,
+                }
+        reqUrl =  self.stateUrlBase + 'NdpEntryHw'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getNdpEntryHwStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'NdpEntryHw'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllNdpEntryHwStates(self):
+        return self.getObjects( 'NdpEntryHw', self.stateUrlBase)
+
+
     """
     .. automethod :: createPolicyStmt(self,
         :param string Name : Policy Statement Name Policy Statement Name
@@ -366,6 +384,256 @@ class FlexSwitch( object):
 
 
     """
+    .. automethod :: createDWDMModuleNwIntf(self,
+        :param uint8 NwIntfId : DWDM Module network interface identifier DWDM Module network interface identifier
+        :param uint8 ModuleId : DWDM Module identifier DWDM Module identifier
+        :param uint8 ClntIntfIdToTributary0Map : Client interface ID to map to network interface tributary 0 Client interface ID to map to network interface tributary 0
+        :param uint8 ClntIntfIdToTributary1Map : Client interface ID to map to network interface tributary 1 Client interface ID to map to network interface tributary 1
+        :param bool EnableRxPRBSChecker : Enable RX PRBS checker Enable RX PRBS checker
+        :param float64 TxPulseShapeFltrRollOff : TX pulse shape filter roll off factor TX pulse shape filter roll off factor
+        :param float64 TxPower : Transmit output power for this network interface in dBm Transmit output power for this network interface in dBm
+        :param bool RxPRBSInvertPattern : Check against inverted PRBS polynomial pattern Check against inverted PRBS polynomial pattern
+        :param bool EnableTxPRBS : Enable TX PRBS generation on this network interface Enable TX PRBS generation on this network interface
+        :param bool TxPRBSInvertPattern : Generate inverted PRBS polynomial pattern Generate inverted PRBS polynomial pattern
+        :param string AdminState : Administrative state of this network interface Administrative state of this network interface
+        :param uint8 ChannelNumber : TX Channel number to use for this network interface TX Channel number to use for this network interface
+        :param string FECMode : DWDM Module network interface FEC mode DWDM Module network interface FEC mode
+        :param string ModulationFmt : Modulation format to use for this network interface Modulation format to use for this network interface
+        :param string TxPulseShapeFltrType : TX pulse shaping filter type TX pulse shaping filter type
+        :param string RxPRBSPattern : PRBS pattern to use for checker PRBS pattern to use for checker
+        :param string TxPRBSPattern : Pattern to use for TX PRBS generation Pattern to use for TX PRBS generation
+        :param bool DiffEncoding : Control to enable/disable DWDM Module network interface encoding type Control to enable/disable DWDM Module network interface encoding type
+
+	"""
+    def createDWDMModuleNwIntf(self,
+                               NwIntfId,
+                               ModuleId,
+                               ClntIntfIdToTributary0Map,
+                               ClntIntfIdToTributary1Map,
+                               EnableRxPRBSChecker=False,
+                               TxPulseShapeFltrRollOff='0.301',
+                               TxPower='0',
+                               RxPRBSInvertPattern=True,
+                               EnableTxPRBS=False,
+                               TxPRBSInvertPattern=True,
+                               AdminState='UP',
+                               ChannelNumber=48,
+                               FECMode='15%SDFEC',
+                               ModulationFmt='16QAM',
+                               TxPulseShapeFltrType='RootRaisedCos',
+                               RxPRBSPattern='2^31',
+                               TxPRBSPattern='2^31',
+                               DiffEncoding=True):
+        obj =  { 
+                'NwIntfId' : int(NwIntfId),
+                'ModuleId' : int(ModuleId),
+                'ClntIntfIdToTributary0Map' : int(ClntIntfIdToTributary0Map),
+                'ClntIntfIdToTributary1Map' : int(ClntIntfIdToTributary1Map),
+                'EnableRxPRBSChecker' : True if EnableRxPRBSChecker else False,
+                'TxPulseShapeFltrRollOff' : TxPulseShapeFltrRollOff,
+                'TxPower' : TxPower,
+                'RxPRBSInvertPattern' : True if RxPRBSInvertPattern else False,
+                'EnableTxPRBS' : True if EnableTxPRBS else False,
+                'TxPRBSInvertPattern' : True if TxPRBSInvertPattern else False,
+                'AdminState' : AdminState,
+                'ChannelNumber' : int(ChannelNumber),
+                'FECMode' : FECMode,
+                'ModulationFmt' : ModulationFmt,
+                'TxPulseShapeFltrType' : TxPulseShapeFltrType,
+                'RxPRBSPattern' : RxPRBSPattern,
+                'TxPRBSPattern' : TxPRBSPattern,
+                'DiffEncoding' : True if DiffEncoding else False,
+                }
+        reqUrl =  self.cfgUrlBase+'DWDMModuleNwIntf'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateDWDMModuleNwIntf(self,
+                               NwIntfId,
+                               ModuleId,
+                               ClntIntfIdToTributary0Map = None,
+                               ClntIntfIdToTributary1Map = None,
+                               EnableRxPRBSChecker = None,
+                               TxPulseShapeFltrRollOff = None,
+                               TxPower = None,
+                               RxPRBSInvertPattern = None,
+                               EnableTxPRBS = None,
+                               TxPRBSInvertPattern = None,
+                               AdminState = None,
+                               ChannelNumber = None,
+                               FECMode = None,
+                               ModulationFmt = None,
+                               TxPulseShapeFltrType = None,
+                               RxPRBSPattern = None,
+                               TxPRBSPattern = None,
+                               DiffEncoding = None):
+        obj =  {}
+        if NwIntfId != None :
+            obj['NwIntfId'] = int(NwIntfId)
+
+        if ModuleId != None :
+            obj['ModuleId'] = int(ModuleId)
+
+        if ClntIntfIdToTributary0Map != None :
+            obj['ClntIntfIdToTributary0Map'] = int(ClntIntfIdToTributary0Map)
+
+        if ClntIntfIdToTributary1Map != None :
+            obj['ClntIntfIdToTributary1Map'] = int(ClntIntfIdToTributary1Map)
+
+        if EnableRxPRBSChecker != None :
+            obj['EnableRxPRBSChecker'] = True if EnableRxPRBSChecker else False
+
+        if TxPulseShapeFltrRollOff != None :
+            obj['TxPulseShapeFltrRollOff'] = TxPulseShapeFltrRollOff
+
+        if TxPower != None :
+            obj['TxPower'] = TxPower
+
+        if RxPRBSInvertPattern != None :
+            obj['RxPRBSInvertPattern'] = True if RxPRBSInvertPattern else False
+
+        if EnableTxPRBS != None :
+            obj['EnableTxPRBS'] = True if EnableTxPRBS else False
+
+        if TxPRBSInvertPattern != None :
+            obj['TxPRBSInvertPattern'] = True if TxPRBSInvertPattern else False
+
+        if AdminState != None :
+            obj['AdminState'] = AdminState
+
+        if ChannelNumber != None :
+            obj['ChannelNumber'] = int(ChannelNumber)
+
+        if FECMode != None :
+            obj['FECMode'] = FECMode
+
+        if ModulationFmt != None :
+            obj['ModulationFmt'] = ModulationFmt
+
+        if TxPulseShapeFltrType != None :
+            obj['TxPulseShapeFltrType'] = TxPulseShapeFltrType
+
+        if RxPRBSPattern != None :
+            obj['RxPRBSPattern'] = RxPRBSPattern
+
+        if TxPRBSPattern != None :
+            obj['TxPRBSPattern'] = TxPRBSPattern
+
+        if DiffEncoding != None :
+            obj['DiffEncoding'] = True if DiffEncoding else False
+
+        reqUrl =  self.cfgUrlBase+'DWDMModuleNwIntf'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateDWDMModuleNwIntfById(self,
+                                    objectId,
+                                    ClntIntfIdToTributary0Map = None,
+                                    ClntIntfIdToTributary1Map = None,
+                                    EnableRxPRBSChecker = None,
+                                    TxPulseShapeFltrRollOff = None,
+                                    TxPower = None,
+                                    RxPRBSInvertPattern = None,
+                                    EnableTxPRBS = None,
+                                    TxPRBSInvertPattern = None,
+                                    AdminState = None,
+                                    ChannelNumber = None,
+                                    FECMode = None,
+                                    ModulationFmt = None,
+                                    TxPulseShapeFltrType = None,
+                                    RxPRBSPattern = None,
+                                    TxPRBSPattern = None,
+                                    DiffEncoding = None):
+        obj =  {'objectId': objectId }
+        if ClntIntfIdToTributary0Map !=  None:
+            obj['ClntIntfIdToTributary0Map'] = ClntIntfIdToTributary0Map
+
+        if ClntIntfIdToTributary1Map !=  None:
+            obj['ClntIntfIdToTributary1Map'] = ClntIntfIdToTributary1Map
+
+        if EnableRxPRBSChecker !=  None:
+            obj['EnableRxPRBSChecker'] = EnableRxPRBSChecker
+
+        if TxPulseShapeFltrRollOff !=  None:
+            obj['TxPulseShapeFltrRollOff'] = TxPulseShapeFltrRollOff
+
+        if TxPower !=  None:
+            obj['TxPower'] = TxPower
+
+        if RxPRBSInvertPattern !=  None:
+            obj['RxPRBSInvertPattern'] = RxPRBSInvertPattern
+
+        if EnableTxPRBS !=  None:
+            obj['EnableTxPRBS'] = EnableTxPRBS
+
+        if TxPRBSInvertPattern !=  None:
+            obj['TxPRBSInvertPattern'] = TxPRBSInvertPattern
+
+        if AdminState !=  None:
+            obj['AdminState'] = AdminState
+
+        if ChannelNumber !=  None:
+            obj['ChannelNumber'] = ChannelNumber
+
+        if FECMode !=  None:
+            obj['FECMode'] = FECMode
+
+        if ModulationFmt !=  None:
+            obj['ModulationFmt'] = ModulationFmt
+
+        if TxPulseShapeFltrType !=  None:
+            obj['TxPulseShapeFltrType'] = TxPulseShapeFltrType
+
+        if RxPRBSPattern !=  None:
+            obj['RxPRBSPattern'] = RxPRBSPattern
+
+        if TxPRBSPattern !=  None:
+            obj['TxPRBSPattern'] = TxPRBSPattern
+
+        if DiffEncoding !=  None:
+            obj['DiffEncoding'] = DiffEncoding
+
+        reqUrl =  self.cfgUrlBase+'DWDMModuleNwIntf'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteDWDMModuleNwIntf(self,
+                               NwIntfId,
+                               ModuleId):
+        obj =  { 
+                'NwIntfId' : NwIntfId,
+                'ModuleId' : ModuleId,
+                }
+        reqUrl =  self.cfgUrlBase+'DWDMModuleNwIntf'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteDWDMModuleNwIntfById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'DWDMModuleNwIntf'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getDWDMModuleNwIntf(self,
+                            NwIntfId,
+                            ModuleId):
+        obj =  { 
+                'NwIntfId' : int(NwIntfId),
+                'ModuleId' : int(ModuleId),
+                }
+        reqUrl =  self.cfgUrlBase + 'DWDMModuleNwIntf'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getDWDMModuleNwIntfById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'DWDMModuleNwIntf'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllDWDMModuleNwIntfs(self):
+        return self.getObjects( 'DWDMModuleNwIntf', self.cfgUrlBase)
+
+
+    """
     .. automethod :: createComponentLogging(self,
         :param string Module : Module name to set logging level Module name to set logging level
         :param string Level : Logging level Logging level
@@ -521,24 +789,6 @@ class FlexSwitch( object):
 
     def getAllFans(self):
         return self.getObjects( 'Fan', self.cfgUrlBase)
-
-
-    def getIPv4EventState(self,
-                          Index):
-        obj =  { 
-                'Index' : int(Index),
-                }
-        reqUrl =  self.stateUrlBase + 'IPv4Event'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    def getIPv4EventStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'IPv4Event'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllIPv4EventStates(self):
-        return self.getObjects( 'IPv4Event', self.stateUrlBase)
 
 
     """
@@ -739,6 +989,26 @@ class FlexSwitch( object):
         return self.getObjects( 'Psu', self.cfgUrlBase)
 
 
+    def getBGPv4NeighborState(self,
+                              IntfRef,
+                              NeighborAddress):
+        obj =  { 
+                'IntfRef' : IntfRef,
+                'NeighborAddress' : NeighborAddress,
+                }
+        reqUrl =  self.stateUrlBase + 'BGPv4Neighbor'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getBGPv4NeighborStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'BGPv4Neighbor'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllBGPv4NeighborStates(self):
+        return self.getObjects( 'BGPv4Neighbor', self.stateUrlBase)
+
+
     def getNDPEntryState(self,
                          IpAddr):
         obj =  { 
@@ -757,22 +1027,88 @@ class FlexSwitch( object):
         return self.getObjects( 'NDPEntry', self.stateUrlBase)
 
 
-    def getDaemonState(self,
-                       Name):
+    """
+    .. automethod :: createXponderGlobal(self,
+        :param uint8 XponderId : Xponder module identifier Xponder module identifier
+        :param string XponderDescription : User configurable description string for the xponder module User configurable description string for the xponder module
+        :param string XponderMode : Global operational mode of Xponder module Global operational mode of Xponder module
+
+	"""
+    def createXponderGlobal(self,
+                            XponderDescription='',
+                            XponderMode='OutOfService'):
         obj =  { 
-                'Name' : Name,
+                'XponderId' : int(0),
+                'XponderDescription' : XponderDescription,
+                'XponderMode' : XponderMode,
                 }
-        reqUrl =  self.stateUrlBase + 'Daemon'
+        reqUrl =  self.cfgUrlBase+'XponderGlobal'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateXponderGlobal(self,
+                            XponderId,
+                            XponderDescription = None,
+                            XponderMode = None):
+        obj =  {}
+        if XponderId != None :
+            obj['XponderId'] = int(XponderId)
+
+        if XponderDescription != None :
+            obj['XponderDescription'] = XponderDescription
+
+        if XponderMode != None :
+            obj['XponderMode'] = XponderMode
+
+        reqUrl =  self.cfgUrlBase+'XponderGlobal'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateXponderGlobalById(self,
+                                 objectId,
+                                 XponderDescription = None,
+                                 XponderMode = None):
+        obj =  {'objectId': objectId }
+        if XponderDescription !=  None:
+            obj['XponderDescription'] = XponderDescription
+
+        if XponderMode !=  None:
+            obj['XponderMode'] = XponderMode
+
+        reqUrl =  self.cfgUrlBase+'XponderGlobal'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteXponderGlobal(self,
+                            XponderId):
+        obj =  { 
+                'XponderId' : XponderId,
+                }
+        reqUrl =  self.cfgUrlBase+'XponderGlobal'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteXponderGlobalById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'XponderGlobal'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getXponderGlobal(self,
+                         XponderId):
+        obj =  { 
+                'XponderId' : int(XponderId),
+                }
+        reqUrl =  self.cfgUrlBase + 'XponderGlobal'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
-    def getDaemonStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'Daemon'+"/%s"%(objectId)
+    def getXponderGlobalById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'XponderGlobal'+"/%s"%(objectId)
         r = requests.get(reqUrl, data=None, headers=headers) 
         return r
 
-    def getAllDaemonStates(self):
-        return self.getObjects( 'Daemon', self.stateUrlBase)
+    def getAllXponderGlobals(self):
+        return self.getObjects( 'XponderGlobal', self.cfgUrlBase)
 
 
     """
@@ -1084,22 +1420,100 @@ class FlexSwitch( object):
         return self.getObjects( 'LaPortChannel', self.stateUrlBase)
 
 
-    def getIPv6IntfState(self,
-                         IntfRef):
+    """
+    .. automethod :: createDhcpGlobalConfig(self,
+        :param string DhcpConfigKey : DHCP global config DHCP global config
+        :param bool Enable : DHCP Server enable/disable control DEFAULT DHCP Server enable/disable control DEFAULT
+        :param uint32 DefaultLeaseTime : Default Lease Time in seconds DEFAULT Default Lease Time in seconds DEFAULT
+        :param uint32 MaxLeaseTime : Max Lease Time in seconds DEFAULT Max Lease Time in seconds DEFAULT
+
+	"""
+    def createDhcpGlobalConfig(self,
+                               DhcpConfigKey,
+                               Enable,
+                               DefaultLeaseTime,
+                               MaxLeaseTime):
         obj =  { 
-                'IntfRef' : IntfRef,
+                'DhcpConfigKey' : DhcpConfigKey,
+                'Enable' : True if Enable else False,
+                'DefaultLeaseTime' : int(DefaultLeaseTime),
+                'MaxLeaseTime' : int(MaxLeaseTime),
                 }
-        reqUrl =  self.stateUrlBase + 'IPv6Intf'
+        reqUrl =  self.cfgUrlBase+'DhcpGlobalConfig'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateDhcpGlobalConfig(self,
+                               DhcpConfigKey,
+                               Enable = None,
+                               DefaultLeaseTime = None,
+                               MaxLeaseTime = None):
+        obj =  {}
+        if DhcpConfigKey != None :
+            obj['DhcpConfigKey'] = DhcpConfigKey
+
+        if Enable != None :
+            obj['Enable'] = True if Enable else False
+
+        if DefaultLeaseTime != None :
+            obj['DefaultLeaseTime'] = int(DefaultLeaseTime)
+
+        if MaxLeaseTime != None :
+            obj['MaxLeaseTime'] = int(MaxLeaseTime)
+
+        reqUrl =  self.cfgUrlBase+'DhcpGlobalConfig'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateDhcpGlobalConfigById(self,
+                                    objectId,
+                                    Enable = None,
+                                    DefaultLeaseTime = None,
+                                    MaxLeaseTime = None):
+        obj =  {'objectId': objectId }
+        if Enable !=  None:
+            obj['Enable'] = Enable
+
+        if DefaultLeaseTime !=  None:
+            obj['DefaultLeaseTime'] = DefaultLeaseTime
+
+        if MaxLeaseTime !=  None:
+            obj['MaxLeaseTime'] = MaxLeaseTime
+
+        reqUrl =  self.cfgUrlBase+'DhcpGlobalConfig'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteDhcpGlobalConfig(self,
+                               DhcpConfigKey):
+        obj =  { 
+                'DhcpConfigKey' : DhcpConfigKey,
+                }
+        reqUrl =  self.cfgUrlBase+'DhcpGlobalConfig'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteDhcpGlobalConfigById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'DhcpGlobalConfig'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getDhcpGlobalConfig(self,
+                            DhcpConfigKey):
+        obj =  { 
+                'DhcpConfigKey' : DhcpConfigKey,
+                }
+        reqUrl =  self.cfgUrlBase + 'DhcpGlobalConfig'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
-    def getIPv6IntfStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'IPv6Intf'+"/%s"%(objectId)
+    def getDhcpGlobalConfigById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'DhcpGlobalConfig'+"/%s"%(objectId)
         r = requests.get(reqUrl, data=None, headers=headers) 
         return r
 
-    def getAllIPv6IntfStates(self):
-        return self.getObjects( 'IPv6Intf', self.stateUrlBase)
+    def getAllDhcpGlobalConfigs(self):
+        return self.getObjects( 'DhcpGlobalConfig', self.cfgUrlBase)
 
 
     """
@@ -1185,6 +1599,311 @@ class FlexSwitch( object):
 
     def getAllDhcpRelayIntfs(self):
         return self.getObjects( 'DhcpRelayIntf', self.cfgUrlBase)
+
+
+    """
+    .. automethod :: createBGPv4Neighbor(self,
+        :param string IntfRef : Interface of the BGP neighbor Interface of the BGP neighbor
+        :param string NeighborAddress : Address of the BGP neighbor Address of the BGP neighbor
+        :param string Description : Description of the BGP neighbor Description of the BGP neighbor
+        :param string PeerGroup : Peer group of the BGP neighbor Peer group of the BGP neighbor
+        :param string UpdateSource : Source IP to connect to the BGP neighbor Source IP to connect to the BGP neighbor
+        :param string AuthPassword : Password to connect to the BGP neighbor Password to connect to the BGP neighbor
+        :param bool BfdEnable : Enable/Disable BFD for the BGP neighbor Enable/Disable BFD for the BGP neighbor
+        :param uint8 MultiHopTTL : TTL for multi hop BGP neighbor TTL for multi hop BGP neighbor
+        :param uint32 LocalAS : Local AS of the BGP neighbor Local AS of the BGP neighbor
+        :param uint32 KeepaliveTime : Keep alive time for the BGP neighbor Keep alive time for the BGP neighbor
+        :param bool AddPathsRx : Receive additional paths from BGP neighbor Receive additional paths from BGP neighbor
+        :param bool RouteReflectorClient : Set/Clear BGP neighbor as a route reflector client Set/Clear BGP neighbor as a route reflector client
+        :param uint8 MaxPrefixesRestartTimer : Time in seconds to wait before we start BGP peer session when we receive max prefixes Time in seconds to wait before we start BGP peer session when we receive max prefixes
+        :param bool MultiHopEnable : Enable/Disable multi hop for BGP neighbor Enable/Disable multi hop for BGP neighbor
+        :param uint32 RouteReflectorClusterId : Cluster Id of the internal BGP neighbor route reflector client Cluster Id of the internal BGP neighbor route reflector client
+        :param bool MaxPrefixesDisconnect : Disconnect the BGP peer session when we receive the max prefixes from the neighbor Disconnect the BGP peer session when we receive the max prefixes from the neighbor
+        :param uint32 PeerAS : Peer AS of the BGP neighbor Peer AS of the BGP neighbor
+        :param uint8 AddPathsMaxTx : Max number of additional paths that can be transmitted to BGP neighbor Max number of additional paths that can be transmitted to BGP neighbor
+        :param uint32 MaxPrefixes : Maximum number of prefixes that can be received from the BGP neighbor Maximum number of prefixes that can be received from the BGP neighbor
+        :param uint8 MaxPrefixesThresholdPct : The percentage of maximum prefixes before we start logging The percentage of maximum prefixes before we start logging
+        :param string BfdSessionParam : Bfd session param name to be applied Bfd session param name to be applied
+        :param uint32 HoldTime : Hold time for the BGP neighbor Hold time for the BGP neighbor
+        :param uint32 ConnectRetryTime : Connect retry time to connect to BGP neighbor after disconnect Connect retry time to connect to BGP neighbor after disconnect
+
+	"""
+    def createBGPv4Neighbor(self,
+                            IntfRef,
+                            NeighborAddress,
+                            Description='',
+                            PeerGroup='',
+                            UpdateSource='',
+                            AuthPassword='',
+                            BfdEnable=False,
+                            MultiHopTTL=0,
+                            LocalAS=0,
+                            KeepaliveTime=60,
+                            AddPathsRx=False,
+                            RouteReflectorClient=False,
+                            MaxPrefixesRestartTimer=0,
+                            MultiHopEnable=False,
+                            RouteReflectorClusterId=0,
+                            MaxPrefixesDisconnect=False,
+                            PeerAS=0,
+                            AddPathsMaxTx=0,
+                            MaxPrefixes=0,
+                            MaxPrefixesThresholdPct=80,
+                            BfdSessionParam='default',
+                            HoldTime=180,
+                            ConnectRetryTime=60):
+        obj =  { 
+                'IntfRef' : IntfRef,
+                'NeighborAddress' : NeighborAddress,
+                'Description' : Description,
+                'PeerGroup' : PeerGroup,
+                'UpdateSource' : UpdateSource,
+                'AuthPassword' : AuthPassword,
+                'BfdEnable' : True if BfdEnable else False,
+                'MultiHopTTL' : int(MultiHopTTL),
+                'LocalAS' : int(LocalAS),
+                'KeepaliveTime' : int(KeepaliveTime),
+                'AddPathsRx' : True if AddPathsRx else False,
+                'RouteReflectorClient' : True if RouteReflectorClient else False,
+                'MaxPrefixesRestartTimer' : int(MaxPrefixesRestartTimer),
+                'MultiHopEnable' : True if MultiHopEnable else False,
+                'RouteReflectorClusterId' : int(RouteReflectorClusterId),
+                'MaxPrefixesDisconnect' : True if MaxPrefixesDisconnect else False,
+                'PeerAS' : int(PeerAS),
+                'AddPathsMaxTx' : int(AddPathsMaxTx),
+                'MaxPrefixes' : int(MaxPrefixes),
+                'MaxPrefixesThresholdPct' : int(MaxPrefixesThresholdPct),
+                'BfdSessionParam' : BfdSessionParam,
+                'HoldTime' : int(HoldTime),
+                'ConnectRetryTime' : int(ConnectRetryTime),
+                }
+        reqUrl =  self.cfgUrlBase+'BGPv4Neighbor'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateBGPv4Neighbor(self,
+                            IntfRef,
+                            NeighborAddress,
+                            Description = None,
+                            PeerGroup = None,
+                            UpdateSource = None,
+                            AuthPassword = None,
+                            BfdEnable = None,
+                            MultiHopTTL = None,
+                            LocalAS = None,
+                            KeepaliveTime = None,
+                            AddPathsRx = None,
+                            RouteReflectorClient = None,
+                            MaxPrefixesRestartTimer = None,
+                            MultiHopEnable = None,
+                            RouteReflectorClusterId = None,
+                            MaxPrefixesDisconnect = None,
+                            PeerAS = None,
+                            AddPathsMaxTx = None,
+                            MaxPrefixes = None,
+                            MaxPrefixesThresholdPct = None,
+                            BfdSessionParam = None,
+                            HoldTime = None,
+                            ConnectRetryTime = None):
+        obj =  {}
+        if IntfRef != None :
+            obj['IntfRef'] = IntfRef
+
+        if NeighborAddress != None :
+            obj['NeighborAddress'] = NeighborAddress
+
+        if Description != None :
+            obj['Description'] = Description
+
+        if PeerGroup != None :
+            obj['PeerGroup'] = PeerGroup
+
+        if UpdateSource != None :
+            obj['UpdateSource'] = UpdateSource
+
+        if AuthPassword != None :
+            obj['AuthPassword'] = AuthPassword
+
+        if BfdEnable != None :
+            obj['BfdEnable'] = True if BfdEnable else False
+
+        if MultiHopTTL != None :
+            obj['MultiHopTTL'] = int(MultiHopTTL)
+
+        if LocalAS != None :
+            obj['LocalAS'] = int(LocalAS)
+
+        if KeepaliveTime != None :
+            obj['KeepaliveTime'] = int(KeepaliveTime)
+
+        if AddPathsRx != None :
+            obj['AddPathsRx'] = True if AddPathsRx else False
+
+        if RouteReflectorClient != None :
+            obj['RouteReflectorClient'] = True if RouteReflectorClient else False
+
+        if MaxPrefixesRestartTimer != None :
+            obj['MaxPrefixesRestartTimer'] = int(MaxPrefixesRestartTimer)
+
+        if MultiHopEnable != None :
+            obj['MultiHopEnable'] = True if MultiHopEnable else False
+
+        if RouteReflectorClusterId != None :
+            obj['RouteReflectorClusterId'] = int(RouteReflectorClusterId)
+
+        if MaxPrefixesDisconnect != None :
+            obj['MaxPrefixesDisconnect'] = True if MaxPrefixesDisconnect else False
+
+        if PeerAS != None :
+            obj['PeerAS'] = int(PeerAS)
+
+        if AddPathsMaxTx != None :
+            obj['AddPathsMaxTx'] = int(AddPathsMaxTx)
+
+        if MaxPrefixes != None :
+            obj['MaxPrefixes'] = int(MaxPrefixes)
+
+        if MaxPrefixesThresholdPct != None :
+            obj['MaxPrefixesThresholdPct'] = int(MaxPrefixesThresholdPct)
+
+        if BfdSessionParam != None :
+            obj['BfdSessionParam'] = BfdSessionParam
+
+        if HoldTime != None :
+            obj['HoldTime'] = int(HoldTime)
+
+        if ConnectRetryTime != None :
+            obj['ConnectRetryTime'] = int(ConnectRetryTime)
+
+        reqUrl =  self.cfgUrlBase+'BGPv4Neighbor'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateBGPv4NeighborById(self,
+                                 objectId,
+                                 Description = None,
+                                 PeerGroup = None,
+                                 UpdateSource = None,
+                                 AuthPassword = None,
+                                 BfdEnable = None,
+                                 MultiHopTTL = None,
+                                 LocalAS = None,
+                                 KeepaliveTime = None,
+                                 AddPathsRx = None,
+                                 RouteReflectorClient = None,
+                                 MaxPrefixesRestartTimer = None,
+                                 MultiHopEnable = None,
+                                 RouteReflectorClusterId = None,
+                                 MaxPrefixesDisconnect = None,
+                                 PeerAS = None,
+                                 AddPathsMaxTx = None,
+                                 MaxPrefixes = None,
+                                 MaxPrefixesThresholdPct = None,
+                                 BfdSessionParam = None,
+                                 HoldTime = None,
+                                 ConnectRetryTime = None):
+        obj =  {'objectId': objectId }
+        if Description !=  None:
+            obj['Description'] = Description
+
+        if PeerGroup !=  None:
+            obj['PeerGroup'] = PeerGroup
+
+        if UpdateSource !=  None:
+            obj['UpdateSource'] = UpdateSource
+
+        if AuthPassword !=  None:
+            obj['AuthPassword'] = AuthPassword
+
+        if BfdEnable !=  None:
+            obj['BfdEnable'] = BfdEnable
+
+        if MultiHopTTL !=  None:
+            obj['MultiHopTTL'] = MultiHopTTL
+
+        if LocalAS !=  None:
+            obj['LocalAS'] = LocalAS
+
+        if KeepaliveTime !=  None:
+            obj['KeepaliveTime'] = KeepaliveTime
+
+        if AddPathsRx !=  None:
+            obj['AddPathsRx'] = AddPathsRx
+
+        if RouteReflectorClient !=  None:
+            obj['RouteReflectorClient'] = RouteReflectorClient
+
+        if MaxPrefixesRestartTimer !=  None:
+            obj['MaxPrefixesRestartTimer'] = MaxPrefixesRestartTimer
+
+        if MultiHopEnable !=  None:
+            obj['MultiHopEnable'] = MultiHopEnable
+
+        if RouteReflectorClusterId !=  None:
+            obj['RouteReflectorClusterId'] = RouteReflectorClusterId
+
+        if MaxPrefixesDisconnect !=  None:
+            obj['MaxPrefixesDisconnect'] = MaxPrefixesDisconnect
+
+        if PeerAS !=  None:
+            obj['PeerAS'] = PeerAS
+
+        if AddPathsMaxTx !=  None:
+            obj['AddPathsMaxTx'] = AddPathsMaxTx
+
+        if MaxPrefixes !=  None:
+            obj['MaxPrefixes'] = MaxPrefixes
+
+        if MaxPrefixesThresholdPct !=  None:
+            obj['MaxPrefixesThresholdPct'] = MaxPrefixesThresholdPct
+
+        if BfdSessionParam !=  None:
+            obj['BfdSessionParam'] = BfdSessionParam
+
+        if HoldTime !=  None:
+            obj['HoldTime'] = HoldTime
+
+        if ConnectRetryTime !=  None:
+            obj['ConnectRetryTime'] = ConnectRetryTime
+
+        reqUrl =  self.cfgUrlBase+'BGPv4Neighbor'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteBGPv4Neighbor(self,
+                            IntfRef,
+                            NeighborAddress):
+        obj =  { 
+                'IntfRef' : IntfRef,
+                'NeighborAddress' : NeighborAddress,
+                }
+        reqUrl =  self.cfgUrlBase+'BGPv4Neighbor'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteBGPv4NeighborById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'BGPv4Neighbor'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getBGPv4Neighbor(self,
+                         IntfRef,
+                         NeighborAddress):
+        obj =  { 
+                'IntfRef' : IntfRef,
+                'NeighborAddress' : NeighborAddress,
+                }
+        reqUrl =  self.cfgUrlBase + 'BGPv4Neighbor'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getBGPv4NeighborById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'BGPv4Neighbor'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllBGPv4Neighbors(self):
+        return self.getObjects( 'BGPv4Neighbor', self.cfgUrlBase)
 
 
     def getStpPortState(self,
@@ -1278,6 +1997,101 @@ class FlexSwitch( object):
 
     def getAllFMgrGlobals(self):
         return self.getObjects( 'FMgrGlobal', self.cfgUrlBase)
+
+
+    """
+    .. automethod :: createNotifierEnable(self,
+        :param string Vrf : Vrf name Vrf name
+        :param bool AlarmEnable : Enable Notifier Enable Notifier
+        :param bool FaultEnable : Enable Notifier Enable Notifier
+        :param bool EventEnable : Enable Notifier Enable Notifier
+
+	"""
+    def createNotifierEnable(self,
+                             AlarmEnable=True,
+                             FaultEnable=True,
+                             EventEnable=True):
+        obj =  { 
+                'Vrf' : 'default',
+                'AlarmEnable' : True if AlarmEnable else False,
+                'FaultEnable' : True if FaultEnable else False,
+                'EventEnable' : True if EventEnable else False,
+                }
+        reqUrl =  self.cfgUrlBase+'NotifierEnable'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateNotifierEnable(self,
+                             Vrf,
+                             AlarmEnable = None,
+                             FaultEnable = None,
+                             EventEnable = None):
+        obj =  {}
+        if Vrf != None :
+            obj['Vrf'] = Vrf
+
+        if AlarmEnable != None :
+            obj['AlarmEnable'] = True if AlarmEnable else False
+
+        if FaultEnable != None :
+            obj['FaultEnable'] = True if FaultEnable else False
+
+        if EventEnable != None :
+            obj['EventEnable'] = True if EventEnable else False
+
+        reqUrl =  self.cfgUrlBase+'NotifierEnable'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateNotifierEnableById(self,
+                                  objectId,
+                                  AlarmEnable = None,
+                                  FaultEnable = None,
+                                  EventEnable = None):
+        obj =  {'objectId': objectId }
+        if AlarmEnable !=  None:
+            obj['AlarmEnable'] = AlarmEnable
+
+        if FaultEnable !=  None:
+            obj['FaultEnable'] = FaultEnable
+
+        if EventEnable !=  None:
+            obj['EventEnable'] = EventEnable
+
+        reqUrl =  self.cfgUrlBase+'NotifierEnable'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteNotifierEnable(self,
+                             Vrf):
+        obj =  { 
+                'Vrf' : Vrf,
+                }
+        reqUrl =  self.cfgUrlBase+'NotifierEnable'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteNotifierEnableById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'NotifierEnable'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getNotifierEnable(self,
+                          Vrf):
+        obj =  { 
+                'Vrf' : Vrf,
+                }
+        reqUrl =  self.cfgUrlBase + 'NotifierEnable'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getNotifierEnableById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'NotifierEnable'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllNotifierEnables(self):
+        return self.getObjects( 'NotifierEnable', self.cfgUrlBase)
 
 
     """
@@ -1640,24 +2454,40 @@ class FlexSwitch( object):
         return self.getObjects( 'BfdSessionParam', self.cfgUrlBase)
 
 
-    def getOspfNbrEntryState(self,
-                             NbrIpAddr,
-                             NbrAddressLessIndex):
+    def getBGPPolicyStmtState(self,
+                              Name):
         obj =  { 
-                'NbrIpAddr' : NbrIpAddr,
-                'NbrAddressLessIndex' : int(NbrAddressLessIndex),
+                'Name' : Name,
                 }
-        reqUrl =  self.stateUrlBase + 'OspfNbrEntry'
+        reqUrl =  self.stateUrlBase + 'BGPPolicyStmt'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
-    def getOspfNbrEntryStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'OspfNbrEntry'+"/%s"%(objectId)
+    def getBGPPolicyStmtStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'BGPPolicyStmt'+"/%s"%(objectId)
         r = requests.get(reqUrl, data=None, headers=headers) 
         return r
 
-    def getAllOspfNbrEntryStates(self):
-        return self.getObjects( 'OspfNbrEntry', self.stateUrlBase)
+    def getAllBGPPolicyStmtStates(self):
+        return self.getObjects( 'BGPPolicyStmt', self.stateUrlBase)
+
+
+    def getDWDMModuleState(self,
+                           ModuleId):
+        obj =  { 
+                'ModuleId' : int(ModuleId),
+                }
+        reqUrl =  self.stateUrlBase + 'DWDMModule'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getDWDMModuleStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'DWDMModule'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllDWDMModuleStates(self):
+        return self.getObjects( 'DWDMModule', self.stateUrlBase)
 
 
     def getDhcpRelayIntfState(self,
@@ -2320,199 +3150,42 @@ class FlexSwitch( object):
         return self.getObjects( 'OspfVirtNbrEntry', self.stateUrlBase)
 
 
-    """
-    .. automethod :: createStpPort(self,
-        :param int32 BrgIfIndex : The value of the instance of the ifIndex object The value of the instance of the ifIndex object
-        :param int32 IfIndex : The port number of the port for which this entry contains Spanning Tree Protocol management information. The port number of the port for which this entry contains Spanning Tree Protocol management information.
-        :param int32 BpduGuardInterval : The interval time to which a port will try to recover from BPDU Guard err-disable state.  If no BPDU frames are detected after this timeout plus 3 Times Hello Time then the port will transition back to Up state.  If condition is cleared manually then this operation is ignored.  If set to zero then timer is inactive and recovery is based on manual intervention. The interval time to which a port will try to recover from BPDU Guard err-disable state.  If no BPDU frames are detected after this timeout plus 3 Times Hello Time then the port will transition back to Up state.  If condition is cleared manually then this operation is ignored.  If set to zero then timer is inactive and recovery is based on manual intervention.
-        :param int32 PathCost : The contribution of this port to the path cost of paths towards the spanning tree root which include this port.  802.1D-1998 recommends that the default value of this parameter be in inverse proportion to the speed of the attached LAN.  New implementations should support PathCost32. If the port path costs exceeds the maximum value of this object then this object should report the maximum value The contribution of this port to the path cost of paths towards the spanning tree root which include this port.  802.1D-1998 recommends that the default value of this parameter be in inverse proportion to the speed of the attached LAN.  New implementations should support PathCost32. If the port path costs exceeds the maximum value of this object then this object should report the maximum value
-        :param int32 Priority : The value of the priority field that is contained in the first (in network byte order) octet of the (2 octet long) Port ID.  The other octet of the Port ID is given by the value of StpPort. On bridges supporting IEEE 802.1t or IEEE 802.1w The value of the priority field that is contained in the first (in network byte order) octet of the (2 octet long) Port ID.  The other octet of the Port ID is given by the value of StpPort. On bridges supporting IEEE 802.1t or IEEE 802.1w
-        :param int32 AdminEdgePort : The administrative value of the Edge Port parameter.  A value of true(1) indicates that this port should be assumed as an edge-port The administrative value of the Edge Port parameter.  A value of true(1) indicates that this port should be assumed as an edge-port
-        :param int32 Enable : The enabled/disabled status of the port. The enabled/disabled status of the port.
-        :param int32 ProtocolMigration : When operating in RSTP (version 2) mode When operating in RSTP (version 2) mode
-        :param int32 BridgeAssurance : When enabled BPDUs will be transmitted out of all stp ports regardless of state.  When an stp port fails to receive a BPDU the port should  transition to a Blocked state.  Upon reception of BDPU after shutdown  should transition port into the bridge. When enabled BPDUs will be transmitted out of all stp ports regardless of state.  When an stp port fails to receive a BPDU the port should  transition to a Blocked state.  Upon reception of BDPU after shutdown  should transition port into the bridge.
-        :param int32 BpduGuard : A Port as OperEdge which receives BPDU with BpduGuard enabled will shut the port down. A Port as OperEdge which receives BPDU with BpduGuard enabled will shut the port down.
-        :param int32 AdminPointToPoint : The administrative point-to-point status of the LAN segment attached to this port The administrative point-to-point status of the LAN segment attached to this port
-        :param int32 AdminPathCost : The administratively assigned value for the contribution of this port to the path cost of paths toward the spanning tree root.  Writing a value of '0' assigns the automatically calculated default Path Cost value to the port.  If the default Path Cost is being used The administratively assigned value for the contribution of this port to the path cost of paths toward the spanning tree root.  Writing a value of '0' assigns the automatically calculated default Path Cost value to the port.  If the default Path Cost is being used
-        :param int32 PathCost32 : The contribution of this port to the path cost of paths towards the spanning tree root which include this port.  802.1D-1998 recommends that the default value of this parameter be in inverse proportion to the speed of the attached LAN.  This object replaces PathCost to support IEEE 802.1t. Value of 1 will force node to auto discover the value        based on the ports capabilities. The contribution of this port to the path cost of paths towards the spanning tree root which include this port.  802.1D-1998 recommends that the default value of this parameter be in inverse proportion to the speed of the attached LAN.  This object replaces PathCost to support IEEE 802.1t. Value of 1 will force node to auto discover the value        based on the ports capabilities.
-
-	"""
-    def createStpPort(self,
-                      BrgIfIndex,
-                      IfIndex,
-                      BpduGuardInterval,
-                      PathCost=1,
-                      Priority=128,
-                      AdminEdgePort=2,
-                      Enable=2,
-                      ProtocolMigration=1,
-                      BridgeAssurance=2,
-                      BpduGuard=2,
-                      AdminPointToPoint=2,
-                      AdminPathCost=200000,
-                      PathCost32=1):
+    def getDWDMModuleClntIntfState(self,
+                                   ClntIntfId,
+                                   ModuleId):
         obj =  { 
-                'BrgIfIndex' : int(BrgIfIndex),
-                'IfIndex' : int(IfIndex),
-                'BpduGuardInterval' : int(BpduGuardInterval),
-                'PathCost' : int(PathCost),
-                'Priority' : int(Priority),
-                'AdminEdgePort' : int(AdminEdgePort),
-                'Enable' : int(Enable),
-                'ProtocolMigration' : int(ProtocolMigration),
-                'BridgeAssurance' : int(BridgeAssurance),
-                'BpduGuard' : int(BpduGuard),
-                'AdminPointToPoint' : int(AdminPointToPoint),
-                'AdminPathCost' : int(AdminPathCost),
-                'PathCost32' : int(PathCost32),
+                'ClntIntfId' : int(ClntIntfId),
+                'ModuleId' : int(ModuleId),
                 }
-        reqUrl =  self.cfgUrlBase+'StpPort'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    def updateStpPort(self,
-                      BrgIfIndex,
-                      IfIndex,
-                      BpduGuardInterval = None,
-                      PathCost = None,
-                      Priority = None,
-                      AdminEdgePort = None,
-                      Enable = None,
-                      ProtocolMigration = None,
-                      BridgeAssurance = None,
-                      BpduGuard = None,
-                      AdminPointToPoint = None,
-                      AdminPathCost = None,
-                      PathCost32 = None):
-        obj =  {}
-        if BrgIfIndex != None :
-            obj['BrgIfIndex'] = int(BrgIfIndex)
-
-        if IfIndex != None :
-            obj['IfIndex'] = int(IfIndex)
-
-        if BpduGuardInterval != None :
-            obj['BpduGuardInterval'] = int(BpduGuardInterval)
-
-        if PathCost != None :
-            obj['PathCost'] = int(PathCost)
-
-        if Priority != None :
-            obj['Priority'] = int(Priority)
-
-        if AdminEdgePort != None :
-            obj['AdminEdgePort'] = int(AdminEdgePort)
-
-        if Enable != None :
-            obj['Enable'] = int(Enable)
-
-        if ProtocolMigration != None :
-            obj['ProtocolMigration'] = int(ProtocolMigration)
-
-        if BridgeAssurance != None :
-            obj['BridgeAssurance'] = int(BridgeAssurance)
-
-        if BpduGuard != None :
-            obj['BpduGuard'] = int(BpduGuard)
-
-        if AdminPointToPoint != None :
-            obj['AdminPointToPoint'] = int(AdminPointToPoint)
-
-        if AdminPathCost != None :
-            obj['AdminPathCost'] = int(AdminPathCost)
-
-        if PathCost32 != None :
-            obj['PathCost32'] = int(PathCost32)
-
-        reqUrl =  self.cfgUrlBase+'StpPort'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    def updateStpPortById(self,
-                           objectId,
-                           BpduGuardInterval = None,
-                           PathCost = None,
-                           Priority = None,
-                           AdminEdgePort = None,
-                           Enable = None,
-                           ProtocolMigration = None,
-                           BridgeAssurance = None,
-                           BpduGuard = None,
-                           AdminPointToPoint = None,
-                           AdminPathCost = None,
-                           PathCost32 = None):
-        obj =  {'objectId': objectId }
-        if BpduGuardInterval !=  None:
-            obj['BpduGuardInterval'] = BpduGuardInterval
-
-        if PathCost !=  None:
-            obj['PathCost'] = PathCost
-
-        if Priority !=  None:
-            obj['Priority'] = Priority
-
-        if AdminEdgePort !=  None:
-            obj['AdminEdgePort'] = AdminEdgePort
-
-        if Enable !=  None:
-            obj['Enable'] = Enable
-
-        if ProtocolMigration !=  None:
-            obj['ProtocolMigration'] = ProtocolMigration
-
-        if BridgeAssurance !=  None:
-            obj['BridgeAssurance'] = BridgeAssurance
-
-        if BpduGuard !=  None:
-            obj['BpduGuard'] = BpduGuard
-
-        if AdminPointToPoint !=  None:
-            obj['AdminPointToPoint'] = AdminPointToPoint
-
-        if AdminPathCost !=  None:
-            obj['AdminPathCost'] = AdminPathCost
-
-        if PathCost32 !=  None:
-            obj['PathCost32'] = PathCost32
-
-        reqUrl =  self.cfgUrlBase+'StpPort'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    def deleteStpPort(self,
-                      BrgIfIndex,
-                      IfIndex):
-        obj =  { 
-                'BrgIfIndex' : BrgIfIndex,
-                'IfIndex' : IfIndex,
-                }
-        reqUrl =  self.cfgUrlBase+'StpPort'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    def deleteStpPortById(self, objectId ):
-        reqUrl =  self.cfgUrlBase+'StpPort'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getStpPort(self,
-                   BrgIfIndex,
-                   IfIndex):
-        obj =  { 
-                'BrgIfIndex' : int(BrgIfIndex),
-                'IfIndex' : int(IfIndex),
-                }
-        reqUrl =  self.cfgUrlBase + 'StpPort'
+        reqUrl =  self.stateUrlBase + 'DWDMModuleClntIntf'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
-    def getStpPortById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'StpPort'+"/%s"%(objectId)
+    def getDWDMModuleClntIntfStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'DWDMModuleClntIntf'+"/%s"%(objectId)
         r = requests.get(reqUrl, data=None, headers=headers) 
         return r
 
-    def getAllStpPorts(self):
-        return self.getObjects( 'StpPort', self.cfgUrlBase)
+    def getAllDWDMModuleClntIntfStates(self):
+        return self.getObjects( 'DWDMModuleClntIntf', self.stateUrlBase)
+
+
+    def getRouteStatState(self,
+                          Vrf):
+        obj =  { 
+                'Vrf' : Vrf,
+                }
+        reqUrl =  self.stateUrlBase + 'RouteStat'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getRouteStatStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'RouteStat'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllRouteStatStates(self):
+        return self.getObjects( 'RouteStat', self.stateUrlBase)
 
 
     def getRouteDistanceState(self,
@@ -2607,6 +3280,26 @@ class FlexSwitch( object):
         return self.getObjects( 'LogicalIntf', self.cfgUrlBase)
 
 
+    def getBGPv6NeighborState(self,
+                              IntfRef,
+                              NeighborAddress):
+        obj =  { 
+                'IntfRef' : IntfRef,
+                'NeighborAddress' : NeighborAddress,
+                }
+        reqUrl =  self.stateUrlBase + 'BGPv6Neighbor'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getBGPv6NeighborStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'BGPv6Neighbor'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllBGPv6NeighborStates(self):
+        return self.getObjects( 'BGPv6Neighbor', self.stateUrlBase)
+
+
     def getMacTableEntryState(self,
                               MacAddr):
         obj =  { 
@@ -2625,265 +3318,24 @@ class FlexSwitch( object):
         return self.getObjects( 'MacTableEntry', self.stateUrlBase)
 
 
-    """
-    .. automethod :: createBGPPeerGroup(self,
-        :param string Name : Name of the BGP peer group Name of the BGP peer group
-        :param string UpdateSource : Source IP to connect to the BGP neighbor Source IP to connect to the BGP neighbor
-        :param string AuthPassword : Password to connect to the BGP neighbor Password to connect to the BGP neighbor
-        :param string Description : Description of the BGP neighbor Description of the BGP neighbor
-        :param uint8 MaxPrefixesRestartTimer : Time to wait before we start BGP peer session when we receive max prefixes Time to wait before we start BGP peer session when we receive max prefixes
-        :param bool RouteReflectorClient : Set/Clear BGP neighbor as a route reflector client Set/Clear BGP neighbor as a route reflector client
-        :param uint8 MultiHopTTL : TTL for multi hop BGP neighbor TTL for multi hop BGP neighbor
-        :param bool MaxPrefixesDisconnect : Disconnect the BGP peer session when we receive the max prefixes from the neighbor Disconnect the BGP peer session when we receive the max prefixes from the neighbor
-        :param uint32 LocalAS : Local AS of the BGP neighbor Local AS of the BGP neighbor
-        :param uint32 KeepaliveTime : Keep alive time for the BGP neighbor Keep alive time for the BGP neighbor
-        :param uint32 RouteReflectorClusterId : Cluster Id of the internal BGP neighbor route reflector client Cluster Id of the internal BGP neighbor route reflector client
-        :param uint32 MaxPrefixes : Maximum number of prefixes that can be received from the BGP neighbor Maximum number of prefixes that can be received from the BGP neighbor
-        :param uint8 AddPathsMaxTx : Max number of additional paths that can be transmitted to BGP neighbor Max number of additional paths that can be transmitted to BGP neighbor
-        :param bool MultiHopEnable : Enable/Disable multi hop for BGP neighbor Enable/Disable multi hop for BGP neighbor
-        :param bool AddPathsRx : Receive additional paths from BGP neighbor Receive additional paths from BGP neighbor
-        :param uint8 MaxPrefixesThresholdPct : The percentage of maximum prefixes before we start logging The percentage of maximum prefixes before we start logging
-        :param uint32 HoldTime : Hold time for the BGP neighbor Hold time for the BGP neighbor
-        :param uint32 PeerAS : Peer AS of the BGP neighbor Peer AS of the BGP neighbor
-        :param uint32 ConnectRetryTime : Connect retry time to connect to BGP neighbor after disconnect Connect retry time to connect to BGP neighbor after disconnect
-
-	"""
-    def createBGPPeerGroup(self,
-                           Name,
-                           UpdateSource='',
-                           AuthPassword='',
-                           Description='',
-                           MaxPrefixesRestartTimer=0,
-                           RouteReflectorClient=False,
-                           MultiHopTTL=0,
-                           MaxPrefixesDisconnect=False,
-                           LocalAS=0,
-                           KeepaliveTime=60,
-                           RouteReflectorClusterId=0,
-                           MaxPrefixes=0,
-                           AddPathsMaxTx=0,
-                           MultiHopEnable=False,
-                           AddPathsRx=False,
-                           MaxPrefixesThresholdPct=0,
-                           HoldTime=180,
-                           PeerAS=0,
-                           ConnectRetryTime=60):
+    def getOspfNbrEntryState(self,
+                             NbrIpAddr,
+                             NbrAddressLessIndex):
         obj =  { 
-                'Name' : Name,
-                'UpdateSource' : UpdateSource,
-                'AuthPassword' : AuthPassword,
-                'Description' : Description,
-                'MaxPrefixesRestartTimer' : int(MaxPrefixesRestartTimer),
-                'RouteReflectorClient' : True if RouteReflectorClient else False,
-                'MultiHopTTL' : int(MultiHopTTL),
-                'MaxPrefixesDisconnect' : True if MaxPrefixesDisconnect else False,
-                'LocalAS' : int(LocalAS),
-                'KeepaliveTime' : int(KeepaliveTime),
-                'RouteReflectorClusterId' : int(RouteReflectorClusterId),
-                'MaxPrefixes' : int(MaxPrefixes),
-                'AddPathsMaxTx' : int(AddPathsMaxTx),
-                'MultiHopEnable' : True if MultiHopEnable else False,
-                'AddPathsRx' : True if AddPathsRx else False,
-                'MaxPrefixesThresholdPct' : int(MaxPrefixesThresholdPct),
-                'HoldTime' : int(HoldTime),
-                'PeerAS' : int(PeerAS),
-                'ConnectRetryTime' : int(ConnectRetryTime),
+                'NbrIpAddr' : NbrIpAddr,
+                'NbrAddressLessIndex' : int(NbrAddressLessIndex),
                 }
-        reqUrl =  self.cfgUrlBase+'BGPPeerGroup'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    def updateBGPPeerGroup(self,
-                           Name,
-                           UpdateSource = None,
-                           AuthPassword = None,
-                           Description = None,
-                           MaxPrefixesRestartTimer = None,
-                           RouteReflectorClient = None,
-                           MultiHopTTL = None,
-                           MaxPrefixesDisconnect = None,
-                           LocalAS = None,
-                           KeepaliveTime = None,
-                           RouteReflectorClusterId = None,
-                           MaxPrefixes = None,
-                           AddPathsMaxTx = None,
-                           MultiHopEnable = None,
-                           AddPathsRx = None,
-                           MaxPrefixesThresholdPct = None,
-                           HoldTime = None,
-                           PeerAS = None,
-                           ConnectRetryTime = None):
-        obj =  {}
-        if Name != None :
-            obj['Name'] = Name
-
-        if UpdateSource != None :
-            obj['UpdateSource'] = UpdateSource
-
-        if AuthPassword != None :
-            obj['AuthPassword'] = AuthPassword
-
-        if Description != None :
-            obj['Description'] = Description
-
-        if MaxPrefixesRestartTimer != None :
-            obj['MaxPrefixesRestartTimer'] = int(MaxPrefixesRestartTimer)
-
-        if RouteReflectorClient != None :
-            obj['RouteReflectorClient'] = True if RouteReflectorClient else False
-
-        if MultiHopTTL != None :
-            obj['MultiHopTTL'] = int(MultiHopTTL)
-
-        if MaxPrefixesDisconnect != None :
-            obj['MaxPrefixesDisconnect'] = True if MaxPrefixesDisconnect else False
-
-        if LocalAS != None :
-            obj['LocalAS'] = int(LocalAS)
-
-        if KeepaliveTime != None :
-            obj['KeepaliveTime'] = int(KeepaliveTime)
-
-        if RouteReflectorClusterId != None :
-            obj['RouteReflectorClusterId'] = int(RouteReflectorClusterId)
-
-        if MaxPrefixes != None :
-            obj['MaxPrefixes'] = int(MaxPrefixes)
-
-        if AddPathsMaxTx != None :
-            obj['AddPathsMaxTx'] = int(AddPathsMaxTx)
-
-        if MultiHopEnable != None :
-            obj['MultiHopEnable'] = True if MultiHopEnable else False
-
-        if AddPathsRx != None :
-            obj['AddPathsRx'] = True if AddPathsRx else False
-
-        if MaxPrefixesThresholdPct != None :
-            obj['MaxPrefixesThresholdPct'] = int(MaxPrefixesThresholdPct)
-
-        if HoldTime != None :
-            obj['HoldTime'] = int(HoldTime)
-
-        if PeerAS != None :
-            obj['PeerAS'] = int(PeerAS)
-
-        if ConnectRetryTime != None :
-            obj['ConnectRetryTime'] = int(ConnectRetryTime)
-
-        reqUrl =  self.cfgUrlBase+'BGPPeerGroup'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    def updateBGPPeerGroupById(self,
-                                objectId,
-                                UpdateSource = None,
-                                AuthPassword = None,
-                                Description = None,
-                                MaxPrefixesRestartTimer = None,
-                                RouteReflectorClient = None,
-                                MultiHopTTL = None,
-                                MaxPrefixesDisconnect = None,
-                                LocalAS = None,
-                                KeepaliveTime = None,
-                                RouteReflectorClusterId = None,
-                                MaxPrefixes = None,
-                                AddPathsMaxTx = None,
-                                MultiHopEnable = None,
-                                AddPathsRx = None,
-                                MaxPrefixesThresholdPct = None,
-                                HoldTime = None,
-                                PeerAS = None,
-                                ConnectRetryTime = None):
-        obj =  {'objectId': objectId }
-        if UpdateSource !=  None:
-            obj['UpdateSource'] = UpdateSource
-
-        if AuthPassword !=  None:
-            obj['AuthPassword'] = AuthPassword
-
-        if Description !=  None:
-            obj['Description'] = Description
-
-        if MaxPrefixesRestartTimer !=  None:
-            obj['MaxPrefixesRestartTimer'] = MaxPrefixesRestartTimer
-
-        if RouteReflectorClient !=  None:
-            obj['RouteReflectorClient'] = RouteReflectorClient
-
-        if MultiHopTTL !=  None:
-            obj['MultiHopTTL'] = MultiHopTTL
-
-        if MaxPrefixesDisconnect !=  None:
-            obj['MaxPrefixesDisconnect'] = MaxPrefixesDisconnect
-
-        if LocalAS !=  None:
-            obj['LocalAS'] = LocalAS
-
-        if KeepaliveTime !=  None:
-            obj['KeepaliveTime'] = KeepaliveTime
-
-        if RouteReflectorClusterId !=  None:
-            obj['RouteReflectorClusterId'] = RouteReflectorClusterId
-
-        if MaxPrefixes !=  None:
-            obj['MaxPrefixes'] = MaxPrefixes
-
-        if AddPathsMaxTx !=  None:
-            obj['AddPathsMaxTx'] = AddPathsMaxTx
-
-        if MultiHopEnable !=  None:
-            obj['MultiHopEnable'] = MultiHopEnable
-
-        if AddPathsRx !=  None:
-            obj['AddPathsRx'] = AddPathsRx
-
-        if MaxPrefixesThresholdPct !=  None:
-            obj['MaxPrefixesThresholdPct'] = MaxPrefixesThresholdPct
-
-        if HoldTime !=  None:
-            obj['HoldTime'] = HoldTime
-
-        if PeerAS !=  None:
-            obj['PeerAS'] = PeerAS
-
-        if ConnectRetryTime !=  None:
-            obj['ConnectRetryTime'] = ConnectRetryTime
-
-        reqUrl =  self.cfgUrlBase+'BGPPeerGroup'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    def deleteBGPPeerGroup(self,
-                           Name):
-        obj =  { 
-                'Name' : Name,
-                }
-        reqUrl =  self.cfgUrlBase+'BGPPeerGroup'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    def deleteBGPPeerGroupById(self, objectId ):
-        reqUrl =  self.cfgUrlBase+'BGPPeerGroup'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getBGPPeerGroup(self,
-                        Name):
-        obj =  { 
-                'Name' : Name,
-                }
-        reqUrl =  self.cfgUrlBase + 'BGPPeerGroup'
+        reqUrl =  self.stateUrlBase + 'OspfNbrEntry'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
-    def getBGPPeerGroupById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BGPPeerGroup'+"/%s"%(objectId)
+    def getOspfNbrEntryStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'OspfNbrEntry'+"/%s"%(objectId)
         r = requests.get(reqUrl, data=None, headers=headers) 
         return r
 
-    def getAllBGPPeerGroups(self):
-        return self.getObjects( 'BGPPeerGroup', self.cfgUrlBase)
+    def getAllOspfNbrEntryStates(self):
+        return self.getObjects( 'OspfNbrEntry', self.stateUrlBase)
 
 
     """
@@ -3076,6 +3528,32 @@ class FlexSwitch( object):
         return self.getObjects( 'BfdGlobal', self.cfgUrlBase)
 
 
+    def getAlarmState(self,
+                      EventId,
+                      EventName,
+                      SrcObjName,
+                      OwnerName,
+                      OwnerId):
+        obj =  { 
+                'EventId' : int(EventId),
+                'EventName' : EventName,
+                'SrcObjName' : SrcObjName,
+                'OwnerName' : OwnerName,
+                'OwnerId' : int(OwnerId),
+                }
+        reqUrl =  self.stateUrlBase + 'Alarm'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getAlarmStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'Alarm'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllAlarmStates(self):
+        return self.getObjects( 'Alarm', self.stateUrlBase)
+
+
     """
     .. automethod :: createBGPPolicyStmt(self,
         :param string Name : Name of the BGP policy statement Name of the BGP policy statement
@@ -3245,22 +3723,265 @@ class FlexSwitch( object):
         return self.getObjects( 'ArpGlobal', self.cfgUrlBase)
 
 
-    def getBGPPolicyStmtState(self,
-                              Name):
+    """
+    .. automethod :: createBGPv4PeerGroup(self,
+        :param string Name : Name of the BGP peer group Name of the BGP peer group
+        :param string UpdateSource : Source IP to connect to the BGP neighbor Source IP to connect to the BGP neighbor
+        :param string AuthPassword : Password to connect to the BGP neighbor Password to connect to the BGP neighbor
+        :param string Description : Description of the BGP neighbor Description of the BGP neighbor
+        :param uint8 MaxPrefixesRestartTimer : Time to wait before we start BGP peer session when we receive max prefixes Time to wait before we start BGP peer session when we receive max prefixes
+        :param bool RouteReflectorClient : Set/Clear BGP neighbor as a route reflector client Set/Clear BGP neighbor as a route reflector client
+        :param uint8 MultiHopTTL : TTL for multi hop BGP neighbor TTL for multi hop BGP neighbor
+        :param bool MaxPrefixesDisconnect : Disconnect the BGP peer session when we receive the max prefixes from the neighbor Disconnect the BGP peer session when we receive the max prefixes from the neighbor
+        :param uint32 LocalAS : Local AS of the BGP neighbor Local AS of the BGP neighbor
+        :param uint32 KeepaliveTime : Keep alive time for the BGP neighbor Keep alive time for the BGP neighbor
+        :param uint32 RouteReflectorClusterId : Cluster Id of the internal BGP neighbor route reflector client Cluster Id of the internal BGP neighbor route reflector client
+        :param uint32 MaxPrefixes : Maximum number of prefixes that can be received from the BGP neighbor Maximum number of prefixes that can be received from the BGP neighbor
+        :param uint8 AddPathsMaxTx : Max number of additional paths that can be transmitted to BGP neighbor Max number of additional paths that can be transmitted to BGP neighbor
+        :param bool MultiHopEnable : Enable/Disable multi hop for BGP neighbor Enable/Disable multi hop for BGP neighbor
+        :param bool AddPathsRx : Receive additional paths from BGP neighbor Receive additional paths from BGP neighbor
+        :param uint8 MaxPrefixesThresholdPct : The percentage of maximum prefixes before we start logging The percentage of maximum prefixes before we start logging
+        :param uint32 HoldTime : Hold time for the BGP neighbor Hold time for the BGP neighbor
+        :param uint32 PeerAS : Peer AS of the BGP neighbor Peer AS of the BGP neighbor
+        :param uint32 ConnectRetryTime : Connect retry time to connect to BGP neighbor after disconnect Connect retry time to connect to BGP neighbor after disconnect
+
+	"""
+    def createBGPv4PeerGroup(self,
+                             Name,
+                             UpdateSource='',
+                             AuthPassword='',
+                             Description='',
+                             MaxPrefixesRestartTimer=0,
+                             RouteReflectorClient=False,
+                             MultiHopTTL=0,
+                             MaxPrefixesDisconnect=False,
+                             LocalAS=0,
+                             KeepaliveTime=60,
+                             RouteReflectorClusterId=0,
+                             MaxPrefixes=0,
+                             AddPathsMaxTx=0,
+                             MultiHopEnable=False,
+                             AddPathsRx=False,
+                             MaxPrefixesThresholdPct=0,
+                             HoldTime=180,
+                             PeerAS=0,
+                             ConnectRetryTime=60):
+        obj =  { 
+                'Name' : Name,
+                'UpdateSource' : UpdateSource,
+                'AuthPassword' : AuthPassword,
+                'Description' : Description,
+                'MaxPrefixesRestartTimer' : int(MaxPrefixesRestartTimer),
+                'RouteReflectorClient' : True if RouteReflectorClient else False,
+                'MultiHopTTL' : int(MultiHopTTL),
+                'MaxPrefixesDisconnect' : True if MaxPrefixesDisconnect else False,
+                'LocalAS' : int(LocalAS),
+                'KeepaliveTime' : int(KeepaliveTime),
+                'RouteReflectorClusterId' : int(RouteReflectorClusterId),
+                'MaxPrefixes' : int(MaxPrefixes),
+                'AddPathsMaxTx' : int(AddPathsMaxTx),
+                'MultiHopEnable' : True if MultiHopEnable else False,
+                'AddPathsRx' : True if AddPathsRx else False,
+                'MaxPrefixesThresholdPct' : int(MaxPrefixesThresholdPct),
+                'HoldTime' : int(HoldTime),
+                'PeerAS' : int(PeerAS),
+                'ConnectRetryTime' : int(ConnectRetryTime),
+                }
+        reqUrl =  self.cfgUrlBase+'BGPv4PeerGroup'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateBGPv4PeerGroup(self,
+                             Name,
+                             UpdateSource = None,
+                             AuthPassword = None,
+                             Description = None,
+                             MaxPrefixesRestartTimer = None,
+                             RouteReflectorClient = None,
+                             MultiHopTTL = None,
+                             MaxPrefixesDisconnect = None,
+                             LocalAS = None,
+                             KeepaliveTime = None,
+                             RouteReflectorClusterId = None,
+                             MaxPrefixes = None,
+                             AddPathsMaxTx = None,
+                             MultiHopEnable = None,
+                             AddPathsRx = None,
+                             MaxPrefixesThresholdPct = None,
+                             HoldTime = None,
+                             PeerAS = None,
+                             ConnectRetryTime = None):
+        obj =  {}
+        if Name != None :
+            obj['Name'] = Name
+
+        if UpdateSource != None :
+            obj['UpdateSource'] = UpdateSource
+
+        if AuthPassword != None :
+            obj['AuthPassword'] = AuthPassword
+
+        if Description != None :
+            obj['Description'] = Description
+
+        if MaxPrefixesRestartTimer != None :
+            obj['MaxPrefixesRestartTimer'] = int(MaxPrefixesRestartTimer)
+
+        if RouteReflectorClient != None :
+            obj['RouteReflectorClient'] = True if RouteReflectorClient else False
+
+        if MultiHopTTL != None :
+            obj['MultiHopTTL'] = int(MultiHopTTL)
+
+        if MaxPrefixesDisconnect != None :
+            obj['MaxPrefixesDisconnect'] = True if MaxPrefixesDisconnect else False
+
+        if LocalAS != None :
+            obj['LocalAS'] = int(LocalAS)
+
+        if KeepaliveTime != None :
+            obj['KeepaliveTime'] = int(KeepaliveTime)
+
+        if RouteReflectorClusterId != None :
+            obj['RouteReflectorClusterId'] = int(RouteReflectorClusterId)
+
+        if MaxPrefixes != None :
+            obj['MaxPrefixes'] = int(MaxPrefixes)
+
+        if AddPathsMaxTx != None :
+            obj['AddPathsMaxTx'] = int(AddPathsMaxTx)
+
+        if MultiHopEnable != None :
+            obj['MultiHopEnable'] = True if MultiHopEnable else False
+
+        if AddPathsRx != None :
+            obj['AddPathsRx'] = True if AddPathsRx else False
+
+        if MaxPrefixesThresholdPct != None :
+            obj['MaxPrefixesThresholdPct'] = int(MaxPrefixesThresholdPct)
+
+        if HoldTime != None :
+            obj['HoldTime'] = int(HoldTime)
+
+        if PeerAS != None :
+            obj['PeerAS'] = int(PeerAS)
+
+        if ConnectRetryTime != None :
+            obj['ConnectRetryTime'] = int(ConnectRetryTime)
+
+        reqUrl =  self.cfgUrlBase+'BGPv4PeerGroup'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateBGPv4PeerGroupById(self,
+                                  objectId,
+                                  UpdateSource = None,
+                                  AuthPassword = None,
+                                  Description = None,
+                                  MaxPrefixesRestartTimer = None,
+                                  RouteReflectorClient = None,
+                                  MultiHopTTL = None,
+                                  MaxPrefixesDisconnect = None,
+                                  LocalAS = None,
+                                  KeepaliveTime = None,
+                                  RouteReflectorClusterId = None,
+                                  MaxPrefixes = None,
+                                  AddPathsMaxTx = None,
+                                  MultiHopEnable = None,
+                                  AddPathsRx = None,
+                                  MaxPrefixesThresholdPct = None,
+                                  HoldTime = None,
+                                  PeerAS = None,
+                                  ConnectRetryTime = None):
+        obj =  {'objectId': objectId }
+        if UpdateSource !=  None:
+            obj['UpdateSource'] = UpdateSource
+
+        if AuthPassword !=  None:
+            obj['AuthPassword'] = AuthPassword
+
+        if Description !=  None:
+            obj['Description'] = Description
+
+        if MaxPrefixesRestartTimer !=  None:
+            obj['MaxPrefixesRestartTimer'] = MaxPrefixesRestartTimer
+
+        if RouteReflectorClient !=  None:
+            obj['RouteReflectorClient'] = RouteReflectorClient
+
+        if MultiHopTTL !=  None:
+            obj['MultiHopTTL'] = MultiHopTTL
+
+        if MaxPrefixesDisconnect !=  None:
+            obj['MaxPrefixesDisconnect'] = MaxPrefixesDisconnect
+
+        if LocalAS !=  None:
+            obj['LocalAS'] = LocalAS
+
+        if KeepaliveTime !=  None:
+            obj['KeepaliveTime'] = KeepaliveTime
+
+        if RouteReflectorClusterId !=  None:
+            obj['RouteReflectorClusterId'] = RouteReflectorClusterId
+
+        if MaxPrefixes !=  None:
+            obj['MaxPrefixes'] = MaxPrefixes
+
+        if AddPathsMaxTx !=  None:
+            obj['AddPathsMaxTx'] = AddPathsMaxTx
+
+        if MultiHopEnable !=  None:
+            obj['MultiHopEnable'] = MultiHopEnable
+
+        if AddPathsRx !=  None:
+            obj['AddPathsRx'] = AddPathsRx
+
+        if MaxPrefixesThresholdPct !=  None:
+            obj['MaxPrefixesThresholdPct'] = MaxPrefixesThresholdPct
+
+        if HoldTime !=  None:
+            obj['HoldTime'] = HoldTime
+
+        if PeerAS !=  None:
+            obj['PeerAS'] = PeerAS
+
+        if ConnectRetryTime !=  None:
+            obj['ConnectRetryTime'] = ConnectRetryTime
+
+        reqUrl =  self.cfgUrlBase+'BGPv4PeerGroup'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteBGPv4PeerGroup(self,
+                             Name):
         obj =  { 
                 'Name' : Name,
                 }
-        reqUrl =  self.stateUrlBase + 'BGPPolicyStmt'
+        reqUrl =  self.cfgUrlBase+'BGPv4PeerGroup'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteBGPv4PeerGroupById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'BGPv4PeerGroup'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getBGPv4PeerGroup(self,
+                          Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.cfgUrlBase + 'BGPv4PeerGroup'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
-    def getBGPPolicyStmtStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BGPPolicyStmt'+"/%s"%(objectId)
+    def getBGPv4PeerGroupById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'BGPv4PeerGroup'+"/%s"%(objectId)
         r = requests.get(reqUrl, data=None, headers=headers) 
         return r
 
-    def getAllBGPPolicyStmtStates(self):
-        return self.getObjects( 'BGPPolicyStmt', self.stateUrlBase)
+    def getAllBGPv4PeerGroups(self):
+        return self.getObjects( 'BGPv4PeerGroup', self.cfgUrlBase)
 
 
     def getIPv4RouteState(self,
@@ -3279,6 +4000,91 @@ class FlexSwitch( object):
 
     def getAllIPv4RouteStates(self):
         return self.getObjects( 'IPv4Route', self.stateUrlBase)
+
+
+    """
+    .. automethod :: createBGPIPv6Aggregate(self,
+        :param string IpPrefix : IPv6 Prefix in CIDR format to match IPv6 Prefix in CIDR format to match
+        :param bool SendSummaryOnly : Send summary route only when aggregating routes Send summary route only when aggregating routes
+        :param bool GenerateASSet : Generate AS set when aggregating routes Generate AS set when aggregating routes
+
+	"""
+    def createBGPIPv6Aggregate(self,
+                               IpPrefix,
+                               SendSummaryOnly=False,
+                               GenerateASSet=False):
+        obj =  { 
+                'IpPrefix' : IpPrefix,
+                'SendSummaryOnly' : True if SendSummaryOnly else False,
+                'GenerateASSet' : True if GenerateASSet else False,
+                }
+        reqUrl =  self.cfgUrlBase+'BGPIPv6Aggregate'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateBGPIPv6Aggregate(self,
+                               IpPrefix,
+                               SendSummaryOnly = None,
+                               GenerateASSet = None):
+        obj =  {}
+        if IpPrefix != None :
+            obj['IpPrefix'] = IpPrefix
+
+        if SendSummaryOnly != None :
+            obj['SendSummaryOnly'] = True if SendSummaryOnly else False
+
+        if GenerateASSet != None :
+            obj['GenerateASSet'] = True if GenerateASSet else False
+
+        reqUrl =  self.cfgUrlBase+'BGPIPv6Aggregate'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateBGPIPv6AggregateById(self,
+                                    objectId,
+                                    SendSummaryOnly = None,
+                                    GenerateASSet = None):
+        obj =  {'objectId': objectId }
+        if SendSummaryOnly !=  None:
+            obj['SendSummaryOnly'] = SendSummaryOnly
+
+        if GenerateASSet !=  None:
+            obj['GenerateASSet'] = GenerateASSet
+
+        reqUrl =  self.cfgUrlBase+'BGPIPv6Aggregate'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteBGPIPv6Aggregate(self,
+                               IpPrefix):
+        obj =  { 
+                'IpPrefix' : IpPrefix,
+                }
+        reqUrl =  self.cfgUrlBase+'BGPIPv6Aggregate'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteBGPIPv6AggregateById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'BGPIPv6Aggregate'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getBGPIPv6Aggregate(self,
+                            IpPrefix):
+        obj =  { 
+                'IpPrefix' : IpPrefix,
+                }
+        reqUrl =  self.cfgUrlBase + 'BGPIPv6Aggregate'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getBGPIPv6AggregateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'BGPIPv6Aggregate'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllBGPIPv6Aggregates(self):
+        return self.getObjects( 'BGPIPv6Aggregate', self.cfgUrlBase)
 
 
     """
@@ -3420,6 +4226,24 @@ class FlexSwitch( object):
         return self.getObjects( 'BGPGlobal', self.stateUrlBase)
 
 
+    def getBfdSessionState(self,
+                           IpAddr):
+        obj =  { 
+                'IpAddr' : IpAddr,
+                }
+        reqUrl =  self.stateUrlBase + 'BfdSession'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getBfdSessionStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'BfdSession'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllBfdSessionStates(self):
+        return self.getObjects( 'BfdSession', self.stateUrlBase)
+
+
     def getOspfEventState(self,
                           Index):
         obj =  { 
@@ -3530,100 +4354,22 @@ class FlexSwitch( object):
         return self.getObjects( 'BufferGlobalStat', self.stateUrlBase)
 
 
-    """
-    .. automethod :: createDhcpGlobalConfig(self,
-        :param string DhcpConfigKey : DHCP global config DHCP global config
-        :param bool Enable : DHCP Server enable/disable control DEFAULT DHCP Server enable/disable control DEFAULT
-        :param uint32 DefaultLeaseTime : Default Lease Time in seconds DEFAULT Default Lease Time in seconds DEFAULT
-        :param uint32 MaxLeaseTime : Max Lease Time in seconds DEFAULT Max Lease Time in seconds DEFAULT
-
-	"""
-    def createDhcpGlobalConfig(self,
-                               DhcpConfigKey,
-                               Enable,
-                               DefaultLeaseTime,
-                               MaxLeaseTime):
+    def getIPv6IntfState(self,
+                         IntfRef):
         obj =  { 
-                'DhcpConfigKey' : DhcpConfigKey,
-                'Enable' : True if Enable else False,
-                'DefaultLeaseTime' : int(DefaultLeaseTime),
-                'MaxLeaseTime' : int(MaxLeaseTime),
+                'IntfRef' : IntfRef,
                 }
-        reqUrl =  self.cfgUrlBase+'DhcpGlobalConfig'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    def updateDhcpGlobalConfig(self,
-                               DhcpConfigKey,
-                               Enable = None,
-                               DefaultLeaseTime = None,
-                               MaxLeaseTime = None):
-        obj =  {}
-        if DhcpConfigKey != None :
-            obj['DhcpConfigKey'] = DhcpConfigKey
-
-        if Enable != None :
-            obj['Enable'] = True if Enable else False
-
-        if DefaultLeaseTime != None :
-            obj['DefaultLeaseTime'] = int(DefaultLeaseTime)
-
-        if MaxLeaseTime != None :
-            obj['MaxLeaseTime'] = int(MaxLeaseTime)
-
-        reqUrl =  self.cfgUrlBase+'DhcpGlobalConfig'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    def updateDhcpGlobalConfigById(self,
-                                    objectId,
-                                    Enable = None,
-                                    DefaultLeaseTime = None,
-                                    MaxLeaseTime = None):
-        obj =  {'objectId': objectId }
-        if Enable !=  None:
-            obj['Enable'] = Enable
-
-        if DefaultLeaseTime !=  None:
-            obj['DefaultLeaseTime'] = DefaultLeaseTime
-
-        if MaxLeaseTime !=  None:
-            obj['MaxLeaseTime'] = MaxLeaseTime
-
-        reqUrl =  self.cfgUrlBase+'DhcpGlobalConfig'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    def deleteDhcpGlobalConfig(self,
-                               DhcpConfigKey):
-        obj =  { 
-                'DhcpConfigKey' : DhcpConfigKey,
-                }
-        reqUrl =  self.cfgUrlBase+'DhcpGlobalConfig'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    def deleteDhcpGlobalConfigById(self, objectId ):
-        reqUrl =  self.cfgUrlBase+'DhcpGlobalConfig'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getDhcpGlobalConfig(self,
-                            DhcpConfigKey):
-        obj =  { 
-                'DhcpConfigKey' : DhcpConfigKey,
-                }
-        reqUrl =  self.cfgUrlBase + 'DhcpGlobalConfig'
+        reqUrl =  self.stateUrlBase + 'IPv6Intf'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
-    def getDhcpGlobalConfigById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'DhcpGlobalConfig'+"/%s"%(objectId)
+    def getIPv6IntfStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'IPv6Intf'+"/%s"%(objectId)
         r = requests.get(reqUrl, data=None, headers=headers) 
         return r
 
-    def getAllDhcpGlobalConfigs(self):
-        return self.getObjects( 'DhcpGlobalConfig', self.cfgUrlBase)
+    def getAllIPv6IntfStates(self):
+        return self.getObjects( 'IPv6Intf', self.stateUrlBase)
 
 
     """
@@ -3852,6 +4598,296 @@ class FlexSwitch( object):
 
     def getAllStpBridgeStates(self):
         return self.getObjects( 'StpBridge', self.stateUrlBase)
+
+
+    """
+    .. automethod :: createDWDMModuleClntIntf(self,
+        :param uint8 ClntIntfId : DWDM Module client interface identifier DWDM Module client interface identifier
+        :param uint8 ModuleId : DWDM Module identifier DWDM Module identifier
+        :param uint8 NwLaneTributaryToClntIntfMap : Network lane/tributary id to map to client interface Network lane/tributary id to map to client interface
+        :param uint8 HostTxEqDfe : Host interface TX deserializer equalization. s-DFE Host interface TX deserializer equalization. s-DFE
+        :param uint8 HostRxSerializerTap1Gain : Host RX Serializer tap 1 control Host RX Serializer tap 1 control
+        :param string RxPRBSPattern : RX PRBS generator pattern RX PRBS generator pattern
+        :param uint8 HostRxSerializerTap2Delay : Host RX Serializer tap 2 control Host RX Serializer tap 2 control
+        :param uint8 HostRxSerializerTap2Gain : Host RX Serializer tap 2 control Host RX Serializer tap 2 control
+        :param uint8 HostRxSerializerTap0Delay : Host RX Serializer tap 0 control Host RX Serializer tap 0 control
+        :param uint8 HostTxEqCtle : Host interface TX deserializer equalization. LELRC CTLE LE gain code. Host interface TX deserializer equalization. LELRC CTLE LE gain code.
+        :param string TxPRBSPattern : PRBS pattern to use for checker PRBS pattern to use for checker
+        :param uint8 HostTxEqLfCtle : Host interface TX deserializer equalization. LELPZRC LF-CTLE LFPZ gain code. Host interface TX deserializer equalization. LELPZRC LF-CTLE LFPZ gain code.
+        :param string AdminState : Administrative state of this client interface Administrative state of this client interface
+        :param bool RXFECDecDisable : 802.3bj FEC decoder enable/disable state for traffic from DWDM module to Host 802.3bj FEC decoder enable/disable state for traffic from DWDM module to Host
+        :param bool EnableTxPRBSChecker : Enable/Disable TX PRBS checker for all lanes of this client interface Enable/Disable TX PRBS checker for all lanes of this client interface
+        :param bool EnableHostLoopback : Enable/Disable loopback on all host lanes of this client interface Enable/Disable loopback on all host lanes of this client interface
+        :param uint8 HostRxSerializerTap0Gain : Host RX Serializer tap 0 control Host RX Serializer tap 0 control
+        :param bool TXFECDecDisable : 802.3bj FEC decoder enable/disable state for traffic from Host to DWDM Module 802.3bj FEC decoder enable/disable state for traffic from Host to DWDM Module
+        :param bool EnableRxPRBS : Enable/Disable RX PRBS generation for all lanes of this client interface Enable/Disable RX PRBS generation for all lanes of this client interface
+        :param bool EnableIntSerdesNWLoopback : Enable/Disable serdes internal loopback Enable/Disable serdes internal loopback
+
+	"""
+    def createDWDMModuleClntIntf(self,
+                                 ClntIntfId,
+                                 ModuleId,
+                                 NwLaneTributaryToClntIntfMap,
+                                 HostTxEqDfe=0,
+                                 HostRxSerializerTap1Gain=7,
+                                 RxPRBSPattern='2^31',
+                                 HostRxSerializerTap2Delay=5,
+                                 HostRxSerializerTap2Gain=15,
+                                 HostRxSerializerTap0Delay=7,
+                                 HostTxEqCtle=18,
+                                 TxPRBSPattern='2^31',
+                                 HostTxEqLfCtle=0,
+                                 AdminState='UP',
+                                 RXFECDecDisable=False,
+                                 EnableTxPRBSChecker=False,
+                                 EnableHostLoopback=False,
+                                 HostRxSerializerTap0Gain=7,
+                                 TXFECDecDisable=False,
+                                 EnableRxPRBS=False,
+                                 EnableIntSerdesNWLoopback=False):
+        obj =  { 
+                'ClntIntfId' : int(ClntIntfId),
+                'ModuleId' : int(ModuleId),
+                'NwLaneTributaryToClntIntfMap' : int(NwLaneTributaryToClntIntfMap),
+                'HostTxEqDfe' : int(HostTxEqDfe),
+                'HostRxSerializerTap1Gain' : int(HostRxSerializerTap1Gain),
+                'RxPRBSPattern' : RxPRBSPattern,
+                'HostRxSerializerTap2Delay' : int(HostRxSerializerTap2Delay),
+                'HostRxSerializerTap2Gain' : int(HostRxSerializerTap2Gain),
+                'HostRxSerializerTap0Delay' : int(HostRxSerializerTap0Delay),
+                'HostTxEqCtle' : int(HostTxEqCtle),
+                'TxPRBSPattern' : TxPRBSPattern,
+                'HostTxEqLfCtle' : int(HostTxEqLfCtle),
+                'AdminState' : AdminState,
+                'RXFECDecDisable' : True if RXFECDecDisable else False,
+                'EnableTxPRBSChecker' : True if EnableTxPRBSChecker else False,
+                'EnableHostLoopback' : True if EnableHostLoopback else False,
+                'HostRxSerializerTap0Gain' : int(HostRxSerializerTap0Gain),
+                'TXFECDecDisable' : True if TXFECDecDisable else False,
+                'EnableRxPRBS' : True if EnableRxPRBS else False,
+                'EnableIntSerdesNWLoopback' : True if EnableIntSerdesNWLoopback else False,
+                }
+        reqUrl =  self.cfgUrlBase+'DWDMModuleClntIntf'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateDWDMModuleClntIntf(self,
+                                 ClntIntfId,
+                                 ModuleId,
+                                 NwLaneTributaryToClntIntfMap = None,
+                                 HostTxEqDfe = None,
+                                 HostRxSerializerTap1Gain = None,
+                                 RxPRBSPattern = None,
+                                 HostRxSerializerTap2Delay = None,
+                                 HostRxSerializerTap2Gain = None,
+                                 HostRxSerializerTap0Delay = None,
+                                 HostTxEqCtle = None,
+                                 TxPRBSPattern = None,
+                                 HostTxEqLfCtle = None,
+                                 AdminState = None,
+                                 RXFECDecDisable = None,
+                                 EnableTxPRBSChecker = None,
+                                 EnableHostLoopback = None,
+                                 HostRxSerializerTap0Gain = None,
+                                 TXFECDecDisable = None,
+                                 EnableRxPRBS = None,
+                                 EnableIntSerdesNWLoopback = None):
+        obj =  {}
+        if ClntIntfId != None :
+            obj['ClntIntfId'] = int(ClntIntfId)
+
+        if ModuleId != None :
+            obj['ModuleId'] = int(ModuleId)
+
+        if NwLaneTributaryToClntIntfMap != None :
+            obj['NwLaneTributaryToClntIntfMap'] = int(NwLaneTributaryToClntIntfMap)
+
+        if HostTxEqDfe != None :
+            obj['HostTxEqDfe'] = int(HostTxEqDfe)
+
+        if HostRxSerializerTap1Gain != None :
+            obj['HostRxSerializerTap1Gain'] = int(HostRxSerializerTap1Gain)
+
+        if RxPRBSPattern != None :
+            obj['RxPRBSPattern'] = RxPRBSPattern
+
+        if HostRxSerializerTap2Delay != None :
+            obj['HostRxSerializerTap2Delay'] = int(HostRxSerializerTap2Delay)
+
+        if HostRxSerializerTap2Gain != None :
+            obj['HostRxSerializerTap2Gain'] = int(HostRxSerializerTap2Gain)
+
+        if HostRxSerializerTap0Delay != None :
+            obj['HostRxSerializerTap0Delay'] = int(HostRxSerializerTap0Delay)
+
+        if HostTxEqCtle != None :
+            obj['HostTxEqCtle'] = int(HostTxEqCtle)
+
+        if TxPRBSPattern != None :
+            obj['TxPRBSPattern'] = TxPRBSPattern
+
+        if HostTxEqLfCtle != None :
+            obj['HostTxEqLfCtle'] = int(HostTxEqLfCtle)
+
+        if AdminState != None :
+            obj['AdminState'] = AdminState
+
+        if RXFECDecDisable != None :
+            obj['RXFECDecDisable'] = True if RXFECDecDisable else False
+
+        if EnableTxPRBSChecker != None :
+            obj['EnableTxPRBSChecker'] = True if EnableTxPRBSChecker else False
+
+        if EnableHostLoopback != None :
+            obj['EnableHostLoopback'] = True if EnableHostLoopback else False
+
+        if HostRxSerializerTap0Gain != None :
+            obj['HostRxSerializerTap0Gain'] = int(HostRxSerializerTap0Gain)
+
+        if TXFECDecDisable != None :
+            obj['TXFECDecDisable'] = True if TXFECDecDisable else False
+
+        if EnableRxPRBS != None :
+            obj['EnableRxPRBS'] = True if EnableRxPRBS else False
+
+        if EnableIntSerdesNWLoopback != None :
+            obj['EnableIntSerdesNWLoopback'] = True if EnableIntSerdesNWLoopback else False
+
+        reqUrl =  self.cfgUrlBase+'DWDMModuleClntIntf'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateDWDMModuleClntIntfById(self,
+                                      objectId,
+                                      NwLaneTributaryToClntIntfMap = None,
+                                      HostTxEqDfe = None,
+                                      HostRxSerializerTap1Gain = None,
+                                      RxPRBSPattern = None,
+                                      HostRxSerializerTap2Delay = None,
+                                      HostRxSerializerTap2Gain = None,
+                                      HostRxSerializerTap0Delay = None,
+                                      HostTxEqCtle = None,
+                                      TxPRBSPattern = None,
+                                      HostTxEqLfCtle = None,
+                                      AdminState = None,
+                                      RXFECDecDisable = None,
+                                      EnableTxPRBSChecker = None,
+                                      EnableHostLoopback = None,
+                                      HostRxSerializerTap0Gain = None,
+                                      TXFECDecDisable = None,
+                                      EnableRxPRBS = None,
+                                      EnableIntSerdesNWLoopback = None):
+        obj =  {'objectId': objectId }
+        if NwLaneTributaryToClntIntfMap !=  None:
+            obj['NwLaneTributaryToClntIntfMap'] = NwLaneTributaryToClntIntfMap
+
+        if HostTxEqDfe !=  None:
+            obj['HostTxEqDfe'] = HostTxEqDfe
+
+        if HostRxSerializerTap1Gain !=  None:
+            obj['HostRxSerializerTap1Gain'] = HostRxSerializerTap1Gain
+
+        if RxPRBSPattern !=  None:
+            obj['RxPRBSPattern'] = RxPRBSPattern
+
+        if HostRxSerializerTap2Delay !=  None:
+            obj['HostRxSerializerTap2Delay'] = HostRxSerializerTap2Delay
+
+        if HostRxSerializerTap2Gain !=  None:
+            obj['HostRxSerializerTap2Gain'] = HostRxSerializerTap2Gain
+
+        if HostRxSerializerTap0Delay !=  None:
+            obj['HostRxSerializerTap0Delay'] = HostRxSerializerTap0Delay
+
+        if HostTxEqCtle !=  None:
+            obj['HostTxEqCtle'] = HostTxEqCtle
+
+        if TxPRBSPattern !=  None:
+            obj['TxPRBSPattern'] = TxPRBSPattern
+
+        if HostTxEqLfCtle !=  None:
+            obj['HostTxEqLfCtle'] = HostTxEqLfCtle
+
+        if AdminState !=  None:
+            obj['AdminState'] = AdminState
+
+        if RXFECDecDisable !=  None:
+            obj['RXFECDecDisable'] = RXFECDecDisable
+
+        if EnableTxPRBSChecker !=  None:
+            obj['EnableTxPRBSChecker'] = EnableTxPRBSChecker
+
+        if EnableHostLoopback !=  None:
+            obj['EnableHostLoopback'] = EnableHostLoopback
+
+        if HostRxSerializerTap0Gain !=  None:
+            obj['HostRxSerializerTap0Gain'] = HostRxSerializerTap0Gain
+
+        if TXFECDecDisable !=  None:
+            obj['TXFECDecDisable'] = TXFECDecDisable
+
+        if EnableRxPRBS !=  None:
+            obj['EnableRxPRBS'] = EnableRxPRBS
+
+        if EnableIntSerdesNWLoopback !=  None:
+            obj['EnableIntSerdesNWLoopback'] = EnableIntSerdesNWLoopback
+
+        reqUrl =  self.cfgUrlBase+'DWDMModuleClntIntf'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteDWDMModuleClntIntf(self,
+                                 ClntIntfId,
+                                 ModuleId):
+        obj =  { 
+                'ClntIntfId' : ClntIntfId,
+                'ModuleId' : ModuleId,
+                }
+        reqUrl =  self.cfgUrlBase+'DWDMModuleClntIntf'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteDWDMModuleClntIntfById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'DWDMModuleClntIntf'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getDWDMModuleClntIntf(self,
+                              ClntIntfId,
+                              ModuleId):
+        obj =  { 
+                'ClntIntfId' : int(ClntIntfId),
+                'ModuleId' : int(ModuleId),
+                }
+        reqUrl =  self.cfgUrlBase + 'DWDMModuleClntIntf'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getDWDMModuleClntIntfById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'DWDMModuleClntIntf'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllDWDMModuleClntIntfs(self):
+        return self.getObjects( 'DWDMModuleClntIntf', self.cfgUrlBase)
+
+
+    def getRouteStatsPerInterfaceState(self,
+                                       Intfref):
+        obj =  { 
+                'Intfref' : Intfref,
+                }
+        reqUrl =  self.stateUrlBase + 'RouteStatsPerInterface'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getRouteStatsPerInterfaceStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'RouteStatsPerInterface'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllRouteStatsPerInterfaceStates(self):
+        return self.getObjects( 'RouteStatsPerInterface', self.stateUrlBase)
 
 
     """
@@ -4161,6 +5197,26 @@ class FlexSwitch( object):
         return self.getObjects( 'IpTableAcl', self.cfgUrlBase)
 
 
+    def getDWDMModuleNwIntfState(self,
+                                 NwIntfId,
+                                 ModuleId):
+        obj =  { 
+                'NwIntfId' : int(NwIntfId),
+                'ModuleId' : int(ModuleId),
+                }
+        reqUrl =  self.stateUrlBase + 'DWDMModuleNwIntf'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getDWDMModuleNwIntfStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'DWDMModuleNwIntf'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllDWDMModuleNwIntfStates(self):
+        return self.getObjects( 'DWDMModuleNwIntf', self.stateUrlBase)
+
+
     """
     .. automethod :: createOspfIfEntry(self,
         :param string IfIpAddress : The IP address of this OSPF interface. The IP address of this OSPF interface.
@@ -4376,8 +5432,9 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createBGPGlobal(self,
-        :param string RouterId : Router id for BGP global config Router id for BGP global config
+        :param string Vrf : VRF id for BGP global config VRF id for BGP global config
         :param uint32 ASNum : Local AS for BGP global config Local AS for BGP global config
+        :param string RouterId : Router id for BGP global config Router id for BGP global config
         :param bool UseMultiplePaths : Enable/disable ECMP for BGP Enable/disable ECMP for BGP
         :param uint32 EBGPMaxPaths : Max ECMP paths from External BGP neighbors Max ECMP paths from External BGP neighbors
         :param bool EBGPAllowMultipleAS : Enable/diable ECMP paths from multiple ASes Enable/diable ECMP paths from multiple ASes
@@ -4386,16 +5443,17 @@ class FlexSwitch( object):
 
 	"""
     def createBGPGlobal(self,
-                        RouterId,
                         ASNum,
+                        RouterId,
                         UseMultiplePaths=False,
                         EBGPMaxPaths=0,
                         EBGPAllowMultipleAS=False,
                         IBGPMaxPaths=0,
                         Redistribution=[]):
         obj =  { 
-                'RouterId' : RouterId,
+                'Vrf' : 'default',
                 'ASNum' : int(ASNum),
+                'RouterId' : RouterId,
                 'UseMultiplePaths' : True if UseMultiplePaths else False,
                 'EBGPMaxPaths' : int(EBGPMaxPaths),
                 'EBGPAllowMultipleAS' : True if EBGPAllowMultipleAS else False,
@@ -4407,19 +5465,23 @@ class FlexSwitch( object):
         return r
 
     def updateBGPGlobal(self,
-                        RouterId,
+                        Vrf,
                         ASNum = None,
+                        RouterId = None,
                         UseMultiplePaths = None,
                         EBGPMaxPaths = None,
                         EBGPAllowMultipleAS = None,
                         IBGPMaxPaths = None,
                         Redistribution = None):
         obj =  {}
-        if RouterId != None :
-            obj['RouterId'] = RouterId
+        if Vrf != None :
+            obj['Vrf'] = Vrf
 
         if ASNum != None :
             obj['ASNum'] = int(ASNum)
+
+        if RouterId != None :
+            obj['RouterId'] = RouterId
 
         if UseMultiplePaths != None :
             obj['UseMultiplePaths'] = True if UseMultiplePaths else False
@@ -4443,6 +5505,7 @@ class FlexSwitch( object):
     def updateBGPGlobalById(self,
                              objectId,
                              ASNum = None,
+                             RouterId = None,
                              UseMultiplePaths = None,
                              EBGPMaxPaths = None,
                              EBGPAllowMultipleAS = None,
@@ -4451,6 +5514,9 @@ class FlexSwitch( object):
         obj =  {'objectId': objectId }
         if ASNum !=  None:
             obj['ASNum'] = ASNum
+
+        if RouterId !=  None:
+            obj['RouterId'] = RouterId
 
         if UseMultiplePaths !=  None:
             obj['UseMultiplePaths'] = UseMultiplePaths
@@ -4472,9 +5538,9 @@ class FlexSwitch( object):
         return r
 
     def deleteBGPGlobal(self,
-                        RouterId):
+                        Vrf):
         obj =  { 
-                'RouterId' : RouterId,
+                'Vrf' : Vrf,
                 }
         reqUrl =  self.cfgUrlBase+'BGPGlobal'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -4486,9 +5552,9 @@ class FlexSwitch( object):
         return r
 
     def getBGPGlobal(self,
-                     RouterId):
+                     Vrf):
         obj =  { 
-                'RouterId' : RouterId,
+                'Vrf' : Vrf,
                 }
         reqUrl =  self.cfgUrlBase + 'BGPGlobal'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -5100,6 +6166,24 @@ class FlexSwitch( object):
         return self.getObjects( 'Vlan', self.stateUrlBase)
 
 
+    def getIsisGlobalState(self,
+                           Vrf):
+        obj =  { 
+                'Vrf' : Vrf,
+                }
+        reqUrl =  self.stateUrlBase + 'IsisGlobal'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getIsisGlobalStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'IsisGlobal'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllIsisGlobalStates(self):
+        return self.getObjects( 'IsisGlobal', self.stateUrlBase)
+
+
     def getLogicalIntfState(self,
                             Name):
         obj =  { 
@@ -5134,311 +6218,6 @@ class FlexSwitch( object):
 
     def getAllThermalStates(self):
         return self.getObjects( 'Thermal', self.stateUrlBase)
-
-
-    """
-    .. automethod :: createBGPNeighbor(self,
-        :param string NeighborAddress : Address of the BGP neighbor Address of the BGP neighbor
-        :param int32 IfIndex : Interface of the BGP neighbor Interface of the BGP neighbor
-        :param string UpdateSource : Source IP to connect to the BGP neighbor Source IP to connect to the BGP neighbor
-        :param string AuthPassword : Password to connect to the BGP neighbor Password to connect to the BGP neighbor
-        :param string Description : Description of the BGP neighbor Description of the BGP neighbor
-        :param string PeerGroup : Peer group of the BGP neighbor Peer group of the BGP neighbor
-        :param bool BfdEnable : Enable/Disable BFD for the BGP neighbor Enable/Disable BFD for the BGP neighbor
-        :param uint8 MultiHopTTL : TTL for multi hop BGP neighbor TTL for multi hop BGP neighbor
-        :param uint32 LocalAS : Local AS of the BGP neighbor Local AS of the BGP neighbor
-        :param uint32 KeepaliveTime : Keep alive time for the BGP neighbor Keep alive time for the BGP neighbor
-        :param bool AddPathsRx : Receive additional paths from BGP neighbor Receive additional paths from BGP neighbor
-        :param bool RouteReflectorClient : Set/Clear BGP neighbor as a route reflector client Set/Clear BGP neighbor as a route reflector client
-        :param uint8 MaxPrefixesRestartTimer : Time in seconds to wait before we start BGP peer session when we receive max prefixes Time in seconds to wait before we start BGP peer session when we receive max prefixes
-        :param bool MultiHopEnable : Enable/Disable multi hop for BGP neighbor Enable/Disable multi hop for BGP neighbor
-        :param uint32 RouteReflectorClusterId : Cluster Id of the internal BGP neighbor route reflector client Cluster Id of the internal BGP neighbor route reflector client
-        :param bool MaxPrefixesDisconnect : Disconnect the BGP peer session when we receive the max prefixes from the neighbor Disconnect the BGP peer session when we receive the max prefixes from the neighbor
-        :param uint32 PeerAS : Peer AS of the BGP neighbor Peer AS of the BGP neighbor
-        :param uint8 AddPathsMaxTx : Max number of additional paths that can be transmitted to BGP neighbor Max number of additional paths that can be transmitted to BGP neighbor
-        :param uint32 MaxPrefixes : Maximum number of prefixes that can be received from the BGP neighbor Maximum number of prefixes that can be received from the BGP neighbor
-        :param uint8 MaxPrefixesThresholdPct : The percentage of maximum prefixes before we start logging The percentage of maximum prefixes before we start logging
-        :param string BfdSessionParam : Bfd session param name to be applied Bfd session param name to be applied
-        :param uint32 HoldTime : Hold time for the BGP neighbor Hold time for the BGP neighbor
-        :param uint32 ConnectRetryTime : Connect retry time to connect to BGP neighbor after disconnect Connect retry time to connect to BGP neighbor after disconnect
-
-	"""
-    def createBGPNeighbor(self,
-                          NeighborAddress,
-                          IfIndex,
-                          UpdateSource='',
-                          AuthPassword='',
-                          Description='',
-                          PeerGroup='',
-                          BfdEnable=False,
-                          MultiHopTTL=0,
-                          LocalAS=0,
-                          KeepaliveTime=60,
-                          AddPathsRx=False,
-                          RouteReflectorClient=False,
-                          MaxPrefixesRestartTimer=0,
-                          MultiHopEnable=False,
-                          RouteReflectorClusterId=0,
-                          MaxPrefixesDisconnect=False,
-                          PeerAS=0,
-                          AddPathsMaxTx=0,
-                          MaxPrefixes=0,
-                          MaxPrefixesThresholdPct=80,
-                          BfdSessionParam='default',
-                          HoldTime=180,
-                          ConnectRetryTime=60):
-        obj =  { 
-                'NeighborAddress' : NeighborAddress,
-                'IfIndex' : int(IfIndex),
-                'UpdateSource' : UpdateSource,
-                'AuthPassword' : AuthPassword,
-                'Description' : Description,
-                'PeerGroup' : PeerGroup,
-                'BfdEnable' : True if BfdEnable else False,
-                'MultiHopTTL' : int(MultiHopTTL),
-                'LocalAS' : int(LocalAS),
-                'KeepaliveTime' : int(KeepaliveTime),
-                'AddPathsRx' : True if AddPathsRx else False,
-                'RouteReflectorClient' : True if RouteReflectorClient else False,
-                'MaxPrefixesRestartTimer' : int(MaxPrefixesRestartTimer),
-                'MultiHopEnable' : True if MultiHopEnable else False,
-                'RouteReflectorClusterId' : int(RouteReflectorClusterId),
-                'MaxPrefixesDisconnect' : True if MaxPrefixesDisconnect else False,
-                'PeerAS' : int(PeerAS),
-                'AddPathsMaxTx' : int(AddPathsMaxTx),
-                'MaxPrefixes' : int(MaxPrefixes),
-                'MaxPrefixesThresholdPct' : int(MaxPrefixesThresholdPct),
-                'BfdSessionParam' : BfdSessionParam,
-                'HoldTime' : int(HoldTime),
-                'ConnectRetryTime' : int(ConnectRetryTime),
-                }
-        reqUrl =  self.cfgUrlBase+'BGPNeighbor'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    def updateBGPNeighbor(self,
-                          NeighborAddress,
-                          IfIndex,
-                          UpdateSource = None,
-                          AuthPassword = None,
-                          Description = None,
-                          PeerGroup = None,
-                          BfdEnable = None,
-                          MultiHopTTL = None,
-                          LocalAS = None,
-                          KeepaliveTime = None,
-                          AddPathsRx = None,
-                          RouteReflectorClient = None,
-                          MaxPrefixesRestartTimer = None,
-                          MultiHopEnable = None,
-                          RouteReflectorClusterId = None,
-                          MaxPrefixesDisconnect = None,
-                          PeerAS = None,
-                          AddPathsMaxTx = None,
-                          MaxPrefixes = None,
-                          MaxPrefixesThresholdPct = None,
-                          BfdSessionParam = None,
-                          HoldTime = None,
-                          ConnectRetryTime = None):
-        obj =  {}
-        if NeighborAddress != None :
-            obj['NeighborAddress'] = NeighborAddress
-
-        if IfIndex != None :
-            obj['IfIndex'] = int(IfIndex)
-
-        if UpdateSource != None :
-            obj['UpdateSource'] = UpdateSource
-
-        if AuthPassword != None :
-            obj['AuthPassword'] = AuthPassword
-
-        if Description != None :
-            obj['Description'] = Description
-
-        if PeerGroup != None :
-            obj['PeerGroup'] = PeerGroup
-
-        if BfdEnable != None :
-            obj['BfdEnable'] = True if BfdEnable else False
-
-        if MultiHopTTL != None :
-            obj['MultiHopTTL'] = int(MultiHopTTL)
-
-        if LocalAS != None :
-            obj['LocalAS'] = int(LocalAS)
-
-        if KeepaliveTime != None :
-            obj['KeepaliveTime'] = int(KeepaliveTime)
-
-        if AddPathsRx != None :
-            obj['AddPathsRx'] = True if AddPathsRx else False
-
-        if RouteReflectorClient != None :
-            obj['RouteReflectorClient'] = True if RouteReflectorClient else False
-
-        if MaxPrefixesRestartTimer != None :
-            obj['MaxPrefixesRestartTimer'] = int(MaxPrefixesRestartTimer)
-
-        if MultiHopEnable != None :
-            obj['MultiHopEnable'] = True if MultiHopEnable else False
-
-        if RouteReflectorClusterId != None :
-            obj['RouteReflectorClusterId'] = int(RouteReflectorClusterId)
-
-        if MaxPrefixesDisconnect != None :
-            obj['MaxPrefixesDisconnect'] = True if MaxPrefixesDisconnect else False
-
-        if PeerAS != None :
-            obj['PeerAS'] = int(PeerAS)
-
-        if AddPathsMaxTx != None :
-            obj['AddPathsMaxTx'] = int(AddPathsMaxTx)
-
-        if MaxPrefixes != None :
-            obj['MaxPrefixes'] = int(MaxPrefixes)
-
-        if MaxPrefixesThresholdPct != None :
-            obj['MaxPrefixesThresholdPct'] = int(MaxPrefixesThresholdPct)
-
-        if BfdSessionParam != None :
-            obj['BfdSessionParam'] = BfdSessionParam
-
-        if HoldTime != None :
-            obj['HoldTime'] = int(HoldTime)
-
-        if ConnectRetryTime != None :
-            obj['ConnectRetryTime'] = int(ConnectRetryTime)
-
-        reqUrl =  self.cfgUrlBase+'BGPNeighbor'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    def updateBGPNeighborById(self,
-                               objectId,
-                               UpdateSource = None,
-                               AuthPassword = None,
-                               Description = None,
-                               PeerGroup = None,
-                               BfdEnable = None,
-                               MultiHopTTL = None,
-                               LocalAS = None,
-                               KeepaliveTime = None,
-                               AddPathsRx = None,
-                               RouteReflectorClient = None,
-                               MaxPrefixesRestartTimer = None,
-                               MultiHopEnable = None,
-                               RouteReflectorClusterId = None,
-                               MaxPrefixesDisconnect = None,
-                               PeerAS = None,
-                               AddPathsMaxTx = None,
-                               MaxPrefixes = None,
-                               MaxPrefixesThresholdPct = None,
-                               BfdSessionParam = None,
-                               HoldTime = None,
-                               ConnectRetryTime = None):
-        obj =  {'objectId': objectId }
-        if UpdateSource !=  None:
-            obj['UpdateSource'] = UpdateSource
-
-        if AuthPassword !=  None:
-            obj['AuthPassword'] = AuthPassword
-
-        if Description !=  None:
-            obj['Description'] = Description
-
-        if PeerGroup !=  None:
-            obj['PeerGroup'] = PeerGroup
-
-        if BfdEnable !=  None:
-            obj['BfdEnable'] = BfdEnable
-
-        if MultiHopTTL !=  None:
-            obj['MultiHopTTL'] = MultiHopTTL
-
-        if LocalAS !=  None:
-            obj['LocalAS'] = LocalAS
-
-        if KeepaliveTime !=  None:
-            obj['KeepaliveTime'] = KeepaliveTime
-
-        if AddPathsRx !=  None:
-            obj['AddPathsRx'] = AddPathsRx
-
-        if RouteReflectorClient !=  None:
-            obj['RouteReflectorClient'] = RouteReflectorClient
-
-        if MaxPrefixesRestartTimer !=  None:
-            obj['MaxPrefixesRestartTimer'] = MaxPrefixesRestartTimer
-
-        if MultiHopEnable !=  None:
-            obj['MultiHopEnable'] = MultiHopEnable
-
-        if RouteReflectorClusterId !=  None:
-            obj['RouteReflectorClusterId'] = RouteReflectorClusterId
-
-        if MaxPrefixesDisconnect !=  None:
-            obj['MaxPrefixesDisconnect'] = MaxPrefixesDisconnect
-
-        if PeerAS !=  None:
-            obj['PeerAS'] = PeerAS
-
-        if AddPathsMaxTx !=  None:
-            obj['AddPathsMaxTx'] = AddPathsMaxTx
-
-        if MaxPrefixes !=  None:
-            obj['MaxPrefixes'] = MaxPrefixes
-
-        if MaxPrefixesThresholdPct !=  None:
-            obj['MaxPrefixesThresholdPct'] = MaxPrefixesThresholdPct
-
-        if BfdSessionParam !=  None:
-            obj['BfdSessionParam'] = BfdSessionParam
-
-        if HoldTime !=  None:
-            obj['HoldTime'] = HoldTime
-
-        if ConnectRetryTime !=  None:
-            obj['ConnectRetryTime'] = ConnectRetryTime
-
-        reqUrl =  self.cfgUrlBase+'BGPNeighbor'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    def deleteBGPNeighbor(self,
-                          NeighborAddress,
-                          IfIndex):
-        obj =  { 
-                'NeighborAddress' : NeighborAddress,
-                'IfIndex' : IfIndex,
-                }
-        reqUrl =  self.cfgUrlBase+'BGPNeighbor'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    def deleteBGPNeighborById(self, objectId ):
-        reqUrl =  self.cfgUrlBase+'BGPNeighbor'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getBGPNeighbor(self,
-                       NeighborAddress,
-                       IfIndex):
-        obj =  { 
-                'NeighborAddress' : NeighborAddress,
-                'IfIndex' : int(IfIndex),
-                }
-        reqUrl =  self.cfgUrlBase + 'BGPNeighbor'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    def getBGPNeighborById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BGPNeighbor'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllBGPNeighbors(self):
-        return self.getObjects( 'BGPNeighbor', self.cfgUrlBase)
 
 
     """
@@ -6163,22 +6942,22 @@ class FlexSwitch( object):
         return self.getObjects( 'SystemSwVersion', self.stateUrlBase)
 
 
-    def getBfdSessionState(self,
-                           IpAddr):
+    def getDaemonState(self,
+                       Name):
         obj =  { 
-                'IpAddr' : IpAddr,
+                'Name' : Name,
                 }
-        reqUrl =  self.stateUrlBase + 'BfdSession'
+        reqUrl =  self.stateUrlBase + 'Daemon'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
-    def getBfdSessionStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BfdSession'+"/%s"%(objectId)
+    def getDaemonStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'Daemon'+"/%s"%(objectId)
         r = requests.get(reqUrl, data=None, headers=headers) 
         return r
 
-    def getAllBfdSessionStates(self):
-        return self.getObjects( 'BfdSession', self.stateUrlBase)
+    def getAllDaemonStates(self):
+        return self.getObjects( 'Daemon', self.stateUrlBase)
 
 
     def getSystemParamState(self,
@@ -6197,6 +6976,628 @@ class FlexSwitch( object):
 
     def getAllSystemParamStates(self):
         return self.getObjects( 'SystemParam', self.stateUrlBase)
+
+
+    def getDWDMModuleNwIntfPMState(self,
+                                   Resource,
+                                   NwIntfId,
+                                   Type,
+                                   Class,
+                                   ModuleId):
+        obj =  { 
+                'Resource' : Resource,
+                'NwIntfId' : int(NwIntfId),
+                'Type' : Type,
+                'Class' : Class,
+                'ModuleId' : int(ModuleId),
+                }
+        reqUrl =  self.stateUrlBase + 'DWDMModuleNwIntfPM'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getDWDMModuleNwIntfPMStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'DWDMModuleNwIntfPM'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllDWDMModuleNwIntfPMStates(self):
+        return self.getObjects( 'DWDMModuleNwIntfPM', self.stateUrlBase)
+
+
+    """
+    .. automethod :: createDWDMModule(self,
+        :param uint8 ModuleId : DWDM Module identifier DWDM Module identifier
+        :param bool EnableExtPMTickSrc : Enable/Disable external tick source for performance monitoring Enable/Disable external tick source for performance monitoring
+        :param uint8 PMInterval : Performance monitoring interval Performance monitoring interval
+        :param string AdminState : Reset state of this dwdm module (false (Reset deasserted) Reset state of this dwdm module (false (Reset deasserted)
+        :param bool IndependentLaneMode : Network lane configuration for the DWDM Module. true-Independent lanes Network lane configuration for the DWDM Module. true-Independent lanes
+
+	"""
+    def createDWDMModule(self,
+                         ModuleId,
+                         EnableExtPMTickSrc=False,
+                         PMInterval=1,
+                         AdminState='DOWN',
+                         IndependentLaneMode=True):
+        obj =  { 
+                'ModuleId' : int(ModuleId),
+                'EnableExtPMTickSrc' : True if EnableExtPMTickSrc else False,
+                'PMInterval' : int(PMInterval),
+                'AdminState' : AdminState,
+                'IndependentLaneMode' : True if IndependentLaneMode else False,
+                }
+        reqUrl =  self.cfgUrlBase+'DWDMModule'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateDWDMModule(self,
+                         ModuleId,
+                         EnableExtPMTickSrc = None,
+                         PMInterval = None,
+                         AdminState = None,
+                         IndependentLaneMode = None):
+        obj =  {}
+        if ModuleId != None :
+            obj['ModuleId'] = int(ModuleId)
+
+        if EnableExtPMTickSrc != None :
+            obj['EnableExtPMTickSrc'] = True if EnableExtPMTickSrc else False
+
+        if PMInterval != None :
+            obj['PMInterval'] = int(PMInterval)
+
+        if AdminState != None :
+            obj['AdminState'] = AdminState
+
+        if IndependentLaneMode != None :
+            obj['IndependentLaneMode'] = True if IndependentLaneMode else False
+
+        reqUrl =  self.cfgUrlBase+'DWDMModule'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateDWDMModuleById(self,
+                              objectId,
+                              EnableExtPMTickSrc = None,
+                              PMInterval = None,
+                              AdminState = None,
+                              IndependentLaneMode = None):
+        obj =  {'objectId': objectId }
+        if EnableExtPMTickSrc !=  None:
+            obj['EnableExtPMTickSrc'] = EnableExtPMTickSrc
+
+        if PMInterval !=  None:
+            obj['PMInterval'] = PMInterval
+
+        if AdminState !=  None:
+            obj['AdminState'] = AdminState
+
+        if IndependentLaneMode !=  None:
+            obj['IndependentLaneMode'] = IndependentLaneMode
+
+        reqUrl =  self.cfgUrlBase+'DWDMModule'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteDWDMModule(self,
+                         ModuleId):
+        obj =  { 
+                'ModuleId' : ModuleId,
+                }
+        reqUrl =  self.cfgUrlBase+'DWDMModule'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteDWDMModuleById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'DWDMModule'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getDWDMModule(self,
+                      ModuleId):
+        obj =  { 
+                'ModuleId' : int(ModuleId),
+                }
+        reqUrl =  self.cfgUrlBase + 'DWDMModule'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getDWDMModuleById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'DWDMModule'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllDWDMModules(self):
+        return self.getObjects( 'DWDMModule', self.cfgUrlBase)
+
+
+    """
+    .. automethod :: createBGPv6Neighbor(self,
+        :param string IntfRef : Interface of the BGP neighbor Interface of the BGP neighbor
+        :param string NeighborAddress : Address of the BGP neighbor Address of the BGP neighbor
+        :param string Description : Description of the BGP neighbor Description of the BGP neighbor
+        :param string PeerGroup : Peer group of the BGP neighbor Peer group of the BGP neighbor
+        :param string UpdateSource : Source IP to connect to the BGP neighbor Source IP to connect to the BGP neighbor
+        :param bool BfdEnable : Enable/Disable BFD for the BGP neighbor Enable/Disable BFD for the BGP neighbor
+        :param uint8 MultiHopTTL : TTL for multi hop BGP neighbor TTL for multi hop BGP neighbor
+        :param uint32 LocalAS : Local AS of the BGP neighbor Local AS of the BGP neighbor
+        :param uint32 KeepaliveTime : Keep alive time for the BGP neighbor Keep alive time for the BGP neighbor
+        :param bool AddPathsRx : Receive additional paths from BGP neighbor Receive additional paths from BGP neighbor
+        :param bool RouteReflectorClient : Set/Clear BGP neighbor as a route reflector client Set/Clear BGP neighbor as a route reflector client
+        :param uint8 MaxPrefixesRestartTimer : Time in seconds to wait before we start BGP peer session when we receive max prefixes Time in seconds to wait before we start BGP peer session when we receive max prefixes
+        :param bool MultiHopEnable : Enable/Disable multi hop for BGP neighbor Enable/Disable multi hop for BGP neighbor
+        :param uint32 RouteReflectorClusterId : Cluster Id of the internal BGP neighbor route reflector client Cluster Id of the internal BGP neighbor route reflector client
+        :param bool MaxPrefixesDisconnect : Disconnect the BGP peer session when we receive the max prefixes from the neighbor Disconnect the BGP peer session when we receive the max prefixes from the neighbor
+        :param uint32 PeerAS : Peer AS of the BGP neighbor Peer AS of the BGP neighbor
+        :param uint8 AddPathsMaxTx : Max number of additional paths that can be transmitted to BGP neighbor Max number of additional paths that can be transmitted to BGP neighbor
+        :param uint32 MaxPrefixes : Maximum number of prefixes that can be received from the BGP neighbor Maximum number of prefixes that can be received from the BGP neighbor
+        :param uint8 MaxPrefixesThresholdPct : The percentage of maximum prefixes before we start logging The percentage of maximum prefixes before we start logging
+        :param string BfdSessionParam : Bfd session param name to be applied Bfd session param name to be applied
+        :param uint32 HoldTime : Hold time for the BGP neighbor Hold time for the BGP neighbor
+        :param uint32 ConnectRetryTime : Connect retry time to connect to BGP neighbor after disconnect Connect retry time to connect to BGP neighbor after disconnect
+
+	"""
+    def createBGPv6Neighbor(self,
+                            IntfRef,
+                            NeighborAddress,
+                            Description='',
+                            PeerGroup='',
+                            UpdateSource='',
+                            BfdEnable=False,
+                            MultiHopTTL=0,
+                            LocalAS=0,
+                            KeepaliveTime=60,
+                            AddPathsRx=False,
+                            RouteReflectorClient=False,
+                            MaxPrefixesRestartTimer=0,
+                            MultiHopEnable=False,
+                            RouteReflectorClusterId=0,
+                            MaxPrefixesDisconnect=False,
+                            PeerAS=0,
+                            AddPathsMaxTx=0,
+                            MaxPrefixes=0,
+                            MaxPrefixesThresholdPct=80,
+                            BfdSessionParam='default',
+                            HoldTime=180,
+                            ConnectRetryTime=60):
+        obj =  { 
+                'IntfRef' : IntfRef,
+                'NeighborAddress' : NeighborAddress,
+                'Description' : Description,
+                'PeerGroup' : PeerGroup,
+                'UpdateSource' : UpdateSource,
+                'BfdEnable' : True if BfdEnable else False,
+                'MultiHopTTL' : int(MultiHopTTL),
+                'LocalAS' : int(LocalAS),
+                'KeepaliveTime' : int(KeepaliveTime),
+                'AddPathsRx' : True if AddPathsRx else False,
+                'RouteReflectorClient' : True if RouteReflectorClient else False,
+                'MaxPrefixesRestartTimer' : int(MaxPrefixesRestartTimer),
+                'MultiHopEnable' : True if MultiHopEnable else False,
+                'RouteReflectorClusterId' : int(RouteReflectorClusterId),
+                'MaxPrefixesDisconnect' : True if MaxPrefixesDisconnect else False,
+                'PeerAS' : int(PeerAS),
+                'AddPathsMaxTx' : int(AddPathsMaxTx),
+                'MaxPrefixes' : int(MaxPrefixes),
+                'MaxPrefixesThresholdPct' : int(MaxPrefixesThresholdPct),
+                'BfdSessionParam' : BfdSessionParam,
+                'HoldTime' : int(HoldTime),
+                'ConnectRetryTime' : int(ConnectRetryTime),
+                }
+        reqUrl =  self.cfgUrlBase+'BGPv6Neighbor'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateBGPv6Neighbor(self,
+                            IntfRef,
+                            NeighborAddress,
+                            Description = None,
+                            PeerGroup = None,
+                            UpdateSource = None,
+                            BfdEnable = None,
+                            MultiHopTTL = None,
+                            LocalAS = None,
+                            KeepaliveTime = None,
+                            AddPathsRx = None,
+                            RouteReflectorClient = None,
+                            MaxPrefixesRestartTimer = None,
+                            MultiHopEnable = None,
+                            RouteReflectorClusterId = None,
+                            MaxPrefixesDisconnect = None,
+                            PeerAS = None,
+                            AddPathsMaxTx = None,
+                            MaxPrefixes = None,
+                            MaxPrefixesThresholdPct = None,
+                            BfdSessionParam = None,
+                            HoldTime = None,
+                            ConnectRetryTime = None):
+        obj =  {}
+        if IntfRef != None :
+            obj['IntfRef'] = IntfRef
+
+        if NeighborAddress != None :
+            obj['NeighborAddress'] = NeighborAddress
+
+        if Description != None :
+            obj['Description'] = Description
+
+        if PeerGroup != None :
+            obj['PeerGroup'] = PeerGroup
+
+        if UpdateSource != None :
+            obj['UpdateSource'] = UpdateSource
+
+        if BfdEnable != None :
+            obj['BfdEnable'] = True if BfdEnable else False
+
+        if MultiHopTTL != None :
+            obj['MultiHopTTL'] = int(MultiHopTTL)
+
+        if LocalAS != None :
+            obj['LocalAS'] = int(LocalAS)
+
+        if KeepaliveTime != None :
+            obj['KeepaliveTime'] = int(KeepaliveTime)
+
+        if AddPathsRx != None :
+            obj['AddPathsRx'] = True if AddPathsRx else False
+
+        if RouteReflectorClient != None :
+            obj['RouteReflectorClient'] = True if RouteReflectorClient else False
+
+        if MaxPrefixesRestartTimer != None :
+            obj['MaxPrefixesRestartTimer'] = int(MaxPrefixesRestartTimer)
+
+        if MultiHopEnable != None :
+            obj['MultiHopEnable'] = True if MultiHopEnable else False
+
+        if RouteReflectorClusterId != None :
+            obj['RouteReflectorClusterId'] = int(RouteReflectorClusterId)
+
+        if MaxPrefixesDisconnect != None :
+            obj['MaxPrefixesDisconnect'] = True if MaxPrefixesDisconnect else False
+
+        if PeerAS != None :
+            obj['PeerAS'] = int(PeerAS)
+
+        if AddPathsMaxTx != None :
+            obj['AddPathsMaxTx'] = int(AddPathsMaxTx)
+
+        if MaxPrefixes != None :
+            obj['MaxPrefixes'] = int(MaxPrefixes)
+
+        if MaxPrefixesThresholdPct != None :
+            obj['MaxPrefixesThresholdPct'] = int(MaxPrefixesThresholdPct)
+
+        if BfdSessionParam != None :
+            obj['BfdSessionParam'] = BfdSessionParam
+
+        if HoldTime != None :
+            obj['HoldTime'] = int(HoldTime)
+
+        if ConnectRetryTime != None :
+            obj['ConnectRetryTime'] = int(ConnectRetryTime)
+
+        reqUrl =  self.cfgUrlBase+'BGPv6Neighbor'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateBGPv6NeighborById(self,
+                                 objectId,
+                                 Description = None,
+                                 PeerGroup = None,
+                                 UpdateSource = None,
+                                 BfdEnable = None,
+                                 MultiHopTTL = None,
+                                 LocalAS = None,
+                                 KeepaliveTime = None,
+                                 AddPathsRx = None,
+                                 RouteReflectorClient = None,
+                                 MaxPrefixesRestartTimer = None,
+                                 MultiHopEnable = None,
+                                 RouteReflectorClusterId = None,
+                                 MaxPrefixesDisconnect = None,
+                                 PeerAS = None,
+                                 AddPathsMaxTx = None,
+                                 MaxPrefixes = None,
+                                 MaxPrefixesThresholdPct = None,
+                                 BfdSessionParam = None,
+                                 HoldTime = None,
+                                 ConnectRetryTime = None):
+        obj =  {'objectId': objectId }
+        if Description !=  None:
+            obj['Description'] = Description
+
+        if PeerGroup !=  None:
+            obj['PeerGroup'] = PeerGroup
+
+        if UpdateSource !=  None:
+            obj['UpdateSource'] = UpdateSource
+
+        if BfdEnable !=  None:
+            obj['BfdEnable'] = BfdEnable
+
+        if MultiHopTTL !=  None:
+            obj['MultiHopTTL'] = MultiHopTTL
+
+        if LocalAS !=  None:
+            obj['LocalAS'] = LocalAS
+
+        if KeepaliveTime !=  None:
+            obj['KeepaliveTime'] = KeepaliveTime
+
+        if AddPathsRx !=  None:
+            obj['AddPathsRx'] = AddPathsRx
+
+        if RouteReflectorClient !=  None:
+            obj['RouteReflectorClient'] = RouteReflectorClient
+
+        if MaxPrefixesRestartTimer !=  None:
+            obj['MaxPrefixesRestartTimer'] = MaxPrefixesRestartTimer
+
+        if MultiHopEnable !=  None:
+            obj['MultiHopEnable'] = MultiHopEnable
+
+        if RouteReflectorClusterId !=  None:
+            obj['RouteReflectorClusterId'] = RouteReflectorClusterId
+
+        if MaxPrefixesDisconnect !=  None:
+            obj['MaxPrefixesDisconnect'] = MaxPrefixesDisconnect
+
+        if PeerAS !=  None:
+            obj['PeerAS'] = PeerAS
+
+        if AddPathsMaxTx !=  None:
+            obj['AddPathsMaxTx'] = AddPathsMaxTx
+
+        if MaxPrefixes !=  None:
+            obj['MaxPrefixes'] = MaxPrefixes
+
+        if MaxPrefixesThresholdPct !=  None:
+            obj['MaxPrefixesThresholdPct'] = MaxPrefixesThresholdPct
+
+        if BfdSessionParam !=  None:
+            obj['BfdSessionParam'] = BfdSessionParam
+
+        if HoldTime !=  None:
+            obj['HoldTime'] = HoldTime
+
+        if ConnectRetryTime !=  None:
+            obj['ConnectRetryTime'] = ConnectRetryTime
+
+        reqUrl =  self.cfgUrlBase+'BGPv6Neighbor'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteBGPv6Neighbor(self,
+                            IntfRef,
+                            NeighborAddress):
+        obj =  { 
+                'IntfRef' : IntfRef,
+                'NeighborAddress' : NeighborAddress,
+                }
+        reqUrl =  self.cfgUrlBase+'BGPv6Neighbor'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteBGPv6NeighborById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'BGPv6Neighbor'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getBGPv6Neighbor(self,
+                         IntfRef,
+                         NeighborAddress):
+        obj =  { 
+                'IntfRef' : IntfRef,
+                'NeighborAddress' : NeighborAddress,
+                }
+        reqUrl =  self.cfgUrlBase + 'BGPv6Neighbor'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getBGPv6NeighborById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'BGPv6Neighbor'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllBGPv6Neighbors(self):
+        return self.getObjects( 'BGPv6Neighbor', self.cfgUrlBase)
+
+
+    """
+    .. automethod :: createStpPort(self,
+        :param int32 BrgIfIndex : The value of the instance of the ifIndex object The value of the instance of the ifIndex object
+        :param int32 IfIndex : The port number of the port for which this entry contains Spanning Tree Protocol management information. The port number of the port for which this entry contains Spanning Tree Protocol management information.
+        :param int32 BpduGuardInterval : The interval time to which a port will try to recover from BPDU Guard err-disable state.  If no BPDU frames are detected after this timeout plus 3 Times Hello Time then the port will transition back to Up state.  If condition is cleared manually then this operation is ignored.  If set to zero then timer is inactive and recovery is based on manual intervention. The interval time to which a port will try to recover from BPDU Guard err-disable state.  If no BPDU frames are detected after this timeout plus 3 Times Hello Time then the port will transition back to Up state.  If condition is cleared manually then this operation is ignored.  If set to zero then timer is inactive and recovery is based on manual intervention.
+        :param int32 PathCost : The contribution of this port to the path cost of paths towards the spanning tree root which include this port.  802.1D-1998 recommends that the default value of this parameter be in inverse proportion to the speed of the attached LAN.  New implementations should support PathCost32. If the port path costs exceeds the maximum value of this object then this object should report the maximum value The contribution of this port to the path cost of paths towards the spanning tree root which include this port.  802.1D-1998 recommends that the default value of this parameter be in inverse proportion to the speed of the attached LAN.  New implementations should support PathCost32. If the port path costs exceeds the maximum value of this object then this object should report the maximum value
+        :param int32 Priority : The value of the priority field that is contained in the first (in network byte order) octet of the (2 octet long) Port ID.  The other octet of the Port ID is given by the value of StpPort. On bridges supporting IEEE 802.1t or IEEE 802.1w The value of the priority field that is contained in the first (in network byte order) octet of the (2 octet long) Port ID.  The other octet of the Port ID is given by the value of StpPort. On bridges supporting IEEE 802.1t or IEEE 802.1w
+        :param int32 AdminEdgePort : The administrative value of the Edge Port parameter.  A value of true(1) indicates that this port should be assumed as an edge-port The administrative value of the Edge Port parameter.  A value of true(1) indicates that this port should be assumed as an edge-port
+        :param int32 Enable : The enabled/disabled status of the port. The enabled/disabled status of the port.
+        :param int32 ProtocolMigration : When operating in RSTP (version 2) mode When operating in RSTP (version 2) mode
+        :param int32 BridgeAssurance : When enabled BPDUs will be transmitted out of all stp ports regardless of state.  When an stp port fails to receive a BPDU the port should  transition to a Blocked state.  Upon reception of BDPU after shutdown  should transition port into the bridge. When enabled BPDUs will be transmitted out of all stp ports regardless of state.  When an stp port fails to receive a BPDU the port should  transition to a Blocked state.  Upon reception of BDPU after shutdown  should transition port into the bridge.
+        :param int32 BpduGuard : A Port as OperEdge which receives BPDU with BpduGuard enabled will shut the port down. A Port as OperEdge which receives BPDU with BpduGuard enabled will shut the port down.
+        :param int32 AdminPointToPoint : The administrative point-to-point status of the LAN segment attached to this port The administrative point-to-point status of the LAN segment attached to this port
+        :param int32 AdminPathCost : The administratively assigned value for the contribution of this port to the path cost of paths toward the spanning tree root.  Writing a value of '0' assigns the automatically calculated default Path Cost value to the port.  If the default Path Cost is being used The administratively assigned value for the contribution of this port to the path cost of paths toward the spanning tree root.  Writing a value of '0' assigns the automatically calculated default Path Cost value to the port.  If the default Path Cost is being used
+        :param int32 PathCost32 : The contribution of this port to the path cost of paths towards the spanning tree root which include this port.  802.1D-1998 recommends that the default value of this parameter be in inverse proportion to the speed of the attached LAN.  This object replaces PathCost to support IEEE 802.1t. Value of 1 will force node to auto discover the value        based on the ports capabilities. The contribution of this port to the path cost of paths towards the spanning tree root which include this port.  802.1D-1998 recommends that the default value of this parameter be in inverse proportion to the speed of the attached LAN.  This object replaces PathCost to support IEEE 802.1t. Value of 1 will force node to auto discover the value        based on the ports capabilities.
+
+	"""
+    def createStpPort(self,
+                      BrgIfIndex,
+                      IfIndex,
+                      BpduGuardInterval,
+                      PathCost=1,
+                      Priority=128,
+                      AdminEdgePort=2,
+                      Enable=2,
+                      ProtocolMigration=1,
+                      BridgeAssurance=2,
+                      BpduGuard=2,
+                      AdminPointToPoint=2,
+                      AdminPathCost=200000,
+                      PathCost32=1):
+        obj =  { 
+                'BrgIfIndex' : int(BrgIfIndex),
+                'IfIndex' : int(IfIndex),
+                'BpduGuardInterval' : int(BpduGuardInterval),
+                'PathCost' : int(PathCost),
+                'Priority' : int(Priority),
+                'AdminEdgePort' : int(AdminEdgePort),
+                'Enable' : int(Enable),
+                'ProtocolMigration' : int(ProtocolMigration),
+                'BridgeAssurance' : int(BridgeAssurance),
+                'BpduGuard' : int(BpduGuard),
+                'AdminPointToPoint' : int(AdminPointToPoint),
+                'AdminPathCost' : int(AdminPathCost),
+                'PathCost32' : int(PathCost32),
+                }
+        reqUrl =  self.cfgUrlBase+'StpPort'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateStpPort(self,
+                      BrgIfIndex,
+                      IfIndex,
+                      BpduGuardInterval = None,
+                      PathCost = None,
+                      Priority = None,
+                      AdminEdgePort = None,
+                      Enable = None,
+                      ProtocolMigration = None,
+                      BridgeAssurance = None,
+                      BpduGuard = None,
+                      AdminPointToPoint = None,
+                      AdminPathCost = None,
+                      PathCost32 = None):
+        obj =  {}
+        if BrgIfIndex != None :
+            obj['BrgIfIndex'] = int(BrgIfIndex)
+
+        if IfIndex != None :
+            obj['IfIndex'] = int(IfIndex)
+
+        if BpduGuardInterval != None :
+            obj['BpduGuardInterval'] = int(BpduGuardInterval)
+
+        if PathCost != None :
+            obj['PathCost'] = int(PathCost)
+
+        if Priority != None :
+            obj['Priority'] = int(Priority)
+
+        if AdminEdgePort != None :
+            obj['AdminEdgePort'] = int(AdminEdgePort)
+
+        if Enable != None :
+            obj['Enable'] = int(Enable)
+
+        if ProtocolMigration != None :
+            obj['ProtocolMigration'] = int(ProtocolMigration)
+
+        if BridgeAssurance != None :
+            obj['BridgeAssurance'] = int(BridgeAssurance)
+
+        if BpduGuard != None :
+            obj['BpduGuard'] = int(BpduGuard)
+
+        if AdminPointToPoint != None :
+            obj['AdminPointToPoint'] = int(AdminPointToPoint)
+
+        if AdminPathCost != None :
+            obj['AdminPathCost'] = int(AdminPathCost)
+
+        if PathCost32 != None :
+            obj['PathCost32'] = int(PathCost32)
+
+        reqUrl =  self.cfgUrlBase+'StpPort'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateStpPortById(self,
+                           objectId,
+                           BpduGuardInterval = None,
+                           PathCost = None,
+                           Priority = None,
+                           AdminEdgePort = None,
+                           Enable = None,
+                           ProtocolMigration = None,
+                           BridgeAssurance = None,
+                           BpduGuard = None,
+                           AdminPointToPoint = None,
+                           AdminPathCost = None,
+                           PathCost32 = None):
+        obj =  {'objectId': objectId }
+        if BpduGuardInterval !=  None:
+            obj['BpduGuardInterval'] = BpduGuardInterval
+
+        if PathCost !=  None:
+            obj['PathCost'] = PathCost
+
+        if Priority !=  None:
+            obj['Priority'] = Priority
+
+        if AdminEdgePort !=  None:
+            obj['AdminEdgePort'] = AdminEdgePort
+
+        if Enable !=  None:
+            obj['Enable'] = Enable
+
+        if ProtocolMigration !=  None:
+            obj['ProtocolMigration'] = ProtocolMigration
+
+        if BridgeAssurance !=  None:
+            obj['BridgeAssurance'] = BridgeAssurance
+
+        if BpduGuard !=  None:
+            obj['BpduGuard'] = BpduGuard
+
+        if AdminPointToPoint !=  None:
+            obj['AdminPointToPoint'] = AdminPointToPoint
+
+        if AdminPathCost !=  None:
+            obj['AdminPathCost'] = AdminPathCost
+
+        if PathCost32 !=  None:
+            obj['PathCost32'] = PathCost32
+
+        reqUrl =  self.cfgUrlBase+'StpPort'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteStpPort(self,
+                      BrgIfIndex,
+                      IfIndex):
+        obj =  { 
+                'BrgIfIndex' : BrgIfIndex,
+                'IfIndex' : IfIndex,
+                }
+        reqUrl =  self.cfgUrlBase+'StpPort'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteStpPortById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'StpPort'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getStpPort(self,
+                   BrgIfIndex,
+                   IfIndex):
+        obj =  { 
+                'BrgIfIndex' : int(BrgIfIndex),
+                'IfIndex' : int(IfIndex),
+                }
+        reqUrl =  self.cfgUrlBase + 'StpPort'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getStpPortById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'StpPort'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllStpPorts(self):
+        return self.getObjects( 'StpPort', self.cfgUrlBase)
 
 
     def getBGPRouteState(self,
@@ -6337,6 +7738,256 @@ class FlexSwitch( object):
         return self.getObjects( 'IPv4Route', self.cfgUrlBase)
 
 
+    """
+    .. automethod :: createBGPv6PeerGroup(self,
+        :param string Name : Name of the BGP peer group Name of the BGP peer group
+        :param string UpdateSource : Source IP to connect to the BGP neighbor Source IP to connect to the BGP neighbor
+        :param string Description : Description of the BGP neighbor Description of the BGP neighbor
+        :param uint8 MaxPrefixesRestartTimer : Time to wait before we start BGP peer session when we receive max prefixes Time to wait before we start BGP peer session when we receive max prefixes
+        :param bool RouteReflectorClient : Set/Clear BGP neighbor as a route reflector client Set/Clear BGP neighbor as a route reflector client
+        :param uint8 MultiHopTTL : TTL for multi hop BGP neighbor TTL for multi hop BGP neighbor
+        :param bool MaxPrefixesDisconnect : Disconnect the BGP peer session when we receive the max prefixes from the neighbor Disconnect the BGP peer session when we receive the max prefixes from the neighbor
+        :param uint32 LocalAS : Local AS of the BGP neighbor Local AS of the BGP neighbor
+        :param uint32 KeepaliveTime : Keep alive time for the BGP neighbor Keep alive time for the BGP neighbor
+        :param uint32 RouteReflectorClusterId : Cluster Id of the internal BGP neighbor route reflector client Cluster Id of the internal BGP neighbor route reflector client
+        :param uint8 AddPathsMaxTx : Max number of additional paths that can be transmitted to BGP neighbor Max number of additional paths that can be transmitted to BGP neighbor
+        :param bool MultiHopEnable : Enable/Disable multi hop for BGP neighbor Enable/Disable multi hop for BGP neighbor
+        :param bool AddPathsRx : Receive additional paths from BGP neighbor Receive additional paths from BGP neighbor
+        :param uint8 MaxPrefixesThresholdPct : The percentage of maximum prefixes before we start logging The percentage of maximum prefixes before we start logging
+        :param uint32 HoldTime : Hold time for the BGP neighbor Hold time for the BGP neighbor
+        :param uint32 MaxPrefixes : Maximum number of prefixes that can be received from the BGP neighbor Maximum number of prefixes that can be received from the BGP neighbor
+        :param uint32 PeerAS : Peer AS of the BGP neighbor Peer AS of the BGP neighbor
+        :param uint32 ConnectRetryTime : Connect retry time to connect to BGP neighbor after disconnect Connect retry time to connect to BGP neighbor after disconnect
+
+	"""
+    def createBGPv6PeerGroup(self,
+                             Name,
+                             UpdateSource='',
+                             Description='',
+                             MaxPrefixesRestartTimer=0,
+                             RouteReflectorClient=False,
+                             MultiHopTTL=0,
+                             MaxPrefixesDisconnect=False,
+                             LocalAS=0,
+                             KeepaliveTime=60,
+                             RouteReflectorClusterId=0,
+                             AddPathsMaxTx=0,
+                             MultiHopEnable=False,
+                             AddPathsRx=False,
+                             MaxPrefixesThresholdPct=0,
+                             HoldTime=180,
+                             MaxPrefixes=0,
+                             PeerAS=0,
+                             ConnectRetryTime=60):
+        obj =  { 
+                'Name' : Name,
+                'UpdateSource' : UpdateSource,
+                'Description' : Description,
+                'MaxPrefixesRestartTimer' : int(MaxPrefixesRestartTimer),
+                'RouteReflectorClient' : True if RouteReflectorClient else False,
+                'MultiHopTTL' : int(MultiHopTTL),
+                'MaxPrefixesDisconnect' : True if MaxPrefixesDisconnect else False,
+                'LocalAS' : int(LocalAS),
+                'KeepaliveTime' : int(KeepaliveTime),
+                'RouteReflectorClusterId' : int(RouteReflectorClusterId),
+                'AddPathsMaxTx' : int(AddPathsMaxTx),
+                'MultiHopEnable' : True if MultiHopEnable else False,
+                'AddPathsRx' : True if AddPathsRx else False,
+                'MaxPrefixesThresholdPct' : int(MaxPrefixesThresholdPct),
+                'HoldTime' : int(HoldTime),
+                'MaxPrefixes' : int(MaxPrefixes),
+                'PeerAS' : int(PeerAS),
+                'ConnectRetryTime' : int(ConnectRetryTime),
+                }
+        reqUrl =  self.cfgUrlBase+'BGPv6PeerGroup'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateBGPv6PeerGroup(self,
+                             Name,
+                             UpdateSource = None,
+                             Description = None,
+                             MaxPrefixesRestartTimer = None,
+                             RouteReflectorClient = None,
+                             MultiHopTTL = None,
+                             MaxPrefixesDisconnect = None,
+                             LocalAS = None,
+                             KeepaliveTime = None,
+                             RouteReflectorClusterId = None,
+                             AddPathsMaxTx = None,
+                             MultiHopEnable = None,
+                             AddPathsRx = None,
+                             MaxPrefixesThresholdPct = None,
+                             HoldTime = None,
+                             MaxPrefixes = None,
+                             PeerAS = None,
+                             ConnectRetryTime = None):
+        obj =  {}
+        if Name != None :
+            obj['Name'] = Name
+
+        if UpdateSource != None :
+            obj['UpdateSource'] = UpdateSource
+
+        if Description != None :
+            obj['Description'] = Description
+
+        if MaxPrefixesRestartTimer != None :
+            obj['MaxPrefixesRestartTimer'] = int(MaxPrefixesRestartTimer)
+
+        if RouteReflectorClient != None :
+            obj['RouteReflectorClient'] = True if RouteReflectorClient else False
+
+        if MultiHopTTL != None :
+            obj['MultiHopTTL'] = int(MultiHopTTL)
+
+        if MaxPrefixesDisconnect != None :
+            obj['MaxPrefixesDisconnect'] = True if MaxPrefixesDisconnect else False
+
+        if LocalAS != None :
+            obj['LocalAS'] = int(LocalAS)
+
+        if KeepaliveTime != None :
+            obj['KeepaliveTime'] = int(KeepaliveTime)
+
+        if RouteReflectorClusterId != None :
+            obj['RouteReflectorClusterId'] = int(RouteReflectorClusterId)
+
+        if AddPathsMaxTx != None :
+            obj['AddPathsMaxTx'] = int(AddPathsMaxTx)
+
+        if MultiHopEnable != None :
+            obj['MultiHopEnable'] = True if MultiHopEnable else False
+
+        if AddPathsRx != None :
+            obj['AddPathsRx'] = True if AddPathsRx else False
+
+        if MaxPrefixesThresholdPct != None :
+            obj['MaxPrefixesThresholdPct'] = int(MaxPrefixesThresholdPct)
+
+        if HoldTime != None :
+            obj['HoldTime'] = int(HoldTime)
+
+        if MaxPrefixes != None :
+            obj['MaxPrefixes'] = int(MaxPrefixes)
+
+        if PeerAS != None :
+            obj['PeerAS'] = int(PeerAS)
+
+        if ConnectRetryTime != None :
+            obj['ConnectRetryTime'] = int(ConnectRetryTime)
+
+        reqUrl =  self.cfgUrlBase+'BGPv6PeerGroup'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateBGPv6PeerGroupById(self,
+                                  objectId,
+                                  UpdateSource = None,
+                                  Description = None,
+                                  MaxPrefixesRestartTimer = None,
+                                  RouteReflectorClient = None,
+                                  MultiHopTTL = None,
+                                  MaxPrefixesDisconnect = None,
+                                  LocalAS = None,
+                                  KeepaliveTime = None,
+                                  RouteReflectorClusterId = None,
+                                  AddPathsMaxTx = None,
+                                  MultiHopEnable = None,
+                                  AddPathsRx = None,
+                                  MaxPrefixesThresholdPct = None,
+                                  HoldTime = None,
+                                  MaxPrefixes = None,
+                                  PeerAS = None,
+                                  ConnectRetryTime = None):
+        obj =  {'objectId': objectId }
+        if UpdateSource !=  None:
+            obj['UpdateSource'] = UpdateSource
+
+        if Description !=  None:
+            obj['Description'] = Description
+
+        if MaxPrefixesRestartTimer !=  None:
+            obj['MaxPrefixesRestartTimer'] = MaxPrefixesRestartTimer
+
+        if RouteReflectorClient !=  None:
+            obj['RouteReflectorClient'] = RouteReflectorClient
+
+        if MultiHopTTL !=  None:
+            obj['MultiHopTTL'] = MultiHopTTL
+
+        if MaxPrefixesDisconnect !=  None:
+            obj['MaxPrefixesDisconnect'] = MaxPrefixesDisconnect
+
+        if LocalAS !=  None:
+            obj['LocalAS'] = LocalAS
+
+        if KeepaliveTime !=  None:
+            obj['KeepaliveTime'] = KeepaliveTime
+
+        if RouteReflectorClusterId !=  None:
+            obj['RouteReflectorClusterId'] = RouteReflectorClusterId
+
+        if AddPathsMaxTx !=  None:
+            obj['AddPathsMaxTx'] = AddPathsMaxTx
+
+        if MultiHopEnable !=  None:
+            obj['MultiHopEnable'] = MultiHopEnable
+
+        if AddPathsRx !=  None:
+            obj['AddPathsRx'] = AddPathsRx
+
+        if MaxPrefixesThresholdPct !=  None:
+            obj['MaxPrefixesThresholdPct'] = MaxPrefixesThresholdPct
+
+        if HoldTime !=  None:
+            obj['HoldTime'] = HoldTime
+
+        if MaxPrefixes !=  None:
+            obj['MaxPrefixes'] = MaxPrefixes
+
+        if PeerAS !=  None:
+            obj['PeerAS'] = PeerAS
+
+        if ConnectRetryTime !=  None:
+            obj['ConnectRetryTime'] = ConnectRetryTime
+
+        reqUrl =  self.cfgUrlBase+'BGPv6PeerGroup'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteBGPv6PeerGroup(self,
+                             Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.cfgUrlBase+'BGPv6PeerGroup'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteBGPv6PeerGroupById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'BGPv6PeerGroup'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getBGPv6PeerGroup(self,
+                          Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.cfgUrlBase + 'BGPv6PeerGroup'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getBGPv6PeerGroupById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'BGPv6PeerGroup'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllBGPv6PeerGroups(self):
+        return self.getObjects( 'BGPv6PeerGroup', self.cfgUrlBase)
+
+
     def getArpEntryHwState(self,
                            IpAddr):
         obj =  { 
@@ -6373,38 +8024,21 @@ class FlexSwitch( object):
         return self.getObjects( 'OspfGlobal', self.stateUrlBase)
 
 
-    def getBGPNeighborState(self,
-                            NeighborAddress,
-                            IfIndex):
-        obj =  { 
-                'NeighborAddress' : NeighborAddress,
-                'IfIndex' : int(IfIndex),
-                }
-        reqUrl =  self.stateUrlBase + 'BGPNeighbor'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    def getBGPNeighborStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BGPNeighbor'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllBGPNeighborStates(self):
-        return self.getObjects( 'BGPNeighbor', self.stateUrlBase)
-
-
     """
     .. automethod :: createIPv6Intf(self,
         :param string IntfRef : Interface name or ifindex of port/lag or vlan on which this IPv4 object is configured Interface name or ifindex of port/lag or vlan on which this IPv4 object is configured
-        :param string IpAddr : Interface IP Address/Prefix-Length to provision on switch interface Interface IP Address/Prefix-Length to provision on switch interface
+        :param string IpAddr : Interface Global Scope IP Address/Prefix-Length to provision on switch interface Interface Global Scope IP Address/Prefix-Length to provision on switch interface
+        :param bool LinkIp : Interface Link Scope IP Address auto-configured Interface Link Scope IP Address auto-configured
 
 	"""
     def createIPv6Intf(self,
                        IntfRef,
-                       IpAddr):
+                       IpAddr='',
+                       LinkIp=True):
         obj =  { 
                 'IntfRef' : IntfRef,
                 'IpAddr' : IpAddr,
+                'LinkIp' : True if LinkIp else False,
                 }
         reqUrl =  self.cfgUrlBase+'IPv6Intf'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -6412,7 +8046,8 @@ class FlexSwitch( object):
 
     def updateIPv6Intf(self,
                        IntfRef,
-                       IpAddr = None):
+                       IpAddr = None,
+                       LinkIp = None):
         obj =  {}
         if IntfRef != None :
             obj['IntfRef'] = IntfRef
@@ -6420,16 +8055,23 @@ class FlexSwitch( object):
         if IpAddr != None :
             obj['IpAddr'] = IpAddr
 
+        if LinkIp != None :
+            obj['LinkIp'] = True if LinkIp else False
+
         reqUrl =  self.cfgUrlBase+'IPv6Intf'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
     def updateIPv6IntfById(self,
                             objectId,
-                            IpAddr = None):
+                            IpAddr = None,
+                            LinkIp = None):
         obj =  {'objectId': objectId }
         if IpAddr !=  None:
             obj['IpAddr'] = IpAddr
+
+        if LinkIp !=  None:
+            obj['LinkIp'] = LinkIp
 
         reqUrl =  self.cfgUrlBase+'IPv6Intf'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -6465,6 +8107,97 @@ class FlexSwitch( object):
 
     def getAllIPv6Intfs(self):
         return self.getObjects( 'IPv6Intf', self.cfgUrlBase)
+
+
+    def getRouteStatsPerProtocolState(self,
+                                      Protocol):
+        obj =  { 
+                'Protocol' : Protocol,
+                }
+        reqUrl =  self.stateUrlBase + 'RouteStatsPerProtocol'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getRouteStatsPerProtocolStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'RouteStatsPerProtocol'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllRouteStatsPerProtocolStates(self):
+        return self.getObjects( 'RouteStatsPerProtocol', self.stateUrlBase)
+
+
+    """
+    .. automethod :: createIsisGlobal(self,
+        :param string Vrf : VRF id where ISIS is globally enabled or disabled VRF id where ISIS is globally enabled or disabled
+        :param bool Enable : Global ISIS state in this VRF Global ISIS state in this VRF
+
+	"""
+    def createIsisGlobal(self,
+                         Enable=True):
+        obj =  { 
+                'Vrf' : 'default',
+                'Enable' : True if Enable else False,
+                }
+        reqUrl =  self.cfgUrlBase+'IsisGlobal'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateIsisGlobal(self,
+                         Vrf,
+                         Enable = None):
+        obj =  {}
+        if Vrf != None :
+            obj['Vrf'] = Vrf
+
+        if Enable != None :
+            obj['Enable'] = True if Enable else False
+
+        reqUrl =  self.cfgUrlBase+'IsisGlobal'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateIsisGlobalById(self,
+                              objectId,
+                              Enable = None):
+        obj =  {'objectId': objectId }
+        if Enable !=  None:
+            obj['Enable'] = Enable
+
+        reqUrl =  self.cfgUrlBase+'IsisGlobal'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteIsisGlobal(self,
+                         Vrf):
+        obj =  { 
+                'Vrf' : Vrf,
+                }
+        reqUrl =  self.cfgUrlBase+'IsisGlobal'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteIsisGlobalById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'IsisGlobal'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getIsisGlobal(self,
+                      Vrf):
+        obj =  { 
+                'Vrf' : Vrf,
+                }
+        reqUrl =  self.cfgUrlBase + 'IsisGlobal'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getIsisGlobalById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'IsisGlobal'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllIsisGlobals(self):
+        return self.getObjects( 'IsisGlobal', self.cfgUrlBase)
 
 
     def getVrrpVridState(self,
@@ -6918,4 +8651,22 @@ class FlexSwitch( object):
 
     def getAllOspfIfEntryStates(self):
         return self.getObjects( 'OspfIfEntry', self.stateUrlBase)
+
+
+    def getRIBEventState(self,
+                         Index):
+        obj =  { 
+                'Index' : int(Index),
+                }
+        reqUrl =  self.stateUrlBase + 'RIBEvent'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getRIBEventStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'RIBEvent'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllRIBEventStates(self):
+        return self.getObjects( 'RIBEvent', self.stateUrlBase)
 
