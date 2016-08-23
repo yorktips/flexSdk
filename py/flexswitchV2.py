@@ -1403,9 +1403,9 @@ class FlexSwitch( object):
 
 
     def getLaPortChannelState(self,
-                              LagId):
+                              IntfRef):
         obj =  { 
-                'LagId' : int(LagId),
+                'IntfRef' : IntfRef,
                 }
         reqUrl =  self.stateUrlBase + 'LaPortChannel'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -1599,6 +1599,186 @@ class FlexSwitch( object):
 
     def getAllDhcpRelayIntfs(self):
         return self.getObjects( 'DhcpRelayIntf', self.cfgUrlBase)
+
+
+    def getDistributedRelayState(self,
+                                 DrniName):
+        obj =  { 
+                'DrniName' : DrniName,
+                }
+        reqUrl =  self.stateUrlBase + 'DistributedRelay'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getDistributedRelayStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'DistributedRelay'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllDistributedRelayStates(self):
+        return self.getObjects( 'DistributedRelay', self.stateUrlBase)
+
+
+    """
+    .. automethod :: createAclRule(self,
+        :param string RuleName : Acl rule name Acl rule name
+        :param string SourceMac : Source MAC address. Source MAC address.
+        :param string DestMac : Destination MAC address Destination MAC address
+        :param string SourceIp : Source IP address Source IP address
+        :param string DestIp : Destination IP address Destination IP address
+        :param string SourceMask : Network mask for source IP Network mask for source IP
+        :param string DestMask : Network mark for dest IP Network mark for dest IP
+        :param string Proto : Protocol type Protocol type
+        :param int32 Port : L4 Port L4 Port
+        :param string Action : Type of action (Allow/Deny) Type of action (Allow/Deny)
+
+	"""
+    def createAclRule(self,
+                      RuleName,
+                      SourceMac,
+                      DestMac,
+                      SourceIp,
+                      DestIp,
+                      SourceMask,
+                      DestMask,
+                      Proto,
+                      Port,
+                      Action='Allow'):
+        obj =  { 
+                'RuleName' : RuleName,
+                'SourceMac' : SourceMac,
+                'DestMac' : DestMac,
+                'SourceIp' : SourceIp,
+                'DestIp' : DestIp,
+                'SourceMask' : SourceMask,
+                'DestMask' : DestMask,
+                'Proto' : Proto,
+                'Port' : int(Port),
+                'Action' : Action,
+                }
+        reqUrl =  self.cfgUrlBase+'AclRule'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateAclRule(self,
+                      RuleName,
+                      SourceMac = None,
+                      DestMac = None,
+                      SourceIp = None,
+                      DestIp = None,
+                      SourceMask = None,
+                      DestMask = None,
+                      Proto = None,
+                      Port = None,
+                      Action = None):
+        obj =  {}
+        if RuleName != None :
+            obj['RuleName'] = RuleName
+
+        if SourceMac != None :
+            obj['SourceMac'] = SourceMac
+
+        if DestMac != None :
+            obj['DestMac'] = DestMac
+
+        if SourceIp != None :
+            obj['SourceIp'] = SourceIp
+
+        if DestIp != None :
+            obj['DestIp'] = DestIp
+
+        if SourceMask != None :
+            obj['SourceMask'] = SourceMask
+
+        if DestMask != None :
+            obj['DestMask'] = DestMask
+
+        if Proto != None :
+            obj['Proto'] = Proto
+
+        if Port != None :
+            obj['Port'] = int(Port)
+
+        if Action != None :
+            obj['Action'] = Action
+
+        reqUrl =  self.cfgUrlBase+'AclRule'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateAclRuleById(self,
+                           objectId,
+                           SourceMac = None,
+                           DestMac = None,
+                           SourceIp = None,
+                           DestIp = None,
+                           SourceMask = None,
+                           DestMask = None,
+                           Proto = None,
+                           Port = None,
+                           Action = None):
+        obj =  {'objectId': objectId }
+        if SourceMac !=  None:
+            obj['SourceMac'] = SourceMac
+
+        if DestMac !=  None:
+            obj['DestMac'] = DestMac
+
+        if SourceIp !=  None:
+            obj['SourceIp'] = SourceIp
+
+        if DestIp !=  None:
+            obj['DestIp'] = DestIp
+
+        if SourceMask !=  None:
+            obj['SourceMask'] = SourceMask
+
+        if DestMask !=  None:
+            obj['DestMask'] = DestMask
+
+        if Proto !=  None:
+            obj['Proto'] = Proto
+
+        if Port !=  None:
+            obj['Port'] = Port
+
+        if Action !=  None:
+            obj['Action'] = Action
+
+        reqUrl =  self.cfgUrlBase+'AclRule'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteAclRule(self,
+                      RuleName):
+        obj =  { 
+                'RuleName' : RuleName,
+                }
+        reqUrl =  self.cfgUrlBase+'AclRule'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteAclRuleById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'AclRule'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAclRule(self,
+                   RuleName):
+        obj =  { 
+                'RuleName' : RuleName,
+                }
+        reqUrl =  self.cfgUrlBase + 'AclRule'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getAclRuleById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'AclRule'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllAclRules(self):
+        return self.getObjects( 'AclRule', self.cfgUrlBase)
 
 
     """
@@ -2118,38 +2298,38 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createLaPortChannel(self,
-        :param int32 LagId : Id of the lag group Id of the lag group
-        :param int32 Members : List of current member interfaces for the aggregate List of current member interfaces for the aggregate
-        :param string SystemIdMac : The MAC address portion of the node's System ID. This is combined with the system priority to construct the 8-octet system-id The MAC address portion of the node's System ID. This is combined with the system priority to construct the 8-octet system-id
+        :param string IntfRef : Id of the lag group Id of the lag group
+        :param string IntfRefList : List of current member interfaces for the aggregate List of current member interfaces for the aggregate
         :param uint16 MinLinks : Specifies the mininum number of member interfaces that must be active for the aggregate interface to be available Specifies the mininum number of member interfaces that must be active for the aggregate interface to be available
         :param uint16 SystemPriority : Sytem priority used by the node on this LAG interface. Lower value is higher priority for determining which node is the controlling system. Sytem priority used by the node on this LAG interface. Lower value is higher priority for determining which node is the controlling system.
         :param int32 Interval : Set the period between LACP messages -- uses the lacp-period-type enumeration. Set the period between LACP messages -- uses the lacp-period-type enumeration.
         :param int32 LagHash : The tx hashing algorithm used by the lag group The tx hashing algorithm used by the lag group
         :param string AdminState : Convenient way to disable/enable a lag group.  The behaviour should be such that all traffic should stop.  LACP frames should continue to be processed Convenient way to disable/enable a lag group.  The behaviour should be such that all traffic should stop.  LACP frames should continue to be processed
+        :param string SystemIdMac : The MAC address portion of the nodes System ID. This is combined with the system priority to construct the 8-octet system-id The MAC address portion of the nodes System ID. This is combined with the system priority to construct the 8-octet system-id
         :param int32 LagType : Sets the type of LAG Sets the type of LAG
         :param int32 LacpMode : ACTIVE is to initiate the transmission of LACP packets. PASSIVE is to wait for peer to initiate the transmission of LACP packets. ACTIVE is to initiate the transmission of LACP packets. PASSIVE is to wait for peer to initiate the transmission of LACP packets.
 
 	"""
     def createLaPortChannel(self,
-                            LagId,
-                            Members,
-                            SystemIdMac='00',
+                            IntfRef,
+                            IntfRefList,
                             MinLinks=1,
                             SystemPriority=32768,
                             Interval=1,
                             LagHash=0,
                             AdminState='enable',
+                            SystemIdMac='00',
                             LagType=0,
                             LacpMode=0):
         obj =  { 
-                'LagId' : int(LagId),
-                'Members' : Members,
-                'SystemIdMac' : SystemIdMac,
+                'IntfRef' : IntfRef,
+                'IntfRefList' : IntfRefList,
                 'MinLinks' : int(MinLinks),
                 'SystemPriority' : int(SystemPriority),
                 'Interval' : int(Interval),
                 'LagHash' : int(LagHash),
                 'AdminState' : AdminState,
+                'SystemIdMac' : SystemIdMac,
                 'LagType' : int(LagType),
                 'LacpMode' : int(LacpMode),
                 }
@@ -2158,25 +2338,22 @@ class FlexSwitch( object):
         return r
 
     def updateLaPortChannel(self,
-                            LagId,
-                            Members = None,
-                            SystemIdMac = None,
+                            IntfRef,
+                            IntfRefList = None,
                             MinLinks = None,
                             SystemPriority = None,
                             Interval = None,
                             LagHash = None,
                             AdminState = None,
+                            SystemIdMac = None,
                             LagType = None,
                             LacpMode = None):
         obj =  {}
-        if LagId != None :
-            obj['LagId'] = int(LagId)
+        if IntfRef != None :
+            obj['IntfRef'] = IntfRef
 
-        if Members != None :
-            obj['Members'] = Members
-
-        if SystemIdMac != None :
-            obj['SystemIdMac'] = SystemIdMac
+        if IntfRefList != None :
+            obj['IntfRefList'] = IntfRefList
 
         if MinLinks != None :
             obj['MinLinks'] = int(MinLinks)
@@ -2193,6 +2370,9 @@ class FlexSwitch( object):
         if AdminState != None :
             obj['AdminState'] = AdminState
 
+        if SystemIdMac != None :
+            obj['SystemIdMac'] = SystemIdMac
+
         if LagType != None :
             obj['LagType'] = int(LagType)
 
@@ -2205,21 +2385,18 @@ class FlexSwitch( object):
 
     def updateLaPortChannelById(self,
                                  objectId,
-                                 Members = None,
-                                 SystemIdMac = None,
+                                 IntfRefList = None,
                                  MinLinks = None,
                                  SystemPriority = None,
                                  Interval = None,
                                  LagHash = None,
                                  AdminState = None,
+                                 SystemIdMac = None,
                                  LagType = None,
                                  LacpMode = None):
         obj =  {'objectId': objectId }
-        if Members !=  None:
-            obj['Members'] = Members
-
-        if SystemIdMac !=  None:
-            obj['SystemIdMac'] = SystemIdMac
+        if IntfRefList !=  None:
+            obj['IntfRefList'] = IntfRefList
 
         if MinLinks !=  None:
             obj['MinLinks'] = MinLinks
@@ -2236,6 +2413,9 @@ class FlexSwitch( object):
         if AdminState !=  None:
             obj['AdminState'] = AdminState
 
+        if SystemIdMac !=  None:
+            obj['SystemIdMac'] = SystemIdMac
+
         if LagType !=  None:
             obj['LagType'] = LagType
 
@@ -2247,9 +2427,9 @@ class FlexSwitch( object):
         return r
 
     def deleteLaPortChannel(self,
-                            LagId):
+                            IntfRef):
         obj =  { 
-                'LagId' : LagId,
+                'IntfRef' : IntfRef,
                 }
         reqUrl =  self.cfgUrlBase+'LaPortChannel'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -2261,9 +2441,9 @@ class FlexSwitch( object):
         return r
 
     def getLaPortChannel(self,
-                         LagId):
+                         IntfRef):
         obj =  { 
-                'LagId' : int(LagId),
+                'IntfRef' : IntfRef,
                 }
         reqUrl =  self.cfgUrlBase + 'LaPortChannel'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
@@ -2530,6 +2710,24 @@ class FlexSwitch( object):
         return self.getObjects( 'DhcpRelayIntf', self.stateUrlBase)
 
 
+    def getLaPortChannelIntfRefListState(self,
+                                         IntfRef):
+        obj =  { 
+                'IntfRef' : IntfRef,
+                }
+        reqUrl =  self.stateUrlBase + 'LaPortChannelIntfRefList'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getLaPortChannelIntfRefListStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'LaPortChannelIntfRefList'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllLaPortChannelIntfRefListStates(self):
+        return self.getObjects( 'LaPortChannelIntfRefList', self.stateUrlBase)
+
+
     """
     .. automethod :: createDhcpRelayGlobal(self,
         :param string DhcpRelay : Global Dhcp Relay Agent Information Global Dhcp Relay Agent Information
@@ -2680,6 +2878,267 @@ class FlexSwitch( object):
 
     def getAllArpLinuxEntryStates(self):
         return self.getObjects( 'ArpLinuxEntry', self.stateUrlBase)
+
+
+    """
+    .. automethod :: createDistributedRelay(self,
+        :param string DrniName : The unique identifier allocated to this Distributed Relay by the local System. This attribute identifies a Distributed Relay instance among the subordinate managed objects of the containing object. The unique identifier allocated to this Distributed Relay by the local System. This attribute identifies a Distributed Relay instance among the subordinate managed objects of the containing object.
+        :param uint8 PortalSystemNumber : A read-write identifier of this particular Portal System within a Portal. It is the responsibility of the network administrator to ensure that these numbers are unique among the Portal Systems with the same aDrniPortalAddr (7.4.1.1.4) A read-write identifier of this particular Portal System within a Portal. It is the responsibility of the network administrator to ensure that these numbers are unique among the Portal Systems with the same aDrniPortalAddr (7.4.1.1.4)
+        :param uint32 IntraPortalLinkList : Read-write list of the Interface Identifiers of the Ports to the Intra-Portal Links assigned to this Distributed Relay. Each Interface Identifier Read-write list of the Interface Identifiers of the Ports to the Intra-Portal Links assigned to this Distributed Relay. Each Interface Identifier
+        :param string IntfRef : Read-write Interface Identifier of the Aggregator Port assigned to this Distributed Relay Read-write Interface Identifier of the Aggregator Port assigned to this Distributed Relay
+        :param uint32 ConvAdminGateway : There are 4096 aDrniConvAdminGateway[] variables There are 4096 aDrniConvAdminGateway[] variables
+        :param uint8 NeighborAdminConvGatewayListDigest : The value for the digest of the prioritized Gateway Conversation ID-to-Gateway assignments of the Neighbor Portal System The value for the digest of the prioritized Gateway Conversation ID-to-Gateway assignments of the Neighbor Portal System
+        :param uint8 NeighborAdminConvPortListDigest : The value for the digest of the prioritized Port Conversation ID-to-Aggregation Port assignments of the Neighbor Portal System The value for the digest of the prioritized Port Conversation ID-to-Aggregation Port assignments of the Neighbor Portal System
+        :param uint32 IPLEncapMap : This managed object is applicable only when Network / IPL sharing by tag (9.3.2.2) or Network / IPL sharing by encapsulation (9.3.2.3) is supported. Each entry represents the value of the identifier used for an IPL frame associated with that Gateway Conversation ID for the encapsulation method specified in 7.4.1.1.17. There are 1024 possible Conversation Ids in a three portal system This managed object is applicable only when Network / IPL sharing by tag (9.3.2.2) or Network / IPL sharing by encapsulation (9.3.2.3) is supported. Each entry represents the value of the identifier used for an IPL frame associated with that Gateway Conversation ID for the encapsulation method specified in 7.4.1.1.17. There are 1024 possible Conversation Ids in a three portal system
+        :param uint32 NetEncapMap : This managed object is applicable only when Network / IPL sharing by tag (9.3.2.2) is supported. Each entry represents the translated value of the identifier used for a network frame associated with that Gateway Conversation ID when the method specified in 7.4.1.1.17 is the Network / IPL sharing by tag method specified in 9.3.2.2 and the network frames need to share the tag space used by IPL frames This managed object is applicable only when Network / IPL sharing by tag (9.3.2.2) is supported. Each entry represents the translated value of the identifier used for a network frame associated with that Gateway Conversation ID when the method specified in 7.4.1.1.17 is the Network / IPL sharing by tag method specified in 9.3.2.2 and the network frames need to share the tag space used by IPL frames
+        :param uint16 PortalPriority : A 2octet read-write value indicating the priority value associated with the Portals System ID. Also used as the Actors System Priority (6.3.2) for the emulated system. A 2octet read-write value indicating the priority value associated with the Portals System ID. Also used as the Actors System Priority (6.3.2) for the emulated system.
+        :param string NeighborPortAlgorithm : This object identifies the value for the Port Algorithm of the Neighbor Portal System This object identifies the value for the Port Algorithm of the Neighbor Portal System
+        :param string PortalAddress : A read-write identifier of a particular Portal. Portal-Addr has to be unique among at least all of the potential Portal Systems to which a given Portal System might be attached via an IPL Intra-Portal Link. Also used as the Actors System ID (6.3.2) for the emulated system A read-write identifier of a particular Portal. Portal-Addr has to be unique among at least all of the potential Portal Systems to which a given Portal System might be attached via an IPL Intra-Portal Link. Also used as the Actors System ID (6.3.2) for the emulated system
+        :param string IntraPortalPortProtocolDA : A 6-octet read-write MAC Address value specifying the DA to be used when sending DRCPDUs A 6-octet read-write MAC Address value specifying the DA to be used when sending DRCPDUs
+        :param string NeighborAdminDRCPState : A string of 8 bits A string of 8 bits
+        :param string NeighborGatewayAlgorithm : TThis object identifies the value for the Gateway algorithm of the Neighbor Portal System TThis object identifies the value for the Gateway algorithm of the Neighbor Portal System
+        :param bool PortConversationControl : A read-write Boolean value that controls the operation of the updateDRFHomeState (9.4.11). When set to TRUE the Home Gateway Vector is set equal to Drni_Portal_System_Port_Conversation. Setting this object to TRUE is only possible when the Gateway algorithm and the Port algorithm use the same distributions methods. The default is FALSE A read-write Boolean value that controls the operation of the updateDRFHomeState (9.4.11). When set to TRUE the Home Gateway Vector is set equal to Drni_Portal_System_Port_Conversation. Setting this object to TRUE is only possible when the Gateway algorithm and the Port algorithm use the same distributions methods. The default is FALSE
+        :param string GatewayAlgorithm : This object identifies the algorithm used by the DR Function to assign frames to a Gateway Conversation ID. Table 9-7 provides the IEEE 802.1 OUI (00 This object identifies the algorithm used by the DR Function to assign frames to a Gateway Conversation ID. Table 9-7 provides the IEEE 802.1 OUI (00
+        :param bool ThreePortalSystem : A read-write Boolean value indicating whether this Portal System is part of a Portal consisting of three Portal Systems or not. Value 1 stands for a Portal of three Portal Systems A read-write Boolean value indicating whether this Portal System is part of a Portal consisting of three Portal Systems or not. Value 1 stands for a Portal of three Portal Systems
+        :param string EncapMethod : This managed object is applicable only when Network / IPL sharing by time (9.3.2.1) or Network / IPL sharing by tag (9.3.2.2) or Network / IPL sharing by encapsulation (9.3.2.3) is supported. The object identifies the value representing the encapsulation method that is used to transport IPL frames to the Neighbor Portal System when the IPL and network link are sharing the same physical link. It consists of the 3-octet OUI or CID identifying the organization that is responsible for this encapsulation and one following octet used to identify the encapsulation method defined by that organization. Table 9-11 provides the IEEE 802.1 OUI (00-80-C2) encapsulation method encodings. A Default value of 0x00-80-C2-00 indicates that the IPL is using a separate physical or Aggregation link. A value of 1 indicates that Network / IPL sharing by time (9.3.2.1) is used. A value of 2 indicates that the encapsulation method used is the same as the one used by network frames and that Network / IPL sharing by tag (9.3.2.2) is used This managed object is applicable only when Network / IPL sharing by time (9.3.2.1) or Network / IPL sharing by tag (9.3.2.2) or Network / IPL sharing by encapsulation (9.3.2.3) is supported. The object identifies the value representing the encapsulation method that is used to transport IPL frames to the Neighbor Portal System when the IPL and network link are sharing the same physical link. It consists of the 3-octet OUI or CID identifying the organization that is responsible for this encapsulation and one following octet used to identify the encapsulation method defined by that organization. Table 9-11 provides the IEEE 802.1 OUI (00-80-C2) encapsulation method encodings. A Default value of 0x00-80-C2-00 indicates that the IPL is using a separate physical or Aggregation link. A value of 1 indicates that Network / IPL sharing by time (9.3.2.1) is used. A value of 2 indicates that the encapsulation method used is the same as the one used by network frames and that Network / IPL sharing by tag (9.3.2.2) is used
+
+	"""
+    def createDistributedRelay(self,
+                               DrniName,
+                               PortalSystemNumber,
+                               IntraPortalLinkList,
+                               IntfRef,
+                               ConvAdminGateway,
+                               NeighborAdminConvGatewayListDigest,
+                               NeighborAdminConvPortListDigest,
+                               IPLEncapMap,
+                               NetEncapMap,
+                               PortalPriority=32768,
+                               NeighborPortAlgorithm='00',
+                               PortalAddress='00',
+                               IntraPortalPortProtocolDA='01',
+                               NeighborAdminDRCPState='00000000',
+                               NeighborGatewayAlgorithm='00',
+                               PortConversationControl=False,
+                               GatewayAlgorithm='00',
+                               ThreePortalSystem=False,
+                               EncapMethod='00'):
+        obj =  { 
+                'DrniName' : DrniName,
+                'PortalSystemNumber' : int(PortalSystemNumber),
+                'IntraPortalLinkList' : IntraPortalLinkList,
+                'IntfRef' : IntfRef,
+                'ConvAdminGateway' : ConvAdminGateway,
+                'NeighborAdminConvGatewayListDigest' : NeighborAdminConvGatewayListDigest,
+                'NeighborAdminConvPortListDigest' : NeighborAdminConvPortListDigest,
+                'IPLEncapMap' : IPLEncapMap,
+                'NetEncapMap' : NetEncapMap,
+                'PortalPriority' : int(PortalPriority),
+                'NeighborPortAlgorithm' : NeighborPortAlgorithm,
+                'PortalAddress' : PortalAddress,
+                'IntraPortalPortProtocolDA' : IntraPortalPortProtocolDA,
+                'NeighborAdminDRCPState' : NeighborAdminDRCPState,
+                'NeighborGatewayAlgorithm' : NeighborGatewayAlgorithm,
+                'PortConversationControl' : True if PortConversationControl else False,
+                'GatewayAlgorithm' : GatewayAlgorithm,
+                'ThreePortalSystem' : True if ThreePortalSystem else False,
+                'EncapMethod' : EncapMethod,
+                }
+        reqUrl =  self.cfgUrlBase+'DistributedRelay'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateDistributedRelay(self,
+                               DrniName,
+                               PortalSystemNumber = None,
+                               IntraPortalLinkList = None,
+                               IntfRef = None,
+                               ConvAdminGateway = None,
+                               NeighborAdminConvGatewayListDigest = None,
+                               NeighborAdminConvPortListDigest = None,
+                               IPLEncapMap = None,
+                               NetEncapMap = None,
+                               PortalPriority = None,
+                               NeighborPortAlgorithm = None,
+                               PortalAddress = None,
+                               IntraPortalPortProtocolDA = None,
+                               NeighborAdminDRCPState = None,
+                               NeighborGatewayAlgorithm = None,
+                               PortConversationControl = None,
+                               GatewayAlgorithm = None,
+                               ThreePortalSystem = None,
+                               EncapMethod = None):
+        obj =  {}
+        if DrniName != None :
+            obj['DrniName'] = DrniName
+
+        if PortalSystemNumber != None :
+            obj['PortalSystemNumber'] = int(PortalSystemNumber)
+
+        if IntraPortalLinkList != None :
+            obj['IntraPortalLinkList'] = IntraPortalLinkList
+
+        if IntfRef != None :
+            obj['IntfRef'] = IntfRef
+
+        if ConvAdminGateway != None :
+            obj['ConvAdminGateway'] = ConvAdminGateway
+
+        if NeighborAdminConvGatewayListDigest != None :
+            obj['NeighborAdminConvGatewayListDigest'] = NeighborAdminConvGatewayListDigest
+
+        if NeighborAdminConvPortListDigest != None :
+            obj['NeighborAdminConvPortListDigest'] = NeighborAdminConvPortListDigest
+
+        if IPLEncapMap != None :
+            obj['IPLEncapMap'] = IPLEncapMap
+
+        if NetEncapMap != None :
+            obj['NetEncapMap'] = NetEncapMap
+
+        if PortalPriority != None :
+            obj['PortalPriority'] = int(PortalPriority)
+
+        if NeighborPortAlgorithm != None :
+            obj['NeighborPortAlgorithm'] = NeighborPortAlgorithm
+
+        if PortalAddress != None :
+            obj['PortalAddress'] = PortalAddress
+
+        if IntraPortalPortProtocolDA != None :
+            obj['IntraPortalPortProtocolDA'] = IntraPortalPortProtocolDA
+
+        if NeighborAdminDRCPState != None :
+            obj['NeighborAdminDRCPState'] = NeighborAdminDRCPState
+
+        if NeighborGatewayAlgorithm != None :
+            obj['NeighborGatewayAlgorithm'] = NeighborGatewayAlgorithm
+
+        if PortConversationControl != None :
+            obj['PortConversationControl'] = True if PortConversationControl else False
+
+        if GatewayAlgorithm != None :
+            obj['GatewayAlgorithm'] = GatewayAlgorithm
+
+        if ThreePortalSystem != None :
+            obj['ThreePortalSystem'] = True if ThreePortalSystem else False
+
+        if EncapMethod != None :
+            obj['EncapMethod'] = EncapMethod
+
+        reqUrl =  self.cfgUrlBase+'DistributedRelay'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateDistributedRelayById(self,
+                                    objectId,
+                                    PortalSystemNumber = None,
+                                    IntraPortalLinkList = None,
+                                    IntfRef = None,
+                                    ConvAdminGateway = None,
+                                    NeighborAdminConvGatewayListDigest = None,
+                                    NeighborAdminConvPortListDigest = None,
+                                    IPLEncapMap = None,
+                                    NetEncapMap = None,
+                                    PortalPriority = None,
+                                    NeighborPortAlgorithm = None,
+                                    PortalAddress = None,
+                                    IntraPortalPortProtocolDA = None,
+                                    NeighborAdminDRCPState = None,
+                                    NeighborGatewayAlgorithm = None,
+                                    PortConversationControl = None,
+                                    GatewayAlgorithm = None,
+                                    ThreePortalSystem = None,
+                                    EncapMethod = None):
+        obj =  {'objectId': objectId }
+        if PortalSystemNumber !=  None:
+            obj['PortalSystemNumber'] = PortalSystemNumber
+
+        if IntraPortalLinkList !=  None:
+            obj['IntraPortalLinkList'] = IntraPortalLinkList
+
+        if IntfRef !=  None:
+            obj['IntfRef'] = IntfRef
+
+        if ConvAdminGateway !=  None:
+            obj['ConvAdminGateway'] = ConvAdminGateway
+
+        if NeighborAdminConvGatewayListDigest !=  None:
+            obj['NeighborAdminConvGatewayListDigest'] = NeighborAdminConvGatewayListDigest
+
+        if NeighborAdminConvPortListDigest !=  None:
+            obj['NeighborAdminConvPortListDigest'] = NeighborAdminConvPortListDigest
+
+        if IPLEncapMap !=  None:
+            obj['IPLEncapMap'] = IPLEncapMap
+
+        if NetEncapMap !=  None:
+            obj['NetEncapMap'] = NetEncapMap
+
+        if PortalPriority !=  None:
+            obj['PortalPriority'] = PortalPriority
+
+        if NeighborPortAlgorithm !=  None:
+            obj['NeighborPortAlgorithm'] = NeighborPortAlgorithm
+
+        if PortalAddress !=  None:
+            obj['PortalAddress'] = PortalAddress
+
+        if IntraPortalPortProtocolDA !=  None:
+            obj['IntraPortalPortProtocolDA'] = IntraPortalPortProtocolDA
+
+        if NeighborAdminDRCPState !=  None:
+            obj['NeighborAdminDRCPState'] = NeighborAdminDRCPState
+
+        if NeighborGatewayAlgorithm !=  None:
+            obj['NeighborGatewayAlgorithm'] = NeighborGatewayAlgorithm
+
+        if PortConversationControl !=  None:
+            obj['PortConversationControl'] = PortConversationControl
+
+        if GatewayAlgorithm !=  None:
+            obj['GatewayAlgorithm'] = GatewayAlgorithm
+
+        if ThreePortalSystem !=  None:
+            obj['ThreePortalSystem'] = ThreePortalSystem
+
+        if EncapMethod !=  None:
+            obj['EncapMethod'] = EncapMethod
+
+        reqUrl =  self.cfgUrlBase+'DistributedRelay'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteDistributedRelay(self,
+                               DrniName):
+        obj =  { 
+                'DrniName' : DrniName,
+                }
+        reqUrl =  self.cfgUrlBase+'DistributedRelay'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteDistributedRelayById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'DistributedRelay'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getDistributedRelay(self,
+                            DrniName):
+        obj =  { 
+                'DrniName' : DrniName,
+                }
+        reqUrl =  self.cfgUrlBase + 'DistributedRelay'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getDistributedRelayById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'DistributedRelay'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllDistributedRelays(self):
+        return self.getObjects( 'DistributedRelay', self.cfgUrlBase)
 
 
     """
@@ -3152,6 +3611,26 @@ class FlexSwitch( object):
         return self.getObjects( 'PolicyDefinition', self.cfgUrlBase)
 
 
+    def getAclState(self,
+                    AclName,
+                    Direction):
+        obj =  { 
+                'AclName' : AclName,
+                'Direction' : Direction,
+                }
+        reqUrl =  self.stateUrlBase + 'Acl'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getAclStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'Acl'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllAclStates(self):
+        return self.getObjects( 'Acl', self.stateUrlBase)
+
+
     def getOspfVirtNbrEntryState(self,
                                  VirtNbrRtrId,
                                  VirtNbrArea):
@@ -3574,6 +4053,24 @@ class FlexSwitch( object):
 
     def getAllAlarmStates(self):
         return self.getObjects( 'Alarm', self.stateUrlBase)
+
+
+    def getAclRuleState(self,
+                        RuleName):
+        obj =  { 
+                'RuleName' : RuleName,
+                }
+        reqUrl =  self.stateUrlBase + 'AclRule'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getAclRuleStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'AclRule'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllAclRuleStates(self):
+        return self.getObjects( 'AclRule', self.stateUrlBase)
 
 
     """
@@ -4044,176 +4541,6 @@ class FlexSwitch( object):
 
     def getAllIPv4RouteStates(self):
         return self.getObjects( 'IPv4Route', self.stateUrlBase)
-
-
-    """
-    .. automethod :: createBGPIPv6Aggregate(self,
-        :param string IpPrefix : IPv6 Prefix in CIDR format to match IPv6 Prefix in CIDR format to match
-        :param bool SendSummaryOnly : Send summary route only when aggregating routes Send summary route only when aggregating routes
-        :param bool GenerateASSet : Generate AS set when aggregating routes Generate AS set when aggregating routes
-
-	"""
-    def createBGPIPv6Aggregate(self,
-                               IpPrefix,
-                               SendSummaryOnly=False,
-                               GenerateASSet=False):
-        obj =  { 
-                'IpPrefix' : IpPrefix,
-                'SendSummaryOnly' : True if SendSummaryOnly else False,
-                'GenerateASSet' : True if GenerateASSet else False,
-                }
-        reqUrl =  self.cfgUrlBase+'BGPIPv6Aggregate'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    def updateBGPIPv6Aggregate(self,
-                               IpPrefix,
-                               SendSummaryOnly = None,
-                               GenerateASSet = None):
-        obj =  {}
-        if IpPrefix != None :
-            obj['IpPrefix'] = IpPrefix
-
-        if SendSummaryOnly != None :
-            obj['SendSummaryOnly'] = True if SendSummaryOnly else False
-
-        if GenerateASSet != None :
-            obj['GenerateASSet'] = True if GenerateASSet else False
-
-        reqUrl =  self.cfgUrlBase+'BGPIPv6Aggregate'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    def updateBGPIPv6AggregateById(self,
-                                    objectId,
-                                    SendSummaryOnly = None,
-                                    GenerateASSet = None):
-        obj =  {'objectId': objectId }
-        if SendSummaryOnly !=  None:
-            obj['SendSummaryOnly'] = SendSummaryOnly
-
-        if GenerateASSet !=  None:
-            obj['GenerateASSet'] = GenerateASSet
-
-        reqUrl =  self.cfgUrlBase+'BGPIPv6Aggregate'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    def deleteBGPIPv6Aggregate(self,
-                               IpPrefix):
-        obj =  { 
-                'IpPrefix' : IpPrefix,
-                }
-        reqUrl =  self.cfgUrlBase+'BGPIPv6Aggregate'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    def deleteBGPIPv6AggregateById(self, objectId ):
-        reqUrl =  self.cfgUrlBase+'BGPIPv6Aggregate'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getBGPIPv6Aggregate(self,
-                            IpPrefix):
-        obj =  { 
-                'IpPrefix' : IpPrefix,
-                }
-        reqUrl =  self.cfgUrlBase + 'BGPIPv6Aggregate'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    def getBGPIPv6AggregateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BGPIPv6Aggregate'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllBGPIPv6Aggregates(self):
-        return self.getObjects( 'BGPIPv6Aggregate', self.cfgUrlBase)
-
-
-    """
-    .. automethod :: createBGPAggregate(self,
-        :param string IpPrefix : IP Prefix in CIDR format to match IP Prefix in CIDR format to match
-        :param bool SendSummaryOnly : Send summary route only when aggregating routes Send summary route only when aggregating routes
-        :param bool GenerateASSet : Generate AS set when aggregating routes Generate AS set when aggregating routes
-
-	"""
-    def createBGPAggregate(self,
-                           IpPrefix,
-                           SendSummaryOnly=False,
-                           GenerateASSet=False):
-        obj =  { 
-                'IpPrefix' : IpPrefix,
-                'SendSummaryOnly' : True if SendSummaryOnly else False,
-                'GenerateASSet' : True if GenerateASSet else False,
-                }
-        reqUrl =  self.cfgUrlBase+'BGPAggregate'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    def updateBGPAggregate(self,
-                           IpPrefix,
-                           SendSummaryOnly = None,
-                           GenerateASSet = None):
-        obj =  {}
-        if IpPrefix != None :
-            obj['IpPrefix'] = IpPrefix
-
-        if SendSummaryOnly != None :
-            obj['SendSummaryOnly'] = True if SendSummaryOnly else False
-
-        if GenerateASSet != None :
-            obj['GenerateASSet'] = True if GenerateASSet else False
-
-        reqUrl =  self.cfgUrlBase+'BGPAggregate'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    def updateBGPAggregateById(self,
-                                objectId,
-                                SendSummaryOnly = None,
-                                GenerateASSet = None):
-        obj =  {'objectId': objectId }
-        if SendSummaryOnly !=  None:
-            obj['SendSummaryOnly'] = SendSummaryOnly
-
-        if GenerateASSet !=  None:
-            obj['GenerateASSet'] = GenerateASSet
-
-        reqUrl =  self.cfgUrlBase+'BGPAggregate'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    def deleteBGPAggregate(self,
-                           IpPrefix):
-        obj =  { 
-                'IpPrefix' : IpPrefix,
-                }
-        reqUrl =  self.cfgUrlBase+'BGPAggregate'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    def deleteBGPAggregateById(self, objectId ):
-        reqUrl =  self.cfgUrlBase+'BGPAggregate'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getBGPAggregate(self,
-                        IpPrefix):
-        obj =  { 
-                'IpPrefix' : IpPrefix,
-                }
-        reqUrl =  self.cfgUrlBase + 'BGPAggregate'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    def getBGPAggregateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BGPAggregate'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllBGPAggregates(self):
-        return self.getObjects( 'BGPAggregate', self.cfgUrlBase)
 
 
     def getBfdGlobalState(self,
@@ -5241,6 +5568,26 @@ class FlexSwitch( object):
         return self.getObjects( 'IpTableAcl', self.cfgUrlBase)
 
 
+    def getIppLinkState(self,
+                        IntfRef,
+                        DrNameRef):
+        obj =  { 
+                'IntfRef' : IntfRef,
+                'DrNameRef' : DrNameRef,
+                }
+        reqUrl =  self.stateUrlBase + 'IppLink'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getIppLinkStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'IppLink'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllIppLinkStates(self):
+        return self.getObjects( 'IppLink', self.stateUrlBase)
+
+
     def getDWDMModuleNwIntfState(self,
                                  NwIntfId,
                                  ModuleId):
@@ -6246,6 +6593,91 @@ class FlexSwitch( object):
         return self.getObjects( 'LogicalIntf', self.stateUrlBase)
 
 
+    """
+    .. automethod :: createBGPv6Aggregate(self,
+        :param string IpPrefix : IPv6 Prefix in CIDR format to match IPv6 Prefix in CIDR format to match
+        :param bool SendSummaryOnly : Send summary route only when aggregating routes Send summary route only when aggregating routes
+        :param bool GenerateASSet : Generate AS set when aggregating routes Generate AS set when aggregating routes
+
+	"""
+    def createBGPv6Aggregate(self,
+                             IpPrefix,
+                             SendSummaryOnly=False,
+                             GenerateASSet=False):
+        obj =  { 
+                'IpPrefix' : IpPrefix,
+                'SendSummaryOnly' : True if SendSummaryOnly else False,
+                'GenerateASSet' : True if GenerateASSet else False,
+                }
+        reqUrl =  self.cfgUrlBase+'BGPv6Aggregate'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateBGPv6Aggregate(self,
+                             IpPrefix,
+                             SendSummaryOnly = None,
+                             GenerateASSet = None):
+        obj =  {}
+        if IpPrefix != None :
+            obj['IpPrefix'] = IpPrefix
+
+        if SendSummaryOnly != None :
+            obj['SendSummaryOnly'] = True if SendSummaryOnly else False
+
+        if GenerateASSet != None :
+            obj['GenerateASSet'] = True if GenerateASSet else False
+
+        reqUrl =  self.cfgUrlBase+'BGPv6Aggregate'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateBGPv6AggregateById(self,
+                                  objectId,
+                                  SendSummaryOnly = None,
+                                  GenerateASSet = None):
+        obj =  {'objectId': objectId }
+        if SendSummaryOnly !=  None:
+            obj['SendSummaryOnly'] = SendSummaryOnly
+
+        if GenerateASSet !=  None:
+            obj['GenerateASSet'] = GenerateASSet
+
+        reqUrl =  self.cfgUrlBase+'BGPv6Aggregate'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteBGPv6Aggregate(self,
+                             IpPrefix):
+        obj =  { 
+                'IpPrefix' : IpPrefix,
+                }
+        reqUrl =  self.cfgUrlBase+'BGPv6Aggregate'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteBGPv6AggregateById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'BGPv6Aggregate'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getBGPv6Aggregate(self,
+                          IpPrefix):
+        obj =  { 
+                'IpPrefix' : IpPrefix,
+                }
+        reqUrl =  self.cfgUrlBase + 'BGPv6Aggregate'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getBGPv6AggregateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'BGPv6Aggregate'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllBGPv6Aggregates(self):
+        return self.getObjects( 'BGPv6Aggregate', self.cfgUrlBase)
+
+
     def getThermalState(self,
                         ThermalId):
         obj =  { 
@@ -6271,7 +6703,7 @@ class FlexSwitch( object):
         :param int32 ForwardDelay : The value that all bridges use for ForwardDelay when this bridge is acting as the root.  Note that 802.1D-1998 specifies that the range for this parameter is related to the value of MaxAge.  The granularity of this timer is specified by 802.1D-1998 to be 1 second.  An agent may return a badValue error if a set is attempted to a value that is not a whole number of seconds. The value that all bridges use for ForwardDelay when this bridge is acting as the root.  Note that 802.1D-1998 specifies that the range for this parameter is related to the value of MaxAge.  The granularity of this timer is specified by 802.1D-1998 to be 1 second.  An agent may return a badValue error if a set is attempted to a value that is not a whole number of seconds.
         :param int32 MaxAge : The value that all bridges use for MaxAge when this bridge is acting as the root.  Note that 802.1D-1998 specifies that the range for this parameter is related to the value of HelloTime.  The granularity of this timer is specified by 802.1D-1998 to be 1 second.  An agent may return a badValue error if a set is attempted to a value that is not a whole number of seconds. The value that all bridges use for MaxAge when this bridge is acting as the root.  Note that 802.1D-1998 specifies that the range for this parameter is related to the value of HelloTime.  The granularity of this timer is specified by 802.1D-1998 to be 1 second.  An agent may return a badValue error if a set is attempted to a value that is not a whole number of seconds.
         :param int32 TxHoldCount : Configures the number of BPDUs that can be sent before pausing for 1 second. Configures the number of BPDUs that can be sent before pausing for 1 second.
-        :param int32 Priority : The value of the write-able portion of the Bridge ID (i.e. The value of the write-able portion of the Bridge ID (i.e.
+        :param int32 Priority : The value of the write-able portion of the Bridge ID i.e. The value of the write-able portion of the Bridge ID i.e.
         :param int32 ForceVersion : Stp Version Stp Version
         :param string Address : The bridge identifier of the root of the spanning tree The bridge identifier of the root of the spanning tree
 
@@ -6402,24 +6834,6 @@ class FlexSwitch( object):
 
     def getAllStpBridgeInstances(self):
         return self.getObjects( 'StpBridgeInstance', self.cfgUrlBase)
-
-
-    def getLaPortChannelMemberState(self,
-                                    IfIndex):
-        obj =  { 
-                'IfIndex' : int(IfIndex),
-                }
-        reqUrl =  self.stateUrlBase + 'LaPortChannelMember'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    def getLaPortChannelMemberStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'LaPortChannelMember'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllLaPortChannelMemberStates(self):
-        return self.getObjects( 'LaPortChannelMember', self.stateUrlBase)
 
 
     """
@@ -7156,6 +7570,102 @@ class FlexSwitch( object):
 
 
     """
+    .. automethod :: createAcl(self,
+        :param string AclName : Acl name to be used to refer to this ACL Acl name to be used to refer to this ACL
+        :param string Direction :  
+        :param string IntfList : list of IntfRef can be port/lag object list of IntfRef can be port/lag object
+        :param string RuleNameList : List of rules to be applied to this ACL. This should match with AclRule RuleName List of rules to be applied to this ACL. This should match with AclRule RuleName
+
+	"""
+    def createAcl(self,
+                  AclName,
+                  Direction,
+                  IntfList,
+                  RuleNameList):
+        obj =  { 
+                'AclName' : AclName,
+                'Direction' : Direction,
+                'IntfList' : IntfList,
+                'RuleNameList' : RuleNameList,
+                }
+        reqUrl =  self.cfgUrlBase+'Acl'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateAcl(self,
+                  AclName,
+                  Direction,
+                  IntfList = None,
+                  RuleNameList = None):
+        obj =  {}
+        if AclName != None :
+            obj['AclName'] = AclName
+
+        if Direction != None :
+            obj['Direction'] = Direction
+
+        if IntfList != None :
+            obj['IntfList'] = IntfList
+
+        if RuleNameList != None :
+            obj['RuleNameList'] = RuleNameList
+
+        reqUrl =  self.cfgUrlBase+'Acl'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateAclById(self,
+                       objectId,
+                       IntfList = None,
+                       RuleNameList = None):
+        obj =  {'objectId': objectId }
+        if IntfList !=  None:
+            obj['IntfList'] = IntfList
+
+        if RuleNameList !=  None:
+            obj['RuleNameList'] = RuleNameList
+
+        reqUrl =  self.cfgUrlBase+'Acl'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteAcl(self,
+                  AclName,
+                  Direction):
+        obj =  { 
+                'AclName' : AclName,
+                'Direction' : Direction,
+                }
+        reqUrl =  self.cfgUrlBase+'Acl'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteAclById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'Acl'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAcl(self,
+               AclName,
+               Direction):
+        obj =  { 
+                'AclName' : AclName,
+                'Direction' : Direction,
+                }
+        reqUrl =  self.cfgUrlBase + 'Acl'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getAclById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'Acl'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllAcls(self):
+        return self.getObjects( 'Acl', self.cfgUrlBase)
+
+
+    """
     .. automethod :: createBGPv6Neighbor(self,
         :param string IntfRef : Interface of the BGP neighbor Interface of the BGP neighbor
         :param string NeighborAddress : Address of the BGP neighbor Address of the BGP neighbor
@@ -7477,7 +7987,7 @@ class FlexSwitch( object):
         :param int32 IfIndex : The port number of the port for which this entry contains Spanning Tree Protocol management information. The port number of the port for which this entry contains Spanning Tree Protocol management information.
         :param int32 BpduGuardInterval : The interval time to which a port will try to recover from BPDU Guard err-disable state.  If no BPDU frames are detected after this timeout plus 3 Times Hello Time then the port will transition back to Up state.  If condition is cleared manually then this operation is ignored.  If set to zero then timer is inactive and recovery is based on manual intervention. The interval time to which a port will try to recover from BPDU Guard err-disable state.  If no BPDU frames are detected after this timeout plus 3 Times Hello Time then the port will transition back to Up state.  If condition is cleared manually then this operation is ignored.  If set to zero then timer is inactive and recovery is based on manual intervention.
         :param int32 PathCost : The contribution of this port to the path cost of paths towards the spanning tree root which include this port.  802.1D-1998 recommends that the default value of this parameter be in inverse proportion to the speed of the attached LAN.  New implementations should support PathCost32. If the port path costs exceeds the maximum value of this object then this object should report the maximum value The contribution of this port to the path cost of paths towards the spanning tree root which include this port.  802.1D-1998 recommends that the default value of this parameter be in inverse proportion to the speed of the attached LAN.  New implementations should support PathCost32. If the port path costs exceeds the maximum value of this object then this object should report the maximum value
-        :param int32 Priority : The value of the priority field that is contained in the first (in network byte order) octet of the (2 octet long) Port ID.  The other octet of the Port ID is given by the value of StpPort. On bridges supporting IEEE 802.1t or IEEE 802.1w The value of the priority field that is contained in the first (in network byte order) octet of the (2 octet long) Port ID.  The other octet of the Port ID is given by the value of StpPort. On bridges supporting IEEE 802.1t or IEEE 802.1w
+        :param int32 Priority : The value of the priority field that is contained in the first in network byte order octet of the 2 octet long Port ID.  The other octet of the Port ID is given by the value of StpPort. On bridges supporting IEEE 802.1t or IEEE 802.1w The value of the priority field that is contained in the first in network byte order octet of the 2 octet long Port ID.  The other octet of the Port ID is given by the value of StpPort. On bridges supporting IEEE 802.1t or IEEE 802.1w
         :param int32 AdminEdgePort : The administrative value of the Edge Port parameter.  A value of true(1) indicates that this port should be assumed as an edge-port The administrative value of the Edge Port parameter.  A value of true(1) indicates that this port should be assumed as an edge-port
         :param int32 Enable : The enabled/disabled status of the port. The enabled/disabled status of the port.
         :param int32 ProtocolMigration : When operating in RSTP (version 2) mode When operating in RSTP (version 2) mode
@@ -8332,6 +8842,91 @@ class FlexSwitch( object):
 
     def getAllFaultStates(self):
         return self.getObjects( 'Fault', self.stateUrlBase)
+
+
+    """
+    .. automethod :: createBGPv4Aggregate(self,
+        :param string IpPrefix : IP Prefix in CIDR format to match IP Prefix in CIDR format to match
+        :param bool SendSummaryOnly : Send summary route only when aggregating routes Send summary route only when aggregating routes
+        :param bool GenerateASSet : Generate AS set when aggregating routes Generate AS set when aggregating routes
+
+	"""
+    def createBGPv4Aggregate(self,
+                             IpPrefix,
+                             SendSummaryOnly=False,
+                             GenerateASSet=False):
+        obj =  { 
+                'IpPrefix' : IpPrefix,
+                'SendSummaryOnly' : True if SendSummaryOnly else False,
+                'GenerateASSet' : True if GenerateASSet else False,
+                }
+        reqUrl =  self.cfgUrlBase+'BGPv4Aggregate'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateBGPv4Aggregate(self,
+                             IpPrefix,
+                             SendSummaryOnly = None,
+                             GenerateASSet = None):
+        obj =  {}
+        if IpPrefix != None :
+            obj['IpPrefix'] = IpPrefix
+
+        if SendSummaryOnly != None :
+            obj['SendSummaryOnly'] = True if SendSummaryOnly else False
+
+        if GenerateASSet != None :
+            obj['GenerateASSet'] = True if GenerateASSet else False
+
+        reqUrl =  self.cfgUrlBase+'BGPv4Aggregate'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def updateBGPv4AggregateById(self,
+                                  objectId,
+                                  SendSummaryOnly = None,
+                                  GenerateASSet = None):
+        obj =  {'objectId': objectId }
+        if SendSummaryOnly !=  None:
+            obj['SendSummaryOnly'] = SendSummaryOnly
+
+        if GenerateASSet !=  None:
+            obj['GenerateASSet'] = GenerateASSet
+
+        reqUrl =  self.cfgUrlBase+'BGPv4Aggregate'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteBGPv4Aggregate(self,
+                             IpPrefix):
+        obj =  { 
+                'IpPrefix' : IpPrefix,
+                }
+        reqUrl =  self.cfgUrlBase+'BGPv4Aggregate'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def deleteBGPv4AggregateById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'BGPv4Aggregate'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getBGPv4Aggregate(self,
+                          IpPrefix):
+        obj =  { 
+                'IpPrefix' : IpPrefix,
+                }
+        reqUrl =  self.cfgUrlBase + 'BGPv4Aggregate'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getBGPv4AggregateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'BGPv4Aggregate'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers) 
+        return r
+
+    def getAllBGPv4Aggregates(self):
+        return self.getObjects( 'BGPv4Aggregate', self.cfgUrlBase)
 
 
     """

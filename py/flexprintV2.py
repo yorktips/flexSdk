@@ -500,17 +500,16 @@ class FlexSwitchShow( object):
     def printLaPortChannelStates(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
-            header.append('LagId')
+            header.append('IntfRef')
             header.append('IfIndex')
-            header.append('Name')
             header.append('LagType')
             header.append('MinLinks')
             header.append('SystemIdMac')
             header.append('SystemPriority')
             header.append('AdminState')
             header.append('OperState')
-            header.append('Members')
-            header.append('MembersUpInBundle')
+            header.append('IntfRefList')
+            header.append('IntfRefListUpInBundle')
             header.append('Interval')
             header.append('LagHash')
             header.append('LacpMode')
@@ -519,17 +518,16 @@ class FlexSwitchShow( object):
         for obj in objs:
             o = obj['Object']
             values = []
-            values.append('%s' % o['LagId'])
+            values.append('%s' % o['IntfRef'])
             values.append('%s' % o['IfIndex'])
-            values.append('%s' % o['Name'])
             values.append('%s' % o['LagType'])
             values.append('%s' % o['MinLinks'])
             values.append('%s' % o['SystemIdMac'])
             values.append('%s' % o['SystemPriority'])
             values.append('%s' % o['AdminState'])
             values.append('%s' % o['OperState'])
-            values.append('%s' % o['Members'])
-            values.append('%s' % o['MembersUpInBundle'])
+            values.append('%s' % o['IntfRefList'])
+            values.append('%s' % o['IntfRefListUpInBundle'])
             values.append('%s' % o['Interval'])
             values.append('%s' % o['LagHash'])
             values.append('%s' % o['LacpMode'])
@@ -573,6 +571,96 @@ class FlexSwitchShow( object):
             values.append('%s' % o['ServerIp'])
             rows.append(values)
         self.tblPrintObject('DhcpRelayIntf', header, rows)
+
+
+    def printDistributedRelayStates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('DrniName')
+            header.append('Description')
+            header.append('PortalAddress')
+            header.append('PortalPriority')
+            header.append('ThreePortalSystem')
+            header.append('PortalSystemNumber')
+            header.append('IntraPortalLinkList')
+            header.append('IntfRef')
+            header.append('ConvAdminGateway')
+            header.append('NeighborAdminConvGatewayListDigest')
+            header.append('NeighborAdminConvPortListDigest')
+            header.append('GatewayAlgorithm')
+            header.append('NeighborGatewayAlgorithm')
+            header.append('PortAlgorithm')
+            header.append('NeighborAdminDRCPState')
+            header.append('EncapMethod')
+            header.append('IPLEncapMap')
+            header.append('NetEncapMap')
+            header.append('DRPortConversationPasses')
+            header.append('DRGatewayConversationPasses')
+            header.append('PSI')
+            header.append('PortConversationControl')
+            header.append('IntraPortalPortProtocolDA')
+
+        objs = self.swtch.getAllDistributedRelayStates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['DrniName'])
+            values.append('%s' % o['Description'])
+            values.append('%s' % o['PortalAddress'])
+            values.append('%s' % o['PortalPriority'])
+            values.append('%s' % o['ThreePortalSystem'])
+            values.append('%s' % o['PortalSystemNumber'])
+            values.append('%s' % o['IntraPortalLinkList'])
+            values.append('%s' % o['IntfRef'])
+            values.append('%s' % o['ConvAdminGateway'])
+            values.append('%s' % o['NeighborAdminConvGatewayListDigest'])
+            values.append('%s' % o['NeighborAdminConvPortListDigest'])
+            values.append('%s' % o['GatewayAlgorithm'])
+            values.append('%s' % o['NeighborGatewayAlgorithm'])
+            values.append('%s' % o['PortAlgorithm'])
+            values.append('%s' % o['NeighborAdminDRCPState'])
+            values.append('%s' % o['EncapMethod'])
+            values.append('%s' % o['IPLEncapMap'])
+            values.append('%s' % o['NetEncapMap'])
+            values.append('%s' % o['DRPortConversationPasses'])
+            values.append('%s' % o['DRGatewayConversationPasses'])
+            values.append('%s' % o['PSI'])
+            values.append('%s' % o['PortConversationControl'])
+            values.append('%s' % o['IntraPortalPortProtocolDA'])
+            rows.append(values)
+        self.tblPrintObject('DistributedRelayState', header, rows)
+
+
+    def printAclRules(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('RuleName')
+            header.append('SourceMac')
+            header.append('DestMac')
+            header.append('SourceIp')
+            header.append('DestIp')
+            header.append('SourceMask')
+            header.append('DestMask')
+            header.append('Proto')
+            header.append('Port')
+            header.append('Action')
+
+        objs = self.swtch.getAllAclRules()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['RuleName'])
+            values.append('%s' % o['SourceMac'])
+            values.append('%s' % o['DestMac'])
+            values.append('%s' % o['SourceIp'])
+            values.append('%s' % o['DestIp'])
+            values.append('%s' % o['SourceMask'])
+            values.append('%s' % o['DestMask'])
+            values.append('%s' % o['Proto'])
+            values.append('%s' % o['Port'])
+            values.append('%s' % o['Action'])
+            rows.append(values)
+        self.tblPrintObject('AclRule', header, rows)
 
 
     def printBGPv4Neighbors(self, addHeader=True, brief=None):
@@ -814,14 +902,14 @@ class FlexSwitchShow( object):
     def printLaPortChannels(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
-            header.append('LagId')
-            header.append('Members')
-            header.append('SystemIdMac')
+            header.append('IntfRef')
+            header.append('IntfRefList')
             header.append('MinLinks')
             header.append('SystemPriority')
             header.append('Interval')
             header.append('LagHash')
             header.append('AdminState')
+            header.append('SystemIdMac')
             header.append('LagType')
             header.append('LacpMode')
 
@@ -829,14 +917,14 @@ class FlexSwitchShow( object):
         for obj in objs:
             o = obj['Object']
             values = []
-            values.append('%s' % o['LagId'])
-            values.append('%s' % o['Members'])
-            values.append('%s' % o['SystemIdMac'])
+            values.append('%s' % o['IntfRef'])
+            values.append('%s' % o['IntfRefList'])
             values.append('%s' % o['MinLinks'])
             values.append('%s' % o['SystemPriority'])
             values.append('%s' % o['Interval'])
             values.append('%s' % o['LagHash'])
             values.append('%s' % o['AdminState'])
+            values.append('%s' % o['SystemIdMac'])
             values.append('%s' % o['LagType'])
             values.append('%s' % o['LacpMode'])
             rows.append(values)
@@ -993,6 +1081,102 @@ class FlexSwitchShow( object):
         self.tblPrintObject('DhcpRelayIntfState', header, rows)
 
 
+    def printLaPortChannelIntfRefListStates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('IntfRef')
+            header.append('LagIntfRef')
+            header.append('OperState')
+            header.append('IfIndex')
+            header.append('Activity')
+            header.append('Timeout')
+            header.append('Synchronization')
+            header.append('Aggregatable')
+            header.append('Collecting')
+            header.append('Distributing')
+            header.append('Defaulted')
+            header.append('SystemId')
+            header.append('OperKey')
+            header.append('PartnerId')
+            header.append('PartnerKey')
+            header.append('DebugId')
+            header.append('RxMachine')
+            header.append('RxTime')
+            header.append('MuxMachine')
+            header.append('MuxReason')
+            header.append('ActorChurnMachine')
+            header.append('PartnerChurnMachine')
+            header.append('ActorChurnCount')
+            header.append('PartnerChurnCount')
+            header.append('ActorSyncTransitionCount')
+            header.append('PartnerSyncTransitionCount')
+            header.append('ActorChangeCount')
+            header.append('PartnerChangeCount')
+            header.append('ActorCdsChurnMachine')
+            header.append('PartnerCdsChurnMachine')
+            header.append('ActorCdsChurnCount')
+            header.append('PartnerCdsChurnCount')
+            header.append('LacpInPkts')
+            header.append('LacpOutPkts')
+            header.append('LacpRxErrors')
+            header.append('LacpTxErrors')
+            header.append('LacpUnknownErrors')
+            header.append('LacpErrors')
+            header.append('LampInPdu')
+            header.append('LampInResponsePdu')
+            header.append('LampOutPdu')
+            header.append('LampOutResponsePdu')
+
+        objs = self.swtch.getAllLaPortChannelIntfRefListStates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['IntfRef'])
+            values.append('%s' % o['LagIntfRef'])
+            values.append('%s' % o['OperState'])
+            values.append('%s' % o['IfIndex'])
+            values.append('%s' % o['Activity'])
+            values.append('%s' % o['Timeout'])
+            values.append('%s' % o['Synchronization'])
+            values.append('%s' % o['Aggregatable'])
+            values.append('%s' % o['Collecting'])
+            values.append('%s' % o['Distributing'])
+            values.append('%s' % o['Defaulted'])
+            values.append('%s' % o['SystemId'])
+            values.append('%s' % o['OperKey'])
+            values.append('%s' % o['PartnerId'])
+            values.append('%s' % o['PartnerKey'])
+            values.append('%s' % o['DebugId'])
+            values.append('%s' % o['RxMachine'])
+            values.append('%s' % o['RxTime'])
+            values.append('%s' % o['MuxMachine'])
+            values.append('%s' % o['MuxReason'])
+            values.append('%s' % o['ActorChurnMachine'])
+            values.append('%s' % o['PartnerChurnMachine'])
+            values.append('%s' % o['ActorChurnCount'])
+            values.append('%s' % o['PartnerChurnCount'])
+            values.append('%s' % o['ActorSyncTransitionCount'])
+            values.append('%s' % o['PartnerSyncTransitionCount'])
+            values.append('%s' % o['ActorChangeCount'])
+            values.append('%s' % o['PartnerChangeCount'])
+            values.append('%s' % o['ActorCdsChurnMachine'])
+            values.append('%s' % o['PartnerCdsChurnMachine'])
+            values.append('%s' % o['ActorCdsChurnCount'])
+            values.append('%s' % o['PartnerCdsChurnCount'])
+            values.append('%s' % o['LacpInPkts'])
+            values.append('%s' % o['LacpOutPkts'])
+            values.append('%s' % o['LacpRxErrors'])
+            values.append('%s' % o['LacpTxErrors'])
+            values.append('%s' % o['LacpUnknownErrors'])
+            values.append('%s' % o['LacpErrors'])
+            values.append('%s' % o['LampInPdu'])
+            values.append('%s' % o['LampInResponsePdu'])
+            values.append('%s' % o['LampOutPdu'])
+            values.append('%s' % o['LampOutResponsePdu'])
+            rows.append(values)
+        self.tblPrintObject('LaPortChannelIntfRefListState', header, rows)
+
+
     def printDhcpRelayGlobals(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
@@ -1119,6 +1303,56 @@ class FlexSwitchShow( object):
         self.tblPrintObject('ArpLinuxEntryState', header, rows)
 
 
+    def printDistributedRelays(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('DrniName')
+            header.append('PortalSystemNumber')
+            header.append('IntraPortalLinkList')
+            header.append('IntfRef')
+            header.append('ConvAdminGateway')
+            header.append('NeighborAdminConvGatewayListDigest')
+            header.append('NeighborAdminConvPortListDigest')
+            header.append('IPLEncapMap')
+            header.append('NetEncapMap')
+            header.append('PortalPriority')
+            header.append('NeighborPortAlgorithm')
+            header.append('PortalAddress')
+            header.append('IntraPortalPortProtocolDA')
+            header.append('NeighborAdminDRCPState')
+            header.append('NeighborGatewayAlgorithm')
+            header.append('PortConversationControl')
+            header.append('GatewayAlgorithm')
+            header.append('ThreePortalSystem')
+            header.append('EncapMethod')
+
+        objs = self.swtch.getAllDistributedRelays()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['DrniName'])
+            values.append('%s' % o['PortalSystemNumber'])
+            values.append('%s' % o['IntraPortalLinkList'])
+            values.append('%s' % o['IntfRef'])
+            values.append('%s' % o['ConvAdminGateway'])
+            values.append('%s' % o['NeighborAdminConvGatewayListDigest'])
+            values.append('%s' % o['NeighborAdminConvPortListDigest'])
+            values.append('%s' % o['IPLEncapMap'])
+            values.append('%s' % o['NetEncapMap'])
+            values.append('%s' % o['PortalPriority'])
+            values.append('%s' % o['NeighborPortAlgorithm'])
+            values.append('%s' % o['PortalAddress'])
+            values.append('%s' % o['IntraPortalPortProtocolDA'])
+            values.append('%s' % o['NeighborAdminDRCPState'])
+            values.append('%s' % o['NeighborGatewayAlgorithm'])
+            values.append('%s' % o['PortConversationControl'])
+            values.append('%s' % o['GatewayAlgorithm'])
+            values.append('%s' % o['ThreePortalSystem'])
+            values.append('%s' % o['EncapMethod'])
+            rows.append(values)
+        self.tblPrintObject('DistributedRelay', header, rows)
+
+
     def printBGPPolicyConditions(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
@@ -1235,6 +1469,7 @@ class FlexSwitchShow( object):
             header.append('PeerPort')
             header.append('PeerHostName')
             header.append('HoldTime')
+            header.append('SystemDescription')
             header.append('SystemCapabilities')
             header.append('EnabledCapabilities')
 
@@ -1249,6 +1484,7 @@ class FlexSwitchShow( object):
             values.append('%s' % o['PeerPort'])
             values.append('%s' % o['PeerHostName'])
             values.append('%s' % o['HoldTime'])
+            values.append('%s' % o['SystemDescription'])
             values.append('%s' % o['SystemCapabilities'])
             values.append('%s' % o['EnabledCapabilities'])
             rows.append(values)
@@ -1293,6 +1529,26 @@ class FlexSwitchShow( object):
             values.append('%s' % o['PolicyType'])
             rows.append(values)
         self.tblPrintObject('PolicyDefinition', header, rows)
+
+
+    def printAclStates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('AclName')
+            header.append('Direction')
+            header.append('RuleNameList')
+            header.append('IntfList')
+
+        objs = self.swtch.getAllAclStates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['AclName'])
+            values.append('%s' % o['Direction'])
+            values.append('%s' % o['RuleNameList'])
+            values.append('%s' % o['IntfList'])
+            rows.append(values)
+        self.tblPrintObject('AclState', header, rows)
 
 
     def printOspfVirtNbrEntryStates(self, addHeader=True, brief=None):
@@ -1589,6 +1845,38 @@ class FlexSwitchShow( object):
         self.tblPrintObject('AlarmState', header, rows)
 
 
+    def printAclRuleStates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('RuleName')
+            header.append('SourceMac')
+            header.append('DestMac')
+            header.append('SourceIp')
+            header.append('DestIp')
+            header.append('SourceMask')
+            header.append('DestMask')
+            header.append('Proto')
+            header.append('Port')
+            header.append('Action')
+
+        objs = self.swtch.getAllAclRuleStates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['RuleName'])
+            values.append('%s' % o['SourceMac'])
+            values.append('%s' % o['DestMac'])
+            values.append('%s' % o['SourceIp'])
+            values.append('%s' % o['DestIp'])
+            values.append('%s' % o['SourceMask'])
+            values.append('%s' % o['DestMask'])
+            values.append('%s' % o['Proto'])
+            values.append('%s' % o['Port'])
+            values.append('%s' % o['Action'])
+            rows.append(values)
+        self.tblPrintObject('AclRuleState', header, rows)
+
+
     def printBGPPolicyStmts(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
@@ -1705,42 +1993,6 @@ class FlexSwitchShow( object):
             values.append('%s' % o['NextBestRoute'])
             rows.append(values)
         self.tblPrintObject('IPv4RouteState', header, rows)
-
-
-    def printBGPIPv6Aggregates(self, addHeader=True, brief=None):
-        header = []; rows = []
-        if addHeader:
-            header.append('IpPrefix')
-            header.append('SendSummaryOnly')
-            header.append('GenerateASSet')
-
-        objs = self.swtch.getAllBGPIPv6Aggregates()
-        for obj in objs:
-            o = obj['Object']
-            values = []
-            values.append('%s' % o['IpPrefix'])
-            values.append('%s' % o['SendSummaryOnly'])
-            values.append('%s' % o['GenerateASSet'])
-            rows.append(values)
-        self.tblPrintObject('BGPIPv6Aggregate', header, rows)
-
-
-    def printBGPAggregates(self, addHeader=True, brief=None):
-        header = []; rows = []
-        if addHeader:
-            header.append('IpPrefix')
-            header.append('SendSummaryOnly')
-            header.append('GenerateASSet')
-
-        objs = self.swtch.getAllBGPAggregates()
-        for obj in objs:
-            o = obj['Object']
-            values = []
-            values.append('%s' % o['IpPrefix'])
-            values.append('%s' % o['SendSummaryOnly'])
-            values.append('%s' % o['GenerateASSet'])
-            rows.append(values)
-        self.tblPrintObject('BGPAggregate', header, rows)
 
 
     def printBfdGlobalStates(self, addHeader=True, brief=None):
@@ -2281,6 +2533,38 @@ class FlexSwitchShow( object):
         self.tblPrintObject('IpTableAcl', header, rows)
 
 
+    def printIppLinkStates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('IntfRef')
+            header.append('DrNameRef')
+            header.append('IPPID')
+            header.append('PortConversationPasses')
+            header.append('GatewayConversationDirection')
+            header.append('DRCPDUsRx')
+            header.append('DRCPDUsTx')
+            header.append('DRCPRxState')
+            header.append('LastRxTime')
+            header.append('DiffPortalReason')
+
+        objs = self.swtch.getAllIppLinkStates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['IntfRef'])
+            values.append('%s' % o['DrNameRef'])
+            values.append('%s' % o['IPPID'])
+            values.append('%s' % o['PortConversationPasses'])
+            values.append('%s' % o['GatewayConversationDirection'])
+            values.append('%s' % o['DRCPDUsRx'])
+            values.append('%s' % o['DRCPDUsTx'])
+            values.append('%s' % o['DRCPRxState'])
+            values.append('%s' % o['LastRxTime'])
+            values.append('%s' % o['DiffPortalReason'])
+            rows.append(values)
+        self.tblPrintObject('IppLinkState', header, rows)
+
+
     def printDWDMModuleNwIntfStates(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
@@ -2697,6 +2981,24 @@ class FlexSwitchShow( object):
         self.tblPrintObject('LogicalIntfState', header, rows)
 
 
+    def printBGPv6Aggregates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('IpPrefix')
+            header.append('SendSummaryOnly')
+            header.append('GenerateASSet')
+
+        objs = self.swtch.getAllBGPv6Aggregates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['IpPrefix'])
+            values.append('%s' % o['SendSummaryOnly'])
+            values.append('%s' % o['GenerateASSet'])
+            rows.append(values)
+        self.tblPrintObject('BGPv6Aggregate', header, rows)
+
+
     def printThermalStates(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
@@ -2747,102 +3049,6 @@ class FlexSwitchShow( object):
             values.append('%s' % o['Address'])
             rows.append(values)
         self.tblPrintObject('StpBridgeInstance', header, rows)
-
-
-    def printLaPortChannelMemberStates(self, addHeader=True, brief=None):
-        header = []; rows = []
-        if addHeader:
-            header.append('IfIndex')
-            header.append('LagId')
-            header.append('OperState')
-            header.append('LagIfIndex')
-            header.append('Activity')
-            header.append('Timeout')
-            header.append('Synchronization')
-            header.append('Aggregatable')
-            header.append('Collecting')
-            header.append('Distributing')
-            header.append('Defaulted')
-            header.append('SystemId')
-            header.append('OperKey')
-            header.append('PartnerId')
-            header.append('PartnerKey')
-            header.append('DebugId')
-            header.append('RxMachine')
-            header.append('RxTime')
-            header.append('MuxMachine')
-            header.append('MuxReason')
-            header.append('ActorChurnMachine')
-            header.append('PartnerChurnMachine')
-            header.append('ActorChurnCount')
-            header.append('PartnerChurnCount')
-            header.append('ActorSyncTransitionCount')
-            header.append('PartnerSyncTransitionCount')
-            header.append('ActorChangeCount')
-            header.append('PartnerChangeCount')
-            header.append('ActorCdsChurnMachine')
-            header.append('PartnerCdsChurnMachine')
-            header.append('ActorCdsChurnCount')
-            header.append('PartnerCdsChurnCount')
-            header.append('LacpInPkts')
-            header.append('LacpOutPkts')
-            header.append('LacpRxErrors')
-            header.append('LacpTxErrors')
-            header.append('LacpUnknownErrors')
-            header.append('LacpErrors')
-            header.append('LampInPdu')
-            header.append('LampInResponsePdu')
-            header.append('LampOutPdu')
-            header.append('LampOutResponsePdu')
-
-        objs = self.swtch.getAllLaPortChannelMemberStates()
-        for obj in objs:
-            o = obj['Object']
-            values = []
-            values.append('%s' % o['IfIndex'])
-            values.append('%s' % o['LagId'])
-            values.append('%s' % o['OperState'])
-            values.append('%s' % o['LagIfIndex'])
-            values.append('%s' % o['Activity'])
-            values.append('%s' % o['Timeout'])
-            values.append('%s' % o['Synchronization'])
-            values.append('%s' % o['Aggregatable'])
-            values.append('%s' % o['Collecting'])
-            values.append('%s' % o['Distributing'])
-            values.append('%s' % o['Defaulted'])
-            values.append('%s' % o['SystemId'])
-            values.append('%s' % o['OperKey'])
-            values.append('%s' % o['PartnerId'])
-            values.append('%s' % o['PartnerKey'])
-            values.append('%s' % o['DebugId'])
-            values.append('%s' % o['RxMachine'])
-            values.append('%s' % o['RxTime'])
-            values.append('%s' % o['MuxMachine'])
-            values.append('%s' % o['MuxReason'])
-            values.append('%s' % o['ActorChurnMachine'])
-            values.append('%s' % o['PartnerChurnMachine'])
-            values.append('%s' % o['ActorChurnCount'])
-            values.append('%s' % o['PartnerChurnCount'])
-            values.append('%s' % o['ActorSyncTransitionCount'])
-            values.append('%s' % o['PartnerSyncTransitionCount'])
-            values.append('%s' % o['ActorChangeCount'])
-            values.append('%s' % o['PartnerChangeCount'])
-            values.append('%s' % o['ActorCdsChurnMachine'])
-            values.append('%s' % o['PartnerCdsChurnMachine'])
-            values.append('%s' % o['ActorCdsChurnCount'])
-            values.append('%s' % o['PartnerCdsChurnCount'])
-            values.append('%s' % o['LacpInPkts'])
-            values.append('%s' % o['LacpOutPkts'])
-            values.append('%s' % o['LacpRxErrors'])
-            values.append('%s' % o['LacpTxErrors'])
-            values.append('%s' % o['LacpUnknownErrors'])
-            values.append('%s' % o['LacpErrors'])
-            values.append('%s' % o['LampInPdu'])
-            values.append('%s' % o['LampInResponsePdu'])
-            values.append('%s' % o['LampOutPdu'])
-            values.append('%s' % o['LampOutResponsePdu'])
-            rows.append(values)
-        self.tblPrintObject('LaPortChannelMemberState', header, rows)
 
 
     def printOspfVirtIfEntrys(self, addHeader=True, brief=None):
@@ -3197,6 +3403,26 @@ class FlexSwitchShow( object):
         self.tblPrintObject('DWDMModule', header, rows)
 
 
+    def printAcls(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('AclName')
+            header.append('Direction')
+            header.append('IntfList')
+            header.append('RuleNameList')
+
+        objs = self.swtch.getAllAcls()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['AclName'])
+            values.append('%s' % o['Direction'])
+            values.append('%s' % o['IntfList'])
+            values.append('%s' % o['RuleNameList'])
+            rows.append(values)
+        self.tblPrintObject('Acl', header, rows)
+
+
     def printBGPv6Neighbors(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
@@ -3549,6 +3775,24 @@ class FlexSwitchShow( object):
             values.append('%s' % o['ResolutionReason'])
             rows.append(values)
         self.tblPrintObject('FaultState', header, rows)
+
+
+    def printBGPv4Aggregates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('IpPrefix')
+            header.append('SendSummaryOnly')
+            header.append('GenerateASSet')
+
+        objs = self.swtch.getAllBGPv4Aggregates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['IpPrefix'])
+            values.append('%s' % o['SendSummaryOnly'])
+            values.append('%s' % o['GenerateASSet'])
+            rows.append(values)
+        self.tblPrintObject('BGPv4Aggregate', header, rows)
 
 
     def printBGPPolicyDefinitions(self, addHeader=True, brief=None):
