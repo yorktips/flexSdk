@@ -1609,6 +1609,8 @@ class FlexSwitch( object):
         :param string PeerGroup : Peer group of the BGP neighbor Peer group of the BGP neighbor
         :param string UpdateSource : Source IP to connect to the BGP neighbor Source IP to connect to the BGP neighbor
         :param string AuthPassword : Password to connect to the BGP neighbor Password to connect to the BGP neighbor
+        :param string AdjRIBInFilter : Policy that is applied for Adj-RIB-In prefix filtering Policy that is applied for Adj-RIB-In prefix filtering
+        :param string AdjRIBOutFilter : Policy that is applied for Adj-RIB-Out prefix filtering Policy that is applied for Adj-RIB-Out prefix filtering
         :param bool BfdEnable : Enable/Disable BFD for the BGP neighbor Enable/Disable BFD for the BGP neighbor
         :param uint8 MultiHopTTL : TTL for multi hop BGP neighbor TTL for multi hop BGP neighbor
         :param uint32 LocalAS : Local AS of the BGP neighbor Local AS of the BGP neighbor
@@ -1635,6 +1637,8 @@ class FlexSwitch( object):
                             PeerGroup='',
                             UpdateSource='',
                             AuthPassword='',
+                            AdjRIBInFilter='',
+                            AdjRIBOutFilter='',
                             BfdEnable=False,
                             MultiHopTTL=0,
                             LocalAS=0,
@@ -1659,6 +1663,8 @@ class FlexSwitch( object):
                 'PeerGroup' : PeerGroup,
                 'UpdateSource' : UpdateSource,
                 'AuthPassword' : AuthPassword,
+                'AdjRIBInFilter' : AdjRIBInFilter,
+                'AdjRIBOutFilter' : AdjRIBOutFilter,
                 'BfdEnable' : True if BfdEnable else False,
                 'MultiHopTTL' : int(MultiHopTTL),
                 'LocalAS' : int(LocalAS),
@@ -1688,6 +1694,8 @@ class FlexSwitch( object):
                             PeerGroup = None,
                             UpdateSource = None,
                             AuthPassword = None,
+                            AdjRIBInFilter = None,
+                            AdjRIBOutFilter = None,
                             BfdEnable = None,
                             MultiHopTTL = None,
                             LocalAS = None,
@@ -1723,6 +1731,12 @@ class FlexSwitch( object):
 
         if AuthPassword != None :
             obj['AuthPassword'] = AuthPassword
+
+        if AdjRIBInFilter != None :
+            obj['AdjRIBInFilter'] = AdjRIBInFilter
+
+        if AdjRIBOutFilter != None :
+            obj['AdjRIBOutFilter'] = AdjRIBOutFilter
 
         if BfdEnable != None :
             obj['BfdEnable'] = True if BfdEnable else False
@@ -1785,6 +1799,8 @@ class FlexSwitch( object):
                                  PeerGroup = None,
                                  UpdateSource = None,
                                  AuthPassword = None,
+                                 AdjRIBInFilter = None,
+                                 AdjRIBOutFilter = None,
                                  BfdEnable = None,
                                  MultiHopTTL = None,
                                  LocalAS = None,
@@ -1814,6 +1830,12 @@ class FlexSwitch( object):
 
         if AuthPassword !=  None:
             obj['AuthPassword'] = AuthPassword
+
+        if AdjRIBInFilter !=  None:
+            obj['AdjRIBInFilter'] = AdjRIBInFilter
+
+        if AdjRIBOutFilter !=  None:
+            obj['AdjRIBOutFilter'] = AdjRIBOutFilter
 
         if BfdEnable !=  None:
             obj['BfdEnable'] = BfdEnable
@@ -3729,17 +3751,19 @@ class FlexSwitch( object):
         :param string UpdateSource : Source IP to connect to the BGP neighbor Source IP to connect to the BGP neighbor
         :param string AuthPassword : Password to connect to the BGP neighbor Password to connect to the BGP neighbor
         :param string Description : Description of the BGP neighbor Description of the BGP neighbor
+        :param string AdjRIBInFilter : Policy that is applied for Adj-RIB-In prefix filtering Policy that is applied for Adj-RIB-In prefix filtering
+        :param string AdjRIBOutFilter : Policy that is applied for Adj-RIB-Out prefix filtering Policy that is applied for Adj-RIB-Out prefix filtering
         :param uint8 MaxPrefixesRestartTimer : Time to wait before we start BGP peer session when we receive max prefixes Time to wait before we start BGP peer session when we receive max prefixes
-        :param bool RouteReflectorClient : Set/Clear BGP neighbor as a route reflector client Set/Clear BGP neighbor as a route reflector client
-        :param uint8 MultiHopTTL : TTL for multi hop BGP neighbor TTL for multi hop BGP neighbor
+        :param bool MultiHopEnable : Enable/Disable multi hop for BGP neighbor Enable/Disable multi hop for BGP neighbor
         :param bool MaxPrefixesDisconnect : Disconnect the BGP peer session when we receive the max prefixes from the neighbor Disconnect the BGP peer session when we receive the max prefixes from the neighbor
         :param uint32 LocalAS : Local AS of the BGP neighbor Local AS of the BGP neighbor
+        :param uint8 MultiHopTTL : TTL for multi hop BGP neighbor TTL for multi hop BGP neighbor
         :param uint32 KeepaliveTime : Keep alive time for the BGP neighbor Keep alive time for the BGP neighbor
         :param uint32 RouteReflectorClusterId : Cluster Id of the internal BGP neighbor route reflector client Cluster Id of the internal BGP neighbor route reflector client
         :param uint32 MaxPrefixes : Maximum number of prefixes that can be received from the BGP neighbor Maximum number of prefixes that can be received from the BGP neighbor
         :param uint8 AddPathsMaxTx : Max number of additional paths that can be transmitted to BGP neighbor Max number of additional paths that can be transmitted to BGP neighbor
-        :param bool MultiHopEnable : Enable/Disable multi hop for BGP neighbor Enable/Disable multi hop for BGP neighbor
         :param bool AddPathsRx : Receive additional paths from BGP neighbor Receive additional paths from BGP neighbor
+        :param bool RouteReflectorClient : Set/Clear BGP neighbor as a route reflector client Set/Clear BGP neighbor as a route reflector client
         :param uint8 MaxPrefixesThresholdPct : The percentage of maximum prefixes before we start logging The percentage of maximum prefixes before we start logging
         :param uint32 HoldTime : Hold time for the BGP neighbor Hold time for the BGP neighbor
         :param uint32 PeerAS : Peer AS of the BGP neighbor Peer AS of the BGP neighbor
@@ -3751,17 +3775,19 @@ class FlexSwitch( object):
                              UpdateSource='',
                              AuthPassword='',
                              Description='',
+                             AdjRIBInFilter='',
+                             AdjRIBOutFilter='',
                              MaxPrefixesRestartTimer=0,
-                             RouteReflectorClient=False,
-                             MultiHopTTL=0,
+                             MultiHopEnable=False,
                              MaxPrefixesDisconnect=False,
                              LocalAS=0,
+                             MultiHopTTL=0,
                              KeepaliveTime=60,
                              RouteReflectorClusterId=0,
                              MaxPrefixes=0,
                              AddPathsMaxTx=0,
-                             MultiHopEnable=False,
                              AddPathsRx=False,
+                             RouteReflectorClient=False,
                              MaxPrefixesThresholdPct=0,
                              HoldTime=180,
                              PeerAS=0,
@@ -3771,17 +3797,19 @@ class FlexSwitch( object):
                 'UpdateSource' : UpdateSource,
                 'AuthPassword' : AuthPassword,
                 'Description' : Description,
+                'AdjRIBInFilter' : AdjRIBInFilter,
+                'AdjRIBOutFilter' : AdjRIBOutFilter,
                 'MaxPrefixesRestartTimer' : int(MaxPrefixesRestartTimer),
-                'RouteReflectorClient' : True if RouteReflectorClient else False,
-                'MultiHopTTL' : int(MultiHopTTL),
+                'MultiHopEnable' : True if MultiHopEnable else False,
                 'MaxPrefixesDisconnect' : True if MaxPrefixesDisconnect else False,
                 'LocalAS' : int(LocalAS),
+                'MultiHopTTL' : int(MultiHopTTL),
                 'KeepaliveTime' : int(KeepaliveTime),
                 'RouteReflectorClusterId' : int(RouteReflectorClusterId),
                 'MaxPrefixes' : int(MaxPrefixes),
                 'AddPathsMaxTx' : int(AddPathsMaxTx),
-                'MultiHopEnable' : True if MultiHopEnable else False,
                 'AddPathsRx' : True if AddPathsRx else False,
+                'RouteReflectorClient' : True if RouteReflectorClient else False,
                 'MaxPrefixesThresholdPct' : int(MaxPrefixesThresholdPct),
                 'HoldTime' : int(HoldTime),
                 'PeerAS' : int(PeerAS),
@@ -3796,17 +3824,19 @@ class FlexSwitch( object):
                              UpdateSource = None,
                              AuthPassword = None,
                              Description = None,
+                             AdjRIBInFilter = None,
+                             AdjRIBOutFilter = None,
                              MaxPrefixesRestartTimer = None,
-                             RouteReflectorClient = None,
-                             MultiHopTTL = None,
+                             MultiHopEnable = None,
                              MaxPrefixesDisconnect = None,
                              LocalAS = None,
+                             MultiHopTTL = None,
                              KeepaliveTime = None,
                              RouteReflectorClusterId = None,
                              MaxPrefixes = None,
                              AddPathsMaxTx = None,
-                             MultiHopEnable = None,
                              AddPathsRx = None,
+                             RouteReflectorClient = None,
                              MaxPrefixesThresholdPct = None,
                              HoldTime = None,
                              PeerAS = None,
@@ -3824,20 +3854,26 @@ class FlexSwitch( object):
         if Description != None :
             obj['Description'] = Description
 
+        if AdjRIBInFilter != None :
+            obj['AdjRIBInFilter'] = AdjRIBInFilter
+
+        if AdjRIBOutFilter != None :
+            obj['AdjRIBOutFilter'] = AdjRIBOutFilter
+
         if MaxPrefixesRestartTimer != None :
             obj['MaxPrefixesRestartTimer'] = int(MaxPrefixesRestartTimer)
 
-        if RouteReflectorClient != None :
-            obj['RouteReflectorClient'] = True if RouteReflectorClient else False
-
-        if MultiHopTTL != None :
-            obj['MultiHopTTL'] = int(MultiHopTTL)
+        if MultiHopEnable != None :
+            obj['MultiHopEnable'] = True if MultiHopEnable else False
 
         if MaxPrefixesDisconnect != None :
             obj['MaxPrefixesDisconnect'] = True if MaxPrefixesDisconnect else False
 
         if LocalAS != None :
             obj['LocalAS'] = int(LocalAS)
+
+        if MultiHopTTL != None :
+            obj['MultiHopTTL'] = int(MultiHopTTL)
 
         if KeepaliveTime != None :
             obj['KeepaliveTime'] = int(KeepaliveTime)
@@ -3851,11 +3887,11 @@ class FlexSwitch( object):
         if AddPathsMaxTx != None :
             obj['AddPathsMaxTx'] = int(AddPathsMaxTx)
 
-        if MultiHopEnable != None :
-            obj['MultiHopEnable'] = True if MultiHopEnable else False
-
         if AddPathsRx != None :
             obj['AddPathsRx'] = True if AddPathsRx else False
+
+        if RouteReflectorClient != None :
+            obj['RouteReflectorClient'] = True if RouteReflectorClient else False
 
         if MaxPrefixesThresholdPct != None :
             obj['MaxPrefixesThresholdPct'] = int(MaxPrefixesThresholdPct)
@@ -3878,17 +3914,19 @@ class FlexSwitch( object):
                                   UpdateSource = None,
                                   AuthPassword = None,
                                   Description = None,
+                                  AdjRIBInFilter = None,
+                                  AdjRIBOutFilter = None,
                                   MaxPrefixesRestartTimer = None,
-                                  RouteReflectorClient = None,
-                                  MultiHopTTL = None,
+                                  MultiHopEnable = None,
                                   MaxPrefixesDisconnect = None,
                                   LocalAS = None,
+                                  MultiHopTTL = None,
                                   KeepaliveTime = None,
                                   RouteReflectorClusterId = None,
                                   MaxPrefixes = None,
                                   AddPathsMaxTx = None,
-                                  MultiHopEnable = None,
                                   AddPathsRx = None,
+                                  RouteReflectorClient = None,
                                   MaxPrefixesThresholdPct = None,
                                   HoldTime = None,
                                   PeerAS = None,
@@ -3903,20 +3941,26 @@ class FlexSwitch( object):
         if Description !=  None:
             obj['Description'] = Description
 
+        if AdjRIBInFilter !=  None:
+            obj['AdjRIBInFilter'] = AdjRIBInFilter
+
+        if AdjRIBOutFilter !=  None:
+            obj['AdjRIBOutFilter'] = AdjRIBOutFilter
+
         if MaxPrefixesRestartTimer !=  None:
             obj['MaxPrefixesRestartTimer'] = MaxPrefixesRestartTimer
 
-        if RouteReflectorClient !=  None:
-            obj['RouteReflectorClient'] = RouteReflectorClient
-
-        if MultiHopTTL !=  None:
-            obj['MultiHopTTL'] = MultiHopTTL
+        if MultiHopEnable !=  None:
+            obj['MultiHopEnable'] = MultiHopEnable
 
         if MaxPrefixesDisconnect !=  None:
             obj['MaxPrefixesDisconnect'] = MaxPrefixesDisconnect
 
         if LocalAS !=  None:
             obj['LocalAS'] = LocalAS
+
+        if MultiHopTTL !=  None:
+            obj['MultiHopTTL'] = MultiHopTTL
 
         if KeepaliveTime !=  None:
             obj['KeepaliveTime'] = KeepaliveTime
@@ -3930,11 +3974,11 @@ class FlexSwitch( object):
         if AddPathsMaxTx !=  None:
             obj['AddPathsMaxTx'] = AddPathsMaxTx
 
-        if MultiHopEnable !=  None:
-            obj['MultiHopEnable'] = MultiHopEnable
-
         if AddPathsRx !=  None:
             obj['AddPathsRx'] = AddPathsRx
+
+        if RouteReflectorClient !=  None:
+            obj['RouteReflectorClient'] = RouteReflectorClient
 
         if MaxPrefixesThresholdPct !=  None:
             obj['MaxPrefixesThresholdPct'] = MaxPrefixesThresholdPct
@@ -7118,6 +7162,8 @@ class FlexSwitch( object):
         :param string Description : Description of the BGP neighbor Description of the BGP neighbor
         :param string PeerGroup : Peer group of the BGP neighbor Peer group of the BGP neighbor
         :param string UpdateSource : Source IP to connect to the BGP neighbor Source IP to connect to the BGP neighbor
+        :param string AdjRIBInFilter : Policy that is applied for Adj-RIB-In prefix filtering Policy that is applied for Adj-RIB-In prefix filtering
+        :param string AdjRIBOutFilter : Policy that is applied for Adj-RIB-Out prefix filtering Policy that is applied for Adj-RIB-Out prefix filtering
         :param bool BfdEnable : Enable/Disable BFD for the BGP neighbor Enable/Disable BFD for the BGP neighbor
         :param uint8 MultiHopTTL : TTL for multi hop BGP neighbor TTL for multi hop BGP neighbor
         :param uint32 LocalAS : Local AS of the BGP neighbor Local AS of the BGP neighbor
@@ -7143,6 +7189,8 @@ class FlexSwitch( object):
                             Description='',
                             PeerGroup='',
                             UpdateSource='',
+                            AdjRIBInFilter='',
+                            AdjRIBOutFilter='',
                             BfdEnable=False,
                             MultiHopTTL=0,
                             LocalAS=0,
@@ -7166,6 +7214,8 @@ class FlexSwitch( object):
                 'Description' : Description,
                 'PeerGroup' : PeerGroup,
                 'UpdateSource' : UpdateSource,
+                'AdjRIBInFilter' : AdjRIBInFilter,
+                'AdjRIBOutFilter' : AdjRIBOutFilter,
                 'BfdEnable' : True if BfdEnable else False,
                 'MultiHopTTL' : int(MultiHopTTL),
                 'LocalAS' : int(LocalAS),
@@ -7194,6 +7244,8 @@ class FlexSwitch( object):
                             Description = None,
                             PeerGroup = None,
                             UpdateSource = None,
+                            AdjRIBInFilter = None,
+                            AdjRIBOutFilter = None,
                             BfdEnable = None,
                             MultiHopTTL = None,
                             LocalAS = None,
@@ -7226,6 +7278,12 @@ class FlexSwitch( object):
 
         if UpdateSource != None :
             obj['UpdateSource'] = UpdateSource
+
+        if AdjRIBInFilter != None :
+            obj['AdjRIBInFilter'] = AdjRIBInFilter
+
+        if AdjRIBOutFilter != None :
+            obj['AdjRIBOutFilter'] = AdjRIBOutFilter
 
         if BfdEnable != None :
             obj['BfdEnable'] = True if BfdEnable else False
@@ -7287,6 +7345,8 @@ class FlexSwitch( object):
                                  Description = None,
                                  PeerGroup = None,
                                  UpdateSource = None,
+                                 AdjRIBInFilter = None,
+                                 AdjRIBOutFilter = None,
                                  BfdEnable = None,
                                  MultiHopTTL = None,
                                  LocalAS = None,
@@ -7313,6 +7373,12 @@ class FlexSwitch( object):
 
         if UpdateSource !=  None:
             obj['UpdateSource'] = UpdateSource
+
+        if AdjRIBInFilter !=  None:
+            obj['AdjRIBInFilter'] = AdjRIBInFilter
+
+        if AdjRIBOutFilter !=  None:
+            obj['AdjRIBOutFilter'] = AdjRIBOutFilter
 
         if BfdEnable !=  None:
             obj['BfdEnable'] = BfdEnable
@@ -7743,16 +7809,18 @@ class FlexSwitch( object):
         :param string Name : Name of the BGP peer group Name of the BGP peer group
         :param string UpdateSource : Source IP to connect to the BGP neighbor Source IP to connect to the BGP neighbor
         :param string Description : Description of the BGP neighbor Description of the BGP neighbor
+        :param string AdjRIBInFilter : Policy that is applied for Adj-RIB-In prefix filtering Policy that is applied for Adj-RIB-In prefix filtering
+        :param string AdjRIBOutFilter : Policy that is applied for Adj-RIB-Out prefix filtering Policy that is applied for Adj-RIB-Out prefix filtering
         :param uint8 MaxPrefixesRestartTimer : Time to wait before we start BGP peer session when we receive max prefixes Time to wait before we start BGP peer session when we receive max prefixes
-        :param bool RouteReflectorClient : Set/Clear BGP neighbor as a route reflector client Set/Clear BGP neighbor as a route reflector client
-        :param uint8 MultiHopTTL : TTL for multi hop BGP neighbor TTL for multi hop BGP neighbor
+        :param bool MultiHopEnable : Enable/Disable multi hop for BGP neighbor Enable/Disable multi hop for BGP neighbor
         :param bool MaxPrefixesDisconnect : Disconnect the BGP peer session when we receive the max prefixes from the neighbor Disconnect the BGP peer session when we receive the max prefixes from the neighbor
         :param uint32 LocalAS : Local AS of the BGP neighbor Local AS of the BGP neighbor
+        :param uint8 MultiHopTTL : TTL for multi hop BGP neighbor TTL for multi hop BGP neighbor
         :param uint32 KeepaliveTime : Keep alive time for the BGP neighbor Keep alive time for the BGP neighbor
         :param uint32 RouteReflectorClusterId : Cluster Id of the internal BGP neighbor route reflector client Cluster Id of the internal BGP neighbor route reflector client
         :param uint8 AddPathsMaxTx : Max number of additional paths that can be transmitted to BGP neighbor Max number of additional paths that can be transmitted to BGP neighbor
-        :param bool MultiHopEnable : Enable/Disable multi hop for BGP neighbor Enable/Disable multi hop for BGP neighbor
         :param bool AddPathsRx : Receive additional paths from BGP neighbor Receive additional paths from BGP neighbor
+        :param bool RouteReflectorClient : Set/Clear BGP neighbor as a route reflector client Set/Clear BGP neighbor as a route reflector client
         :param uint8 MaxPrefixesThresholdPct : The percentage of maximum prefixes before we start logging The percentage of maximum prefixes before we start logging
         :param uint32 HoldTime : Hold time for the BGP neighbor Hold time for the BGP neighbor
         :param uint32 MaxPrefixes : Maximum number of prefixes that can be received from the BGP neighbor Maximum number of prefixes that can be received from the BGP neighbor
@@ -7764,16 +7832,18 @@ class FlexSwitch( object):
                              Name,
                              UpdateSource='',
                              Description='',
+                             AdjRIBInFilter='',
+                             AdjRIBOutFilter='',
                              MaxPrefixesRestartTimer=0,
-                             RouteReflectorClient=False,
-                             MultiHopTTL=0,
+                             MultiHopEnable=False,
                              MaxPrefixesDisconnect=False,
                              LocalAS=0,
+                             MultiHopTTL=0,
                              KeepaliveTime=60,
                              RouteReflectorClusterId=0,
                              AddPathsMaxTx=0,
-                             MultiHopEnable=False,
                              AddPathsRx=False,
+                             RouteReflectorClient=False,
                              MaxPrefixesThresholdPct=0,
                              HoldTime=180,
                              MaxPrefixes=0,
@@ -7783,16 +7853,18 @@ class FlexSwitch( object):
                 'Name' : Name,
                 'UpdateSource' : UpdateSource,
                 'Description' : Description,
+                'AdjRIBInFilter' : AdjRIBInFilter,
+                'AdjRIBOutFilter' : AdjRIBOutFilter,
                 'MaxPrefixesRestartTimer' : int(MaxPrefixesRestartTimer),
-                'RouteReflectorClient' : True if RouteReflectorClient else False,
-                'MultiHopTTL' : int(MultiHopTTL),
+                'MultiHopEnable' : True if MultiHopEnable else False,
                 'MaxPrefixesDisconnect' : True if MaxPrefixesDisconnect else False,
                 'LocalAS' : int(LocalAS),
+                'MultiHopTTL' : int(MultiHopTTL),
                 'KeepaliveTime' : int(KeepaliveTime),
                 'RouteReflectorClusterId' : int(RouteReflectorClusterId),
                 'AddPathsMaxTx' : int(AddPathsMaxTx),
-                'MultiHopEnable' : True if MultiHopEnable else False,
                 'AddPathsRx' : True if AddPathsRx else False,
+                'RouteReflectorClient' : True if RouteReflectorClient else False,
                 'MaxPrefixesThresholdPct' : int(MaxPrefixesThresholdPct),
                 'HoldTime' : int(HoldTime),
                 'MaxPrefixes' : int(MaxPrefixes),
@@ -7807,16 +7879,18 @@ class FlexSwitch( object):
                              Name,
                              UpdateSource = None,
                              Description = None,
+                             AdjRIBInFilter = None,
+                             AdjRIBOutFilter = None,
                              MaxPrefixesRestartTimer = None,
-                             RouteReflectorClient = None,
-                             MultiHopTTL = None,
+                             MultiHopEnable = None,
                              MaxPrefixesDisconnect = None,
                              LocalAS = None,
+                             MultiHopTTL = None,
                              KeepaliveTime = None,
                              RouteReflectorClusterId = None,
                              AddPathsMaxTx = None,
-                             MultiHopEnable = None,
                              AddPathsRx = None,
+                             RouteReflectorClient = None,
                              MaxPrefixesThresholdPct = None,
                              HoldTime = None,
                              MaxPrefixes = None,
@@ -7832,20 +7906,26 @@ class FlexSwitch( object):
         if Description != None :
             obj['Description'] = Description
 
+        if AdjRIBInFilter != None :
+            obj['AdjRIBInFilter'] = AdjRIBInFilter
+
+        if AdjRIBOutFilter != None :
+            obj['AdjRIBOutFilter'] = AdjRIBOutFilter
+
         if MaxPrefixesRestartTimer != None :
             obj['MaxPrefixesRestartTimer'] = int(MaxPrefixesRestartTimer)
 
-        if RouteReflectorClient != None :
-            obj['RouteReflectorClient'] = True if RouteReflectorClient else False
-
-        if MultiHopTTL != None :
-            obj['MultiHopTTL'] = int(MultiHopTTL)
+        if MultiHopEnable != None :
+            obj['MultiHopEnable'] = True if MultiHopEnable else False
 
         if MaxPrefixesDisconnect != None :
             obj['MaxPrefixesDisconnect'] = True if MaxPrefixesDisconnect else False
 
         if LocalAS != None :
             obj['LocalAS'] = int(LocalAS)
+
+        if MultiHopTTL != None :
+            obj['MultiHopTTL'] = int(MultiHopTTL)
 
         if KeepaliveTime != None :
             obj['KeepaliveTime'] = int(KeepaliveTime)
@@ -7856,11 +7936,11 @@ class FlexSwitch( object):
         if AddPathsMaxTx != None :
             obj['AddPathsMaxTx'] = int(AddPathsMaxTx)
 
-        if MultiHopEnable != None :
-            obj['MultiHopEnable'] = True if MultiHopEnable else False
-
         if AddPathsRx != None :
             obj['AddPathsRx'] = True if AddPathsRx else False
+
+        if RouteReflectorClient != None :
+            obj['RouteReflectorClient'] = True if RouteReflectorClient else False
 
         if MaxPrefixesThresholdPct != None :
             obj['MaxPrefixesThresholdPct'] = int(MaxPrefixesThresholdPct)
@@ -7885,16 +7965,18 @@ class FlexSwitch( object):
                                   objectId,
                                   UpdateSource = None,
                                   Description = None,
+                                  AdjRIBInFilter = None,
+                                  AdjRIBOutFilter = None,
                                   MaxPrefixesRestartTimer = None,
-                                  RouteReflectorClient = None,
-                                  MultiHopTTL = None,
+                                  MultiHopEnable = None,
                                   MaxPrefixesDisconnect = None,
                                   LocalAS = None,
+                                  MultiHopTTL = None,
                                   KeepaliveTime = None,
                                   RouteReflectorClusterId = None,
                                   AddPathsMaxTx = None,
-                                  MultiHopEnable = None,
                                   AddPathsRx = None,
+                                  RouteReflectorClient = None,
                                   MaxPrefixesThresholdPct = None,
                                   HoldTime = None,
                                   MaxPrefixes = None,
@@ -7907,20 +7989,26 @@ class FlexSwitch( object):
         if Description !=  None:
             obj['Description'] = Description
 
+        if AdjRIBInFilter !=  None:
+            obj['AdjRIBInFilter'] = AdjRIBInFilter
+
+        if AdjRIBOutFilter !=  None:
+            obj['AdjRIBOutFilter'] = AdjRIBOutFilter
+
         if MaxPrefixesRestartTimer !=  None:
             obj['MaxPrefixesRestartTimer'] = MaxPrefixesRestartTimer
 
-        if RouteReflectorClient !=  None:
-            obj['RouteReflectorClient'] = RouteReflectorClient
-
-        if MultiHopTTL !=  None:
-            obj['MultiHopTTL'] = MultiHopTTL
+        if MultiHopEnable !=  None:
+            obj['MultiHopEnable'] = MultiHopEnable
 
         if MaxPrefixesDisconnect !=  None:
             obj['MaxPrefixesDisconnect'] = MaxPrefixesDisconnect
 
         if LocalAS !=  None:
             obj['LocalAS'] = LocalAS
+
+        if MultiHopTTL !=  None:
+            obj['MultiHopTTL'] = MultiHopTTL
 
         if KeepaliveTime !=  None:
             obj['KeepaliveTime'] = KeepaliveTime
@@ -7931,11 +8019,11 @@ class FlexSwitch( object):
         if AddPathsMaxTx !=  None:
             obj['AddPathsMaxTx'] = AddPathsMaxTx
 
-        if MultiHopEnable !=  None:
-            obj['MultiHopEnable'] = MultiHopEnable
-
         if AddPathsRx !=  None:
             obj['AddPathsRx'] = AddPathsRx
+
+        if RouteReflectorClient !=  None:
+            obj['RouteReflectorClient'] = RouteReflectorClient
 
         if MaxPrefixesThresholdPct !=  None:
             obj['MaxPrefixesThresholdPct'] = MaxPrefixesThresholdPct
