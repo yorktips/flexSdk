@@ -550,14 +550,14 @@ class FlexPrint( FlexSwitchShow):
         '''
 
         portchannels = self.swtch.getAllLaPortChannelStates()
-        members = self.swtch.getAllLaPortChannelMemberStates()
+        members = self.swtch.getAllLaPortChannelIntfRefListStates()
 
         if not portchannels:
             print 'No Data To Display for %s' %('LaPortChannelState')
 
         for portchannel in portchannels:
             lag = portchannel['Object']
-            print 'LagId: %s' %(lag['LagId']) + ' IfIndex: %s' %(lag['IfIndex']) + ' Name: %s' %(lag['Name'])
+            print 'IntfRef: %s' %(lag['IntfRef']) + ' IfIndex: %s' %(lag['IfIndex']) 
             labels = ('LagType','Interval','Mode','System Id', 'System Priority', 'Hash Mode', 'OperState', 'Members', 'Members Up in Bundle')
             rows=[]
 
@@ -568,8 +568,8 @@ class FlexPrint( FlexSwitchShow):
                          "%s" %(lag["SystemPriority"]),
                          "%s" %(lag['LagHash']),
                          "%s" %(lag['OperState']),
-                         "%s" %(lag['Members']),
-                         "%s" %(lag['MembersUpInBundle'])))
+                         "%s" %(lag['IntfRefList']),
+                         "%s" %(lag['IntfRefListUpInBundle'])))
             width = 20
             print indent([labels]+rows, hasHeader=False, separateRows=True,
                  prefix='| ', postfix=' |',
@@ -578,12 +578,12 @@ class FlexPrint( FlexSwitchShow):
             # TODO dump the LAG group info
             if not brief:
                 if not members:
-                    print 'No Data To Display for %s' %('LaPortChannelMemberState')
+                    print 'No Data To Display for %s' %('LaPortChannelIntfRefListState')
 
-                for d in [m['Object'] for m in members if m['Object']['LagId'] == lag['LagId']]:
+                for d in [m['Object'] for m in members if m['Object']['IntfRef'] == lag['IntfRef']]:
 
                     print '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n'
-                    print 'IfIndex: ' + "%s" % d['IfIndex'] + 'LagId: ' + "%s" %d['LagId'] + 'LagIfIndex: ' + "%s" %d['LagIfIndex']
+                    print 'IfIndex: ' + "%s" % d['IfIndex'] + 'Name: ' + "%s" %d['IntfRef'] + 'LagIfIndex: ' + "%s" %d['LagIfIndex']
                     print 'OperState: ' + d['OperState']
                     #print 'lagtype: ' + ('LACP' if not d['LagType'] else 'STATIC')
                     print 'operkey: %s' % d['OperKey']

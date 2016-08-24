@@ -1629,7 +1629,8 @@ class FlexSwitch( object):
         :param string SourceMask : Network mask for source IP Network mask for source IP
         :param string DestMask : Network mark for dest IP Network mark for dest IP
         :param string Proto : Protocol type Protocol type
-        :param int32 Port : L4 Port L4 Port
+        :param int32 SrcPort : Source Port Source Port
+        :param int32 DstPort : Dest Port Dest Port
         :param string Action : Type of action (Allow/Deny) Type of action (Allow/Deny)
 
 	"""
@@ -1642,7 +1643,8 @@ class FlexSwitch( object):
                       SourceMask,
                       DestMask,
                       Proto,
-                      Port,
+                      SrcPort,
+                      DstPort,
                       Action='Allow'):
         obj =  { 
                 'RuleName' : RuleName,
@@ -1653,7 +1655,8 @@ class FlexSwitch( object):
                 'SourceMask' : SourceMask,
                 'DestMask' : DestMask,
                 'Proto' : Proto,
-                'Port' : int(Port),
+                'SrcPort' : int(SrcPort),
+                'DstPort' : int(DstPort),
                 'Action' : Action,
                 }
         reqUrl =  self.cfgUrlBase+'AclRule'
@@ -1669,7 +1672,8 @@ class FlexSwitch( object):
                       SourceMask = None,
                       DestMask = None,
                       Proto = None,
-                      Port = None,
+                      SrcPort = None,
+                      DstPort = None,
                       Action = None):
         obj =  {}
         if RuleName != None :
@@ -1696,8 +1700,11 @@ class FlexSwitch( object):
         if Proto != None :
             obj['Proto'] = Proto
 
-        if Port != None :
-            obj['Port'] = int(Port)
+        if SrcPort != None :
+            obj['SrcPort'] = int(SrcPort)
+
+        if DstPort != None :
+            obj['DstPort'] = int(DstPort)
 
         if Action != None :
             obj['Action'] = Action
@@ -1715,7 +1722,8 @@ class FlexSwitch( object):
                            SourceMask = None,
                            DestMask = None,
                            Proto = None,
-                           Port = None,
+                           SrcPort = None,
+                           DstPort = None,
                            Action = None):
         obj =  {'objectId': objectId }
         if SourceMac !=  None:
@@ -1739,8 +1747,11 @@ class FlexSwitch( object):
         if Proto !=  None:
             obj['Proto'] = Proto
 
-        if Port !=  None:
-            obj['Port'] = Port
+        if SrcPort !=  None:
+            obj['SrcPort'] = SrcPort
+
+        if DstPort !=  None:
+            obj['DstPort'] = DstPort
 
         if Action !=  None:
             obj['Action'] = Action
@@ -2883,65 +2894,47 @@ class FlexSwitch( object):
     """
     .. automethod :: createDistributedRelay(self,
         :param string DrniName : The unique identifier allocated to this Distributed Relay by the local System. This attribute identifies a Distributed Relay instance among the subordinate managed objects of the containing object. The unique identifier allocated to this Distributed Relay by the local System. This attribute identifies a Distributed Relay instance among the subordinate managed objects of the containing object.
-        :param uint8 PortalSystemNumber : A read-write identifier of this particular Portal System within a Portal. It is the responsibility of the network administrator to ensure that these numbers are unique among the Portal Systems with the same aDrniPortalAddr (7.4.1.1.4) A read-write identifier of this particular Portal System within a Portal. It is the responsibility of the network administrator to ensure that these numbers are unique among the Portal Systems with the same aDrniPortalAddr (7.4.1.1.4)
-        :param uint32 IntraPortalLinkList : Read-write list of the Interface Identifiers of the Ports to the Intra-Portal Links assigned to this Distributed Relay. Each Interface Identifier Read-write list of the Interface Identifiers of the Ports to the Intra-Portal Links assigned to this Distributed Relay. Each Interface Identifier
-        :param string IntfRef : Read-write Interface Identifier of the Aggregator Port assigned to this Distributed Relay Read-write Interface Identifier of the Aggregator Port assigned to this Distributed Relay
-        :param uint32 ConvAdminGateway : There are 4096 aDrniConvAdminGateway[] variables There are 4096 aDrniConvAdminGateway[] variables
-        :param uint8 NeighborAdminConvGatewayListDigest : The value for the digest of the prioritized Gateway Conversation ID-to-Gateway assignments of the Neighbor Portal System The value for the digest of the prioritized Gateway Conversation ID-to-Gateway assignments of the Neighbor Portal System
-        :param uint8 NeighborAdminConvPortListDigest : The value for the digest of the prioritized Port Conversation ID-to-Aggregation Port assignments of the Neighbor Portal System The value for the digest of the prioritized Port Conversation ID-to-Aggregation Port assignments of the Neighbor Portal System
-        :param uint32 IPLEncapMap : This managed object is applicable only when Network / IPL sharing by tag (9.3.2.2) or Network / IPL sharing by encapsulation (9.3.2.3) is supported. Each entry represents the value of the identifier used for an IPL frame associated with that Gateway Conversation ID for the encapsulation method specified in 7.4.1.1.17. There are 1024 possible Conversation Ids in a three portal system This managed object is applicable only when Network / IPL sharing by tag (9.3.2.2) or Network / IPL sharing by encapsulation (9.3.2.3) is supported. Each entry represents the value of the identifier used for an IPL frame associated with that Gateway Conversation ID for the encapsulation method specified in 7.4.1.1.17. There are 1024 possible Conversation Ids in a three portal system
-        :param uint32 NetEncapMap : This managed object is applicable only when Network / IPL sharing by tag (9.3.2.2) is supported. Each entry represents the translated value of the identifier used for a network frame associated with that Gateway Conversation ID when the method specified in 7.4.1.1.17 is the Network / IPL sharing by tag method specified in 9.3.2.2 and the network frames need to share the tag space used by IPL frames This managed object is applicable only when Network / IPL sharing by tag (9.3.2.2) is supported. Each entry represents the translated value of the identifier used for a network frame associated with that Gateway Conversation ID when the method specified in 7.4.1.1.17 is the Network / IPL sharing by tag method specified in 9.3.2.2 and the network frames need to share the tag space used by IPL frames
-        :param uint16 PortalPriority : A 2octet read-write value indicating the priority value associated with the Portals System ID. Also used as the Actors System Priority (6.3.2) for the emulated system. A 2octet read-write value indicating the priority value associated with the Portals System ID. Also used as the Actors System Priority (6.3.2) for the emulated system.
-        :param string NeighborPortAlgorithm : This object identifies the value for the Port Algorithm of the Neighbor Portal System This object identifies the value for the Port Algorithm of the Neighbor Portal System
         :param string PortalAddress : A read-write identifier of a particular Portal. Portal-Addr has to be unique among at least all of the potential Portal Systems to which a given Portal System might be attached via an IPL Intra-Portal Link. Also used as the Actors System ID (6.3.2) for the emulated system A read-write identifier of a particular Portal. Portal-Addr has to be unique among at least all of the potential Portal Systems to which a given Portal System might be attached via an IPL Intra-Portal Link. Also used as the Actors System ID (6.3.2) for the emulated system
-        :param string IntraPortalPortProtocolDA : A 6-octet read-write MAC Address value specifying the DA to be used when sending DRCPDUs A 6-octet read-write MAC Address value specifying the DA to be used when sending DRCPDUs
+        :param uint8 PortalSystemNumber : A read-write identifier of this particular Portal System within a Portal. It is the responsibility of the network administrator to ensure that these numbers are unique among the Portal Systems with the same aDrniPortalAddr (7.4.1.1.4) A read-write identifier of this particular Portal System within a Portal. It is the responsibility of the network administrator to ensure that these numbers are unique among the Portal Systems with the same aDrniPortalAddr (7.4.1.1.4)
+        :param string Intfreflist : Read-write list of the Interface Identifiers of the Ports to the Intra-Portal Links assigned to this Distributed Relay. Each Interface Identifier Read-write list of the Interface Identifiers of the Ports to the Intra-Portal Links assigned to this Distributed Relay. Each Interface Identifier
+        :param string IntfRef : Read-write Interface Identifier of the Aggregator Port assigned to this Distributed Relay Read-write Interface Identifier of the Aggregator Port assigned to this Distributed Relay
+        :param uint16 PortalPriority : A 2octet read-write value indicating the priority value associated with the Portals System ID. Also used as the Actors System Priority (6.3.2) for the emulated system. A 2octet read-write value indicating the priority value associated with the Portals System ID. Also used as the Actors System Priority (6.3.2) for the emulated system.
+        :param string GatewayAlgorithm : This object identifies the algorithm used by the DR Function to assign frames to a Gateway Conversation ID. Table 9-7 provides the IEEE 802.1 OUI (00 This object identifies the algorithm used by the DR Function to assign frames to a Gateway Conversation ID. Table 9-7 provides the IEEE 802.1 OUI (00
         :param string NeighborAdminDRCPState : A string of 8 bits A string of 8 bits
         :param string NeighborGatewayAlgorithm : TThis object identifies the value for the Gateway algorithm of the Neighbor Portal System TThis object identifies the value for the Gateway algorithm of the Neighbor Portal System
-        :param bool PortConversationControl : A read-write Boolean value that controls the operation of the updateDRFHomeState (9.4.11). When set to TRUE the Home Gateway Vector is set equal to Drni_Portal_System_Port_Conversation. Setting this object to TRUE is only possible when the Gateway algorithm and the Port algorithm use the same distributions methods. The default is FALSE A read-write Boolean value that controls the operation of the updateDRFHomeState (9.4.11). When set to TRUE the Home Gateway Vector is set equal to Drni_Portal_System_Port_Conversation. Setting this object to TRUE is only possible when the Gateway algorithm and the Port algorithm use the same distributions methods. The default is FALSE
-        :param string GatewayAlgorithm : This object identifies the algorithm used by the DR Function to assign frames to a Gateway Conversation ID. Table 9-7 provides the IEEE 802.1 OUI (00 This object identifies the algorithm used by the DR Function to assign frames to a Gateway Conversation ID. Table 9-7 provides the IEEE 802.1 OUI (00
         :param bool ThreePortalSystem : A read-write Boolean value indicating whether this Portal System is part of a Portal consisting of three Portal Systems or not. Value 1 stands for a Portal of three Portal Systems A read-write Boolean value indicating whether this Portal System is part of a Portal consisting of three Portal Systems or not. Value 1 stands for a Portal of three Portal Systems
+        :param string IntraPortalPortProtocolDA : A 6-octet read-write MAC Address value specifying the DA to be used when sending DRCPDUs A 6-octet read-write MAC Address value specifying the DA to be used when sending DRCPDUs
+        :param string NeighborPortAlgorithm : This object identifies the value for the Port Algorithm of the Neighbor Portal System This object identifies the value for the Port Algorithm of the Neighbor Portal System
         :param string EncapMethod : This managed object is applicable only when Network / IPL sharing by time (9.3.2.1) or Network / IPL sharing by tag (9.3.2.2) or Network / IPL sharing by encapsulation (9.3.2.3) is supported. The object identifies the value representing the encapsulation method that is used to transport IPL frames to the Neighbor Portal System when the IPL and network link are sharing the same physical link. It consists of the 3-octet OUI or CID identifying the organization that is responsible for this encapsulation and one following octet used to identify the encapsulation method defined by that organization. Table 9-11 provides the IEEE 802.1 OUI (00-80-C2) encapsulation method encodings. A Default value of 0x00-80-C2-00 indicates that the IPL is using a separate physical or Aggregation link. A value of 1 indicates that Network / IPL sharing by time (9.3.2.1) is used. A value of 2 indicates that the encapsulation method used is the same as the one used by network frames and that Network / IPL sharing by tag (9.3.2.2) is used This managed object is applicable only when Network / IPL sharing by time (9.3.2.1) or Network / IPL sharing by tag (9.3.2.2) or Network / IPL sharing by encapsulation (9.3.2.3) is supported. The object identifies the value representing the encapsulation method that is used to transport IPL frames to the Neighbor Portal System when the IPL and network link are sharing the same physical link. It consists of the 3-octet OUI or CID identifying the organization that is responsible for this encapsulation and one following octet used to identify the encapsulation method defined by that organization. Table 9-11 provides the IEEE 802.1 OUI (00-80-C2) encapsulation method encodings. A Default value of 0x00-80-C2-00 indicates that the IPL is using a separate physical or Aggregation link. A value of 1 indicates that Network / IPL sharing by time (9.3.2.1) is used. A value of 2 indicates that the encapsulation method used is the same as the one used by network frames and that Network / IPL sharing by tag (9.3.2.2) is used
 
 	"""
     def createDistributedRelay(self,
                                DrniName,
+                               PortalAddress,
                                PortalSystemNumber,
-                               IntraPortalLinkList,
+                               Intfreflist,
                                IntfRef,
-                               ConvAdminGateway,
-                               NeighborAdminConvGatewayListDigest,
-                               NeighborAdminConvPortListDigest,
-                               IPLEncapMap,
-                               NetEncapMap,
                                PortalPriority=32768,
-                               NeighborPortAlgorithm='00',
-                               PortalAddress='00',
-                               IntraPortalPortProtocolDA='01',
+                               GatewayAlgorithm='00-80-C2-01',
                                NeighborAdminDRCPState='00000000',
-                               NeighborGatewayAlgorithm='00',
-                               PortConversationControl=False,
-                               GatewayAlgorithm='00',
+                               NeighborGatewayAlgorithm='00-80-C2-01',
                                ThreePortalSystem=False,
-                               EncapMethod='00'):
+                               IntraPortalPortProtocolDA='01-80-C2-00-00-03',
+                               NeighborPortAlgorithm='00-80-C2-01',
+                               EncapMethod='00-80-C2-01'):
         obj =  { 
                 'DrniName' : DrniName,
-                'PortalSystemNumber' : int(PortalSystemNumber),
-                'IntraPortalLinkList' : IntraPortalLinkList,
-                'IntfRef' : IntfRef,
-                'ConvAdminGateway' : ConvAdminGateway,
-                'NeighborAdminConvGatewayListDigest' : NeighborAdminConvGatewayListDigest,
-                'NeighborAdminConvPortListDigest' : NeighborAdminConvPortListDigest,
-                'IPLEncapMap' : IPLEncapMap,
-                'NetEncapMap' : NetEncapMap,
-                'PortalPriority' : int(PortalPriority),
-                'NeighborPortAlgorithm' : NeighborPortAlgorithm,
                 'PortalAddress' : PortalAddress,
-                'IntraPortalPortProtocolDA' : IntraPortalPortProtocolDA,
+                'PortalSystemNumber' : int(PortalSystemNumber),
+                'Intfreflist' : Intfreflist,
+                'IntfRef' : IntfRef,
+                'PortalPriority' : int(PortalPriority),
+                'GatewayAlgorithm' : GatewayAlgorithm,
                 'NeighborAdminDRCPState' : NeighborAdminDRCPState,
                 'NeighborGatewayAlgorithm' : NeighborGatewayAlgorithm,
-                'PortConversationControl' : True if PortConversationControl else False,
-                'GatewayAlgorithm' : GatewayAlgorithm,
                 'ThreePortalSystem' : True if ThreePortalSystem else False,
+                'IntraPortalPortProtocolDA' : IntraPortalPortProtocolDA,
+                'NeighborPortAlgorithm' : NeighborPortAlgorithm,
                 'EncapMethod' : EncapMethod,
                 }
         reqUrl =  self.cfgUrlBase+'DistributedRelay'
@@ -2950,63 +2943,39 @@ class FlexSwitch( object):
 
     def updateDistributedRelay(self,
                                DrniName,
-                               PortalSystemNumber = None,
-                               IntraPortalLinkList = None,
-                               IntfRef = None,
-                               ConvAdminGateway = None,
-                               NeighborAdminConvGatewayListDigest = None,
-                               NeighborAdminConvPortListDigest = None,
-                               IPLEncapMap = None,
-                               NetEncapMap = None,
-                               PortalPriority = None,
-                               NeighborPortAlgorithm = None,
                                PortalAddress = None,
-                               IntraPortalPortProtocolDA = None,
+                               PortalSystemNumber = None,
+                               Intfreflist = None,
+                               IntfRef = None,
+                               PortalPriority = None,
+                               GatewayAlgorithm = None,
                                NeighborAdminDRCPState = None,
                                NeighborGatewayAlgorithm = None,
-                               PortConversationControl = None,
-                               GatewayAlgorithm = None,
                                ThreePortalSystem = None,
+                               IntraPortalPortProtocolDA = None,
+                               NeighborPortAlgorithm = None,
                                EncapMethod = None):
         obj =  {}
         if DrniName != None :
             obj['DrniName'] = DrniName
 
+        if PortalAddress != None :
+            obj['PortalAddress'] = PortalAddress
+
         if PortalSystemNumber != None :
             obj['PortalSystemNumber'] = int(PortalSystemNumber)
 
-        if IntraPortalLinkList != None :
-            obj['IntraPortalLinkList'] = IntraPortalLinkList
+        if Intfreflist != None :
+            obj['Intfreflist'] = Intfreflist
 
         if IntfRef != None :
             obj['IntfRef'] = IntfRef
 
-        if ConvAdminGateway != None :
-            obj['ConvAdminGateway'] = ConvAdminGateway
-
-        if NeighborAdminConvGatewayListDigest != None :
-            obj['NeighborAdminConvGatewayListDigest'] = NeighborAdminConvGatewayListDigest
-
-        if NeighborAdminConvPortListDigest != None :
-            obj['NeighborAdminConvPortListDigest'] = NeighborAdminConvPortListDigest
-
-        if IPLEncapMap != None :
-            obj['IPLEncapMap'] = IPLEncapMap
-
-        if NetEncapMap != None :
-            obj['NetEncapMap'] = NetEncapMap
-
         if PortalPriority != None :
             obj['PortalPriority'] = int(PortalPriority)
 
-        if NeighborPortAlgorithm != None :
-            obj['NeighborPortAlgorithm'] = NeighborPortAlgorithm
-
-        if PortalAddress != None :
-            obj['PortalAddress'] = PortalAddress
-
-        if IntraPortalPortProtocolDA != None :
-            obj['IntraPortalPortProtocolDA'] = IntraPortalPortProtocolDA
+        if GatewayAlgorithm != None :
+            obj['GatewayAlgorithm'] = GatewayAlgorithm
 
         if NeighborAdminDRCPState != None :
             obj['NeighborAdminDRCPState'] = NeighborAdminDRCPState
@@ -3014,14 +2983,14 @@ class FlexSwitch( object):
         if NeighborGatewayAlgorithm != None :
             obj['NeighborGatewayAlgorithm'] = NeighborGatewayAlgorithm
 
-        if PortConversationControl != None :
-            obj['PortConversationControl'] = True if PortConversationControl else False
-
-        if GatewayAlgorithm != None :
-            obj['GatewayAlgorithm'] = GatewayAlgorithm
-
         if ThreePortalSystem != None :
             obj['ThreePortalSystem'] = True if ThreePortalSystem else False
+
+        if IntraPortalPortProtocolDA != None :
+            obj['IntraPortalPortProtocolDA'] = IntraPortalPortProtocolDA
+
+        if NeighborPortAlgorithm != None :
+            obj['NeighborPortAlgorithm'] = NeighborPortAlgorithm
 
         if EncapMethod != None :
             obj['EncapMethod'] = EncapMethod
@@ -3032,60 +3001,36 @@ class FlexSwitch( object):
 
     def updateDistributedRelayById(self,
                                     objectId,
-                                    PortalSystemNumber = None,
-                                    IntraPortalLinkList = None,
-                                    IntfRef = None,
-                                    ConvAdminGateway = None,
-                                    NeighborAdminConvGatewayListDigest = None,
-                                    NeighborAdminConvPortListDigest = None,
-                                    IPLEncapMap = None,
-                                    NetEncapMap = None,
-                                    PortalPriority = None,
-                                    NeighborPortAlgorithm = None,
                                     PortalAddress = None,
-                                    IntraPortalPortProtocolDA = None,
+                                    PortalSystemNumber = None,
+                                    Intfreflist = None,
+                                    IntfRef = None,
+                                    PortalPriority = None,
+                                    GatewayAlgorithm = None,
                                     NeighborAdminDRCPState = None,
                                     NeighborGatewayAlgorithm = None,
-                                    PortConversationControl = None,
-                                    GatewayAlgorithm = None,
                                     ThreePortalSystem = None,
+                                    IntraPortalPortProtocolDA = None,
+                                    NeighborPortAlgorithm = None,
                                     EncapMethod = None):
         obj =  {'objectId': objectId }
+        if PortalAddress !=  None:
+            obj['PortalAddress'] = PortalAddress
+
         if PortalSystemNumber !=  None:
             obj['PortalSystemNumber'] = PortalSystemNumber
 
-        if IntraPortalLinkList !=  None:
-            obj['IntraPortalLinkList'] = IntraPortalLinkList
+        if Intfreflist !=  None:
+            obj['Intfreflist'] = Intfreflist
 
         if IntfRef !=  None:
             obj['IntfRef'] = IntfRef
 
-        if ConvAdminGateway !=  None:
-            obj['ConvAdminGateway'] = ConvAdminGateway
-
-        if NeighborAdminConvGatewayListDigest !=  None:
-            obj['NeighborAdminConvGatewayListDigest'] = NeighborAdminConvGatewayListDigest
-
-        if NeighborAdminConvPortListDigest !=  None:
-            obj['NeighborAdminConvPortListDigest'] = NeighborAdminConvPortListDigest
-
-        if IPLEncapMap !=  None:
-            obj['IPLEncapMap'] = IPLEncapMap
-
-        if NetEncapMap !=  None:
-            obj['NetEncapMap'] = NetEncapMap
-
         if PortalPriority !=  None:
             obj['PortalPriority'] = PortalPriority
 
-        if NeighborPortAlgorithm !=  None:
-            obj['NeighborPortAlgorithm'] = NeighborPortAlgorithm
-
-        if PortalAddress !=  None:
-            obj['PortalAddress'] = PortalAddress
-
-        if IntraPortalPortProtocolDA !=  None:
-            obj['IntraPortalPortProtocolDA'] = IntraPortalPortProtocolDA
+        if GatewayAlgorithm !=  None:
+            obj['GatewayAlgorithm'] = GatewayAlgorithm
 
         if NeighborAdminDRCPState !=  None:
             obj['NeighborAdminDRCPState'] = NeighborAdminDRCPState
@@ -3093,14 +3038,14 @@ class FlexSwitch( object):
         if NeighborGatewayAlgorithm !=  None:
             obj['NeighborGatewayAlgorithm'] = NeighborGatewayAlgorithm
 
-        if PortConversationControl !=  None:
-            obj['PortConversationControl'] = PortConversationControl
-
-        if GatewayAlgorithm !=  None:
-            obj['GatewayAlgorithm'] = GatewayAlgorithm
-
         if ThreePortalSystem !=  None:
             obj['ThreePortalSystem'] = ThreePortalSystem
+
+        if IntraPortalPortProtocolDA !=  None:
+            obj['IntraPortalPortProtocolDA'] = IntraPortalPortProtocolDA
+
+        if NeighborPortAlgorithm !=  None:
+            obj['NeighborPortAlgorithm'] = NeighborPortAlgorithm
 
         if EncapMethod !=  None:
             obj['EncapMethod'] = EncapMethod
