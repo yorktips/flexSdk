@@ -789,7 +789,7 @@ class FlexPrint( FlexSwitchShow):
                             rows)
 
 
-    def printBGPNeighborStates(self):	   
+    def printBGPv4NeighborStates(self):	   
        sessionState=  {  1: "Idle",
                  2: "Connect",
                  3: "Active",
@@ -798,7 +798,7 @@ class FlexPrint( FlexSwitchShow):
                  6: "Established"
                }
 
-       peers = self.swtch.getAllBGPNeighborStates()
+       peers = self.swtch.getAllBGPv4NeighborStates()
        if len(peers)>=0:
            print '\n'
            labels = ('Neighbor','LocalAS','PeerAS','State','RxMsg','TxMsg','Description','Prefixes_Rcvd')
