@@ -580,10 +580,10 @@ class FlexPrint( FlexSwitchShow):
                 if not members:
                     print 'No Data To Display for %s' %('LaPortChannelIntfRefListState')
 
-                for d in [m['Object'] for m in members if m['Object']['IntfRef'] == lag['IntfRef']]:
+                for d in [m['Object'] for m in members if m['Object']['LagIntfRef'] == lag['IntfRef']]:
 
                     print '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n'
-                    print 'IfIndex: ' + "%s" % d['IfIndex'] + 'Name: ' + "%s" %d['IntfRef'] + 'LagIfIndex: ' + "%s" %d['LagIfIndex']
+                    print 'IfIndex: ' + "%s" % d['IfIndex'] + 'Name: ' + "%s" %d['IntfRef'] + ' LagIntfRef: ' + "%s" %d['LagIntfRef']
                     print 'OperState: ' + d['OperState']
                     #print 'lagtype: ' + ('LACP' if not d['LagType'] else 'STATIC')
                     print 'operkey: %s' % d['OperKey']
