@@ -160,6 +160,32 @@ class FlexPrint( FlexSwitchShow):
                     print "   via", rt_next['NextHopList'][rt_count-1]['NextHopIp']+", "+rt_next['NextHopList'][rt_count-1]['NextHopIntRef']+", "+"["+str(rd['Distance'])+"/"+str(rt_next['NextHopList'][rt_count-1]['Weight'])+"]"+",",rt['RouteCreatedTime']+",",rt['Protocol']
                 rt_count-=1
 
+
+    def printIPv6RouteStates(self):
+        routes = self.swtch.getAllIPv6RouteStates()     
+        print "IPv6 Route Table"
+        print "'[x/y]' denotes [preference/metric]"
+        print "\n"    	
+        for r in routes:
+            rt = r['Object']
+            rt_spec = self.swtch.getIPv4RouteState(rt['DestinationNw']).json()
+            rt_next=rt_spec['Object']
+            rt_count = len(rt_next['NextHopList'])  
+            route_distance = self.swtch.getRouteDistanceState(rt['Protocol']).json()
+            rd = route_distance['Object']    
+            if rt['PolicyList'] is None:
+                policy=rt['PolicyList']
+            else:
+                policy = str(rt['PolicyList']).split("[")[1].split()[1]
+            print rt['DestinationNw'], "ubest/mbest: 1/0"+",", "Policy:", policy
+            while rt_count > 0:
+                if rt['Protocol'] == "CONNECTED":
+                    ip_int = self.swtch.getIPv4IntfState(rt_next['NextHopList'][rt_count-1]['NextHopIntRef']).json()
+                    print "   via",ip_int['Object']['IpAddr'].split("/")[0] +", "+rt_next['NextHopList'][rt_count-1]['NextHopIntRef']+", "+"["+str(rd['Distance'])+"/"+str(rt_next['NextHopList'][rt_count-1]['Weight'])+"]"+",",rt['RouteCreatedTime']+",",rt['Protocol']
+                else:
+                    print "   via", rt_next['NextHopList'][rt_count-1]['NextHopIp']+", "+rt_next['NextHopList'][rt_count-1]['NextHopIntRef']+", "+"["+str(rd['Distance'])+"/"+str(rt_next['NextHopList'][rt_count-1]['Weight'])+"]"+",",rt['RouteCreatedTime']+",",rt['Protocol']
+                rt_count-=1
+
     def printVlanState(self, VlanId):
 
         self.printVlanStates(int(VlanId))
@@ -633,8 +659,36 @@ class FlexPrint( FlexSwitchShow):
                         print e
 
 
-    def printBGPRouteStates(self, ):
-        routes = self.swtch.getAllBGPRouteStates()
+    def printBGPv4RouteStates(self, ):
+        routes = self.swtch.getAllBGPv4RouteStates()
+        bgpglobal = self.swtch.getAllBGPGlobals()
+        labels = ('Network', 'NextHop','BP', 'MP', 'Metric', 'LocalPref', 'Updated', 'Path')
+        rows = []
+        for r in routes:
+            rt = r['Object']
+            if rt['Paths'] is None:
+                continue
+            for p in rt['Paths']:
+                if p['Path'] is None:
+                    bgp_path = p['Path']
+                else:
+                    bgp_path = [x.encode('utf-8') for x in p['Path']]
+
+                rows.append((rt['Network']+"/"+str(rt['CIDRLen']),
+                            "%s" %(p['NextHop']),
+                            "%s" %(p['BestPath']),
+                            "%s" %(p['MultiPath']),
+                            "%s" %(p['Metric']),
+                            "%s" %(p['LocalPref']),
+                            "%s" %(p['UpdatedTime'].split(".")[0]),
+                            "%s" %(bgp_path)))
+        width = 30
+        print indent([labels]+rows, hasHeader=True, separateRows=False,
+                     prefix=' ', postfix=' ', headerChar= '-', delim='    ',
+                     wrapfunc=lambda x: wrap_onspace_strict(x,width))
+
+    def printBGPv6RouteStates(self, ):
+        routes = self.swtch.getAllBGPv6RouteStates()
         bgpglobal = self.swtch.getAllBGPGlobals()
         labels = ('Network', 'NextHop','BP', 'MP', 'Metric', 'LocalPref', 'Updated', 'Path')
         rows = []
