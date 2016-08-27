@@ -884,7 +884,7 @@ class FlexPrint( FlexSwitchShow):
         peers = self.swtch.getAllBfdSessionStates()
         if len(peers)>=0:
             print '\n'
-            labels = ('NeighAddr','LD/RD','Protocols','Multi','TxInt','RxInt','State','Int','TxPkts','RxPkts')
+            labels = ('NeighAddr','LD/RD','Protocols','Multi','TxInt','RxInt','State','Int','TxPkts','RxPkts','Uptime')
             rows=[]
             for p in peers:
                 pr = p['Object']
@@ -899,7 +899,8 @@ class FlexPrint( FlexSwitchShow):
                       "%s" %(pr['RemoteSessionState']),
                       "%s" %(pr['IfIndex']),
                       "%s" %(pr['NumTxPackets']),
-                      "%s" %(pr['NumRxPackets'])))
+                      "%s" %(pr['NumRxPackets']),
+                      "%s" %(pr['UpDuration'])))
 
             self.tblPrintObject('BfdSessionStates',
                             labels,
