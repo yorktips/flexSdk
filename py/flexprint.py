@@ -210,7 +210,7 @@ class FlexPrint( FlexSwitchShow):
                         tag_ports = ', '.join(vl['IntfList'])
                     else:
                         tag_ports = ""
-                    port = untag_ports + tag_ports
+                    port = untag_ports + "," + tag_ports
                     name = vls['VlanName']
                     rows.append( (str(vl['VlanId']),
                           "%s" %(name),
