@@ -50,11 +50,8 @@ class FlexPrint( FlexSwitchShow):
         port_config = self.swtch.getPort(p['IntfRef']).json()
         pc = port_config['Object']
         ipv4_state = self.swtch.getIPv4IntfState(p['IntfRef']).json()
-        #print ipv4_state
         ipv4 = None
-        if ipv4_state.has_key('Result') and 'Error' in ipv4_state['Result']:
-            ipv4 = {'IpAddr': ipv4_state['Result']}
-        elif ipv4_state.has_key('Object'):
+        if ipv4_state.has_key('Object'):
             ipv4 = ipv4_state['Object']
 
         if not p['LastDownEventTime']:
@@ -213,7 +210,7 @@ class FlexPrint( FlexSwitchShow):
                         tag_ports = ', '.join(vl['IntfList'])
                     else:
                         tag_ports = ""
-                    port = untag_ports + tag_ports
+                    port = untag_ports + "," + tag_ports
                     name = vls['VlanName']
                     rows.append( (str(vl['VlanId']),
                           "%s" %(name),
@@ -874,10 +871,39 @@ class FlexPrint( FlexSwitchShow):
                             labels,
                             rows)
 
-           #width = 20
-           #print indent([labels]+rows, hasHeader=True, separateRows=False,
-           #             prefix=' ', postfix=' ', headerChar= '-', delim='    ',
-           #             wrapfunc=lambda x: wrap_onspace_strict(x,width))
+    def printBGPv6NeighborStates(self):	   
+       sessionState=  {  1: "Idle",
+                 2: "Connect",
+                 3: "Active",
+                 4: "OpenSent",
+                 5: "OpenConfirm",
+                 6: "Established"
+               }
+
+       peers = self.swtch.getAllBGPv6NeighborStates()
+       if len(peers)>=0:
+           print '\n'
+           labels = ('Neighbor','LocalAS','PeerAS','State','RxMsg','TxMsg','Description','Prefixes_Rcvd')
+           rows=[]
+           for p in peers:
+               pr = p['Object']
+               RXmsg = (pr['Messages']['Received']['Notification']) + (pr['Messages']['Received']['Update'])
+               TXmsg = (pr['Messages']['Sent']['Notification']) + (pr['Messages']['Sent']['Update'])
+               rows.append( (pr['NeighborAddress'],
+                     "%s" %(pr['LocalAS']),
+                     "%s" %(pr['PeerAS']),
+                     "%s" %(sessionState[pr['SessionState']]),
+                     "%s" %(RXmsg),
+                     "%s" %(TXmsg),
+                     "%s" %(pr['Description']),
+                     "%s" %(pr['TotalPrefixes'])))
+
+
+           self.tblPrintObject('BGPNeighborStates',
+                            labels,
+                            rows)
+
+
 
     def printBfdSessionStates(self):
         peers = self.swtch.getAllBfdSessionStates()
