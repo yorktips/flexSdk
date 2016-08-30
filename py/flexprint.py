@@ -186,7 +186,7 @@ class FlexPrint( FlexSwitchShow):
 
         self.printVlanStates(int(VlanId))
 
-    def printVlanStates(self, VlanId=None):
+    def printCombinedVlanStates(self, VlanId=None):
         if VlanId is not None:
             vlans = [self.swtch.getVlan(VlanId).json()]
         else:
@@ -712,13 +712,21 @@ class FlexPrint( FlexSwitchShow):
                      wrapfunc=lambda x: wrap_onspace_strict(x,width))
 
     def printIPv4IntfStates(self,):
+    	ipintfs = self.swtch.getAllIPv4IntfStates()
+    	print '\n'
+    	labels = ('Interface', 'IP Address', 'OperState', 'DownEvents','Last Flap')
+    	rows =[]
+    	for i in ipintfs:
+            ip = i['Object']    
+            rows.append((ip['IntfRef'],
+                        "%s" %(ip['IpAddr']),
+                        "%s" %(ip['OperState']),
+                        "%s" %(ip['NumDownEvents']),
+                        "%s" %(ip['LastDownEventTime'])))
 
-        self.printEthIPv4IntfStates()
-        print '\n'
-        self.printSviIPv4IntfStates()
-        print '\n'
-        self.printLagIPv4IntfStates()
-        print '\n'
+        self.tblPrintObject('IPv6IntfStates',
+                            labels,
+                            rows)
 
     def printEthIPv4IntfStates(self,):
         ipintfs = self.swtch.getAllIPv4IntfStates()
@@ -774,16 +782,42 @@ class FlexPrint( FlexSwitchShow):
                             labels,
                             rows)
 
+    def printLoIPv4IntfStates(self,):
+    	ipintfs = self.swtch.getAllLogicalIntfStates()
+    	print '\n'
+    	labels = ('Interface', 'IP Address', 'OperState', 'DownEvents','Last Flap')
+        rows = []
+        for i in ipintfs:
+            ip = i['Object']
+            if ip['L2IntfType'] == 'Loopback':
+                rows.append((ip['IntfRef'],
+                            "%s" %(ip['IpAddr']),
+                            "%s" %(ip['OperState']),
+                            "%s" %(ip['NumDownEvents']),
+                            "%s" %(ip['LastDownEventTime'])))
 
+        self.tblPrintObject('LagIPv4IntfStates',
+                            labels,
+                            rows)
+                            
     def printIPv6IntfStates(self,):
-
-        self.printEthIPv6IntfStates()
-        print '\n'
-        self.printSviIPv6IntfStates()
-        print '\n'
-        self.printLagIPv6IntfStates()
-        print '\n'
-
+		ipintfs = self.swtch.getAllIPv6IntfStates()
+		print '\n'
+		labels = ('Interface', 'IP Address', 'OperState', 'DownEvents','Last Flap')
+		rows=[]
+		for i in ipintfs:
+			ip = i['Object']    
+			rows.append((ip['IntfRef'],
+                        "%s" %(ip['IpAddr']),
+                        "%s" %(ip['OperState']),
+                        "%s" %(ip['NumDownEvents']),
+                        "%s" %(ip['LastDownEventTime'])))
+		self.tblPrintObject('IPv6IntfStates',
+                            labels,
+                            rows)
+       
+        
+        
     def printEthIPv6IntfStates(self,):
         ipintfs = self.swtch.getAllIPv6IntfStates()
         print '\n'
@@ -838,6 +872,23 @@ class FlexPrint( FlexSwitchShow):
                             labels,
                             rows)
 
+    def printLoIPv6IntfStates(self,):
+        ipintfs = self.swtch.getAllLogicalIntfStates()
+        print '\n'
+        labels = ('Interface', 'IP Address', 'OperState', 'DownEvents','Last Flap')
+        rows = []
+        for i in ipintfs:
+            ip = i['Object']
+            if ip['L2IntfType'] == 'Loopback':
+                rows.append((ip['IntfRef'],
+                            "%s" %(ip['IpAddr']),
+                            "%s" %(ip['OperState']),
+                            "%s" %(ip['NumDownEvents']),
+                            "%s" %(ip['LastDownEventTime'])))
+
+        self.tblPrintObject('LagIPv4IntfStates',
+                            labels,
+                            rows)
 
     def printBGPv4NeighborStates(self):	   
        sessionState=  {  1: "Idle",
