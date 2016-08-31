@@ -1054,7 +1054,7 @@ class FlexSwitch( object):
 
 	"""
     def createXponderGlobal(self,
-                            XponderDescription='',
+                            XponderDescription='This is a Voyager platform',
                             XponderMode='OutOfService'):
         obj =  { 
                 'XponderId' : int(0),
@@ -4934,6 +4934,26 @@ class FlexSwitch( object):
         return self.getObjects( 'StpBridge', self.stateUrlBase)
 
 
+    def getApiCallState(self,
+                        API,
+                        Time):
+        obj =  { 
+                'API' : API,
+                'Time' : Time,
+                }
+        reqUrl =  self.stateUrlBase + 'ApiCall'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getApiCallStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'ApiCall'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllApiCallStates(self):
+        return self.getObjects( 'ApiCall', self.stateUrlBase)
+
+
     """
     .. automethod :: createDWDMModuleClntIntf(self,
         :param uint8 ClntIntfId : DWDM Module client interface identifier DWDM Module client interface identifier
@@ -5944,14 +5964,20 @@ class FlexSwitch( object):
     """
     .. automethod :: createNDPGlobal(self,
         :param string Vrf : System Vrf System Vrf
-        :param string Enable : Enable/Diable Neighbor Discovery Globally Enable/Diable Neighbor Discovery Globally
+        :param int32 RetransmitInterval : The time between retransmissions of Neighbor Solicitation messages to a neighbor when resolving the address or when probing the reachability of a neighbor in ms The time between retransmissions of Neighbor Solicitation messages to a neighbor when resolving the address or when probing the reachability of a neighbor in ms
+        :param int32 RouterAdvertisementInterval : Delay between each router advertisements in seconds Delay between each router advertisements in seconds
+        :param int32 ReachableTime : The time a neighbor is considered reachable after receiving a reachability confirmation in ms The time a neighbor is considered reachable after receiving a reachability confirmation in ms
 
 	"""
     def createNDPGlobal(self,
-                        Enable='true'):
+                        RetransmitInterval=1,
+                        RouterAdvertisementInterval=5,
+                        ReachableTime=30000):
         obj =  { 
                 'Vrf' : 'default',
-                'Enable' : Enable,
+                'RetransmitInterval' : int(RetransmitInterval),
+                'RouterAdvertisementInterval' : int(RouterAdvertisementInterval),
+                'ReachableTime' : int(ReachableTime),
                 }
         reqUrl =  self.cfgUrlBase+'NDPGlobal'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
@@ -5959,13 +5985,21 @@ class FlexSwitch( object):
 
     def updateNDPGlobal(self,
                         Vrf,
-                        Enable = None):
+                        RetransmitInterval = None,
+                        RouterAdvertisementInterval = None,
+                        ReachableTime = None):
         obj =  {}
         if Vrf != None :
             obj['Vrf'] = Vrf
 
-        if Enable != None :
-            obj['Enable'] = Enable
+        if RetransmitInterval != None :
+            obj['RetransmitInterval'] = int(RetransmitInterval)
+
+        if RouterAdvertisementInterval != None :
+            obj['RouterAdvertisementInterval'] = int(RouterAdvertisementInterval)
+
+        if ReachableTime != None :
+            obj['ReachableTime'] = int(ReachableTime)
 
         reqUrl =  self.cfgUrlBase+'NDPGlobal'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
@@ -5973,10 +6007,18 @@ class FlexSwitch( object):
 
     def updateNDPGlobalById(self,
                              objectId,
-                             Enable = None):
+                             RetransmitInterval = None,
+                             RouterAdvertisementInterval = None,
+                             ReachableTime = None):
         obj =  {'objectId': objectId }
-        if Enable !=  None:
-            obj['Enable'] = Enable
+        if RetransmitInterval !=  None:
+            obj['RetransmitInterval'] = RetransmitInterval
+
+        if RouterAdvertisementInterval !=  None:
+            obj['RouterAdvertisementInterval'] = RouterAdvertisementInterval
+
+        if ReachableTime !=  None:
+            obj['ReachableTime'] = ReachableTime
 
         reqUrl =  self.cfgUrlBase+'NDPGlobal'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
