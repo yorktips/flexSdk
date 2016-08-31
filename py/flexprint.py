@@ -221,18 +221,24 @@ class FlexPrint( FlexSwitchShow):
                         prefix=' ', postfix=' ', headerChar= '-', delim='    ',
                         wrapfunc=lambda x: wrap_onspace_strict(x,width))
 
+
+     
+     
     def printPolicyDefinitionStates(self) :
-        policies = self.swtch.getAllPolicyDefinitionStates()
+        policies = self.swtch.getAllPolicyDefinitions()
         if len(policies) :
-            print '\n\n---- Policies----'
-            print 'Name            Hit Counter     Affected Routes'
-        for plcy in policies:
-            routes=''
-            for route in plcy['IpPrefixList']:
-                routes = routes + '  ' +route
-            print '%s       %s          %s ' %(plcy['Name'], 
-                                plcy['HitCounter'],
-                                routes)
+            print '\n'       
+            for p in policies:
+            	plcy = p['Object']
+            	print 'route_policy %s %s' %(plcy['Name'],plcy['Priority'])
+            	for stmt in plcy['StatementList']:
+            		print '	priority_stmt %d'%( stmt['Priority'])
+            		print '	 match %s'%(stmt['Statement'])
+             	print '\n'
+            #width = 20
+            #print indent([labels]+rows, hasHeader=True, separateRows=False,
+            #            prefix=' ', postfix=' ', headerChar= '-', delim='    ',
+            #            wrapfunc=lambda x: wrap_onspace_strict(x,width))
                                 
     def printDhcpRelayHostDhcpStates(self) :
         hosts = self.swtch.getAllDhcpRelayHostDhcpStates()
