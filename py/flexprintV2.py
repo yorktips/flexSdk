@@ -2274,12 +2274,15 @@ class FlexSwitchShow( object):
             header.append('Action')
             header.append('PolicyList')
 
+        objsc = self.swtch.getAllPolicyStmts()
         objs = self.swtch.getAllPolicyStmtStates()
-        for obj in objs:
+  
+        for obj, objc in zip(objs,objsc):
             o = obj['Object']
+            oc = objc['Object']
             values = []
             values.append('%s' % o['Name'])
-            values.append('%s' % o['MatchConditions'])
+            values.append('%s' % oc['MatchConditions'])
             values.append('%s' % o['Conditions'])
             values.append('%s' % o['Action'])
             values.append('%s' % o['PolicyList'])
