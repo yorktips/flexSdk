@@ -142,7 +142,9 @@ class FlexPrint( FlexSwitchShow):
             rt_next=rt_spec['Object']
             rt_count = len(rt_next['NextHopList'])  
             route_distance = self.swtch.getRouteDistanceState(rt['Protocol']).json()
-            rd = route_distance['Object']    
+            rd = ''
+            if len(route_distance):
+            	rd = route_distance['Object']    
             if rt['PolicyList'] is None:
                 policy=rt['PolicyList']
             else:
@@ -164,11 +166,13 @@ class FlexPrint( FlexSwitchShow):
         print "\n"    	
         for r in routes:
             rt = r['Object']
-            rt_spec = self.swtch.getIPv4RouteState(rt['DestinationNw']).json()
-            rt_next=rt_spec['Object']
+            rt_spec = self.swtch.getIPv6RouteState(rt['DestinationNw']).json()
+            rt_next=rt_spec['Object']    
             rt_count = len(rt_next['NextHopList'])  
             route_distance = self.swtch.getRouteDistanceState(rt['Protocol']).json()
-            rd = route_distance['Object']    
+            rd = ''
+            if len(route_distance):
+            	rd = route_distance['Object']     
             if rt['PolicyList'] is None:
                 policy=rt['PolicyList']
             else:
@@ -897,7 +901,7 @@ class FlexPrint( FlexSwitchShow):
                             rows)
 
     def printBGPv4NeighborStates(self):	   
-       sessionState=  {  1: "Idle",
+       sessionState=  {  0: "Resolving Peer", 1: "Idle",
                  2: "Connect",
                  3: "Active",
                  4: "OpenSent",
@@ -929,7 +933,7 @@ class FlexPrint( FlexSwitchShow):
                             rows)
 
     def printBGPv6NeighborStates(self):	   
-       sessionState=  {  1: "Idle",
+       sessionState=  {  0: "Resolving Peer", 1: "Idle",
                  2: "Connect",
                  3: "Active",
                  4: "OpenSent",
@@ -979,7 +983,7 @@ class FlexPrint( FlexSwitchShow):
                       "%s" %(pr['DesiredMinTxInterval']),
                       "%s" %(pr['RequiredMinRxInterval']),
                       "%s" %(pr['RemoteSessionState']),
-                      "%s" %(pr['IfIndex']),
+                      "%s" %(pr['IntfRef']),
                       "%s" %(pr['NumTxPackets']),
                       "%s" %(pr['NumRxPackets']),
                       "%s" %(pr['UpDuration'])))
