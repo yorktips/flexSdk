@@ -3269,7 +3269,8 @@ class FlexSwitchShow( object):
             header.append('EnabledCapabilities')
 
         objs = self.swtch.getAllLLDPIntfStates()
-        for obj in objs:
+        lines = sorted(objs, key=lambda k: k['Object'].get('IntfRef', 0)) 
+        for obj in lines:
             o = obj['Object']
             values = []
             values.append('%s' % o['IntfRef'])

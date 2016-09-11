@@ -89,7 +89,8 @@ class FlexPrint( FlexSwitchShow):
 
     def printPortStates(self):
         ports = self.swtch.getAllPortStates()
-        for port in ports:
+        lines = sorted(ports, key=lambda k: k['Object'].get('IntfRef', 0))
+        for port in lines:
             p = port['Object']
             if 'NO' in p['PresentInHW']:
                 continue
@@ -135,8 +136,9 @@ class FlexPrint( FlexSwitchShow):
         routes = self.swtch.getAllIPv4RouteStates()     
         print "IP Route Table"
         print "'[x/y]' denotes [preference/metric]"
-        print "\n"    	
-        for r in routes:
+        print "\n"  
+        lines = sorted(routes, key=lambda k: k['Object'].get('DestinationNw', 0))  	
+        for r in lines:
             rt = r['Object']
             rt_spec = self.swtch.getIPv4RouteState(rt['DestinationNw']).json()
             rt_next=rt_spec['Object']
@@ -163,8 +165,9 @@ class FlexPrint( FlexSwitchShow):
         routes = self.swtch.getAllIPv6RouteStates()     
         print "IPv6 Route Table"
         print "'[x/y]' denotes [preference/metric]"
-        print "\n"    	
-        for r in routes:
+        print "\n"   
+        lines = sorted(routes, key=lambda k: k['Object'].get('DestinationNw', 0))  	
+        for r in lines:
             rt = r['Object']
             rt_spec = self.swtch.getIPv6RouteState(rt['DestinationNw']).json()
             rt_next=rt_spec['Object']    
@@ -180,7 +183,7 @@ class FlexPrint( FlexSwitchShow):
             print rt['DestinationNw'], "ubest/mbest: 1/0"+",", "Policy:", policy
             while rt_count > 0:
                 if rt['Protocol'] == "CONNECTED":
-                    ip_int = self.swtch.getIPv4IntfState(rt_next['NextHopList'][rt_count-1]['NextHopIntRef']).json()
+                    ip_int = self.swtch.getIPv6IntfState(rt_next['NextHopList'][rt_count-1]['NextHopIntRef']).json()
                     print "   via",ip_int['Object']['IpAddr'].split("/")[0] +", "+rt_next['NextHopList'][rt_count-1]['NextHopIntRef']+", "+"["+str(rd['Distance'])+"/"+str(rt_next['NextHopList'][rt_count-1]['Weight'])+"]"+",",rt['RouteCreatedTime']+",",rt['Protocol']
                 else:
                     print "   via", rt_next['NextHopList'][rt_count-1]['NextHopIp']+", "+rt_next['NextHopList'][rt_count-1]['NextHopIntRef']+", "+"["+str(rd['Distance'])+"/"+str(rt_next['NextHopList'][rt_count-1]['Weight'])+"]"+",",rt['RouteCreatedTime']+",",rt['Protocol']
@@ -667,10 +670,11 @@ class FlexPrint( FlexSwitchShow):
 
     def printBGPv4RouteStates(self, ):
         routes = self.swtch.getAllBGPv4RouteStates()
-        bgpglobal = self.swtch.getAllBGPGlobals()
+        #bgpglobal = self.swtch.getAllBGPGlobals()
         labels = ('Network', 'NextHop','BP', 'MP', 'Metric', 'LocalPref', 'Updated', 'Path')
         rows = []
-        for r in routes:
+        lines = sorted(routes, key=lambda k: k['Object'].get('Network', 0))  	
+        for r in lines:
             rt = r['Object']
             if rt['Paths'] is None:
                 continue
@@ -698,7 +702,8 @@ class FlexPrint( FlexSwitchShow):
         bgpglobal = self.swtch.getAllBGPGlobals()
         labels = ('Network', 'NextHop','BP', 'MP', 'Metric', 'LocalPref', 'Updated', 'Path')
         rows = []
-        for r in routes:
+        lines = sorted(routes, key=lambda k: k['Object'].get('Network', 0))  	
+        for r in lines:
             rt = r['Object']
             if rt['Paths'] is None:
                 continue
@@ -910,11 +915,13 @@ class FlexPrint( FlexSwitchShow):
                }
 
        peers = self.swtch.getAllBGPv4NeighborStates()
+ 	
        if len(peers)>=0:
            print '\n'
            labels = ('Neighbor','LocalAS','PeerAS','State','RxMsg','TxMsg','Description','Prefixes_Rcvd')
            rows=[]
-           for p in peers:
+           lines = sorted(peers, key=lambda k: k['Object'].get('NeighborAddress', 0)) 
+           for p in lines:
                pr = p['Object']
                RXmsg = (pr['Messages']['Received']['Notification']) + (pr['Messages']['Received']['Update'])
                TXmsg = (pr['Messages']['Sent']['Notification']) + (pr['Messages']['Sent']['Update'])
@@ -946,7 +953,8 @@ class FlexPrint( FlexSwitchShow):
            print '\n'
            labels = ('Neighbor','LocalAS','PeerAS','State','RxMsg','TxMsg','Description','Prefixes_Rcvd')
            rows=[]
-           for p in peers:
+           lines = sorted(peers, key=lambda k: k['Object'].get('NeighborAddress', 0)) 
+           for p in lines:
                pr = p['Object']
                RXmsg = (pr['Messages']['Received']['Notification']) + (pr['Messages']['Received']['Update'])
                TXmsg = (pr['Messages']['Sent']['Notification']) + (pr['Messages']['Sent']['Update'])
