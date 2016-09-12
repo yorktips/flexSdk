@@ -364,6 +364,7 @@ class FlexSwitchShow( object):
             header.append('TxPulseShapeFltrRollOff')
             header.append('TxPower')
             header.append('RxPRBSInvertPattern')
+            header.append('TxPowerRampdBmPerSec')
             header.append('EnableTxPRBS')
             header.append('TxPRBSInvertPattern')
             header.append('AdminState')
@@ -387,6 +388,7 @@ class FlexSwitchShow( object):
             values.append('%s' % o['TxPulseShapeFltrRollOff'])
             values.append('%s' % o['TxPower'])
             values.append('%s' % o['RxPRBSInvertPattern'])
+            values.append('%s' % o['TxPowerRampdBmPerSec'])
             values.append('%s' % o['EnableTxPRBS'])
             values.append('%s' % o['TxPRBSInvertPattern'])
             values.append('%s' % o['AdminState'])
@@ -2682,14 +2684,14 @@ class FlexSwitchShow( object):
     def printDhcpRelayGlobals(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
-            header.append('DhcpRelay')
+            header.append('Vrf')
             header.append('Enable')
 
         objs = self.swtch.getAllDhcpRelayGlobals()
         for obj in objs:
             o = obj['Object']
             values = []
-            values.append('%s' % o['DhcpRelay'])
+            values.append('%s' % o['Vrf'])
             values.append('%s' % o['Enable'])
             rows.append(values)
         self.tblPrintObject('DhcpRelayGlobal', header, rows)
@@ -3258,6 +3260,8 @@ class FlexSwitchShow( object):
         if addHeader:
             header.append('IntfRef')
             header.append('IfIndex')
+            header.append('SendFrames')
+            header.append('ReceivedFrames')
             header.append('Enable')
             header.append('LocalPort')
             header.append('PeerMac')
@@ -3269,12 +3273,13 @@ class FlexSwitchShow( object):
             header.append('EnabledCapabilities')
 
         objs = self.swtch.getAllLLDPIntfStates()
-        lines = sorted(objs, key=lambda k: k['Object'].get('IntfRef', 0)) 
-        for obj in lines:
+        for obj in objs:
             o = obj['Object']
             values = []
             values.append('%s' % o['IntfRef'])
             values.append('%s' % o['IfIndex'])
+            values.append('%s' % o['SendFrames'])
+            values.append('%s' % o['ReceivedFrames'])
             values.append('%s' % o['Enable'])
             values.append('%s' % o['LocalPort'])
             values.append('%s' % o['PeerMac'])
@@ -3293,6 +3298,8 @@ class FlexSwitchShow( object):
         if addHeader:
             header.append('IntfRef')
             header.append('IfIndex')
+            header.append('SendFrames')
+            header.append('ReceivedFrames')
             header.append('Enable')
             header.append('LocalPort')
             header.append('PeerMac')
@@ -3311,6 +3318,8 @@ class FlexSwitchShow( object):
                 values = []
                 values.append('%s' % o['IntfRef'])
                 values.append('%s' % o['IfIndex'])
+                values.append('%s' % o['SendFrames'])
+                values.append('%s' % o['ReceivedFrames'])
                 values.append('%s' % o['Enable'])
                 values.append('%s' % o['LocalPort'])
                 values.append('%s' % o['PeerMac'])
@@ -3331,6 +3340,8 @@ class FlexSwitchShow( object):
         if addHeader:
             header.append('IntfRef')
             header.append('IfIndex')
+            header.append('SendFrames')
+            header.append('ReceivedFrames')
             header.append('Enable')
             header.append('LocalPort')
             header.append('PeerMac')
@@ -3347,6 +3358,8 @@ class FlexSwitchShow( object):
             values = []
             values.append('%s' % o['IntfRef'])
             values.append('%s' % o['IfIndex'])
+            values.append('%s' % o['SendFrames'])
+            values.append('%s' % o['ReceivedFrames'])
             values.append('%s' % o['Enable'])
             values.append('%s' % o['LocalPort'])
             values.append('%s' % o['PeerMac'])
@@ -6495,6 +6508,10 @@ class FlexSwitchShow( object):
             header.append('PRBSRxErrCnt')
             header.append('RxPower')
             header.append('ChanFrequency')
+            header.append('CurrChromDisp')
+            header.append('AvgChromDispOverPMInt')
+            header.append('MinChromDispOverPMInt')
+            header.append('MaxChromDispOverPMInt')
 
         objs = self.swtch.getAllDWDMModuleNwIntfStates()
         for obj in objs:
@@ -6512,6 +6529,10 @@ class FlexSwitchShow( object):
             values.append('%s' % o['PRBSRxErrCnt'])
             values.append('%s' % o['RxPower'])
             values.append('%s' % o['ChanFrequency'])
+            values.append('%s' % o['CurrChromDisp'])
+            values.append('%s' % o['AvgChromDispOverPMInt'])
+            values.append('%s' % o['MinChromDispOverPMInt'])
+            values.append('%s' % o['MaxChromDispOverPMInt'])
             rows.append(values)
         self.tblPrintObject('DWDMModuleNwIntfState', header, rows)
 
@@ -6531,6 +6552,10 @@ class FlexSwitchShow( object):
             header.append('PRBSRxErrCnt')
             header.append('RxPower')
             header.append('ChanFrequency')
+            header.append('CurrChromDisp')
+            header.append('AvgChromDispOverPMInt')
+            header.append('MinChromDispOverPMInt')
+            header.append('MaxChromDispOverPMInt')
 
         objs = self.swtch.getDWDMModuleNwIntfState(
                                                    NwIntfId,
@@ -6551,6 +6576,10 @@ class FlexSwitchShow( object):
                 values.append('%s' % o['PRBSRxErrCnt'])
                 values.append('%s' % o['RxPower'])
                 values.append('%s' % o['ChanFrequency'])
+                values.append('%s' % o['CurrChromDisp'])
+                values.append('%s' % o['AvgChromDispOverPMInt'])
+                values.append('%s' % o['MinChromDispOverPMInt'])
+                values.append('%s' % o['MaxChromDispOverPMInt'])
                 rows.append(values)
             self.tblPrintObject('DWDMModuleNwIntfState', header, rows)
 
@@ -6572,12 +6601,17 @@ class FlexSwitchShow( object):
             header.append('PRBSRxErrCnt')
             header.append('RxPower')
             header.append('ChanFrequency')
+            header.append('CurrChromDisp')
+            header.append('AvgChromDispOverPMInt')
+            header.append('MinChromDispOverPMInt')
+            header.append('MaxChromDispOverPMInt')
             header.append('ClntIntfIdToTributary0Map')
             header.append('ClntIntfIdToTributary1Map')
             header.append('EnableRxPRBSChecker')
             header.append('TxPulseShapeFltrRollOff')
             header.append('TxPower')
             header.append('RxPRBSInvertPattern')
+            header.append('TxPowerRampdBmPerSec')
             header.append('EnableTxPRBS')
             header.append('TxPRBSInvertPattern')
             header.append('AdminState')
@@ -6605,6 +6639,10 @@ class FlexSwitchShow( object):
             values.append('%s' % o['PRBSRxErrCnt'])
             values.append('%s' % o['RxPower'])
             values.append('%s' % o['ChanFrequency'])
+            values.append('%s' % o['CurrChromDisp'])
+            values.append('%s' % o['AvgChromDispOverPMInt'])
+            values.append('%s' % o['MinChromDispOverPMInt'])
+            values.append('%s' % o['MaxChromDispOverPMInt'])
             r = self.swtch.getDWDMModuleNwIntf(o['NwIntfId'], o['ModuleId'])
             if r.status_code in self.httpSuccessCodes:
                 o = r.json()['Object']
@@ -6614,6 +6652,7 @@ class FlexSwitchShow( object):
                 values.append('%s' % o['TxPulseShapeFltrRollOff'])
                 values.append('%s' % o['TxPower'])
                 values.append('%s' % o['RxPRBSInvertPattern'])
+                values.append('%s' % o['TxPowerRampdBmPerSec'])
                 values.append('%s' % o['EnableTxPRBS'])
                 values.append('%s' % o['TxPRBSInvertPattern'])
                 values.append('%s' % o['AdminState'])
@@ -6864,6 +6903,85 @@ class FlexSwitchShow( object):
                 values.append('%s' % o['StubDefaultCost'])
             rows.append(values)
         self.tblPrintObject('OspfAreaEntryState', header, rows)
+
+
+    def printLLDPGlobalStates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('Vrf')
+            header.append('Enable')
+            header.append('TranmitInterval')
+            header.append('Neighbors')
+            header.append('TotalTxFrames')
+            header.append('TotalRxFrames')
+
+        objs = self.swtch.getAllLLDPGlobalStates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['Vrf'])
+            values.append('%s' % o['Enable'])
+            values.append('%s' % o['TranmitInterval'])
+            values.append('%s' % o['Neighbors'])
+            values.append('%s' % o['TotalTxFrames'])
+            values.append('%s' % o['TotalRxFrames'])
+            rows.append(values)
+        self.tblPrintObject('LLDPGlobalState', header, rows)
+
+
+    def printLLDPGlobalState(self, Vrf, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('Vrf')
+            header.append('Enable')
+            header.append('TranmitInterval')
+            header.append('Neighbors')
+            header.append('TotalTxFrames')
+            header.append('TotalRxFrames')
+
+        objs = self.swtch.getLLDPGlobalState(
+                                             Vrf)
+        if objs.status_code in self.httpSuccessCodes:
+            for obj in objs:
+                o = obj['Object']
+                values = []
+                values.append('%s' % o['Vrf'])
+                values.append('%s' % o['Enable'])
+                values.append('%s' % o['TranmitInterval'])
+                values.append('%s' % o['Neighbors'])
+                values.append('%s' % o['TotalTxFrames'])
+                values.append('%s' % o['TotalRxFrames'])
+                rows.append(values)
+            self.tblPrintObject('LLDPGlobalState', header, rows)
+
+        else:
+            print objs.content
+
+    def printCombinedLLDPGlobalStates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('Vrf')
+            header.append('Enable')
+            header.append('TranmitInterval')
+            header.append('Neighbors')
+            header.append('TotalTxFrames')
+            header.append('TotalRxFrames')
+
+        objs = self.swtch.getAllLLDPGlobalStates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['Vrf'])
+            values.append('%s' % o['Enable'])
+            values.append('%s' % o['TranmitInterval'])
+            values.append('%s' % o['Neighbors'])
+            values.append('%s' % o['TotalTxFrames'])
+            values.append('%s' % o['TotalRxFrames'])
+            r = self.swtch.getLLDPGlobal(o['Vrf'])
+            if r.status_code in self.httpSuccessCodes:
+                o = r.json()['Object']
+            rows.append(values)
+        self.tblPrintObject('LLDPGlobalState', header, rows)
 
 
     def printNDPGlobals(self, addHeader=True, brief=None):
@@ -7192,6 +7310,7 @@ class FlexSwitchShow( object):
         if addHeader:
             header.append('Vrf')
             header.append('Enable')
+            header.append('TranmitInterval')
 
         objs = self.swtch.getAllLLDPGlobals()
         for obj in objs:
@@ -7199,6 +7318,7 @@ class FlexSwitchShow( object):
             values = []
             values.append('%s' % o['Vrf'])
             values.append('%s' % o['Enable'])
+            values.append('%s' % o['TranmitInterval'])
             rows.append(values)
         self.tblPrintObject('LLDPGlobal', header, rows)
 
@@ -8289,11 +8409,11 @@ class FlexSwitchShow( object):
             header.append('PhyIntfType')
             header.append('MacAddr')
             header.append('Speed')
-            header.append('Duplex')
             header.append('MediaType')
             header.append('Mtu')
             header.append('BreakOutMode')
             header.append('Description')
+            header.append('Duplex')
             header.append('LoopbackMode')
             header.append('EnableFEC')
             header.append('AdminState')
@@ -8330,11 +8450,11 @@ class FlexSwitchShow( object):
                 values.append('%s' % o['PhyIntfType'])
                 values.append('%s' % o['MacAddr'])
                 values.append('%s' % o['Speed'])
-                values.append('%s' % o['Duplex'])
                 values.append('%s' % o['MediaType'])
                 values.append('%s' % o['Mtu'])
                 values.append('%s' % o['BreakOutMode'])
                 values.append('%s' % o['Description'])
+                values.append('%s' % o['Duplex'])
                 values.append('%s' % o['LoopbackMode'])
                 values.append('%s' % o['EnableFEC'])
                 values.append('%s' % o['AdminState'])
@@ -8478,6 +8598,41 @@ class FlexSwitchShow( object):
 
         else:
             print objs.content
+
+    def printCombinedDaemonStates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('Name')
+            header.append('Enable')
+            header.append('State')
+            header.append('Reason')
+            header.append('StartTime')
+            header.append('KeepAlive')
+            header.append('RestartCount')
+            header.append('RestartTime')
+            header.append('RestartReason')
+            header.append('WatchDog')
+
+        objs = self.swtch.getAllDaemonStates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['Name'])
+            values.append('%s' % o['Enable'])
+            values.append('%s' % o['State'])
+            values.append('%s' % o['Reason'])
+            values.append('%s' % o['StartTime'])
+            values.append('%s' % o['KeepAlive'])
+            values.append('%s' % o['RestartCount'])
+            values.append('%s' % o['RestartTime'])
+            values.append('%s' % o['RestartReason'])
+            r = self.swtch.getDaemon(o['Name'])
+            if r.status_code in self.httpSuccessCodes:
+                o = r.json()['Object']
+                values.append('%s' % o['WatchDog'])
+            rows.append(values)
+        self.tblPrintObject('DaemonState', header, rows)
+
 
     def printSystemParamStates(self, addHeader=True, brief=None):
         header = []; rows = []
@@ -9401,11 +9556,11 @@ class FlexSwitchShow( object):
             header.append('PhyIntfType')
             header.append('MacAddr')
             header.append('Speed')
-            header.append('Duplex')
             header.append('MediaType')
             header.append('Mtu')
             header.append('BreakOutMode')
             header.append('Description')
+            header.append('Duplex')
             header.append('LoopbackMode')
             header.append('EnableFEC')
             header.append('AdminState')
@@ -9420,11 +9575,11 @@ class FlexSwitchShow( object):
             values.append('%s' % o['PhyIntfType'])
             values.append('%s' % o['MacAddr'])
             values.append('%s' % o['Speed'])
-            values.append('%s' % o['Duplex'])
             values.append('%s' % o['MediaType'])
             values.append('%s' % o['Mtu'])
             values.append('%s' % o['BreakOutMode'])
             values.append('%s' % o['Description'])
+            values.append('%s' % o['Duplex'])
             values.append('%s' % o['LoopbackMode'])
             values.append('%s' % o['EnableFEC'])
             values.append('%s' % o['AdminState'])

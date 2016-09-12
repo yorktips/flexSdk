@@ -27,6 +27,7 @@ class FlexSwitch( object):
         self.timeout = timeout
         self.cfgUrlBase = 'http://%s:%s/public/v1/config/'%(ip,str(port))                                                         
         self.stateUrlBase = 'http://%s:%s/public/v1/state/'%(ip,str(port))                                                         
+        self.actionUrlBase = 'http://%s:%s/public/v1/action/'%(ip,str(port))
 
     def getObjects(self, objName, urlPath):
         currentMarker = 0                                                                                                  
@@ -242,6 +243,26 @@ class FlexSwitch( object):
     def getAllNdpEntryHwStates(self):
         return self.getObjects( 'NdpEntryHw', self.stateUrlBase)
 
+
+    """
+    .. automethod :: executeFaultEnable(self,
+        :param string OwnerName : Fault owner name Fault owner name
+        :param string EventName : Fault event name Fault event name
+        :param bool Enable : Enable/Disbale control Enable/Disbale control
+
+	"""
+    def executeFaultEnable(self,
+                           OwnerName,
+                           EventName,
+                           Enable):
+        obj =  { 
+                'OwnerName' : OwnerName,
+                'EventName' : EventName,
+                'Enable' : True if Enable else False,
+                }
+        reqUrl =  self.actionUrlBase+'FaultEnable'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
 
     """
     .. automethod :: createPolicyStmt(self,
@@ -552,6 +573,7 @@ class FlexSwitch( object):
         :param float64 TxPulseShapeFltrRollOff : TX pulse shape filter roll off factor TX pulse shape filter roll off factor
         :param float64 TxPower : Transmit output power for this network interface in dBm Transmit output power for this network interface in dBm
         :param bool RxPRBSInvertPattern : Check against inverted PRBS polynomial pattern Check against inverted PRBS polynomial pattern
+        :param float64 TxPowerRampdBmPerSec : Rate of change of tx power on this network interface Rate of change of tx power on this network interface
         :param bool EnableTxPRBS : Enable TX PRBS generation on this network interface Enable TX PRBS generation on this network interface
         :param bool TxPRBSInvertPattern : Generate inverted PRBS polynomial pattern Generate inverted PRBS polynomial pattern
         :param string AdminState : Administrative state of this network interface Administrative state of this network interface
@@ -573,6 +595,7 @@ class FlexSwitch( object):
                                TxPulseShapeFltrRollOff='0.301',
                                TxPower='0',
                                RxPRBSInvertPattern=True,
+                               TxPowerRampdBmPerSec='1',
                                EnableTxPRBS=False,
                                TxPRBSInvertPattern=True,
                                AdminState='UP',
@@ -592,6 +615,7 @@ class FlexSwitch( object):
                 'TxPulseShapeFltrRollOff' : TxPulseShapeFltrRollOff,
                 'TxPower' : TxPower,
                 'RxPRBSInvertPattern' : True if RxPRBSInvertPattern else False,
+                'TxPowerRampdBmPerSec' : TxPowerRampdBmPerSec,
                 'EnableTxPRBS' : True if EnableTxPRBS else False,
                 'TxPRBSInvertPattern' : True if TxPRBSInvertPattern else False,
                 'AdminState' : AdminState,
@@ -616,6 +640,7 @@ class FlexSwitch( object):
                                TxPulseShapeFltrRollOff = None,
                                TxPower = None,
                                RxPRBSInvertPattern = None,
+                               TxPowerRampdBmPerSec = None,
                                EnableTxPRBS = None,
                                TxPRBSInvertPattern = None,
                                AdminState = None,
@@ -650,6 +675,9 @@ class FlexSwitch( object):
 
         if RxPRBSInvertPattern != None :
             obj['RxPRBSInvertPattern'] = True if RxPRBSInvertPattern else False
+
+        if TxPowerRampdBmPerSec != None :
+            obj['TxPowerRampdBmPerSec'] = TxPowerRampdBmPerSec
 
         if EnableTxPRBS != None :
             obj['EnableTxPRBS'] = True if EnableTxPRBS else False
@@ -693,6 +721,7 @@ class FlexSwitch( object):
                                     TxPulseShapeFltrRollOff = None,
                                     TxPower = None,
                                     RxPRBSInvertPattern = None,
+                                    TxPowerRampdBmPerSec = None,
                                     EnableTxPRBS = None,
                                     TxPRBSInvertPattern = None,
                                     AdminState = None,
@@ -721,6 +750,9 @@ class FlexSwitch( object):
 
         if RxPRBSInvertPattern !=  None:
             obj['RxPRBSInvertPattern'] = RxPRBSInvertPattern
+
+        if TxPowerRampdBmPerSec !=  None:
+            obj['TxPowerRampdBmPerSec'] = TxPowerRampdBmPerSec
 
         if EnableTxPRBS !=  None:
             obj['EnableTxPRBS'] = EnableTxPRBS
@@ -1203,6 +1235,20 @@ class FlexSwitch( object):
     def getAllNDPEntryStates(self):
         return self.getObjects( 'NDPEntry', self.stateUrlBase)
 
+
+    """
+    .. automethod :: executeArpRefreshByIPv4Addr(self,
+        :param string IpAddr : Neighbor's IP Address for which corresponding Arp entry needed to be re-learned Neighbor's IP Address for which corresponding Arp entry needed to be re-learned
+
+	"""
+    def executeArpRefreshByIPv4Addr(self,
+                                    IpAddr):
+        obj =  { 
+                'IpAddr' : IpAddr,
+                }
+        reqUrl =  self.actionUrlBase+'ArpRefreshByIPv4Addr'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
 
     """
     .. automethod :: createXponderGlobal(self,
@@ -2296,6 +2342,20 @@ class FlexSwitch( object):
         return self.getObjects( 'BGPv4Neighbor', self.cfgUrlBase)
 
 
+    """
+    .. automethod :: executeSaveConfig(self,
+        :param string FileName : FileName for the saved config FileName for the saved config
+
+	"""
+    def executeSaveConfig(self,
+                          FileName='startup-config'):
+        obj =  { 
+                'FileName' : FileName,
+                }
+        reqUrl =  self.actionUrlBase+'SaveConfig'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
     def getStpPortState(self,
                         IntfRef,
                         Vlan):
@@ -2501,6 +2561,20 @@ class FlexSwitch( object):
     def getAllNotifierEnables(self):
         return self.getObjects( 'NotifierEnable', self.cfgUrlBase)
 
+
+    """
+    .. automethod :: executeArpRefreshByIfName(self,
+        :param string IfName : All the Arp learned on given L3 interface will be re-learned All the Arp learned on given L3 interface will be re-learned
+
+	"""
+    def executeArpRefreshByIfName(self,
+                                  IfName):
+        obj =  { 
+                'IfName' : IfName,
+                }
+        reqUrl =  self.actionUrlBase+'ArpRefreshByIfName'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
 
     """
     .. automethod :: createLaPortChannel(self,
@@ -3052,15 +3126,14 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createDhcpRelayGlobal(self,
-        :param string DhcpRelay : Global Dhcp Relay Agent Information Global Dhcp Relay Agent Information
+        :param string Vrf : Global Dhcp Relay Agent Information Global Dhcp Relay Agent Information
         :param bool Enable : Global Config stating whether DHCP Relay Agent is enabled on the box or not Global Config stating whether DHCP Relay Agent is enabled on the box or not
 
 	"""
     def createDhcpRelayGlobal(self,
-                              DhcpRelay,
                               Enable=False):
         obj =  { 
-                'DhcpRelay' : DhcpRelay,
+                'Vrf' : 'default',
                 'Enable' : True if Enable else False,
                 }
         reqUrl =  self.cfgUrlBase+'DhcpRelayGlobal'
@@ -3068,11 +3141,11 @@ class FlexSwitch( object):
         return r
 
     def updateDhcpRelayGlobal(self,
-                              DhcpRelay,
+                              Vrf,
                               Enable = None):
         obj =  {}
-        if DhcpRelay != None :
-            obj['DhcpRelay'] = DhcpRelay
+        if Vrf != None :
+            obj['Vrf'] = Vrf
 
         if Enable != None :
             obj['Enable'] = True if Enable else False
@@ -3093,9 +3166,9 @@ class FlexSwitch( object):
         return r
 
     def deleteDhcpRelayGlobal(self,
-                              DhcpRelay):
+                              Vrf):
         obj =  { 
-                'DhcpRelay' : DhcpRelay,
+                'Vrf' : Vrf,
                 }
         reqUrl =  self.cfgUrlBase+'DhcpRelayGlobal'
         r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
@@ -3107,9 +3180,9 @@ class FlexSwitch( object):
         return r
 
     def getDhcpRelayGlobal(self,
-                           DhcpRelay):
+                           Vrf):
         obj =  { 
-                'DhcpRelay' : DhcpRelay,
+                'Vrf' : Vrf,
                 }
         reqUrl =  self.cfgUrlBase + 'DhcpRelayGlobal'
         r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
@@ -3749,6 +3822,20 @@ class FlexSwitch( object):
         return self.getObjects( 'DhcpRelayIntfServer', self.stateUrlBase)
 
 
+    """
+    .. automethod :: executeResetBGPv4NeighborByInterface(self,
+        :param string IntfRef : Interface of the BGP IPv4 neighbor to restart Interface of the BGP IPv4 neighbor to restart
+
+	"""
+    def executeResetBGPv4NeighborByInterface(self,
+                                             IntfRef):
+        obj =  { 
+                'IntfRef' : IntfRef,
+                }
+        reqUrl =  self.actionUrlBase+'ResetBGPv4NeighborByInterface'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
     def getLLDPIntfState(self,
                          IntfRef):
         obj =  { 
@@ -4221,6 +4308,17 @@ class FlexSwitch( object):
         return self.getObjects( 'LacpGlobal', self.cfgUrlBase)
 
 
+    """
+    .. automethod :: executeForceApplyConfig(self,
+
+	"""
+    def executeForceApplyConfig(self):
+        obj =  { 
+                }
+        reqUrl =  self.actionUrlBase+'ForceApplyConfig'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
     def getMacTableEntryState(self,
                               MacAddr):
         obj =  { 
@@ -4468,6 +4566,20 @@ class FlexSwitch( object):
     def getAllBfdGlobals(self):
         return self.getObjects( 'BfdGlobal', self.cfgUrlBase)
 
+
+    """
+    .. automethod :: executeResetBGPv6NeighborByInterface(self,
+        :param string IntfRef : Interface of the BGP IPv6 neighbor to restart Interface of the BGP IPv6 neighbor to restart
+
+	"""
+    def executeResetBGPv6NeighborByInterface(self,
+                                             IntfRef):
+        obj =  { 
+                'IntfRef' : IntfRef,
+                }
+        reqUrl =  self.actionUrlBase+'ResetBGPv6NeighborByInterface'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
 
     """
     .. automethod :: createVoltageSensor(self,
@@ -5212,6 +5324,37 @@ class FlexSwitch( object):
     def getAllFanStates(self):
         return self.getObjects( 'Fan', self.stateUrlBase)
 
+
+    """
+    .. automethod :: executeFaultClear(self,
+        :param string OwnerName : Fault owner name Fault owner name
+        :param string EventName : Fault event name Fault event name
+        :param string SrcObjUUID : Source object Key UUID Source object Key UUID
+
+	"""
+    def executeFaultClear(self,
+                          OwnerName,
+                          EventName,
+                          SrcObjUUID):
+        obj =  { 
+                'OwnerName' : OwnerName,
+                'EventName' : EventName,
+                'SrcObjUUID' : SrcObjUUID,
+                }
+        reqUrl =  self.actionUrlBase+'FaultClear'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    """
+    .. automethod :: executeResetConfig(self,
+
+	"""
+    def executeResetConfig(self):
+        obj =  { 
+                }
+        reqUrl =  self.actionUrlBase+'ResetConfig'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
 
     def getBGPGlobalState(self,
                           RouterId):
@@ -6436,6 +6579,20 @@ class FlexSwitch( object):
 
 
     """
+    .. automethod :: executeArpDeleteByIPv4Addr(self,
+        :param string IpAddr : End Host IP Address for which corresponding Arp entry needed to be deleted End Host IP Address for which corresponding Arp entry needed to be deleted
+
+	"""
+    def executeArpDeleteByIPv4Addr(self,
+                                   IpAddr):
+        obj =  { 
+                'IpAddr' : IpAddr,
+                }
+        reqUrl =  self.actionUrlBase+'ArpDeleteByIPv4Addr'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    """
     .. automethod :: createFanSensor(self,
         :param string Name : Fan Sensor Name Fan Sensor Name
         :param int32 HigherAlarmThreshold : Higher Alarm Threshold for TCA Higher Alarm Threshold for TCA
@@ -7101,6 +7258,24 @@ class FlexSwitch( object):
         return self.getObjects( 'OspfAreaEntry', self.stateUrlBase)
 
 
+    def getLLDPGlobalState(self,
+                           Vrf):
+        obj =  { 
+                'Vrf' : Vrf,
+                }
+        reqUrl =  self.stateUrlBase + 'LLDPGlobal'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getLLDPGlobalStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase+'LLDPGlobal'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllLLDPGlobalStates(self):
+        return self.getObjects( 'LLDPGlobal', self.stateUrlBase)
+
+
     """
     .. automethod :: createNDPGlobal(self,
         :param string Vrf : System Vrf System Vrf
@@ -7490,13 +7665,16 @@ class FlexSwitch( object):
     .. automethod :: createLLDPGlobal(self,
         :param string Vrf : LLDP Global Config For Default VRF LLDP Global Config For Default VRF
         :param bool Enable : Enable/Disable LLDP Globally Enable/Disable LLDP Globally
+        :param int32 TranmitInterval : LLDP Re-Transmit Interval in seconds LLDP Re-Transmit Interval in seconds
 
 	"""
     def createLLDPGlobal(self,
-                         Enable=False):
+                         Enable=False,
+                         TranmitInterval=30):
         obj =  { 
                 'Vrf' : 'default',
                 'Enable' : True if Enable else False,
+                'TranmitInterval' : int(TranmitInterval),
                 }
         reqUrl =  self.cfgUrlBase+'LLDPGlobal'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
@@ -7504,7 +7682,8 @@ class FlexSwitch( object):
 
     def updateLLDPGlobal(self,
                          Vrf,
-                         Enable = None):
+                         Enable = None,
+                         TranmitInterval = None):
         obj =  {}
         if Vrf != None :
             obj['Vrf'] = Vrf
@@ -7512,16 +7691,23 @@ class FlexSwitch( object):
         if Enable != None :
             obj['Enable'] = True if Enable else False
 
+        if TranmitInterval != None :
+            obj['TranmitInterval'] = int(TranmitInterval)
+
         reqUrl =  self.cfgUrlBase+'LLDPGlobal'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateLLDPGlobalById(self,
                               objectId,
-                              Enable = None):
+                              Enable = None,
+                              TranmitInterval = None):
         obj =  {'objectId': objectId }
         if Enable !=  None:
             obj['Enable'] = Enable
+
+        if TranmitInterval !=  None:
+            obj['TranmitInterval'] = TranmitInterval
 
         reqUrl =  self.cfgUrlBase+'LLDPGlobal'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
@@ -7952,6 +8138,20 @@ class FlexSwitch( object):
 
 
     """
+    .. automethod :: executeArpDeleteByIfName(self,
+        :param string IfName : All the Arp learned for end host on given L3 interface will be deleted All the Arp learned for end host on given L3 interface will be deleted
+
+	"""
+    def executeArpDeleteByIfName(self,
+                                 IfName):
+        obj =  { 
+                'IfName' : IfName,
+                }
+        reqUrl =  self.actionUrlBase+'ArpDeleteByIfName'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    """
     .. automethod :: createStpBridgeInstance(self,
         :param uint16 Vlan : Each bridge is associated with a domain.  Typically this domain is represented as the vlan; The default domain is 4095 Each bridge is associated with a domain.  Typically this domain is represented as the vlan; The default domain is 4095
         :param int32 HelloTime : The value that all bridges use for HelloTime when this bridge is acting as the root.  The granularity of this timer is specified by 802.1D-1998 to be 1 second.  An agent may return a badValue error if a set is attempted    to a value that is not a whole number of seconds. The value that all bridges use for HelloTime when this bridge is acting as the root.  The granularity of this timer is specified by 802.1D-1998 to be 1 second.  An agent may return a badValue error if a set is attempted    to a value that is not a whole number of seconds.
@@ -8304,6 +8504,20 @@ class FlexSwitch( object):
         return self.getObjects( 'SystemLogging', self.cfgUrlBase)
 
 
+    """
+    .. automethod :: executeResetBGPv4NeighborByIPAddr(self,
+        :param string IPAddr : IP address of the BGP IPv4 neighbor to restart IP address of the BGP IPv4 neighbor to restart
+
+	"""
+    def executeResetBGPv4NeighborByIPAddr(self,
+                                          IPAddr):
+        obj =  { 
+                'IPAddr' : IPAddr,
+                }
+        reqUrl =  self.actionUrlBase+'ResetBGPv4NeighborByIPAddr'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
     def getBGPPolicyActionState(self,
                                 Name):
         obj =  { 
@@ -8637,6 +8851,37 @@ class FlexSwitch( object):
         return self.getObjects( 'BGPPolicyAction', self.cfgUrlBase)
 
 
+    """
+    .. automethod :: executeAsicdClearCounters(self,
+        :param string IntfRef : Clear counters on given interface Clear counters on given interface
+        :param string Type : Clear counter for specific type like port Clear counter for specific type like port
+
+	"""
+    def executeAsicdClearCounters(self,
+                                  IntfRef='All',
+                                  Type='Port'):
+        obj =  { 
+                'IntfRef' : IntfRef,
+                'Type' : Type,
+                }
+        reqUrl =  self.actionUrlBase+'AsicdClearCounters'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    """
+    .. automethod :: executeResetBGPv6NeighborByIPAddr(self,
+        :param string IPAddr : IP address of the BGP IPv6 neighbor to restart IP address of the BGP IPv6 neighbor to restart
+
+	"""
+    def executeResetBGPv6NeighborByIPAddr(self,
+                                          IPAddr):
+        obj =  { 
+                'IPAddr' : IPAddr,
+                }
+        reqUrl =  self.actionUrlBase+'ResetBGPv6NeighborByIPAddr'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
     def getSystemSwVersionState(self,
                                 FlexswitchVersion):
         obj =  { 
@@ -8690,6 +8935,26 @@ class FlexSwitch( object):
     def getAllSystemParamStates(self):
         return self.getObjects( 'SystemParam', self.stateUrlBase)
 
+
+    """
+    .. automethod :: executeDaemon(self,
+        :param string Name : Daemon name Daemon name
+        :param bool Enable : Enable the flexswitch daemon Enable the flexswitch daemon
+        :param bool WatchDog : Enable watchdog for daemon Enable watchdog for daemon
+
+	"""
+    def executeDaemon(self,
+                      Name,
+                      Enable,
+                      WatchDog):
+        obj =  { 
+                'Name' : Name,
+                'Enable' : True if Enable else False,
+                'WatchDog' : True if WatchDog else False,
+                }
+        reqUrl =  self.actionUrlBase+'Daemon'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
 
     def getVoltageSensorState(self,
                               Name):
@@ -8841,6 +9106,17 @@ class FlexSwitch( object):
     def getAllDWDMModules(self):
         return self.getObjects( 'DWDMModule', self.cfgUrlBase)
 
+
+    """
+    .. automethod :: executeApplyConfig(self,
+
+	"""
+    def executeApplyConfig(self):
+        obj =  { 
+                }
+        reqUrl =  self.actionUrlBase+'ApplyConfig'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
 
     """
     .. automethod :: createAcl(self,
@@ -10443,11 +10719,11 @@ class FlexSwitch( object):
         :param string PhyIntfType : Type of internal phy interface Type of internal phy interface
         :param string MacAddr : Mac address associated with this port Mac address associated with this port
         :param int32 Speed : Port speed in Mbps Port speed in Mbps
-        :param string Duplex : Duplex setting for this port Duplex setting for this port
         :param string MediaType : Type of media inserted into this port Type of media inserted into this port
         :param int32 Mtu : Maximum transmission unit size for this port Maximum transmission unit size for this port
         :param string BreakOutMode : Break out mode for the port. Only applicable on ports that support breakout. Valid modes - 1x40 Break out mode for the port. Only applicable on ports that support breakout. Valid modes - 1x40
         :param string Description : User provided string description User provided string description
+        :param string Duplex : Duplex setting for this port Duplex setting for this port
         :param string LoopbackMode : Desired loopback setting for this port Desired loopback setting for this port
         :param bool EnableFEC : Enable/Disable 802.3bj FEC on this interface Enable/Disable 802.3bj FEC on this interface
         :param string AdminState : Administrative state of this port Administrative state of this port
@@ -10460,11 +10736,11 @@ class FlexSwitch( object):
                    PhyIntfType,
                    MacAddr,
                    Speed,
-                   Duplex,
                    MediaType,
                    Mtu,
                    BreakOutMode,
                    Description='FP Port',
+                   Duplex='Full Duplex',
                    LoopbackMode='NONE',
                    EnableFEC=False,
                    AdminState='DOWN',
@@ -10475,11 +10751,11 @@ class FlexSwitch( object):
                 'PhyIntfType' : PhyIntfType,
                 'MacAddr' : MacAddr,
                 'Speed' : int(Speed),
-                'Duplex' : Duplex,
                 'MediaType' : MediaType,
                 'Mtu' : int(Mtu),
                 'BreakOutMode' : BreakOutMode,
                 'Description' : Description,
+                'Duplex' : Duplex,
                 'LoopbackMode' : LoopbackMode,
                 'EnableFEC' : True if EnableFEC else False,
                 'AdminState' : AdminState,
@@ -10495,11 +10771,11 @@ class FlexSwitch( object):
                    PhyIntfType = None,
                    MacAddr = None,
                    Speed = None,
-                   Duplex = None,
                    MediaType = None,
                    Mtu = None,
                    BreakOutMode = None,
                    Description = None,
+                   Duplex = None,
                    LoopbackMode = None,
                    EnableFEC = None,
                    AdminState = None,
@@ -10520,9 +10796,6 @@ class FlexSwitch( object):
         if Speed != None :
             obj['Speed'] = int(Speed)
 
-        if Duplex != None :
-            obj['Duplex'] = Duplex
-
         if MediaType != None :
             obj['MediaType'] = MediaType
 
@@ -10534,6 +10807,9 @@ class FlexSwitch( object):
 
         if Description != None :
             obj['Description'] = Description
+
+        if Duplex != None :
+            obj['Duplex'] = Duplex
 
         if LoopbackMode != None :
             obj['LoopbackMode'] = LoopbackMode
@@ -10557,11 +10833,11 @@ class FlexSwitch( object):
                         PhyIntfType = None,
                         MacAddr = None,
                         Speed = None,
-                        Duplex = None,
                         MediaType = None,
                         Mtu = None,
                         BreakOutMode = None,
                         Description = None,
+                        Duplex = None,
                         LoopbackMode = None,
                         EnableFEC = None,
                         AdminState = None,
@@ -10579,9 +10855,6 @@ class FlexSwitch( object):
         if Speed !=  None:
             obj['Speed'] = Speed
 
-        if Duplex !=  None:
-            obj['Duplex'] = Duplex
-
         if MediaType !=  None:
             obj['MediaType'] = MediaType
 
@@ -10593,6 +10866,9 @@ class FlexSwitch( object):
 
         if Description !=  None:
             obj['Description'] = Description
+
+        if Duplex !=  None:
+            obj['Duplex'] = Duplex
 
         if LoopbackMode !=  None:
             obj['LoopbackMode'] = LoopbackMode
