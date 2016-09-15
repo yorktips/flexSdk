@@ -641,6 +641,7 @@ class FlexSwitchShow( object):
             header.append('IntfRef')
             header.append('NeighborAddress')
             header.append('Description')
+            header.append('Disabled')
             header.append('PeerGroup')
             header.append('PeerType')
             header.append('SessionState')
@@ -667,6 +668,7 @@ class FlexSwitchShow( object):
             header.append('AdjRIBOutFilter')
             header.append('Messages')
             header.append('Queues')
+            header.append('SessionStateUpdatedTime')
 
         objs = self.swtch.getAllBGPv4NeighborStates()
         for obj in objs:
@@ -675,6 +677,7 @@ class FlexSwitchShow( object):
             values.append('%s' % o['IntfRef'])
             values.append('%s' % o['NeighborAddress'])
             values.append('%s' % o['Description'])
+            values.append('%s' % o['Disabled'])
             values.append('%s' % o['PeerGroup'])
             values.append('%s' % o['PeerType'])
             values.append('%s' % o['SessionState'])
@@ -701,6 +704,7 @@ class FlexSwitchShow( object):
             values.append('%s' % o['AdjRIBOutFilter'])
             values.append('%s' % o['Messages'])
             values.append('%s' % o['Queues'])
+            values.append('%s' % o['SessionStateUpdatedTime'])
             rows.append(values)
         self.tblPrintObject('BGPv4NeighborState', header, rows)
 
@@ -711,6 +715,7 @@ class FlexSwitchShow( object):
             header.append('IntfRef')
             header.append('NeighborAddress')
             header.append('Description')
+            header.append('Disabled')
             header.append('PeerGroup')
             header.append('PeerType')
             header.append('SessionState')
@@ -737,6 +742,7 @@ class FlexSwitchShow( object):
             header.append('AdjRIBOutFilter')
             header.append('Messages')
             header.append('Queues')
+            header.append('SessionStateUpdatedTime')
 
         objs = self.swtch.getBGPv4NeighborState(
                                                 IntfRef,
@@ -748,6 +754,7 @@ class FlexSwitchShow( object):
                 values.append('%s' % o['IntfRef'])
                 values.append('%s' % o['NeighborAddress'])
                 values.append('%s' % o['Description'])
+                values.append('%s' % o['Disabled'])
                 values.append('%s' % o['PeerGroup'])
                 values.append('%s' % o['PeerType'])
                 values.append('%s' % o['SessionState'])
@@ -774,6 +781,7 @@ class FlexSwitchShow( object):
                 values.append('%s' % o['AdjRIBOutFilter'])
                 values.append('%s' % o['Messages'])
                 values.append('%s' % o['Queues'])
+                values.append('%s' % o['SessionStateUpdatedTime'])
                 rows.append(values)
             self.tblPrintObject('BGPv4NeighborState', header, rows)
 
@@ -786,6 +794,7 @@ class FlexSwitchShow( object):
             header.append('IntfRef')
             header.append('NeighborAddress')
             header.append('Description')
+            header.append('Disabled')
             header.append('PeerGroup')
             header.append('PeerType')
             header.append('SessionState')
@@ -812,6 +821,7 @@ class FlexSwitchShow( object):
             header.append('AdjRIBOutFilter')
             header.append('Messages')
             header.append('Queues')
+            header.append('SessionStateUpdatedTime')
             header.append('BfdEnable')
             header.append('BfdSessionParam')
 
@@ -822,6 +832,7 @@ class FlexSwitchShow( object):
             values.append('%s' % o['IntfRef'])
             values.append('%s' % o['NeighborAddress'])
             values.append('%s' % o['Description'])
+            values.append('%s' % o['Disabled'])
             values.append('%s' % o['PeerGroup'])
             values.append('%s' % o['PeerType'])
             values.append('%s' % o['SessionState'])
@@ -848,6 +859,7 @@ class FlexSwitchShow( object):
             values.append('%s' % o['AdjRIBOutFilter'])
             values.append('%s' % o['Messages'])
             values.append('%s' % o['Queues'])
+            values.append('%s' % o['SessionStateUpdatedTime'])
             r = self.swtch.getBGPv4Neighbor(o['IntfRef'], o['NeighborAddress'])
             if r.status_code in self.httpSuccessCodes:
                 o = r.json()['Object']
@@ -866,6 +878,8 @@ class FlexSwitchShow( object):
             header.append('Intf')
             header.append('IfIndex')
             header.append('ExpiryTimeLeft')
+            header.append('SendPackets')
+            header.append('ReceivedPackets')
 
         objs = self.swtch.getAllNDPEntryStates()
         for obj in objs:
@@ -877,6 +891,8 @@ class FlexSwitchShow( object):
             values.append('%s' % o['Intf'])
             values.append('%s' % o['IfIndex'])
             values.append('%s' % o['ExpiryTimeLeft'])
+            values.append('%s' % o['SendPackets'])
+            values.append('%s' % o['ReceivedPackets'])
             rows.append(values)
         self.tblPrintObject('NDPEntryState', header, rows)
 
@@ -890,6 +906,8 @@ class FlexSwitchShow( object):
             header.append('Intf')
             header.append('IfIndex')
             header.append('ExpiryTimeLeft')
+            header.append('SendPackets')
+            header.append('ReceivedPackets')
 
         objs = self.swtch.getNDPEntryState(
                                            IpAddr)
@@ -903,6 +921,8 @@ class FlexSwitchShow( object):
                 values.append('%s' % o['Intf'])
                 values.append('%s' % o['IfIndex'])
                 values.append('%s' % o['ExpiryTimeLeft'])
+                values.append('%s' % o['SendPackets'])
+                values.append('%s' % o['ReceivedPackets'])
                 rows.append(values)
             self.tblPrintObject('NDPEntryState', header, rows)
 
@@ -1381,6 +1401,7 @@ class FlexSwitchShow( object):
             header.append('MaxPrefixes')
             header.append('MaxPrefixesThresholdPct')
             header.append('BfdSessionParam')
+            header.append('Disabled')
             header.append('HoldTime')
             header.append('ConnectRetryTime')
 
@@ -1411,10 +1432,31 @@ class FlexSwitchShow( object):
             values.append('%s' % o['MaxPrefixes'])
             values.append('%s' % o['MaxPrefixesThresholdPct'])
             values.append('%s' % o['BfdSessionParam'])
+            values.append('%s' % o['Disabled'])
             values.append('%s' % o['HoldTime'])
             values.append('%s' % o['ConnectRetryTime'])
             rows.append(values)
         self.tblPrintObject('BGPv4Neighbor', header, rows)
+
+
+    def printOspfIfMetricEntrys(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('IfMetricAddressLessIf')
+            header.append('IfMetricTOS')
+            header.append('IfMetricIpAddress')
+            header.append('IfMetricValue')
+
+        objs = self.swtch.getAllOspfIfMetricEntrys()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['IfMetricAddressLessIf'])
+            values.append('%s' % o['IfMetricTOS'])
+            values.append('%s' % o['IfMetricIpAddress'])
+            values.append('%s' % o['IfMetricValue'])
+            rows.append(values)
+        self.tblPrintObject('OspfIfMetricEntry', header, rows)
 
 
     def printStpPortStates(self, addHeader=True, brief=None):
@@ -2028,25 +2070,37 @@ class FlexSwitchShow( object):
         self.tblPrintObject('BGPPolicyConditionState', header, rows)
 
 
-    def printOspfIfMetricEntrys(self, addHeader=True, brief=None):
+    def printApiInfoStates(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
-            header.append('IfMetricAddressLessIf')
-            header.append('IfMetricTOS')
-            header.append('IfMetricIpAddress')
-            header.append('IfMetricValue')
+            header.append('Url')
 
-        objs = self.swtch.getAllOspfIfMetricEntrys()
+        objs = self.swtch.getAllApiInfoStates()
         for obj in objs:
             o = obj['Object']
             values = []
-            values.append('%s' % o['IfMetricAddressLessIf'])
-            values.append('%s' % o['IfMetricTOS'])
-            values.append('%s' % o['IfMetricIpAddress'])
-            values.append('%s' % o['IfMetricValue'])
+            values.append('%s' % o['Url'])
             rows.append(values)
-        self.tblPrintObject('OspfIfMetricEntry', header, rows)
+        self.tblPrintObject('ApiInfoState', header, rows)
 
+
+    def printApiInfoState(self, Url, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('Url')
+
+        objs = self.swtch.getApiInfoState(
+                                          Url)
+        if objs.status_code in self.httpSuccessCodes:
+            for obj in objs:
+                o = obj['Object']
+                values = []
+                values.append('%s' % o['Url'])
+                rows.append(values)
+            self.tblPrintObject('ApiInfoState', header, rows)
+
+        else:
+            print objs.content
 
     def printFanSensorStates(self, addHeader=True, brief=None):
         header = []; rows = []
@@ -2148,6 +2202,7 @@ class FlexSwitchShow( object):
     def printConfigLogStates(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
+            header.append('SeqNum')
             header.append('API')
             header.append('Time')
             header.append('Operation')
@@ -2160,6 +2215,7 @@ class FlexSwitchShow( object):
         for obj in objs:
             o = obj['Object']
             values = []
+            values.append('%s' % o['SeqNum'])
             values.append('%s' % o['API'])
             values.append('%s' % o['Time'])
             values.append('%s' % o['Operation'])
@@ -2171,9 +2227,10 @@ class FlexSwitchShow( object):
         self.tblPrintObject('ConfigLogState', header, rows)
 
 
-    def printConfigLogState(self, API,Time, addHeader=True, brief=None):
+    def printConfigLogState(self, SeqNum,API,Time, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
+            header.append('SeqNum')
             header.append('API')
             header.append('Time')
             header.append('Operation')
@@ -2183,12 +2240,14 @@ class FlexSwitchShow( object):
             header.append('UserName')
 
         objs = self.swtch.getConfigLogState(
+                                            SeqNum,
                                             API,
                                             Time)
         if objs.status_code in self.httpSuccessCodes:
             for obj in objs:
                 o = obj['Object']
                 values = []
+                values.append('%s' % o['SeqNum'])
                 values.append('%s' % o['API'])
                 values.append('%s' % o['Time'])
                 values.append('%s' % o['Operation'])
@@ -2395,7 +2454,7 @@ class FlexSwitchShow( object):
     def printDhcpRelayIntfStates(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
-            header.append('IntfId')
+            header.append('IfIndex')
             header.append('TotalDrops')
             header.append('TotalDhcpClientRx')
             header.append('TotalDhcpClientTx')
@@ -2406,7 +2465,7 @@ class FlexSwitchShow( object):
         for obj in objs:
             o = obj['Object']
             values = []
-            values.append('%s' % o['IntfId'])
+            values.append('%s' % o['IfIndex'])
             values.append('%s' % o['TotalDrops'])
             values.append('%s' % o['TotalDhcpClientRx'])
             values.append('%s' % o['TotalDhcpClientTx'])
@@ -2416,10 +2475,10 @@ class FlexSwitchShow( object):
         self.tblPrintObject('DhcpRelayIntfState', header, rows)
 
 
-    def printDhcpRelayIntfState(self, IntfId, addHeader=True, brief=None):
+    def printDhcpRelayIntfState(self, IfIndex, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
-            header.append('IntfId')
+            header.append('IfIndex')
             header.append('TotalDrops')
             header.append('TotalDhcpClientRx')
             header.append('TotalDhcpClientTx')
@@ -2427,12 +2486,12 @@ class FlexSwitchShow( object):
             header.append('TotalDhcpServerTx')
 
         objs = self.swtch.getDhcpRelayIntfState(
-                                                IntfId)
+                                                IfIndex)
         if objs.status_code in self.httpSuccessCodes:
             for obj in objs:
                 o = obj['Object']
                 values = []
-                values.append('%s' % o['IntfId'])
+                values.append('%s' % o['IfIndex'])
                 values.append('%s' % o['TotalDrops'])
                 values.append('%s' % o['TotalDhcpClientRx'])
                 values.append('%s' % o['TotalDhcpClientTx'])
@@ -2447,13 +2506,12 @@ class FlexSwitchShow( object):
     def printCombinedDhcpRelayIntfStates(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
-            header.append('IntfId')
+            header.append('IfIndex')
             header.append('TotalDrops')
             header.append('TotalDhcpClientRx')
             header.append('TotalDhcpClientTx')
             header.append('TotalDhcpServerRx')
             header.append('TotalDhcpServerTx')
-            header.append('IfIndex')
             header.append('Enable')
             header.append('ServerIp')
 
@@ -2461,16 +2519,15 @@ class FlexSwitchShow( object):
         for obj in objs:
             o = obj['Object']
             values = []
-            values.append('%s' % o['IntfId'])
+            values.append('%s' % o['IfIndex'])
             values.append('%s' % o['TotalDrops'])
             values.append('%s' % o['TotalDhcpClientRx'])
             values.append('%s' % o['TotalDhcpClientTx'])
             values.append('%s' % o['TotalDhcpServerRx'])
             values.append('%s' % o['TotalDhcpServerTx'])
-            r = self.swtch.getDhcpRelayIntf(o['IntfId'])
+            r = self.swtch.getDhcpRelayIntf(o['IfIndex'])
             if r.status_code in self.httpSuccessCodes:
                 o = r.json()['Object']
-                values.append('%s' % o['IfIndex'])
                 values.append('%s' % o['Enable'])
                 values.append('%s' % o['ServerIp'])
             rows.append(values)
@@ -3792,6 +3849,8 @@ class FlexSwitchShow( object):
             header.append('AdjRIBOutFilter')
             header.append('Messages')
             header.append('Queues')
+            header.append('SessionStateUpdatedTime')
+            header.append('Disabled')
 
         objs = self.swtch.getAllBGPv6NeighborStates()
         for obj in objs:
@@ -3825,6 +3884,8 @@ class FlexSwitchShow( object):
             values.append('%s' % o['AdjRIBOutFilter'])
             values.append('%s' % o['Messages'])
             values.append('%s' % o['Queues'])
+            values.append('%s' % o['SessionStateUpdatedTime'])
+            values.append('%s' % o['Disabled'])
             rows.append(values)
         self.tblPrintObject('BGPv6NeighborState', header, rows)
 
@@ -3860,6 +3921,8 @@ class FlexSwitchShow( object):
             header.append('AdjRIBOutFilter')
             header.append('Messages')
             header.append('Queues')
+            header.append('SessionStateUpdatedTime')
+            header.append('Disabled')
 
         objs = self.swtch.getBGPv6NeighborState(
                                                 IntfRef,
@@ -3896,6 +3959,8 @@ class FlexSwitchShow( object):
                 values.append('%s' % o['AdjRIBOutFilter'])
                 values.append('%s' % o['Messages'])
                 values.append('%s' % o['Queues'])
+                values.append('%s' % o['SessionStateUpdatedTime'])
+                values.append('%s' % o['Disabled'])
                 rows.append(values)
             self.tblPrintObject('BGPv6NeighborState', header, rows)
 
@@ -3933,6 +3998,8 @@ class FlexSwitchShow( object):
             header.append('AdjRIBOutFilter')
             header.append('Messages')
             header.append('Queues')
+            header.append('SessionStateUpdatedTime')
+            header.append('Disabled')
             header.append('BfdEnable')
             header.append('BfdSessionParam')
 
@@ -3968,6 +4035,8 @@ class FlexSwitchShow( object):
             values.append('%s' % o['AdjRIBOutFilter'])
             values.append('%s' % o['Messages'])
             values.append('%s' % o['Queues'])
+            values.append('%s' % o['SessionStateUpdatedTime'])
+            values.append('%s' % o['Disabled'])
             r = self.swtch.getBGPv6Neighbor(o['IntfRef'], o['NeighborAddress'])
             if r.status_code in self.httpSuccessCodes:
                 o = r.json()['Object']
@@ -4137,8 +4206,8 @@ class FlexSwitchShow( object):
             header.append('Vrf')
             header.append('MgmtIp')
             header.append('Hostname')
-            header.append('Version')
             header.append('SwitchMac')
+            header.append('SwVersion')
             header.append('Description')
 
         objs = self.swtch.getAllSystemParams()
@@ -4148,8 +4217,8 @@ class FlexSwitchShow( object):
             values.append('%s' % o['Vrf'])
             values.append('%s' % o['MgmtIp'])
             values.append('%s' % o['Hostname'])
-            values.append('%s' % o['Version'])
             values.append('%s' % o['SwitchMac'])
+            values.append('%s' % o['SwVersion'])
             values.append('%s' % o['Description'])
             rows.append(values)
         self.tblPrintObject('SystemParam', header, rows)
@@ -6069,6 +6138,91 @@ class FlexSwitchShow( object):
         else:
             print objs.content
 
+    def printNDPGlobalStates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('Vrf')
+            header.append('RetransmitInterval')
+            header.append('ReachableTime')
+            header.append('RouterAdvertisementInterval')
+            header.append('Neighbors')
+            header.append('TotalTxPackets')
+            header.append('TotalRxPackets')
+
+        objs = self.swtch.getAllNDPGlobalStates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['Vrf'])
+            values.append('%s' % o['RetransmitInterval'])
+            values.append('%s' % o['ReachableTime'])
+            values.append('%s' % o['RouterAdvertisementInterval'])
+            values.append('%s' % o['Neighbors'])
+            values.append('%s' % o['TotalTxPackets'])
+            values.append('%s' % o['TotalRxPackets'])
+            rows.append(values)
+        self.tblPrintObject('NDPGlobalState', header, rows)
+
+
+    def printNDPGlobalState(self, Vrf, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('Vrf')
+            header.append('RetransmitInterval')
+            header.append('ReachableTime')
+            header.append('RouterAdvertisementInterval')
+            header.append('Neighbors')
+            header.append('TotalTxPackets')
+            header.append('TotalRxPackets')
+
+        objs = self.swtch.getNDPGlobalState(
+                                            Vrf)
+        if objs.status_code in self.httpSuccessCodes:
+            for obj in objs:
+                o = obj['Object']
+                values = []
+                values.append('%s' % o['Vrf'])
+                values.append('%s' % o['RetransmitInterval'])
+                values.append('%s' % o['ReachableTime'])
+                values.append('%s' % o['RouterAdvertisementInterval'])
+                values.append('%s' % o['Neighbors'])
+                values.append('%s' % o['TotalTxPackets'])
+                values.append('%s' % o['TotalRxPackets'])
+                rows.append(values)
+            self.tblPrintObject('NDPGlobalState', header, rows)
+
+        else:
+            print objs.content
+
+    def printCombinedNDPGlobalStates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('Vrf')
+            header.append('RetransmitInterval')
+            header.append('ReachableTime')
+            header.append('RouterAdvertisementInterval')
+            header.append('Neighbors')
+            header.append('TotalTxPackets')
+            header.append('TotalRxPackets')
+
+        objs = self.swtch.getAllNDPGlobalStates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['Vrf'])
+            values.append('%s' % o['RetransmitInterval'])
+            values.append('%s' % o['ReachableTime'])
+            values.append('%s' % o['RouterAdvertisementInterval'])
+            values.append('%s' % o['Neighbors'])
+            values.append('%s' % o['TotalTxPackets'])
+            values.append('%s' % o['TotalRxPackets'])
+            r = self.swtch.getNDPGlobal(o['Vrf'])
+            if r.status_code in self.httpSuccessCodes:
+                o = r.json()['Object']
+            rows.append(values)
+        self.tblPrintObject('NDPGlobalState', header, rows)
+
+
     def printQsfps(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
@@ -7322,6 +7476,50 @@ class FlexSwitchShow( object):
             rows.append(values)
         self.tblPrintObject('LLDPGlobal', header, rows)
 
+
+    def printIPv6RouteHwStates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('DestinationNw')
+            header.append('NextHopIps')
+            header.append('RouteCreatedTime')
+            header.append('RouteUpdatedTime')
+
+        objs = self.swtch.getAllIPv6RouteHwStates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['DestinationNw'])
+            values.append('%s' % o['NextHopIps'])
+            values.append('%s' % o['RouteCreatedTime'])
+            values.append('%s' % o['RouteUpdatedTime'])
+            rows.append(values)
+        self.tblPrintObject('IPv6RouteHwState', header, rows)
+
+
+    def printIPv6RouteHwState(self, DestinationNw, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('DestinationNw')
+            header.append('NextHopIps')
+            header.append('RouteCreatedTime')
+            header.append('RouteUpdatedTime')
+
+        objs = self.swtch.getIPv6RouteHwState(
+                                              DestinationNw)
+        if objs.status_code in self.httpSuccessCodes:
+            for obj in objs:
+                o = obj['Object']
+                values = []
+                values.append('%s' % o['DestinationNw'])
+                values.append('%s' % o['NextHopIps'])
+                values.append('%s' % o['RouteCreatedTime'])
+                values.append('%s' % o['RouteUpdatedTime'])
+                rows.append(values)
+            self.tblPrintObject('IPv6RouteHwState', header, rows)
+
+        else:
+            print objs.content
 
     def printSubIPv4Intfs(self, addHeader=True, brief=None):
         header = []; rows = []
@@ -8640,9 +8838,11 @@ class FlexSwitchShow( object):
             header.append('Vrf')
             header.append('MgmtIp')
             header.append('Hostname')
-            header.append('Version')
             header.append('SwitchMac')
+            header.append('SwVersion')
             header.append('Description')
+            header.append('Distro')
+            header.append('Kernel')
 
         objs = self.swtch.getAllSystemParamStates()
         for obj in objs:
@@ -8651,9 +8851,11 @@ class FlexSwitchShow( object):
             values.append('%s' % o['Vrf'])
             values.append('%s' % o['MgmtIp'])
             values.append('%s' % o['Hostname'])
-            values.append('%s' % o['Version'])
             values.append('%s' % o['SwitchMac'])
+            values.append('%s' % o['SwVersion'])
             values.append('%s' % o['Description'])
+            values.append('%s' % o['Distro'])
+            values.append('%s' % o['Kernel'])
             rows.append(values)
         self.tblPrintObject('SystemParamState', header, rows)
 
@@ -8664,9 +8866,11 @@ class FlexSwitchShow( object):
             header.append('Vrf')
             header.append('MgmtIp')
             header.append('Hostname')
-            header.append('Version')
             header.append('SwitchMac')
+            header.append('SwVersion')
             header.append('Description')
+            header.append('Distro')
+            header.append('Kernel')
 
         objs = self.swtch.getSystemParamState(
                                               Vrf)
@@ -8677,9 +8881,11 @@ class FlexSwitchShow( object):
                 values.append('%s' % o['Vrf'])
                 values.append('%s' % o['MgmtIp'])
                 values.append('%s' % o['Hostname'])
-                values.append('%s' % o['Version'])
                 values.append('%s' % o['SwitchMac'])
+                values.append('%s' % o['SwVersion'])
                 values.append('%s' % o['Description'])
+                values.append('%s' % o['Distro'])
+                values.append('%s' % o['Kernel'])
                 rows.append(values)
             self.tblPrintObject('SystemParamState', header, rows)
 
@@ -8692,9 +8898,11 @@ class FlexSwitchShow( object):
             header.append('Vrf')
             header.append('MgmtIp')
             header.append('Hostname')
-            header.append('Version')
             header.append('SwitchMac')
+            header.append('SwVersion')
             header.append('Description')
+            header.append('Distro')
+            header.append('Kernel')
 
         objs = self.swtch.getAllSystemParamStates()
         for obj in objs:
@@ -8703,9 +8911,11 @@ class FlexSwitchShow( object):
             values.append('%s' % o['Vrf'])
             values.append('%s' % o['MgmtIp'])
             values.append('%s' % o['Hostname'])
-            values.append('%s' % o['Version'])
             values.append('%s' % o['SwitchMac'])
+            values.append('%s' % o['SwVersion'])
             values.append('%s' % o['Description'])
+            values.append('%s' % o['Distro'])
+            values.append('%s' % o['Kernel'])
             r = self.swtch.getSystemParam(o['Vrf'])
             if r.status_code in self.httpSuccessCodes:
                 o = r.json()['Object']
@@ -8901,6 +9111,7 @@ class FlexSwitchShow( object):
             header.append('MaxPrefixes')
             header.append('MaxPrefixesThresholdPct')
             header.append('BfdSessionParam')
+            header.append('Disabled')
             header.append('HoldTime')
             header.append('ConnectRetryTime')
 
@@ -8930,6 +9141,7 @@ class FlexSwitchShow( object):
             values.append('%s' % o['MaxPrefixes'])
             values.append('%s' % o['MaxPrefixesThresholdPct'])
             values.append('%s' % o['BfdSessionParam'])
+            values.append('%s' % o['Disabled'])
             values.append('%s' % o['HoldTime'])
             values.append('%s' % o['ConnectRetryTime'])
             rows.append(values)
