@@ -142,12 +142,15 @@ class FlexPrint( FlexSwitchShow):
             rt = r['Object']
             rt_spec = self.swtch.getIPv4RouteState(rt['DestinationNw']).json()
             rt_next=rt_spec['Object']
-            rt_count = len(rt_next['NextHopList'])  
+            if rt_next['NextHopList'] is None:
+            	rt_count = 0
+            else:
+            	rt_count = len(rt_next['NextHopList'])
             route_distance = self.swtch.getRouteDistanceState(rt['Protocol']).json()
-            rd = ''
             if len(route_distance):
             	rd = route_distance['Object']    
-            if rt['PolicyList'] is None:
+            if len(rt['PolicyList']) == 0: 
+#            if rt['PolicyList'] is None :
                 policy=rt['PolicyList']
             else:
                 policy = str(rt['PolicyList']).split("[")[1].split()[1]
@@ -171,12 +174,15 @@ class FlexPrint( FlexSwitchShow):
             rt = r['Object']
             rt_spec = self.swtch.getIPv6RouteState(rt['DestinationNw']).json()
             rt_next=rt_spec['Object']    
-            rt_count = len(rt_next['NextHopList'])  
+            if rt_next['NextHopList'] is None:
+            	rt_count = 0
+            else:
+            	rt_count = len(rt_next['NextHopList'])
             route_distance = self.swtch.getRouteDistanceState(rt['Protocol']).json()
             rd = ''
             if len(route_distance):
-            	rd = route_distance['Object']     
-            if rt['PolicyList'] is None:
+            	rd = route_distance['Object']   
+            if len(rt['PolicyList']) == 0 :
                 policy=rt['PolicyList']
             else:
                 policy = str(rt['PolicyList']).split("[")[1].split()[1]
