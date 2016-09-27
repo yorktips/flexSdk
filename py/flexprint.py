@@ -1,6 +1,7 @@
 import requests
 import json
 import urllib2
+#from datetime import datetime
 from flexswitchV2 import FlexSwitch
 from flexprintV2 import FlexSwitchShow
 from tablePrint import *
@@ -924,13 +925,17 @@ class FlexPrint( FlexSwitchShow):
  	
        if len(peers)>=0:
            print '\n'
-           labels = ('Neighbor','LocalAS','PeerAS','State','RxMsg','TxMsg','Description','Prefixes_Rcvd')
+           labels = ('Neighbor','LocalAS','PeerAS','State','RxMsg','TxMsg','Description','Prefixes_Rcvd', 'ElapsedTime')
            rows=[]
            lines = sorted(peers, key=lambda k: k['Object'].get('NeighborAddress', 0)) 
            for p in lines:
                pr = p['Object']
                RXmsg = (pr['Messages']['Received']['Notification']) + (pr['Messages']['Received']['Update'])
                TXmsg = (pr['Messages']['Sent']['Notification']) + (pr['Messages']['Sent']['Update'])
+               StartTime = pr['SessionStateUpdatedTime']
+               #"2016-09-20 11:42:01.290081007 -0700 PDT"
+               #start = datetime.strptime(StartTime, '%Y-%m-%d %I:%M:%S.%f %z %Z')
+               #UpTime = datetime.datetime.now() - start 
                rows.append( (pr['NeighborAddress'],
                      "%s" %(pr['LocalAS']),
                      "%s" %(pr['PeerAS']),
@@ -938,7 +943,8 @@ class FlexPrint( FlexSwitchShow):
                      "%s" %(RXmsg),
                      "%s" %(TXmsg),
                      "%s" %(pr['Description']),
-                     "%s" %(pr['TotalPrefixes'])))
+                     "%s" %(pr['TotalPrefixes']), 
+                     "%s" %(StartTime) ))
 
 
            self.tblPrintObject('BGPNeighborStates',
