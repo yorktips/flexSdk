@@ -21,11 +21,13 @@ headers = {'Accept' : 'application/json', 'Content-Type' : 'application/json'}
 #    return returnDetails
 class FlexSwitch( object):                                                                                              
     httpSuccessCodes = [200, 201, 202, 204]
-    def  __init__ (self, ip, port):                                                                                     
+    def  __init__ (self, ip, port, timeout=5):                                                                                     
         self.ip    = ip                                                                                                 
         self.port  = port                                                                                               
+        self.timeout = timeout
         self.cfgUrlBase = 'http://%s:%s/public/v1/config/'%(ip,str(port))                                                         
         self.stateUrlBase = 'http://%s:%s/public/v1/state/'%(ip,str(port))                                                         
+        self.actionUrlBase = 'http://%s:%s/public/v1/action/'%(ip,str(port))
 
     def getObjects(self, objName, urlPath):
         currentMarker = 0                                                                                                  
@@ -36,7 +38,7 @@ class FlexSwitch( object):
         while more == True:                                                                                                
             more = False
             qry = '%s/%ss?CurrentMarker=%d&NextMarker=%d&Count=%d' %(urlPath, objName, currentMarker, nextMarker, count)
-            response = requests.get(qry)                                                                                   
+            response = requests.get(qry, timeout=self.timeout)                                                                                   
             if response.status_code in self.httpSuccessCodes:
                 data = response.json()                                                                                         
                 more =  data['MoreExist']                                                                                      
@@ -54,16 +56,34 @@ class FlexSwitch( object):
                 'IpAddr' : IpAddr,
                 }
         reqUrl =  self.stateUrlBase + 'ArpEntry'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getArpEntryStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'ArpEntry'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'ArpEntry'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllArpEntryStates(self):
         return self.getObjects( 'ArpEntry', self.stateUrlBase)
+
+
+    def getPlatformMgmtDeviceState(self,
+                                   DeviceName):
+        obj =  { 
+                'DeviceName' : DeviceName,
+                }
+        reqUrl =  self.stateUrlBase + 'PlatformMgmtDevice'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getPlatformMgmtDeviceStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase + 'PlatformMgmtDevice'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllPlatformMgmtDeviceStates(self):
+        return self.getObjects( 'PlatformMgmtDevice', self.stateUrlBase)
 
 
     def getOspfIPv4RouteState(self,
@@ -76,12 +96,12 @@ class FlexSwitch( object):
                 'AddrMask' : AddrMask,
                 }
         reqUrl =  self.stateUrlBase + 'OspfIPv4Route'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getOspfIPv4RouteStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'OspfIPv4Route'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'OspfIPv4Route'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllOspfIPv4RouteStates(self):
@@ -89,99 +109,154 @@ class FlexSwitch( object):
 
 
     """
-    .. automethod :: createOspfIfMetricEntry(self,
-        :param int32 IfMetricAddressLessIf : For the purpose of easing the instancing of addressed and addressless interfaces; this variable takes the value 0 on interfaces with IP addresses and the value of ifIndex for interfaces having no IP address.  On row creation For the purpose of easing the instancing of addressed and addressless interfaces; this variable takes the value 0 on interfaces with IP addresses and the value of ifIndex for interfaces having no IP address.  On row creation
-        :param int32 IfMetricTOS : The Type of Service metric being referenced. On row creation The Type of Service metric being referenced. On row creation
-        :param string IfMetricIpAddress : The IP address of this OSPF interface.  On row creation The IP address of this OSPF interface.  On row creation
-        :param int32 IfMetricValue : The metric of using this Type of Service on this interface.  The default value of the TOS 0 metric is 10^8 / ifSpeed. The metric of using this Type of Service on this interface.  The default value of the TOS 0 metric is 10^8 / ifSpeed.
+    .. automethod :: createTemperatureSensor(self,
+        :param string Name : Temperature Sensor Name Temperature Sensor Name
+        :param float64 HigherAlarmThreshold : Higher Alarm Threshold for TCA Higher Alarm Threshold for TCA
+        :param float64 HigherWarningThreshold : Higher Warning Threshold for TCA Higher Warning Threshold for TCA
+        :param float64 LowerWarningThreshold : Lower Warning Threshold for TCA Lower Warning Threshold for TCA
+        :param float64 LowerAlarmThreshold : Lower Alarm Threshold for TCA Lower Alarm Threshold for TCA
+        :param string PMClassCAdminState : PM Class-C Admin State PM Class-C Admin State
+        :param string PMClassAAdminState : PM Class-A Admin State PM Class-A Admin State
+        :param string AdminState : Enable/Disable Enable/Disable
+        :param string PMClassBAdminState : PM Class-B Admin State PM Class-B Admin State
 
 	"""
-    def createOspfIfMetricEntry(self,
-                                IfMetricAddressLessIf,
-                                IfMetricTOS,
-                                IfMetricIpAddress,
-                                IfMetricValue):
+    def createTemperatureSensor(self,
+                                Name,
+                                HigherAlarmThreshold,
+                                HigherWarningThreshold,
+                                LowerWarningThreshold,
+                                LowerAlarmThreshold,
+                                PMClassCAdminState='Enable',
+                                PMClassAAdminState='Enable',
+                                AdminState='Enable',
+                                PMClassBAdminState='Enable'):
         obj =  { 
-                'IfMetricAddressLessIf' : int(IfMetricAddressLessIf),
-                'IfMetricTOS' : int(IfMetricTOS),
-                'IfMetricIpAddress' : IfMetricIpAddress,
-                'IfMetricValue' : int(IfMetricValue),
+                'Name' : Name,
+                'HigherAlarmThreshold' : HigherAlarmThreshold,
+                'HigherWarningThreshold' : HigherWarningThreshold,
+                'LowerWarningThreshold' : LowerWarningThreshold,
+                'LowerAlarmThreshold' : LowerAlarmThreshold,
+                'PMClassCAdminState' : PMClassCAdminState,
+                'PMClassAAdminState' : PMClassAAdminState,
+                'AdminState' : AdminState,
+                'PMClassBAdminState' : PMClassBAdminState,
                 }
-        reqUrl =  self.cfgUrlBase+'OspfIfMetricEntry'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'TemperatureSensor'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
-    def updateOspfIfMetricEntry(self,
-                                IfMetricAddressLessIf,
-                                IfMetricTOS,
-                                IfMetricIpAddress,
-                                IfMetricValue = None):
+    def updateTemperatureSensor(self,
+                                Name,
+                                HigherAlarmThreshold = None,
+                                HigherWarningThreshold = None,
+                                LowerWarningThreshold = None,
+                                LowerAlarmThreshold = None,
+                                PMClassCAdminState = None,
+                                PMClassAAdminState = None,
+                                AdminState = None,
+                                PMClassBAdminState = None):
         obj =  {}
-        if IfMetricAddressLessIf != None :
-            obj['IfMetricAddressLessIf'] = int(IfMetricAddressLessIf)
+        if Name != None :
+            obj['Name'] = Name
 
-        if IfMetricTOS != None :
-            obj['IfMetricTOS'] = int(IfMetricTOS)
+        if HigherAlarmThreshold != None :
+            obj['HigherAlarmThreshold'] = HigherAlarmThreshold
 
-        if IfMetricIpAddress != None :
-            obj['IfMetricIpAddress'] = IfMetricIpAddress
+        if HigherWarningThreshold != None :
+            obj['HigherWarningThreshold'] = HigherWarningThreshold
 
-        if IfMetricValue != None :
-            obj['IfMetricValue'] = int(IfMetricValue)
+        if LowerWarningThreshold != None :
+            obj['LowerWarningThreshold'] = LowerWarningThreshold
 
-        reqUrl =  self.cfgUrlBase+'OspfIfMetricEntry'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        if LowerAlarmThreshold != None :
+            obj['LowerAlarmThreshold'] = LowerAlarmThreshold
+
+        if PMClassCAdminState != None :
+            obj['PMClassCAdminState'] = PMClassCAdminState
+
+        if PMClassAAdminState != None :
+            obj['PMClassAAdminState'] = PMClassAAdminState
+
+        if AdminState != None :
+            obj['AdminState'] = AdminState
+
+        if PMClassBAdminState != None :
+            obj['PMClassBAdminState'] = PMClassBAdminState
+
+        reqUrl =  self.cfgUrlBase+'TemperatureSensor'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
-    def updateOspfIfMetricEntryById(self,
+    def updateTemperatureSensorById(self,
                                      objectId,
-                                     IfMetricValue = None):
-        obj =  {'objectId': objectId }
-        if IfMetricValue !=  None:
-            obj['IfMetricValue'] = IfMetricValue
+                                     HigherAlarmThreshold = None,
+                                     HigherWarningThreshold = None,
+                                     LowerWarningThreshold = None,
+                                     LowerAlarmThreshold = None,
+                                     PMClassCAdminState = None,
+                                     PMClassAAdminState = None,
+                                     AdminState = None,
+                                     PMClassBAdminState = None):
+        obj =  {}
+        if HigherAlarmThreshold !=  None:
+            obj['HigherAlarmThreshold'] = HigherAlarmThreshold
 
-        reqUrl =  self.cfgUrlBase+'OspfIfMetricEntry'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        if HigherWarningThreshold !=  None:
+            obj['HigherWarningThreshold'] = HigherWarningThreshold
+
+        if LowerWarningThreshold !=  None:
+            obj['LowerWarningThreshold'] = LowerWarningThreshold
+
+        if LowerAlarmThreshold !=  None:
+            obj['LowerAlarmThreshold'] = LowerAlarmThreshold
+
+        if PMClassCAdminState !=  None:
+            obj['PMClassCAdminState'] = PMClassCAdminState
+
+        if PMClassAAdminState !=  None:
+            obj['PMClassAAdminState'] = PMClassAAdminState
+
+        if AdminState !=  None:
+            obj['AdminState'] = AdminState
+
+        if PMClassBAdminState !=  None:
+            obj['PMClassBAdminState'] = PMClassBAdminState
+
+        reqUrl =  self.cfgUrlBase+'TemperatureSensor'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
-    def deleteOspfIfMetricEntry(self,
-                                IfMetricAddressLessIf,
-                                IfMetricTOS,
-                                IfMetricIpAddress):
+    def deleteTemperatureSensor(self,
+                                Name):
         obj =  { 
-                'IfMetricAddressLessIf' : IfMetricAddressLessIf,
-                'IfMetricTOS' : IfMetricTOS,
-                'IfMetricIpAddress' : IfMetricIpAddress,
+                'Name' : Name,
                 }
-        reqUrl =  self.cfgUrlBase+'OspfIfMetricEntry'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'TemperatureSensor'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
-    def deleteOspfIfMetricEntryById(self, objectId ):
-        reqUrl =  self.cfgUrlBase+'OspfIfMetricEntry'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+    def deleteTemperatureSensorById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'TemperatureSensor'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
-    def getOspfIfMetricEntry(self,
-                             IfMetricAddressLessIf,
-                             IfMetricTOS,
-                             IfMetricIpAddress):
+    def getTemperatureSensor(self,
+                             Name):
         obj =  { 
-                'IfMetricAddressLessIf' : int(IfMetricAddressLessIf),
-                'IfMetricTOS' : int(IfMetricTOS),
-                'IfMetricIpAddress' : IfMetricIpAddress,
+                'Name' : Name,
                 }
-        reqUrl =  self.cfgUrlBase + 'OspfIfMetricEntry'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'TemperatureSensor'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
-    def getOspfIfMetricEntryById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'OspfIfMetricEntry'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+    def getTemperatureSensorById(self, objectId ):
+        reqUrl =  self.cfgUrlBase + 'TemperatureSensor'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
-    def getAllOspfIfMetricEntrys(self):
-        return self.getObjects( 'OspfIfMetricEntry', self.cfgUrlBase)
+    def getAllTemperatureSensors(self):
+        return self.getObjects( 'TemperatureSensor', self.cfgUrlBase)
 
 
     def getNdpEntryHwState(self,
@@ -190,17 +265,37 @@ class FlexSwitch( object):
                 'IpAddr' : IpAddr,
                 }
         reqUrl =  self.stateUrlBase + 'NdpEntryHw'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getNdpEntryHwStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'NdpEntryHw'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'NdpEntryHw'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllNdpEntryHwStates(self):
         return self.getObjects( 'NdpEntryHw', self.stateUrlBase)
 
+
+    """
+    .. automethod :: executeFaultEnable(self,
+        :param string OwnerName : Fault owner name Fault owner name
+        :param string EventName : Fault event name Fault event name
+        :param bool Enable : Enable/Disbale control Enable/Disbale control
+
+	"""
+    def executeFaultEnable(self,
+                           OwnerName,
+                           EventName,
+                           Enable):
+        obj =  { 
+                'OwnerName' : OwnerName,
+                'EventName' : EventName,
+                'Enable' : True if Enable else False,
+                }
+        reqUrl =  self.actionUrlBase+'FaultEnable'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
 
     """
     .. automethod :: createPolicyStmt(self,
@@ -222,7 +317,7 @@ class FlexSwitch( object):
                 'MatchConditions' : MatchConditions,
                 }
         reqUrl =  self.cfgUrlBase+'PolicyStmt'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updatePolicyStmt(self,
@@ -244,7 +339,7 @@ class FlexSwitch( object):
             obj['MatchConditions'] = MatchConditions
 
         reqUrl =  self.cfgUrlBase+'PolicyStmt'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updatePolicyStmtById(self,
@@ -252,7 +347,7 @@ class FlexSwitch( object):
                               Conditions = None,
                               Action = None,
                               MatchConditions = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if Conditions !=  None:
             obj['Conditions'] = Conditions
 
@@ -262,8 +357,8 @@ class FlexSwitch( object):
         if MatchConditions !=  None:
             obj['MatchConditions'] = MatchConditions
 
-        reqUrl =  self.cfgUrlBase+'PolicyStmt'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'PolicyStmt'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deletePolicyStmt(self,
@@ -272,12 +367,12 @@ class FlexSwitch( object):
                 'Name' : Name,
                 }
         reqUrl =  self.cfgUrlBase+'PolicyStmt'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deletePolicyStmtById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'PolicyStmt'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getPolicyStmt(self,
@@ -286,16 +381,417 @@ class FlexSwitch( object):
                 'Name' : Name,
                 }
         reqUrl =  self.cfgUrlBase + 'PolicyStmt'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getPolicyStmtById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'PolicyStmt'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'PolicyStmt'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllPolicyStmts(self):
         return self.getObjects( 'PolicyStmt', self.cfgUrlBase)
+
+
+    """
+    .. automethod :: createQsfpChannel(self,
+        :param int32 ChannelNum : Qsfp Channel Number Qsfp Channel Number
+        :param int32 QsfpId : Qsfp Id Qsfp Id
+        :param float64 HigherAlarmRXPower : Higher Alarm Rx power Threshold for TCA Higher Alarm Rx power Threshold for TCA
+        :param float64 HigherAlarmTXPower : Higher Alarm Rx power for TCA Higher Alarm Rx power for TCA
+        :param float64 HigherAlarmTXBias : Higher Alarm Tx Current Bias for TCA Higher Alarm Tx Current Bias for TCA
+        :param float64 HigherWarningRXPower : Higher Warning Rx power Threshold for TCA Higher Warning Rx power Threshold for TCA
+        :param float64 HigherWarningTXPower : Higher Warning Rx power for TCA Higher Warning Rx power for TCA
+        :param float64 HigherWarningTXBias : Higher Warning Tx Current Bias for TCA Higher Warning Tx Current Bias for TCA
+        :param float64 LowerAlarmRXPower : Lower Alarm Rx power Threshold for TCA Lower Alarm Rx power Threshold for TCA
+        :param float64 LowerAlarmTXPower : Lower Alarm Rx power for TCA Lower Alarm Rx power for TCA
+        :param float64 LowerAlarmTXBias : Lower Alarm Tx Current Bias for TCA Lower Alarm Tx Current Bias for TCA
+        :param float64 LowerWarningRXPower : Lower Warning Rx power Threshold for TCA Lower Warning Rx power Threshold for TCA
+        :param float64 LowerWarningTXPower : Lower Warning Rx power for TCA Lower Warning Rx power for TCA
+        :param float64 LowerWarningTXBias : Lower Warning Tx Current Bias for TCA Lower Warning Tx Current Bias for TCA
+        :param string PMClassBAdminState : PM Class-B Admin State PM Class-B Admin State
+        :param string PMClassCAdminState : PM Class-C Admin State PM Class-C Admin State
+        :param string PMClassAAdminState : PM Class-A Admin State PM Class-A Admin State
+        :param string AdminState : Enable/Disable Enable/Disable
+
+	"""
+    def createQsfpChannel(self,
+                          ChannelNum,
+                          QsfpId,
+                          HigherAlarmRXPower,
+                          HigherAlarmTXPower,
+                          HigherAlarmTXBias,
+                          HigherWarningRXPower,
+                          HigherWarningTXPower,
+                          HigherWarningTXBias,
+                          LowerAlarmRXPower,
+                          LowerAlarmTXPower,
+                          LowerAlarmTXBias,
+                          LowerWarningRXPower,
+                          LowerWarningTXPower,
+                          LowerWarningTXBias,
+                          PMClassBAdminState='Disable',
+                          PMClassCAdminState='Disable',
+                          PMClassAAdminState='Disable',
+                          AdminState='Disable'):
+        obj =  { 
+                'ChannelNum' : int(ChannelNum),
+                'QsfpId' : int(QsfpId),
+                'HigherAlarmRXPower' : HigherAlarmRXPower,
+                'HigherAlarmTXPower' : HigherAlarmTXPower,
+                'HigherAlarmTXBias' : HigherAlarmTXBias,
+                'HigherWarningRXPower' : HigherWarningRXPower,
+                'HigherWarningTXPower' : HigherWarningTXPower,
+                'HigherWarningTXBias' : HigherWarningTXBias,
+                'LowerAlarmRXPower' : LowerAlarmRXPower,
+                'LowerAlarmTXPower' : LowerAlarmTXPower,
+                'LowerAlarmTXBias' : LowerAlarmTXBias,
+                'LowerWarningRXPower' : LowerWarningRXPower,
+                'LowerWarningTXPower' : LowerWarningTXPower,
+                'LowerWarningTXBias' : LowerWarningTXBias,
+                'PMClassBAdminState' : PMClassBAdminState,
+                'PMClassCAdminState' : PMClassCAdminState,
+                'PMClassAAdminState' : PMClassAAdminState,
+                'AdminState' : AdminState,
+                }
+        reqUrl =  self.cfgUrlBase+'QsfpChannel'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def updateQsfpChannel(self,
+                          ChannelNum,
+                          QsfpId,
+                          HigherAlarmRXPower = None,
+                          HigherAlarmTXPower = None,
+                          HigherAlarmTXBias = None,
+                          HigherWarningRXPower = None,
+                          HigherWarningTXPower = None,
+                          HigherWarningTXBias = None,
+                          LowerAlarmRXPower = None,
+                          LowerAlarmTXPower = None,
+                          LowerAlarmTXBias = None,
+                          LowerWarningRXPower = None,
+                          LowerWarningTXPower = None,
+                          LowerWarningTXBias = None,
+                          PMClassBAdminState = None,
+                          PMClassCAdminState = None,
+                          PMClassAAdminState = None,
+                          AdminState = None):
+        obj =  {}
+        if ChannelNum != None :
+            obj['ChannelNum'] = int(ChannelNum)
+
+        if QsfpId != None :
+            obj['QsfpId'] = int(QsfpId)
+
+        if HigherAlarmRXPower != None :
+            obj['HigherAlarmRXPower'] = HigherAlarmRXPower
+
+        if HigherAlarmTXPower != None :
+            obj['HigherAlarmTXPower'] = HigherAlarmTXPower
+
+        if HigherAlarmTXBias != None :
+            obj['HigherAlarmTXBias'] = HigherAlarmTXBias
+
+        if HigherWarningRXPower != None :
+            obj['HigherWarningRXPower'] = HigherWarningRXPower
+
+        if HigherWarningTXPower != None :
+            obj['HigherWarningTXPower'] = HigherWarningTXPower
+
+        if HigherWarningTXBias != None :
+            obj['HigherWarningTXBias'] = HigherWarningTXBias
+
+        if LowerAlarmRXPower != None :
+            obj['LowerAlarmRXPower'] = LowerAlarmRXPower
+
+        if LowerAlarmTXPower != None :
+            obj['LowerAlarmTXPower'] = LowerAlarmTXPower
+
+        if LowerAlarmTXBias != None :
+            obj['LowerAlarmTXBias'] = LowerAlarmTXBias
+
+        if LowerWarningRXPower != None :
+            obj['LowerWarningRXPower'] = LowerWarningRXPower
+
+        if LowerWarningTXPower != None :
+            obj['LowerWarningTXPower'] = LowerWarningTXPower
+
+        if LowerWarningTXBias != None :
+            obj['LowerWarningTXBias'] = LowerWarningTXBias
+
+        if PMClassBAdminState != None :
+            obj['PMClassBAdminState'] = PMClassBAdminState
+
+        if PMClassCAdminState != None :
+            obj['PMClassCAdminState'] = PMClassCAdminState
+
+        if PMClassAAdminState != None :
+            obj['PMClassAAdminState'] = PMClassAAdminState
+
+        if AdminState != None :
+            obj['AdminState'] = AdminState
+
+        reqUrl =  self.cfgUrlBase+'QsfpChannel'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def updateQsfpChannelById(self,
+                               objectId,
+                               HigherAlarmRXPower = None,
+                               HigherAlarmTXPower = None,
+                               HigherAlarmTXBias = None,
+                               HigherWarningRXPower = None,
+                               HigherWarningTXPower = None,
+                               HigherWarningTXBias = None,
+                               LowerAlarmRXPower = None,
+                               LowerAlarmTXPower = None,
+                               LowerAlarmTXBias = None,
+                               LowerWarningRXPower = None,
+                               LowerWarningTXPower = None,
+                               LowerWarningTXBias = None,
+                               PMClassBAdminState = None,
+                               PMClassCAdminState = None,
+                               PMClassAAdminState = None,
+                               AdminState = None):
+        obj =  {}
+        if HigherAlarmRXPower !=  None:
+            obj['HigherAlarmRXPower'] = HigherAlarmRXPower
+
+        if HigherAlarmTXPower !=  None:
+            obj['HigherAlarmTXPower'] = HigherAlarmTXPower
+
+        if HigherAlarmTXBias !=  None:
+            obj['HigherAlarmTXBias'] = HigherAlarmTXBias
+
+        if HigherWarningRXPower !=  None:
+            obj['HigherWarningRXPower'] = HigherWarningRXPower
+
+        if HigherWarningTXPower !=  None:
+            obj['HigherWarningTXPower'] = HigherWarningTXPower
+
+        if HigherWarningTXBias !=  None:
+            obj['HigherWarningTXBias'] = HigherWarningTXBias
+
+        if LowerAlarmRXPower !=  None:
+            obj['LowerAlarmRXPower'] = LowerAlarmRXPower
+
+        if LowerAlarmTXPower !=  None:
+            obj['LowerAlarmTXPower'] = LowerAlarmTXPower
+
+        if LowerAlarmTXBias !=  None:
+            obj['LowerAlarmTXBias'] = LowerAlarmTXBias
+
+        if LowerWarningRXPower !=  None:
+            obj['LowerWarningRXPower'] = LowerWarningRXPower
+
+        if LowerWarningTXPower !=  None:
+            obj['LowerWarningTXPower'] = LowerWarningTXPower
+
+        if LowerWarningTXBias !=  None:
+            obj['LowerWarningTXBias'] = LowerWarningTXBias
+
+        if PMClassBAdminState !=  None:
+            obj['PMClassBAdminState'] = PMClassBAdminState
+
+        if PMClassCAdminState !=  None:
+            obj['PMClassCAdminState'] = PMClassCAdminState
+
+        if PMClassAAdminState !=  None:
+            obj['PMClassAAdminState'] = PMClassAAdminState
+
+        if AdminState !=  None:
+            obj['AdminState'] = AdminState
+
+        reqUrl =  self.cfgUrlBase+'QsfpChannel'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
+        return r
+
+    def deleteQsfpChannel(self,
+                          ChannelNum,
+                          QsfpId):
+        obj =  { 
+                'ChannelNum' : ChannelNum,
+                'QsfpId' : QsfpId,
+                }
+        reqUrl =  self.cfgUrlBase+'QsfpChannel'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def deleteQsfpChannelById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'QsfpChannel'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
+        return r
+
+    def getQsfpChannel(self,
+                       ChannelNum,
+                       QsfpId):
+        obj =  { 
+                'ChannelNum' : int(ChannelNum),
+                'QsfpId' : int(QsfpId),
+                }
+        reqUrl =  self.cfgUrlBase + 'QsfpChannel'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getQsfpChannelById(self, objectId ):
+        reqUrl =  self.cfgUrlBase + 'QsfpChannel'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllQsfpChannels(self):
+        return self.getObjects( 'QsfpChannel', self.cfgUrlBase)
+
+
+    """
+    .. automethod :: createPowerConverterSensor(self,
+        :param string Name : Power Converter Sensor Name Power Converter Sensor Name
+        :param float64 HigherAlarmThreshold : Higher Alarm Threshold for TCA Higher Alarm Threshold for TCA
+        :param float64 HigherWarningThreshold : Higher Warning Threshold for TCA Higher Warning Threshold for TCA
+        :param float64 LowerWarningThreshold : Lower Warning Threshold for TCA Lower Warning Threshold for TCA
+        :param float64 LowerAlarmThreshold : Lower Alarm Threshold for TCA Lower Alarm Threshold for TCA
+        :param string PMClassCAdminState : PM Class-C Admin State PM Class-C Admin State
+        :param string PMClassAAdminState : PM Class-A Admin State PM Class-A Admin State
+        :param string AdminState : Enable/Disable Enable/Disable
+        :param string PMClassBAdminState : PM Class-B Admin State PM Class-B Admin State
+
+	"""
+    def createPowerConverterSensor(self,
+                                   Name,
+                                   HigherAlarmThreshold,
+                                   HigherWarningThreshold,
+                                   LowerWarningThreshold,
+                                   LowerAlarmThreshold,
+                                   PMClassCAdminState='Enable',
+                                   PMClassAAdminState='Enable',
+                                   AdminState='Enable',
+                                   PMClassBAdminState='Enable'):
+        obj =  { 
+                'Name' : Name,
+                'HigherAlarmThreshold' : HigherAlarmThreshold,
+                'HigherWarningThreshold' : HigherWarningThreshold,
+                'LowerWarningThreshold' : LowerWarningThreshold,
+                'LowerAlarmThreshold' : LowerAlarmThreshold,
+                'PMClassCAdminState' : PMClassCAdminState,
+                'PMClassAAdminState' : PMClassAAdminState,
+                'AdminState' : AdminState,
+                'PMClassBAdminState' : PMClassBAdminState,
+                }
+        reqUrl =  self.cfgUrlBase+'PowerConverterSensor'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def updatePowerConverterSensor(self,
+                                   Name,
+                                   HigherAlarmThreshold = None,
+                                   HigherWarningThreshold = None,
+                                   LowerWarningThreshold = None,
+                                   LowerAlarmThreshold = None,
+                                   PMClassCAdminState = None,
+                                   PMClassAAdminState = None,
+                                   AdminState = None,
+                                   PMClassBAdminState = None):
+        obj =  {}
+        if Name != None :
+            obj['Name'] = Name
+
+        if HigherAlarmThreshold != None :
+            obj['HigherAlarmThreshold'] = HigherAlarmThreshold
+
+        if HigherWarningThreshold != None :
+            obj['HigherWarningThreshold'] = HigherWarningThreshold
+
+        if LowerWarningThreshold != None :
+            obj['LowerWarningThreshold'] = LowerWarningThreshold
+
+        if LowerAlarmThreshold != None :
+            obj['LowerAlarmThreshold'] = LowerAlarmThreshold
+
+        if PMClassCAdminState != None :
+            obj['PMClassCAdminState'] = PMClassCAdminState
+
+        if PMClassAAdminState != None :
+            obj['PMClassAAdminState'] = PMClassAAdminState
+
+        if AdminState != None :
+            obj['AdminState'] = AdminState
+
+        if PMClassBAdminState != None :
+            obj['PMClassBAdminState'] = PMClassBAdminState
+
+        reqUrl =  self.cfgUrlBase+'PowerConverterSensor'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def updatePowerConverterSensorById(self,
+                                        objectId,
+                                        HigherAlarmThreshold = None,
+                                        HigherWarningThreshold = None,
+                                        LowerWarningThreshold = None,
+                                        LowerAlarmThreshold = None,
+                                        PMClassCAdminState = None,
+                                        PMClassAAdminState = None,
+                                        AdminState = None,
+                                        PMClassBAdminState = None):
+        obj =  {}
+        if HigherAlarmThreshold !=  None:
+            obj['HigherAlarmThreshold'] = HigherAlarmThreshold
+
+        if HigherWarningThreshold !=  None:
+            obj['HigherWarningThreshold'] = HigherWarningThreshold
+
+        if LowerWarningThreshold !=  None:
+            obj['LowerWarningThreshold'] = LowerWarningThreshold
+
+        if LowerAlarmThreshold !=  None:
+            obj['LowerAlarmThreshold'] = LowerAlarmThreshold
+
+        if PMClassCAdminState !=  None:
+            obj['PMClassCAdminState'] = PMClassCAdminState
+
+        if PMClassAAdminState !=  None:
+            obj['PMClassAAdminState'] = PMClassAAdminState
+
+        if AdminState !=  None:
+            obj['AdminState'] = AdminState
+
+        if PMClassBAdminState !=  None:
+            obj['PMClassBAdminState'] = PMClassBAdminState
+
+        reqUrl =  self.cfgUrlBase+'PowerConverterSensor'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
+        return r
+
+    def deletePowerConverterSensor(self,
+                                   Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.cfgUrlBase+'PowerConverterSensor'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def deletePowerConverterSensorById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'PowerConverterSensor'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
+        return r
+
+    def getPowerConverterSensor(self,
+                                Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.cfgUrlBase + 'PowerConverterSensor'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getPowerConverterSensorById(self, objectId ):
+        reqUrl =  self.cfgUrlBase + 'PowerConverterSensor'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllPowerConverterSensors(self):
+        return self.getObjects( 'PowerConverterSensor', self.cfgUrlBase)
 
 
     """
@@ -315,7 +811,7 @@ class FlexSwitch( object):
                 'UntagIntfList' : UntagIntfList,
                 }
         reqUrl =  self.cfgUrlBase+'Vlan'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateVlan(self,
@@ -333,22 +829,22 @@ class FlexSwitch( object):
             obj['UntagIntfList'] = UntagIntfList
 
         reqUrl =  self.cfgUrlBase+'Vlan'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateVlanById(self,
                         objectId,
                         IntfList = None,
                         UntagIntfList = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if IntfList !=  None:
             obj['IntfList'] = IntfList
 
         if UntagIntfList !=  None:
             obj['UntagIntfList'] = UntagIntfList
 
-        reqUrl =  self.cfgUrlBase+'Vlan'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'Vlan'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteVlan(self,
@@ -357,12 +853,12 @@ class FlexSwitch( object):
                 'VlanId' : VlanId,
                 }
         reqUrl =  self.cfgUrlBase+'Vlan'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteVlanById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'Vlan'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getVlan(self,
@@ -371,12 +867,12 @@ class FlexSwitch( object):
                 'VlanId' : int(VlanId),
                 }
         reqUrl =  self.cfgUrlBase + 'Vlan'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getVlanById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'Vlan'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'Vlan'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllVlans(self):
@@ -393,6 +889,7 @@ class FlexSwitch( object):
         :param float64 TxPulseShapeFltrRollOff : TX pulse shape filter roll off factor TX pulse shape filter roll off factor
         :param float64 TxPower : Transmit output power for this network interface in dBm Transmit output power for this network interface in dBm
         :param bool RxPRBSInvertPattern : Check against inverted PRBS polynomial pattern Check against inverted PRBS polynomial pattern
+        :param float64 TxPowerRampdBmPerSec : Rate of change of tx power on this network interface Rate of change of tx power on this network interface
         :param bool EnableTxPRBS : Enable TX PRBS generation on this network interface Enable TX PRBS generation on this network interface
         :param bool TxPRBSInvertPattern : Generate inverted PRBS polynomial pattern Generate inverted PRBS polynomial pattern
         :param string AdminState : Administrative state of this network interface Administrative state of this network interface
@@ -414,6 +911,7 @@ class FlexSwitch( object):
                                TxPulseShapeFltrRollOff='0.301',
                                TxPower='0',
                                RxPRBSInvertPattern=True,
+                               TxPowerRampdBmPerSec='1',
                                EnableTxPRBS=False,
                                TxPRBSInvertPattern=True,
                                AdminState='UP',
@@ -433,6 +931,7 @@ class FlexSwitch( object):
                 'TxPulseShapeFltrRollOff' : TxPulseShapeFltrRollOff,
                 'TxPower' : TxPower,
                 'RxPRBSInvertPattern' : True if RxPRBSInvertPattern else False,
+                'TxPowerRampdBmPerSec' : TxPowerRampdBmPerSec,
                 'EnableTxPRBS' : True if EnableTxPRBS else False,
                 'TxPRBSInvertPattern' : True if TxPRBSInvertPattern else False,
                 'AdminState' : AdminState,
@@ -445,7 +944,7 @@ class FlexSwitch( object):
                 'DiffEncoding' : True if DiffEncoding else False,
                 }
         reqUrl =  self.cfgUrlBase+'DWDMModuleNwIntf'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateDWDMModuleNwIntf(self,
@@ -457,6 +956,7 @@ class FlexSwitch( object):
                                TxPulseShapeFltrRollOff = None,
                                TxPower = None,
                                RxPRBSInvertPattern = None,
+                               TxPowerRampdBmPerSec = None,
                                EnableTxPRBS = None,
                                TxPRBSInvertPattern = None,
                                AdminState = None,
@@ -492,6 +992,9 @@ class FlexSwitch( object):
         if RxPRBSInvertPattern != None :
             obj['RxPRBSInvertPattern'] = True if RxPRBSInvertPattern else False
 
+        if TxPowerRampdBmPerSec != None :
+            obj['TxPowerRampdBmPerSec'] = TxPowerRampdBmPerSec
+
         if EnableTxPRBS != None :
             obj['EnableTxPRBS'] = True if EnableTxPRBS else False
 
@@ -523,7 +1026,7 @@ class FlexSwitch( object):
             obj['DiffEncoding'] = True if DiffEncoding else False
 
         reqUrl =  self.cfgUrlBase+'DWDMModuleNwIntf'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateDWDMModuleNwIntfById(self,
@@ -534,6 +1037,7 @@ class FlexSwitch( object):
                                     TxPulseShapeFltrRollOff = None,
                                     TxPower = None,
                                     RxPRBSInvertPattern = None,
+                                    TxPowerRampdBmPerSec = None,
                                     EnableTxPRBS = None,
                                     TxPRBSInvertPattern = None,
                                     AdminState = None,
@@ -544,7 +1048,7 @@ class FlexSwitch( object):
                                     RxPRBSPattern = None,
                                     TxPRBSPattern = None,
                                     DiffEncoding = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if ClntIntfIdToTributary0Map !=  None:
             obj['ClntIntfIdToTributary0Map'] = ClntIntfIdToTributary0Map
 
@@ -562,6 +1066,9 @@ class FlexSwitch( object):
 
         if RxPRBSInvertPattern !=  None:
             obj['RxPRBSInvertPattern'] = RxPRBSInvertPattern
+
+        if TxPowerRampdBmPerSec !=  None:
+            obj['TxPowerRampdBmPerSec'] = TxPowerRampdBmPerSec
 
         if EnableTxPRBS !=  None:
             obj['EnableTxPRBS'] = EnableTxPRBS
@@ -593,8 +1100,8 @@ class FlexSwitch( object):
         if DiffEncoding !=  None:
             obj['DiffEncoding'] = DiffEncoding
 
-        reqUrl =  self.cfgUrlBase+'DWDMModuleNwIntf'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'DWDMModuleNwIntf'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteDWDMModuleNwIntf(self,
@@ -605,12 +1112,12 @@ class FlexSwitch( object):
                 'ModuleId' : ModuleId,
                 }
         reqUrl =  self.cfgUrlBase+'DWDMModuleNwIntf'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteDWDMModuleNwIntfById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'DWDMModuleNwIntf'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getDWDMModuleNwIntf(self,
@@ -621,12 +1128,12 @@ class FlexSwitch( object):
                 'ModuleId' : int(ModuleId),
                 }
         reqUrl =  self.cfgUrlBase + 'DWDMModuleNwIntf'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getDWDMModuleNwIntfById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'DWDMModuleNwIntf'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'DWDMModuleNwIntf'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllDWDMModuleNwIntfs(self):
@@ -647,7 +1154,7 @@ class FlexSwitch( object):
                 'Level' : Level,
                 }
         reqUrl =  self.cfgUrlBase+'ComponentLogging'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateComponentLogging(self,
@@ -661,18 +1168,18 @@ class FlexSwitch( object):
             obj['Level'] = Level
 
         reqUrl =  self.cfgUrlBase+'ComponentLogging'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateComponentLoggingById(self,
                                     objectId,
                                     Level = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if Level !=  None:
             obj['Level'] = Level
 
-        reqUrl =  self.cfgUrlBase+'ComponentLogging'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'ComponentLogging'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteComponentLogging(self,
@@ -681,12 +1188,12 @@ class FlexSwitch( object):
                 'Module' : Module,
                 }
         reqUrl =  self.cfgUrlBase+'ComponentLogging'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteComponentLoggingById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'ComponentLogging'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getComponentLogging(self,
@@ -695,12 +1202,12 @@ class FlexSwitch( object):
                 'Module' : Module,
                 }
         reqUrl =  self.cfgUrlBase + 'ComponentLogging'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getComponentLoggingById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'ComponentLogging'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'ComponentLogging'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllComponentLoggings(self):
@@ -723,7 +1230,7 @@ class FlexSwitch( object):
                 'AdminSpeed' : int(AdminSpeed),
                 }
         reqUrl =  self.cfgUrlBase+'Fan'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateFan(self,
@@ -741,22 +1248,22 @@ class FlexSwitch( object):
             obj['AdminSpeed'] = int(AdminSpeed)
 
         reqUrl =  self.cfgUrlBase+'Fan'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateFanById(self,
                        objectId,
                        AdminState = None,
                        AdminSpeed = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if AdminState !=  None:
             obj['AdminState'] = AdminState
 
         if AdminSpeed !=  None:
             obj['AdminSpeed'] = AdminSpeed
 
-        reqUrl =  self.cfgUrlBase+'Fan'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'Fan'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteFan(self,
@@ -765,12 +1272,12 @@ class FlexSwitch( object):
                 'FanId' : FanId,
                 }
         reqUrl =  self.cfgUrlBase+'Fan'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteFanById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'Fan'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getFan(self,
@@ -779,12 +1286,12 @@ class FlexSwitch( object):
                 'FanId' : int(FanId),
                 }
         reqUrl =  self.cfgUrlBase + 'Fan'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getFanById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'Fan'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'Fan'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllFans(self):
@@ -814,7 +1321,7 @@ class FlexSwitch( object):
                 'Enable' : True if Enable else False,
                 }
         reqUrl =  self.cfgUrlBase+'SubIPv6Intf'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateSubIPv6Intf(self,
@@ -840,7 +1347,7 @@ class FlexSwitch( object):
             obj['Enable'] = True if Enable else False
 
         reqUrl =  self.cfgUrlBase+'SubIPv6Intf'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateSubIPv6IntfById(self,
@@ -848,7 +1355,7 @@ class FlexSwitch( object):
                                Type = None,
                                MacAddr = None,
                                Enable = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if Type !=  None:
             obj['Type'] = Type
 
@@ -858,8 +1365,8 @@ class FlexSwitch( object):
         if Enable !=  None:
             obj['Enable'] = Enable
 
-        reqUrl =  self.cfgUrlBase+'SubIPv6Intf'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'SubIPv6Intf'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteSubIPv6Intf(self,
@@ -870,12 +1377,12 @@ class FlexSwitch( object):
                 'IpAddr' : IpAddr,
                 }
         reqUrl =  self.cfgUrlBase+'SubIPv6Intf'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteSubIPv6IntfById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'SubIPv6Intf'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getSubIPv6Intf(self,
@@ -886,12 +1393,12 @@ class FlexSwitch( object):
                 'IpAddr' : IpAddr,
                 }
         reqUrl =  self.cfgUrlBase + 'SubIPv6Intf'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getSubIPv6IntfById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'SubIPv6Intf'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'SubIPv6Intf'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllSubIPv6Intfs(self):
@@ -904,16 +1411,34 @@ class FlexSwitch( object):
                 'DestinationNw' : DestinationNw,
                 }
         reqUrl =  self.stateUrlBase + 'IPv6Route'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getIPv6RouteStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'IPv6Route'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'IPv6Route'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllIPv6RouteStates(self):
         return self.getObjects( 'IPv6Route', self.stateUrlBase)
+
+
+    def getPolicyPrefixSetState(self,
+                                Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.stateUrlBase + 'PolicyPrefixSet'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getPolicyPrefixSetStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase + 'PolicyPrefixSet'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllPolicyPrefixSetStates(self):
+        return self.getObjects( 'PolicyPrefixSet', self.stateUrlBase)
 
 
     """
@@ -929,7 +1454,7 @@ class FlexSwitch( object):
                 'AdminState' : AdminState,
                 }
         reqUrl =  self.cfgUrlBase+'Psu'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updatePsu(self,
@@ -943,18 +1468,18 @@ class FlexSwitch( object):
             obj['AdminState'] = AdminState
 
         reqUrl =  self.cfgUrlBase+'Psu'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updatePsuById(self,
                        objectId,
                        AdminState = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if AdminState !=  None:
             obj['AdminState'] = AdminState
 
-        reqUrl =  self.cfgUrlBase+'Psu'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'Psu'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deletePsu(self,
@@ -963,12 +1488,12 @@ class FlexSwitch( object):
                 'PsuId' : PsuId,
                 }
         reqUrl =  self.cfgUrlBase+'Psu'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deletePsuById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'Psu'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getPsu(self,
@@ -977,12 +1502,12 @@ class FlexSwitch( object):
                 'PsuId' : int(PsuId),
                 }
         reqUrl =  self.cfgUrlBase + 'Psu'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getPsuById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'Psu'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'Psu'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllPsus(self):
@@ -997,35 +1522,31 @@ class FlexSwitch( object):
                 'NeighborAddress' : NeighborAddress,
                 }
         reqUrl =  self.stateUrlBase + 'BGPv4Neighbor'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getBGPv4NeighborStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BGPv4Neighbor'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'BGPv4Neighbor'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllBGPv4NeighborStates(self):
         return self.getObjects( 'BGPv4Neighbor', self.stateUrlBase)
 
 
-    def getNDPEntryState(self,
-                         IpAddr):
+    """
+    .. automethod :: executeArpRefreshByIPv4Addr(self,
+        :param string IpAddr : Neighbor's IP Address for which corresponding Arp entry needed to be re-learned Neighbor's IP Address for which corresponding Arp entry needed to be re-learned
+
+	"""
+    def executeArpRefreshByIPv4Addr(self,
+                                    IpAddr):
         obj =  { 
                 'IpAddr' : IpAddr,
                 }
-        reqUrl =  self.stateUrlBase + 'NDPEntry'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.actionUrlBase+'ArpRefreshByIPv4Addr'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
-
-    def getNDPEntryStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'NDPEntry'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllNDPEntryStates(self):
-        return self.getObjects( 'NDPEntry', self.stateUrlBase)
-
 
     """
     .. automethod :: createXponderGlobal(self,
@@ -1035,7 +1556,7 @@ class FlexSwitch( object):
 
 	"""
     def createXponderGlobal(self,
-                            XponderDescription='',
+                            XponderDescription='This is a Voyager platform',
                             XponderMode='OutOfService'):
         obj =  { 
                 'XponderId' : int(0),
@@ -1043,7 +1564,7 @@ class FlexSwitch( object):
                 'XponderMode' : XponderMode,
                 }
         reqUrl =  self.cfgUrlBase+'XponderGlobal'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateXponderGlobal(self,
@@ -1061,22 +1582,22 @@ class FlexSwitch( object):
             obj['XponderMode'] = XponderMode
 
         reqUrl =  self.cfgUrlBase+'XponderGlobal'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateXponderGlobalById(self,
                                  objectId,
                                  XponderDescription = None,
                                  XponderMode = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if XponderDescription !=  None:
             obj['XponderDescription'] = XponderDescription
 
         if XponderMode !=  None:
             obj['XponderMode'] = XponderMode
 
-        reqUrl =  self.cfgUrlBase+'XponderGlobal'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'XponderGlobal'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteXponderGlobal(self,
@@ -1085,12 +1606,12 @@ class FlexSwitch( object):
                 'XponderId' : XponderId,
                 }
         reqUrl =  self.cfgUrlBase+'XponderGlobal'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteXponderGlobalById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'XponderGlobal'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getXponderGlobal(self,
@@ -1099,12 +1620,12 @@ class FlexSwitch( object):
                 'XponderId' : int(XponderId),
                 }
         reqUrl =  self.cfgUrlBase + 'XponderGlobal'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getXponderGlobalById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'XponderGlobal'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'XponderGlobal'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllXponderGlobals(self):
@@ -1137,7 +1658,7 @@ class FlexSwitch( object):
                 'StubDefaultCost' : int(StubDefaultCost),
                 }
         reqUrl =  self.cfgUrlBase+'OspfAreaEntry'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateOspfAreaEntry(self,
@@ -1167,7 +1688,7 @@ class FlexSwitch( object):
             obj['StubDefaultCost'] = int(StubDefaultCost)
 
         reqUrl =  self.cfgUrlBase+'OspfAreaEntry'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateOspfAreaEntryById(self,
@@ -1177,7 +1698,7 @@ class FlexSwitch( object):
                                  AreaSummary = None,
                                  AreaNssaTranslatorRole = None,
                                  StubDefaultCost = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if AuthType !=  None:
             obj['AuthType'] = AuthType
 
@@ -1193,8 +1714,8 @@ class FlexSwitch( object):
         if StubDefaultCost !=  None:
             obj['StubDefaultCost'] = StubDefaultCost
 
-        reqUrl =  self.cfgUrlBase+'OspfAreaEntry'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'OspfAreaEntry'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteOspfAreaEntry(self,
@@ -1203,12 +1724,12 @@ class FlexSwitch( object):
                 'AreaId' : AreaId,
                 }
         reqUrl =  self.cfgUrlBase+'OspfAreaEntry'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteOspfAreaEntryById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'OspfAreaEntry'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getOspfAreaEntry(self,
@@ -1217,12 +1738,12 @@ class FlexSwitch( object):
                 'AreaId' : AreaId,
                 }
         reqUrl =  self.cfgUrlBase + 'OspfAreaEntry'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getOspfAreaEntryById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'OspfAreaEntry'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'OspfAreaEntry'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllOspfAreaEntrys(self):
@@ -1270,7 +1791,7 @@ class FlexSwitch( object):
                 'DstUDP' : int(DstUDP),
                 }
         reqUrl =  self.cfgUrlBase+'VxlanVtepInstance'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateVxlanVtepInstance(self,
@@ -1320,7 +1841,7 @@ class FlexSwitch( object):
             obj['DstUDP'] = int(DstUDP)
 
         reqUrl =  self.cfgUrlBase+'VxlanVtepInstance'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateVxlanVtepInstanceById(self,
@@ -1335,7 +1856,7 @@ class FlexSwitch( object):
                                      TTL = None,
                                      SrcIp = None,
                                      DstUDP = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if IntfRef !=  None:
             obj['IntfRef'] = IntfRef
 
@@ -1366,8 +1887,8 @@ class FlexSwitch( object):
         if DstUDP !=  None:
             obj['DstUDP'] = DstUDP
 
-        reqUrl =  self.cfgUrlBase+'VxlanVtepInstance'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'VxlanVtepInstance'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteVxlanVtepInstance(self,
@@ -1376,12 +1897,12 @@ class FlexSwitch( object):
                 'Intf' : Intf,
                 }
         reqUrl =  self.cfgUrlBase+'VxlanVtepInstance'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteVxlanVtepInstanceById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'VxlanVtepInstance'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getVxlanVtepInstance(self,
@@ -1390,12 +1911,12 @@ class FlexSwitch( object):
                 'Intf' : Intf,
                 }
         reqUrl =  self.cfgUrlBase + 'VxlanVtepInstance'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getVxlanVtepInstanceById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'VxlanVtepInstance'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'VxlanVtepInstance'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllVxlanVtepInstances(self):
@@ -1408,12 +1929,12 @@ class FlexSwitch( object):
                 'IntfRef' : IntfRef,
                 }
         reqUrl =  self.stateUrlBase + 'LaPortChannel'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getLaPortChannelStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'LaPortChannel'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'LaPortChannel'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllLaPortChannelStates(self):
@@ -1440,7 +1961,7 @@ class FlexSwitch( object):
                 'MaxLeaseTime' : int(MaxLeaseTime),
                 }
         reqUrl =  self.cfgUrlBase+'DhcpGlobalConfig'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateDhcpGlobalConfig(self,
@@ -1462,7 +1983,7 @@ class FlexSwitch( object):
             obj['MaxLeaseTime'] = int(MaxLeaseTime)
 
         reqUrl =  self.cfgUrlBase+'DhcpGlobalConfig'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateDhcpGlobalConfigById(self,
@@ -1470,7 +1991,7 @@ class FlexSwitch( object):
                                     Enable = None,
                                     DefaultLeaseTime = None,
                                     MaxLeaseTime = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if Enable !=  None:
             obj['Enable'] = Enable
 
@@ -1480,8 +2001,8 @@ class FlexSwitch( object):
         if MaxLeaseTime !=  None:
             obj['MaxLeaseTime'] = MaxLeaseTime
 
-        reqUrl =  self.cfgUrlBase+'DhcpGlobalConfig'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'DhcpGlobalConfig'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteDhcpGlobalConfig(self,
@@ -1490,12 +2011,12 @@ class FlexSwitch( object):
                 'DhcpConfigKey' : DhcpConfigKey,
                 }
         reqUrl =  self.cfgUrlBase+'DhcpGlobalConfig'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteDhcpGlobalConfigById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'DhcpGlobalConfig'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getDhcpGlobalConfig(self,
@@ -1504,12 +2025,12 @@ class FlexSwitch( object):
                 'DhcpConfigKey' : DhcpConfigKey,
                 }
         reqUrl =  self.cfgUrlBase + 'DhcpGlobalConfig'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getDhcpGlobalConfigById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'DhcpGlobalConfig'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'DhcpGlobalConfig'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllDhcpGlobalConfigs(self):
@@ -1533,7 +2054,7 @@ class FlexSwitch( object):
                 'ServerIp' : ServerIp,
                 }
         reqUrl =  self.cfgUrlBase+'DhcpRelayIntf'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateDhcpRelayIntf(self,
@@ -1551,22 +2072,22 @@ class FlexSwitch( object):
             obj['ServerIp'] = ServerIp
 
         reqUrl =  self.cfgUrlBase+'DhcpRelayIntf'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateDhcpRelayIntfById(self,
                                  objectId,
                                  Enable = None,
                                  ServerIp = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if Enable !=  None:
             obj['Enable'] = Enable
 
         if ServerIp !=  None:
             obj['ServerIp'] = ServerIp
 
-        reqUrl =  self.cfgUrlBase+'DhcpRelayIntf'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'DhcpRelayIntf'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteDhcpRelayIntf(self,
@@ -1575,12 +2096,12 @@ class FlexSwitch( object):
                 'IfIndex' : IfIndex,
                 }
         reqUrl =  self.cfgUrlBase+'DhcpRelayIntf'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteDhcpRelayIntfById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'DhcpRelayIntf'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getDhcpRelayIntf(self,
@@ -1589,12 +2110,12 @@ class FlexSwitch( object):
                 'IfIndex' : int(IfIndex),
                 }
         reqUrl =  self.cfgUrlBase + 'DhcpRelayIntf'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getDhcpRelayIntfById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'DhcpRelayIntf'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'DhcpRelayIntf'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllDhcpRelayIntfs(self):
@@ -1607,12 +2128,12 @@ class FlexSwitch( object):
                 'DrniName' : DrniName,
                 }
         reqUrl =  self.stateUrlBase + 'DistributedRelay'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getDistributedRelayStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'DistributedRelay'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'DistributedRelay'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllDistributedRelayStates(self):
@@ -1630,8 +2151,13 @@ class FlexSwitch( object):
         :param string DestMask : Network mark for dest IP Network mark for dest IP
         :param string Proto : Protocol type Protocol type
         :param int32 SrcPort : Source Port Source Port
-        :param int32 DstPort : Dest Port Dest Port
+        :param int32 L4DstPort : TCP/UDP destionation port TCP/UDP destionation port
+        :param int32 L4MinPort : Min port when l4 port is specified as range Min port when l4 port is specified as range
+        :param int32 L4SrcPort : TCP/UDP source port TCP/UDP source port
         :param string Action : Type of action (Allow/Deny) Type of action (Allow/Deny)
+        :param int32 L4MaxPort : Max port when l4 port is specified as range Max port when l4 port is specified as range
+        :param int32 DstPort : Dest Port Dest Port
+        :param string L4PortMatch : match condition can be EQ(equal) match condition can be EQ(equal)
 
 	"""
     def createAclRule(self,
@@ -1644,8 +2170,13 @@ class FlexSwitch( object):
                       DestMask,
                       Proto,
                       SrcPort,
-                      DstPort,
-                      Action='Allow'):
+                      L4DstPort,
+                      L4MinPort=0,
+                      L4SrcPort=0,
+                      Action='Allow',
+                      L4MaxPort=0,
+                      DstPort=0,
+                      L4PortMatch='NA'):
         obj =  { 
                 'RuleName' : RuleName,
                 'SourceMac' : SourceMac,
@@ -1656,11 +2187,16 @@ class FlexSwitch( object):
                 'DestMask' : DestMask,
                 'Proto' : Proto,
                 'SrcPort' : int(SrcPort),
-                'DstPort' : int(DstPort),
+                'L4DstPort' : int(L4DstPort),
+                'L4MinPort' : int(L4MinPort),
+                'L4SrcPort' : int(L4SrcPort),
                 'Action' : Action,
+                'L4MaxPort' : int(L4MaxPort),
+                'DstPort' : int(DstPort),
+                'L4PortMatch' : L4PortMatch,
                 }
         reqUrl =  self.cfgUrlBase+'AclRule'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateAclRule(self,
@@ -1673,8 +2209,13 @@ class FlexSwitch( object):
                       DestMask = None,
                       Proto = None,
                       SrcPort = None,
+                      L4DstPort = None,
+                      L4MinPort = None,
+                      L4SrcPort = None,
+                      Action = None,
+                      L4MaxPort = None,
                       DstPort = None,
-                      Action = None):
+                      L4PortMatch = None):
         obj =  {}
         if RuleName != None :
             obj['RuleName'] = RuleName
@@ -1703,14 +2244,29 @@ class FlexSwitch( object):
         if SrcPort != None :
             obj['SrcPort'] = int(SrcPort)
 
-        if DstPort != None :
-            obj['DstPort'] = int(DstPort)
+        if L4DstPort != None :
+            obj['L4DstPort'] = int(L4DstPort)
+
+        if L4MinPort != None :
+            obj['L4MinPort'] = int(L4MinPort)
+
+        if L4SrcPort != None :
+            obj['L4SrcPort'] = int(L4SrcPort)
 
         if Action != None :
             obj['Action'] = Action
 
+        if L4MaxPort != None :
+            obj['L4MaxPort'] = int(L4MaxPort)
+
+        if DstPort != None :
+            obj['DstPort'] = int(DstPort)
+
+        if L4PortMatch != None :
+            obj['L4PortMatch'] = L4PortMatch
+
         reqUrl =  self.cfgUrlBase+'AclRule'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateAclRuleById(self,
@@ -1723,9 +2279,14 @@ class FlexSwitch( object):
                            DestMask = None,
                            Proto = None,
                            SrcPort = None,
+                           L4DstPort = None,
+                           L4MinPort = None,
+                           L4SrcPort = None,
+                           Action = None,
+                           L4MaxPort = None,
                            DstPort = None,
-                           Action = None):
-        obj =  {'objectId': objectId }
+                           L4PortMatch = None):
+        obj =  {}
         if SourceMac !=  None:
             obj['SourceMac'] = SourceMac
 
@@ -1750,14 +2311,29 @@ class FlexSwitch( object):
         if SrcPort !=  None:
             obj['SrcPort'] = SrcPort
 
-        if DstPort !=  None:
-            obj['DstPort'] = DstPort
+        if L4DstPort !=  None:
+            obj['L4DstPort'] = L4DstPort
+
+        if L4MinPort !=  None:
+            obj['L4MinPort'] = L4MinPort
+
+        if L4SrcPort !=  None:
+            obj['L4SrcPort'] = L4SrcPort
 
         if Action !=  None:
             obj['Action'] = Action
 
-        reqUrl =  self.cfgUrlBase+'AclRule'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        if L4MaxPort !=  None:
+            obj['L4MaxPort'] = L4MaxPort
+
+        if DstPort !=  None:
+            obj['DstPort'] = DstPort
+
+        if L4PortMatch !=  None:
+            obj['L4PortMatch'] = L4PortMatch
+
+        reqUrl =  self.cfgUrlBase+'AclRule'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteAclRule(self,
@@ -1766,12 +2342,12 @@ class FlexSwitch( object):
                 'RuleName' : RuleName,
                 }
         reqUrl =  self.cfgUrlBase+'AclRule'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteAclRuleById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'AclRule'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getAclRule(self,
@@ -1780,12 +2356,12 @@ class FlexSwitch( object):
                 'RuleName' : RuleName,
                 }
         reqUrl =  self.cfgUrlBase + 'AclRule'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getAclRuleById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'AclRule'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'AclRule'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllAclRules(self):
@@ -1798,13 +2374,14 @@ class FlexSwitch( object):
         :param string NeighborAddress : Address of the BGP neighbor Address of the BGP neighbor
         :param string Description : Description of the BGP neighbor Description of the BGP neighbor
         :param string PeerGroup : Peer group of the BGP neighbor Peer group of the BGP neighbor
+        :param string PeerAS : Peer AS of the BGP neighbor Peer AS of the BGP neighbor
+        :param string LocalAS : Local AS of the BGP neighbor Local AS of the BGP neighbor
         :param string UpdateSource : Source IP to connect to the BGP neighbor Source IP to connect to the BGP neighbor
         :param string AuthPassword : Password to connect to the BGP neighbor Password to connect to the BGP neighbor
         :param string AdjRIBInFilter : Policy that is applied for Adj-RIB-In prefix filtering Policy that is applied for Adj-RIB-In prefix filtering
         :param string AdjRIBOutFilter : Policy that is applied for Adj-RIB-Out prefix filtering Policy that is applied for Adj-RIB-Out prefix filtering
         :param bool BfdEnable : Enable/Disable BFD for the BGP neighbor Enable/Disable BFD for the BGP neighbor
         :param uint8 MultiHopTTL : TTL for multi hop BGP neighbor TTL for multi hop BGP neighbor
-        :param uint32 LocalAS : Local AS of the BGP neighbor Local AS of the BGP neighbor
         :param uint32 KeepaliveTime : Keep alive time for the BGP neighbor Keep alive time for the BGP neighbor
         :param bool AddPathsRx : Receive additional paths from BGP neighbor Receive additional paths from BGP neighbor
         :param bool RouteReflectorClient : Set/Clear BGP neighbor as a route reflector client Set/Clear BGP neighbor as a route reflector client
@@ -1812,11 +2389,11 @@ class FlexSwitch( object):
         :param bool MultiHopEnable : Enable/Disable multi hop for BGP neighbor Enable/Disable multi hop for BGP neighbor
         :param uint32 RouteReflectorClusterId : Cluster Id of the internal BGP neighbor route reflector client Cluster Id of the internal BGP neighbor route reflector client
         :param bool MaxPrefixesDisconnect : Disconnect the BGP peer session when we receive the max prefixes from the neighbor Disconnect the BGP peer session when we receive the max prefixes from the neighbor
-        :param uint32 PeerAS : Peer AS of the BGP neighbor Peer AS of the BGP neighbor
         :param uint8 AddPathsMaxTx : Max number of additional paths that can be transmitted to BGP neighbor Max number of additional paths that can be transmitted to BGP neighbor
         :param uint32 MaxPrefixes : Maximum number of prefixes that can be received from the BGP neighbor Maximum number of prefixes that can be received from the BGP neighbor
         :param uint8 MaxPrefixesThresholdPct : The percentage of maximum prefixes before we start logging The percentage of maximum prefixes before we start logging
         :param string BfdSessionParam : Bfd session param name to be applied Bfd session param name to be applied
+        :param bool Disabled : Enable/Disable the BGP neighbor Enable/Disable the BGP neighbor
         :param uint32 HoldTime : Hold time for the BGP neighbor Hold time for the BGP neighbor
         :param uint32 ConnectRetryTime : Connect retry time to connect to BGP neighbor after disconnect Connect retry time to connect to BGP neighbor after disconnect
 
@@ -1826,39 +2403,41 @@ class FlexSwitch( object):
                             NeighborAddress,
                             Description='',
                             PeerGroup='',
+                            PeerAS='',
+                            LocalAS='',
                             UpdateSource='',
                             AuthPassword='',
                             AdjRIBInFilter='',
                             AdjRIBOutFilter='',
                             BfdEnable=False,
                             MultiHopTTL=0,
-                            LocalAS=0,
-                            KeepaliveTime=60,
+                            KeepaliveTime=0,
                             AddPathsRx=False,
                             RouteReflectorClient=False,
                             MaxPrefixesRestartTimer=0,
                             MultiHopEnable=False,
                             RouteReflectorClusterId=0,
                             MaxPrefixesDisconnect=False,
-                            PeerAS=0,
                             AddPathsMaxTx=0,
                             MaxPrefixes=0,
                             MaxPrefixesThresholdPct=80,
                             BfdSessionParam='default',
-                            HoldTime=180,
-                            ConnectRetryTime=60):
+                            Disabled=False,
+                            HoldTime=0,
+                            ConnectRetryTime=0):
         obj =  { 
                 'IntfRef' : IntfRef,
                 'NeighborAddress' : NeighborAddress,
                 'Description' : Description,
                 'PeerGroup' : PeerGroup,
+                'PeerAS' : PeerAS,
+                'LocalAS' : LocalAS,
                 'UpdateSource' : UpdateSource,
                 'AuthPassword' : AuthPassword,
                 'AdjRIBInFilter' : AdjRIBInFilter,
                 'AdjRIBOutFilter' : AdjRIBOutFilter,
                 'BfdEnable' : True if BfdEnable else False,
                 'MultiHopTTL' : int(MultiHopTTL),
-                'LocalAS' : int(LocalAS),
                 'KeepaliveTime' : int(KeepaliveTime),
                 'AddPathsRx' : True if AddPathsRx else False,
                 'RouteReflectorClient' : True if RouteReflectorClient else False,
@@ -1866,16 +2445,16 @@ class FlexSwitch( object):
                 'MultiHopEnable' : True if MultiHopEnable else False,
                 'RouteReflectorClusterId' : int(RouteReflectorClusterId),
                 'MaxPrefixesDisconnect' : True if MaxPrefixesDisconnect else False,
-                'PeerAS' : int(PeerAS),
                 'AddPathsMaxTx' : int(AddPathsMaxTx),
                 'MaxPrefixes' : int(MaxPrefixes),
                 'MaxPrefixesThresholdPct' : int(MaxPrefixesThresholdPct),
                 'BfdSessionParam' : BfdSessionParam,
+                'Disabled' : True if Disabled else False,
                 'HoldTime' : int(HoldTime),
                 'ConnectRetryTime' : int(ConnectRetryTime),
                 }
         reqUrl =  self.cfgUrlBase+'BGPv4Neighbor'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateBGPv4Neighbor(self,
@@ -1883,13 +2462,14 @@ class FlexSwitch( object):
                             NeighborAddress,
                             Description = None,
                             PeerGroup = None,
+                            PeerAS = None,
+                            LocalAS = None,
                             UpdateSource = None,
                             AuthPassword = None,
                             AdjRIBInFilter = None,
                             AdjRIBOutFilter = None,
                             BfdEnable = None,
                             MultiHopTTL = None,
-                            LocalAS = None,
                             KeepaliveTime = None,
                             AddPathsRx = None,
                             RouteReflectorClient = None,
@@ -1897,11 +2477,11 @@ class FlexSwitch( object):
                             MultiHopEnable = None,
                             RouteReflectorClusterId = None,
                             MaxPrefixesDisconnect = None,
-                            PeerAS = None,
                             AddPathsMaxTx = None,
                             MaxPrefixes = None,
                             MaxPrefixesThresholdPct = None,
                             BfdSessionParam = None,
+                            Disabled = None,
                             HoldTime = None,
                             ConnectRetryTime = None):
         obj =  {}
@@ -1916,6 +2496,12 @@ class FlexSwitch( object):
 
         if PeerGroup != None :
             obj['PeerGroup'] = PeerGroup
+
+        if PeerAS != None :
+            obj['PeerAS'] = PeerAS
+
+        if LocalAS != None :
+            obj['LocalAS'] = LocalAS
 
         if UpdateSource != None :
             obj['UpdateSource'] = UpdateSource
@@ -1934,9 +2520,6 @@ class FlexSwitch( object):
 
         if MultiHopTTL != None :
             obj['MultiHopTTL'] = int(MultiHopTTL)
-
-        if LocalAS != None :
-            obj['LocalAS'] = int(LocalAS)
 
         if KeepaliveTime != None :
             obj['KeepaliveTime'] = int(KeepaliveTime)
@@ -1959,9 +2542,6 @@ class FlexSwitch( object):
         if MaxPrefixesDisconnect != None :
             obj['MaxPrefixesDisconnect'] = True if MaxPrefixesDisconnect else False
 
-        if PeerAS != None :
-            obj['PeerAS'] = int(PeerAS)
-
         if AddPathsMaxTx != None :
             obj['AddPathsMaxTx'] = int(AddPathsMaxTx)
 
@@ -1974,6 +2554,9 @@ class FlexSwitch( object):
         if BfdSessionParam != None :
             obj['BfdSessionParam'] = BfdSessionParam
 
+        if Disabled != None :
+            obj['Disabled'] = True if Disabled else False
+
         if HoldTime != None :
             obj['HoldTime'] = int(HoldTime)
 
@@ -1981,20 +2564,21 @@ class FlexSwitch( object):
             obj['ConnectRetryTime'] = int(ConnectRetryTime)
 
         reqUrl =  self.cfgUrlBase+'BGPv4Neighbor'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateBGPv4NeighborById(self,
                                  objectId,
                                  Description = None,
                                  PeerGroup = None,
+                                 PeerAS = None,
+                                 LocalAS = None,
                                  UpdateSource = None,
                                  AuthPassword = None,
                                  AdjRIBInFilter = None,
                                  AdjRIBOutFilter = None,
                                  BfdEnable = None,
                                  MultiHopTTL = None,
-                                 LocalAS = None,
                                  KeepaliveTime = None,
                                  AddPathsRx = None,
                                  RouteReflectorClient = None,
@@ -2002,19 +2586,25 @@ class FlexSwitch( object):
                                  MultiHopEnable = None,
                                  RouteReflectorClusterId = None,
                                  MaxPrefixesDisconnect = None,
-                                 PeerAS = None,
                                  AddPathsMaxTx = None,
                                  MaxPrefixes = None,
                                  MaxPrefixesThresholdPct = None,
                                  BfdSessionParam = None,
+                                 Disabled = None,
                                  HoldTime = None,
                                  ConnectRetryTime = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if Description !=  None:
             obj['Description'] = Description
 
         if PeerGroup !=  None:
             obj['PeerGroup'] = PeerGroup
+
+        if PeerAS !=  None:
+            obj['PeerAS'] = PeerAS
+
+        if LocalAS !=  None:
+            obj['LocalAS'] = LocalAS
 
         if UpdateSource !=  None:
             obj['UpdateSource'] = UpdateSource
@@ -2033,9 +2623,6 @@ class FlexSwitch( object):
 
         if MultiHopTTL !=  None:
             obj['MultiHopTTL'] = MultiHopTTL
-
-        if LocalAS !=  None:
-            obj['LocalAS'] = LocalAS
 
         if KeepaliveTime !=  None:
             obj['KeepaliveTime'] = KeepaliveTime
@@ -2058,9 +2645,6 @@ class FlexSwitch( object):
         if MaxPrefixesDisconnect !=  None:
             obj['MaxPrefixesDisconnect'] = MaxPrefixesDisconnect
 
-        if PeerAS !=  None:
-            obj['PeerAS'] = PeerAS
-
         if AddPathsMaxTx !=  None:
             obj['AddPathsMaxTx'] = AddPathsMaxTx
 
@@ -2073,14 +2657,17 @@ class FlexSwitch( object):
         if BfdSessionParam !=  None:
             obj['BfdSessionParam'] = BfdSessionParam
 
+        if Disabled !=  None:
+            obj['Disabled'] = Disabled
+
         if HoldTime !=  None:
             obj['HoldTime'] = HoldTime
 
         if ConnectRetryTime !=  None:
             obj['ConnectRetryTime'] = ConnectRetryTime
 
-        reqUrl =  self.cfgUrlBase+'BGPv4Neighbor'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'BGPv4Neighbor'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteBGPv4Neighbor(self,
@@ -2091,12 +2678,12 @@ class FlexSwitch( object):
                 'NeighborAddress' : NeighborAddress,
                 }
         reqUrl =  self.cfgUrlBase+'BGPv4Neighbor'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteBGPv4NeighborById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'BGPv4Neighbor'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getBGPv4Neighbor(self,
@@ -2107,36 +2694,164 @@ class FlexSwitch( object):
                 'NeighborAddress' : NeighborAddress,
                 }
         reqUrl =  self.cfgUrlBase + 'BGPv4Neighbor'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getBGPv4NeighborById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BGPv4Neighbor'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'BGPv4Neighbor'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllBGPv4Neighbors(self):
         return self.getObjects( 'BGPv4Neighbor', self.cfgUrlBase)
 
 
-    def getStpPortState(self,
-                        BrgIfIndex,
-                        IfIndex):
+    """
+    .. automethod :: executeSaveConfig(self,
+        :param string FileName : FileName for the saved config FileName for the saved config
+
+	"""
+    def executeSaveConfig(self,
+                          FileName='startup-config'):
         obj =  { 
-                'BrgIfIndex' : int(BrgIfIndex),
-                'IfIndex' : int(IfIndex),
+                'FileName' : FileName,
+                }
+        reqUrl =  self.actionUrlBase+'SaveConfig'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    """
+    .. automethod :: createOspfIfMetricEntry(self,
+        :param int32 IfMetricAddressLessIf : For the purpose of easing the instancing of addressed and addressless interfaces; this variable takes the value 0 on interfaces with IP addresses and the value of ifIndex for interfaces having no IP address.  On row creation For the purpose of easing the instancing of addressed and addressless interfaces; this variable takes the value 0 on interfaces with IP addresses and the value of ifIndex for interfaces having no IP address.  On row creation
+        :param int32 IfMetricTOS : The Type of Service metric being referenced. On row creation The Type of Service metric being referenced. On row creation
+        :param string IfMetricIpAddress : The IP address of this OSPF interface.  On row creation The IP address of this OSPF interface.  On row creation
+        :param int32 IfMetricValue : The metric of using this Type of Service on this interface.  The default value of the TOS 0 metric is 10^8 / ifSpeed. The metric of using this Type of Service on this interface.  The default value of the TOS 0 metric is 10^8 / ifSpeed.
+
+	"""
+    def createOspfIfMetricEntry(self,
+                                IfMetricAddressLessIf,
+                                IfMetricTOS,
+                                IfMetricIpAddress,
+                                IfMetricValue):
+        obj =  { 
+                'IfMetricAddressLessIf' : int(IfMetricAddressLessIf),
+                'IfMetricTOS' : int(IfMetricTOS),
+                'IfMetricIpAddress' : IfMetricIpAddress,
+                'IfMetricValue' : int(IfMetricValue),
+                }
+        reqUrl =  self.cfgUrlBase+'OspfIfMetricEntry'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def updateOspfIfMetricEntry(self,
+                                IfMetricAddressLessIf,
+                                IfMetricTOS,
+                                IfMetricIpAddress,
+                                IfMetricValue = None):
+        obj =  {}
+        if IfMetricAddressLessIf != None :
+            obj['IfMetricAddressLessIf'] = int(IfMetricAddressLessIf)
+
+        if IfMetricTOS != None :
+            obj['IfMetricTOS'] = int(IfMetricTOS)
+
+        if IfMetricIpAddress != None :
+            obj['IfMetricIpAddress'] = IfMetricIpAddress
+
+        if IfMetricValue != None :
+            obj['IfMetricValue'] = int(IfMetricValue)
+
+        reqUrl =  self.cfgUrlBase+'OspfIfMetricEntry'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def updateOspfIfMetricEntryById(self,
+                                     objectId,
+                                     IfMetricValue = None):
+        obj =  {}
+        if IfMetricValue !=  None:
+            obj['IfMetricValue'] = IfMetricValue
+
+        reqUrl =  self.cfgUrlBase+'OspfIfMetricEntry'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
+        return r
+
+    def deleteOspfIfMetricEntry(self,
+                                IfMetricAddressLessIf,
+                                IfMetricTOS,
+                                IfMetricIpAddress):
+        obj =  { 
+                'IfMetricAddressLessIf' : IfMetricAddressLessIf,
+                'IfMetricTOS' : IfMetricTOS,
+                'IfMetricIpAddress' : IfMetricIpAddress,
+                }
+        reqUrl =  self.cfgUrlBase+'OspfIfMetricEntry'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def deleteOspfIfMetricEntryById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'OspfIfMetricEntry'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
+        return r
+
+    def getOspfIfMetricEntry(self,
+                             IfMetricAddressLessIf,
+                             IfMetricTOS,
+                             IfMetricIpAddress):
+        obj =  { 
+                'IfMetricAddressLessIf' : int(IfMetricAddressLessIf),
+                'IfMetricTOS' : int(IfMetricTOS),
+                'IfMetricIpAddress' : IfMetricIpAddress,
+                }
+        reqUrl =  self.cfgUrlBase + 'OspfIfMetricEntry'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getOspfIfMetricEntryById(self, objectId ):
+        reqUrl =  self.cfgUrlBase + 'OspfIfMetricEntry'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllOspfIfMetricEntrys(self):
+        return self.getObjects( 'OspfIfMetricEntry', self.cfgUrlBase)
+
+
+    def getStpPortState(self,
+                        IntfRef,
+                        Vlan):
+        obj =  { 
+                'IntfRef' : IntfRef,
+                'Vlan' : int(Vlan),
                 }
         reqUrl =  self.stateUrlBase + 'StpPort'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getStpPortStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'StpPort'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'StpPort'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllStpPortStates(self):
         return self.getObjects( 'StpPort', self.stateUrlBase)
+
+
+    def getCoppStatState(self,
+                         Protocol):
+        obj =  { 
+                'Protocol' : Protocol,
+                }
+        reqUrl =  self.stateUrlBase + 'CoppStat'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getCoppStatStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase + 'CoppStat'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllCoppStatStates(self):
+        return self.getObjects( 'CoppStat', self.stateUrlBase)
 
 
     """
@@ -2152,7 +2867,7 @@ class FlexSwitch( object):
                 'Enable' : True if Enable else False,
                 }
         reqUrl =  self.cfgUrlBase+'FMgrGlobal'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateFMgrGlobal(self,
@@ -2166,18 +2881,18 @@ class FlexSwitch( object):
             obj['Enable'] = True if Enable else False
 
         reqUrl =  self.cfgUrlBase+'FMgrGlobal'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateFMgrGlobalById(self,
                               objectId,
                               Enable = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if Enable !=  None:
             obj['Enable'] = Enable
 
-        reqUrl =  self.cfgUrlBase+'FMgrGlobal'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'FMgrGlobal'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteFMgrGlobal(self,
@@ -2186,12 +2901,12 @@ class FlexSwitch( object):
                 'Vrf' : Vrf,
                 }
         reqUrl =  self.cfgUrlBase+'FMgrGlobal'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteFMgrGlobalById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'FMgrGlobal'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getFMgrGlobal(self,
@@ -2200,12 +2915,12 @@ class FlexSwitch( object):
                 'Vrf' : Vrf,
                 }
         reqUrl =  self.cfgUrlBase + 'FMgrGlobal'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getFMgrGlobalById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'FMgrGlobal'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'FMgrGlobal'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllFMgrGlobals(self):
@@ -2231,7 +2946,7 @@ class FlexSwitch( object):
                 'EventEnable' : True if EventEnable else False,
                 }
         reqUrl =  self.cfgUrlBase+'NotifierEnable'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateNotifierEnable(self,
@@ -2253,7 +2968,7 @@ class FlexSwitch( object):
             obj['EventEnable'] = True if EventEnable else False
 
         reqUrl =  self.cfgUrlBase+'NotifierEnable'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateNotifierEnableById(self,
@@ -2261,7 +2976,7 @@ class FlexSwitch( object):
                                   AlarmEnable = None,
                                   FaultEnable = None,
                                   EventEnable = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if AlarmEnable !=  None:
             obj['AlarmEnable'] = AlarmEnable
 
@@ -2271,8 +2986,8 @@ class FlexSwitch( object):
         if EventEnable !=  None:
             obj['EventEnable'] = EventEnable
 
-        reqUrl =  self.cfgUrlBase+'NotifierEnable'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'NotifierEnable'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteNotifierEnable(self,
@@ -2281,12 +2996,12 @@ class FlexSwitch( object):
                 'Vrf' : Vrf,
                 }
         reqUrl =  self.cfgUrlBase+'NotifierEnable'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteNotifierEnableById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'NotifierEnable'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getNotifierEnable(self,
@@ -2295,17 +3010,31 @@ class FlexSwitch( object):
                 'Vrf' : Vrf,
                 }
         reqUrl =  self.cfgUrlBase + 'NotifierEnable'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getNotifierEnableById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'NotifierEnable'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'NotifierEnable'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllNotifierEnables(self):
         return self.getObjects( 'NotifierEnable', self.cfgUrlBase)
 
+
+    """
+    .. automethod :: executeArpRefreshByIfName(self,
+        :param string IfName : All the Arp learned on given L3 interface will be re-learned All the Arp learned on given L3 interface will be re-learned
+
+	"""
+    def executeArpRefreshByIfName(self,
+                                  IfName):
+        obj =  { 
+                'IfName' : IfName,
+                }
+        reqUrl =  self.actionUrlBase+'ArpRefreshByIfName'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
 
     """
     .. automethod :: createLaPortChannel(self,
@@ -2328,8 +3057,8 @@ class FlexSwitch( object):
                             SystemPriority=32768,
                             Interval=1,
                             LagHash=0,
-                            AdminState='enable',
-                            SystemIdMac='00',
+                            AdminState='UP',
+                            SystemIdMac='00-00-00-00-00-00',
                             LagType=0,
                             LacpMode=0):
         obj =  { 
@@ -2345,7 +3074,7 @@ class FlexSwitch( object):
                 'LacpMode' : int(LacpMode),
                 }
         reqUrl =  self.cfgUrlBase+'LaPortChannel'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateLaPortChannel(self,
@@ -2391,7 +3120,7 @@ class FlexSwitch( object):
             obj['LacpMode'] = int(LacpMode)
 
         reqUrl =  self.cfgUrlBase+'LaPortChannel'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateLaPortChannelById(self,
@@ -2405,7 +3134,7 @@ class FlexSwitch( object):
                                  SystemIdMac = None,
                                  LagType = None,
                                  LacpMode = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if IntfRefList !=  None:
             obj['IntfRefList'] = IntfRefList
 
@@ -2433,8 +3162,8 @@ class FlexSwitch( object):
         if LacpMode !=  None:
             obj['LacpMode'] = LacpMode
 
-        reqUrl =  self.cfgUrlBase+'LaPortChannel'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'LaPortChannel'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteLaPortChannel(self,
@@ -2443,12 +3172,12 @@ class FlexSwitch( object):
                 'IntfRef' : IntfRef,
                 }
         reqUrl =  self.cfgUrlBase+'LaPortChannel'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteLaPortChannelById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'LaPortChannel'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getLaPortChannel(self,
@@ -2457,12 +3186,12 @@ class FlexSwitch( object):
                 'IntfRef' : IntfRef,
                 }
         reqUrl =  self.cfgUrlBase + 'LaPortChannel'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getLaPortChannelById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'LaPortChannel'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'LaPortChannel'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllLaPortChannels(self):
@@ -2475,34 +3204,52 @@ class FlexSwitch( object):
                 'Name' : Name,
                 }
         reqUrl =  self.stateUrlBase + 'BGPPolicyCondition'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getBGPPolicyConditionStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BGPPolicyCondition'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'BGPPolicyCondition'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllBGPPolicyConditionStates(self):
         return self.getObjects( 'BGPPolicyCondition', self.stateUrlBase)
 
 
-    def getIPv4RouteHwState(self,
-                            DestinationNw):
+    def getApiInfoState(self,
+                        Url):
         obj =  { 
-                'DestinationNw' : DestinationNw,
+                'Url' : Url,
                 }
-        reqUrl =  self.stateUrlBase + 'IPv4RouteHw'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.stateUrlBase + 'ApiInfo'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
-    def getIPv4RouteHwStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'IPv4RouteHw'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+    def getApiInfoStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase + 'ApiInfo'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
-    def getAllIPv4RouteHwStates(self):
-        return self.getObjects( 'IPv4RouteHw', self.stateUrlBase)
+    def getAllApiInfoStates(self):
+        return self.getObjects( 'ApiInfo', self.stateUrlBase)
+
+
+    def getFanSensorState(self,
+                          Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.stateUrlBase + 'FanSensor'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getFanSensorStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase + 'FanSensor'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllFanSensorStates(self):
+        return self.getObjects( 'FanSensor', self.stateUrlBase)
 
 
     """
@@ -2543,7 +3290,7 @@ class FlexSwitch( object):
                 'LocalMultiplier' : int(LocalMultiplier),
                 }
         reqUrl =  self.cfgUrlBase+'BfdSessionParam'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateBfdSessionParam(self,
@@ -2589,7 +3336,7 @@ class FlexSwitch( object):
             obj['LocalMultiplier'] = int(LocalMultiplier)
 
         reqUrl =  self.cfgUrlBase+'BfdSessionParam'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateBfdSessionParamById(self,
@@ -2603,7 +3350,7 @@ class FlexSwitch( object):
                                    AuthenticationEnabled = None,
                                    RequiredMinEchoRxInterval = None,
                                    LocalMultiplier = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if RequiredMinRxInterval !=  None:
             obj['RequiredMinRxInterval'] = RequiredMinRxInterval
 
@@ -2631,8 +3378,8 @@ class FlexSwitch( object):
         if LocalMultiplier !=  None:
             obj['LocalMultiplier'] = LocalMultiplier
 
-        reqUrl =  self.cfgUrlBase+'BfdSessionParam'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'BfdSessionParam'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteBfdSessionParam(self,
@@ -2641,12 +3388,12 @@ class FlexSwitch( object):
                 'Name' : Name,
                 }
         reqUrl =  self.cfgUrlBase+'BfdSessionParam'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteBfdSessionParamById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'BfdSessionParam'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getBfdSessionParam(self,
@@ -2655,16 +3402,38 @@ class FlexSwitch( object):
                 'Name' : Name,
                 }
         reqUrl =  self.cfgUrlBase + 'BfdSessionParam'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getBfdSessionParamById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BfdSessionParam'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'BfdSessionParam'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllBfdSessionParams(self):
         return self.getObjects( 'BfdSessionParam', self.cfgUrlBase)
+
+
+    def getConfigLogState(self,
+                          SeqNum,
+                          API,
+                          Time):
+        obj =  { 
+                'SeqNum' : int(SeqNum),
+                'API' : API,
+                'Time' : Time,
+                }
+        reqUrl =  self.stateUrlBase + 'ConfigLog'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getConfigLogStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase + 'ConfigLog'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllConfigLogStates(self):
+        return self.getObjects( 'ConfigLog', self.stateUrlBase)
 
 
     def getBGPPolicyStmtState(self,
@@ -2673,12 +3442,12 @@ class FlexSwitch( object):
                 'Name' : Name,
                 }
         reqUrl =  self.stateUrlBase + 'BGPPolicyStmt'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getBGPPolicyStmtStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BGPPolicyStmt'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'BGPPolicyStmt'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllBGPPolicyStmtStates(self):
@@ -2691,12 +3460,12 @@ class FlexSwitch( object):
                 'ModuleId' : int(ModuleId),
                 }
         reqUrl =  self.stateUrlBase + 'DWDMModule'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getDWDMModuleStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'DWDMModule'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'DWDMModule'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllDWDMModuleStates(self):
@@ -2704,17 +3473,17 @@ class FlexSwitch( object):
 
 
     def getDhcpRelayIntfState(self,
-                              IntfId):
+                              IfIndex):
         obj =  { 
-                'IntfId' : int(IntfId),
+                'IfIndex' : int(IfIndex),
                 }
         reqUrl =  self.stateUrlBase + 'DhcpRelayIntf'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getDhcpRelayIntfStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'DhcpRelayIntf'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'DhcpRelayIntf'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllDhcpRelayIntfStates(self):
@@ -2727,12 +3496,12 @@ class FlexSwitch( object):
                 'IntfRef' : IntfRef,
                 }
         reqUrl =  self.stateUrlBase + 'LaPortChannelIntfRefList'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getLaPortChannelIntfRefListStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'LaPortChannelIntfRefList'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'LaPortChannelIntfRefList'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllLaPortChannelIntfRefListStates(self):
@@ -2741,72 +3510,71 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createDhcpRelayGlobal(self,
-        :param string DhcpRelay : Global Dhcp Relay Agent Information Global Dhcp Relay Agent Information
+        :param string Vrf : Global Dhcp Relay Agent Information Global Dhcp Relay Agent Information
         :param bool Enable : Global Config stating whether DHCP Relay Agent is enabled on the box or not Global Config stating whether DHCP Relay Agent is enabled on the box or not
 
 	"""
     def createDhcpRelayGlobal(self,
-                              DhcpRelay,
                               Enable=False):
         obj =  { 
-                'DhcpRelay' : DhcpRelay,
+                'Vrf' : 'default',
                 'Enable' : True if Enable else False,
                 }
         reqUrl =  self.cfgUrlBase+'DhcpRelayGlobal'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateDhcpRelayGlobal(self,
-                              DhcpRelay,
+                              Vrf,
                               Enable = None):
         obj =  {}
-        if DhcpRelay != None :
-            obj['DhcpRelay'] = DhcpRelay
+        if Vrf != None :
+            obj['Vrf'] = Vrf
 
         if Enable != None :
             obj['Enable'] = True if Enable else False
 
         reqUrl =  self.cfgUrlBase+'DhcpRelayGlobal'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateDhcpRelayGlobalById(self,
                                    objectId,
                                    Enable = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if Enable !=  None:
             obj['Enable'] = Enable
 
-        reqUrl =  self.cfgUrlBase+'DhcpRelayGlobal'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'DhcpRelayGlobal'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteDhcpRelayGlobal(self,
-                              DhcpRelay):
+                              Vrf):
         obj =  { 
-                'DhcpRelay' : DhcpRelay,
+                'Vrf' : Vrf,
                 }
         reqUrl =  self.cfgUrlBase+'DhcpRelayGlobal'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteDhcpRelayGlobalById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'DhcpRelayGlobal'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getDhcpRelayGlobal(self,
-                           DhcpRelay):
+                           Vrf):
         obj =  { 
-                'DhcpRelay' : DhcpRelay,
+                'Vrf' : Vrf,
                 }
         reqUrl =  self.cfgUrlBase + 'DhcpRelayGlobal'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getDhcpRelayGlobalById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'DhcpRelayGlobal'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'DhcpRelayGlobal'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllDhcpRelayGlobals(self):
@@ -2819,12 +3587,12 @@ class FlexSwitch( object):
                 'ObjName' : ObjName,
                 }
         reqUrl =  self.stateUrlBase + 'Platform'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getPlatformStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'Platform'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'Platform'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllPlatformStates(self):
@@ -2837,16 +3605,48 @@ class FlexSwitch( object):
                 'Name' : Name,
                 }
         reqUrl =  self.stateUrlBase + 'BfdSessionParam'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getBfdSessionParamStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BfdSessionParam'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'BfdSessionParam'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllBfdSessionParamStates(self):
         return self.getObjects( 'BfdSessionParam', self.stateUrlBase)
+
+
+    """
+    .. automethod :: executeResetBfdSession(self,
+        :param string IpAddr : Reset BFD session to this address Reset BFD session to this address
+
+	"""
+    def executeResetBfdSession(self,
+                               IpAddr):
+        obj =  { 
+                'IpAddr' : IpAddr,
+                }
+        reqUrl =  self.actionUrlBase+'ResetBfdSession'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getAsicGlobalState(self,
+                           ModuleId):
+        obj =  { 
+                'ModuleId' : int(ModuleId),
+                }
+        reqUrl =  self.stateUrlBase + 'AsicGlobal'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAsicGlobalStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase + 'AsicGlobal'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllAsicGlobalStates(self):
+        return self.getObjects( 'AsicGlobal', self.stateUrlBase)
 
 
     def getOspfLsdbEntryState(self,
@@ -2861,12 +3661,12 @@ class FlexSwitch( object):
                 'LsdbRouterId' : LsdbRouterId,
                 }
         reqUrl =  self.stateUrlBase + 'OspfLsdbEntry'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getOspfLsdbEntryStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'OspfLsdbEntry'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'OspfLsdbEntry'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllOspfLsdbEntryStates(self):
@@ -2879,16 +3679,89 @@ class FlexSwitch( object):
                 'IpAddr' : IpAddr,
                 }
         reqUrl =  self.stateUrlBase + 'ArpLinuxEntry'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getArpLinuxEntryStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'ArpLinuxEntry'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'ArpLinuxEntry'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllArpLinuxEntryStates(self):
         return self.getObjects( 'ArpLinuxEntry', self.stateUrlBase)
+
+
+    """
+    .. automethod :: createStpGlobal(self,
+        :param string Vrf : global system object defining the global state of STPD. global system object defining the global state of STPD.
+        :param string AdminState : Administrative state of STPD Administrative state of STPD
+
+	"""
+    def createStpGlobal(self,
+                        AdminState='UP'):
+        obj =  { 
+                'Vrf' : 'default',
+                'AdminState' : AdminState,
+                }
+        reqUrl =  self.cfgUrlBase+'StpGlobal'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def updateStpGlobal(self,
+                        Vrf,
+                        AdminState = None):
+        obj =  {}
+        if Vrf != None :
+            obj['Vrf'] = Vrf
+
+        if AdminState != None :
+            obj['AdminState'] = AdminState
+
+        reqUrl =  self.cfgUrlBase+'StpGlobal'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def updateStpGlobalById(self,
+                             objectId,
+                             AdminState = None):
+        obj =  {}
+        if AdminState !=  None:
+            obj['AdminState'] = AdminState
+
+        reqUrl =  self.cfgUrlBase+'StpGlobal'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
+        return r
+
+    def deleteStpGlobal(self,
+                        Vrf):
+        obj =  { 
+                'Vrf' : Vrf,
+                }
+        reqUrl =  self.cfgUrlBase+'StpGlobal'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def deleteStpGlobalById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'StpGlobal'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
+        return r
+
+    def getStpGlobal(self,
+                     Vrf):
+        obj =  { 
+                'Vrf' : Vrf,
+                }
+        reqUrl =  self.cfgUrlBase + 'StpGlobal'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getStpGlobalById(self, objectId ):
+        reqUrl =  self.cfgUrlBase + 'StpGlobal'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllStpGlobals(self):
+        return self.getObjects( 'StpGlobal', self.cfgUrlBase)
 
 
     """
@@ -2938,7 +3811,7 @@ class FlexSwitch( object):
                 'EncapMethod' : EncapMethod,
                 }
         reqUrl =  self.cfgUrlBase+'DistributedRelay'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateDistributedRelay(self,
@@ -2996,7 +3869,7 @@ class FlexSwitch( object):
             obj['EncapMethod'] = EncapMethod
 
         reqUrl =  self.cfgUrlBase+'DistributedRelay'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateDistributedRelayById(self,
@@ -3013,7 +3886,7 @@ class FlexSwitch( object):
                                     IntraPortalPortProtocolDA = None,
                                     NeighborPortAlgorithm = None,
                                     EncapMethod = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if PortalAddress !=  None:
             obj['PortalAddress'] = PortalAddress
 
@@ -3050,8 +3923,8 @@ class FlexSwitch( object):
         if EncapMethod !=  None:
             obj['EncapMethod'] = EncapMethod
 
-        reqUrl =  self.cfgUrlBase+'DistributedRelay'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'DistributedRelay'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteDistributedRelay(self,
@@ -3060,12 +3933,12 @@ class FlexSwitch( object):
                 'DrniName' : DrniName,
                 }
         reqUrl =  self.cfgUrlBase+'DistributedRelay'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteDistributedRelayById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'DistributedRelay'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getDistributedRelay(self,
@@ -3074,12 +3947,12 @@ class FlexSwitch( object):
                 'DrniName' : DrniName,
                 }
         reqUrl =  self.cfgUrlBase + 'DistributedRelay'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getDistributedRelayById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'DistributedRelay'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'DistributedRelay'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllDistributedRelays(self):
@@ -3106,7 +3979,7 @@ class FlexSwitch( object):
                 'MaskLengthRange' : MaskLengthRange,
                 }
         reqUrl =  self.cfgUrlBase+'BGPPolicyCondition'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateBGPPolicyCondition(self,
@@ -3128,7 +4001,7 @@ class FlexSwitch( object):
             obj['MaskLengthRange'] = MaskLengthRange
 
         reqUrl =  self.cfgUrlBase+'BGPPolicyCondition'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateBGPPolicyConditionById(self,
@@ -3136,7 +4009,7 @@ class FlexSwitch( object):
                                       ConditionType = None,
                                       IpPrefix = None,
                                       MaskLengthRange = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if ConditionType !=  None:
             obj['ConditionType'] = ConditionType
 
@@ -3146,8 +4019,8 @@ class FlexSwitch( object):
         if MaskLengthRange !=  None:
             obj['MaskLengthRange'] = MaskLengthRange
 
-        reqUrl =  self.cfgUrlBase+'BGPPolicyCondition'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'BGPPolicyCondition'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteBGPPolicyCondition(self,
@@ -3156,12 +4029,12 @@ class FlexSwitch( object):
                 'Name' : Name,
                 }
         reqUrl =  self.cfgUrlBase+'BGPPolicyCondition'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteBGPPolicyConditionById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'BGPPolicyCondition'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getBGPPolicyCondition(self,
@@ -3170,12 +4043,12 @@ class FlexSwitch( object):
                 'Name' : Name,
                 }
         reqUrl =  self.cfgUrlBase + 'BGPPolicyCondition'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getBGPPolicyConditionById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BGPPolicyCondition'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'BGPPolicyCondition'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllBGPPolicyConditions(self):
@@ -3211,7 +4084,7 @@ class FlexSwitch( object):
                 'ReferenceBandwidth' : int(ReferenceBandwidth),
                 }
         reqUrl =  self.cfgUrlBase+'OspfGlobal'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateOspfGlobal(self,
@@ -3245,7 +4118,7 @@ class FlexSwitch( object):
             obj['ReferenceBandwidth'] = int(ReferenceBandwidth)
 
         reqUrl =  self.cfgUrlBase+'OspfGlobal'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateOspfGlobalById(self,
@@ -3256,7 +4129,7 @@ class FlexSwitch( object):
                               RestartInterval = None,
                               TOSSupport = None,
                               ReferenceBandwidth = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if AdminStat !=  None:
             obj['AdminStat'] = AdminStat
 
@@ -3275,8 +4148,8 @@ class FlexSwitch( object):
         if ReferenceBandwidth !=  None:
             obj['ReferenceBandwidth'] = ReferenceBandwidth
 
-        reqUrl =  self.cfgUrlBase+'OspfGlobal'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'OspfGlobal'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteOspfGlobal(self,
@@ -3285,12 +4158,12 @@ class FlexSwitch( object):
                 'RouterId' : RouterId,
                 }
         reqUrl =  self.cfgUrlBase+'OspfGlobal'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteOspfGlobalById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'OspfGlobal'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getOspfGlobal(self,
@@ -3299,12 +4172,12 @@ class FlexSwitch( object):
                 'RouterId' : RouterId,
                 }
         reqUrl =  self.cfgUrlBase + 'OspfGlobal'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getOspfGlobalById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'OspfGlobal'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'OspfGlobal'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllOspfGlobals(self):
@@ -3317,12 +4190,12 @@ class FlexSwitch( object):
                 'MacAddr' : MacAddr,
                 }
         reqUrl =  self.stateUrlBase + 'DhcpRelayHostDhcp'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getDhcpRelayHostDhcpStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'DhcpRelayHostDhcp'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'DhcpRelayHostDhcp'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllDhcpRelayHostDhcpStates(self):
@@ -3335,30 +4208,44 @@ class FlexSwitch( object):
                 'IntfId' : int(IntfId),
                 }
         reqUrl =  self.stateUrlBase + 'DhcpRelayIntfServer'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getDhcpRelayIntfServerStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'DhcpRelayIntfServer'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'DhcpRelayIntfServer'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllDhcpRelayIntfServerStates(self):
         return self.getObjects( 'DhcpRelayIntfServer', self.stateUrlBase)
 
 
-    def getLLDPIntfState(self,
-                         IfIndex):
+    """
+    .. automethod :: executeResetBGPv4NeighborByInterface(self,
+        :param string IntfRef : Interface of the BGP IPv4 neighbor to restart Interface of the BGP IPv4 neighbor to restart
+
+	"""
+    def executeResetBGPv4NeighborByInterface(self,
+                                             IntfRef):
         obj =  { 
-                'IfIndex' : int(IfIndex),
+                'IntfRef' : IntfRef,
+                }
+        reqUrl =  self.actionUrlBase+'ResetBGPv4NeighborByInterface'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getLLDPIntfState(self,
+                         IntfRef):
+        obj =  { 
+                'IntfRef' : IntfRef,
                 }
         reqUrl =  self.stateUrlBase + 'LLDPIntf'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getLLDPIntfStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'LLDPIntf'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'LLDPIntf'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllLLDPIntfStates(self):
@@ -3381,7 +4268,7 @@ class FlexSwitch( object):
                 'LedSetColor' : LedSetColor,
                 }
         reqUrl =  self.cfgUrlBase+'Led'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateLed(self,
@@ -3399,22 +4286,22 @@ class FlexSwitch( object):
             obj['LedSetColor'] = LedSetColor
 
         reqUrl =  self.cfgUrlBase+'Led'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateLedById(self,
                        objectId,
                        LedAdmin = None,
                        LedSetColor = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if LedAdmin !=  None:
             obj['LedAdmin'] = LedAdmin
 
         if LedSetColor !=  None:
             obj['LedSetColor'] = LedSetColor
 
-        reqUrl =  self.cfgUrlBase+'Led'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'Led'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteLed(self,
@@ -3423,12 +4310,12 @@ class FlexSwitch( object):
                 'LedId' : LedId,
                 }
         reqUrl =  self.cfgUrlBase+'Led'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteLedById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'Led'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getLed(self,
@@ -3437,12 +4324,12 @@ class FlexSwitch( object):
                 'LedId' : int(LedId),
                 }
         reqUrl =  self.cfgUrlBase + 'Led'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getLedById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'Led'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'Led'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllLeds(self):
@@ -3472,7 +4359,7 @@ class FlexSwitch( object):
                 'PolicyType' : PolicyType,
                 }
         reqUrl =  self.cfgUrlBase+'PolicyDefinition'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updatePolicyDefinition(self,
@@ -3498,7 +4385,7 @@ class FlexSwitch( object):
             obj['PolicyType'] = PolicyType
 
         reqUrl =  self.cfgUrlBase+'PolicyDefinition'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updatePolicyDefinitionById(self,
@@ -3507,7 +4394,7 @@ class FlexSwitch( object):
                                     StatementList = None,
                                     MatchType = None,
                                     PolicyType = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if Priority !=  None:
             obj['Priority'] = Priority
 
@@ -3520,8 +4407,8 @@ class FlexSwitch( object):
         if PolicyType !=  None:
             obj['PolicyType'] = PolicyType
 
-        reqUrl =  self.cfgUrlBase+'PolicyDefinition'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'PolicyDefinition'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deletePolicyDefinition(self,
@@ -3530,12 +4417,12 @@ class FlexSwitch( object):
                 'Name' : Name,
                 }
         reqUrl =  self.cfgUrlBase+'PolicyDefinition'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deletePolicyDefinitionById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'PolicyDefinition'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getPolicyDefinition(self,
@@ -3544,12 +4431,12 @@ class FlexSwitch( object):
                 'Name' : Name,
                 }
         reqUrl =  self.cfgUrlBase + 'PolicyDefinition'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getPolicyDefinitionById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'PolicyDefinition'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'PolicyDefinition'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllPolicyDefinitions(self):
@@ -3564,16 +4451,167 @@ class FlexSwitch( object):
                 'Direction' : Direction,
                 }
         reqUrl =  self.stateUrlBase + 'Acl'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getAclStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'Acl'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'Acl'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllAclStates(self):
         return self.getObjects( 'Acl', self.stateUrlBase)
+
+
+    """
+    .. automethod :: createEthernetPM(self,
+        :param string Resource : Resource identifier Resource identifier
+        :param string IntfRef : Interface name of port Interface name of port
+        :param bool PMClassBEnable : Enable/Disable control for CLASS-B PM Enable/Disable control for CLASS-B PM
+        :param bool PMClassCEnable : Enable/Disable control for CLASS-C PM Enable/Disable control for CLASS-C PM
+        :param float64 HighWarnThreshold : High warning threshold value for this PM High warning threshold value for this PM
+        :param float64 LowAlarmThreshold : Low alarm threshold value for this PM Low alarm threshold value for this PM
+        :param bool PMClassAEnable : Enable/Disable control for CLASS-A PM Enable/Disable control for CLASS-A PM
+        :param float64 HighAlarmThreshold : High alarm threshold value for this PM High alarm threshold value for this PM
+        :param float64 LowWarnThreshold : Low warning threshold value for this PM Low warning threshold value for this PM
+
+	"""
+    def createEthernetPM(self,
+                         Resource,
+                         IntfRef,
+                         PMClassBEnable=True,
+                         PMClassCEnable=True,
+                         HighWarnThreshold='100000',
+                         LowAlarmThreshold='-100000',
+                         PMClassAEnable=True,
+                         HighAlarmThreshold='100000',
+                         LowWarnThreshold='-100000'):
+        obj =  { 
+                'Resource' : Resource,
+                'IntfRef' : IntfRef,
+                'PMClassBEnable' : True if PMClassBEnable else False,
+                'PMClassCEnable' : True if PMClassCEnable else False,
+                'HighWarnThreshold' : HighWarnThreshold,
+                'LowAlarmThreshold' : LowAlarmThreshold,
+                'PMClassAEnable' : True if PMClassAEnable else False,
+                'HighAlarmThreshold' : HighAlarmThreshold,
+                'LowWarnThreshold' : LowWarnThreshold,
+                }
+        reqUrl =  self.cfgUrlBase+'EthernetPM'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def updateEthernetPM(self,
+                         Resource,
+                         IntfRef,
+                         PMClassBEnable = None,
+                         PMClassCEnable = None,
+                         HighWarnThreshold = None,
+                         LowAlarmThreshold = None,
+                         PMClassAEnable = None,
+                         HighAlarmThreshold = None,
+                         LowWarnThreshold = None):
+        obj =  {}
+        if Resource != None :
+            obj['Resource'] = Resource
+
+        if IntfRef != None :
+            obj['IntfRef'] = IntfRef
+
+        if PMClassBEnable != None :
+            obj['PMClassBEnable'] = True if PMClassBEnable else False
+
+        if PMClassCEnable != None :
+            obj['PMClassCEnable'] = True if PMClassCEnable else False
+
+        if HighWarnThreshold != None :
+            obj['HighWarnThreshold'] = HighWarnThreshold
+
+        if LowAlarmThreshold != None :
+            obj['LowAlarmThreshold'] = LowAlarmThreshold
+
+        if PMClassAEnable != None :
+            obj['PMClassAEnable'] = True if PMClassAEnable else False
+
+        if HighAlarmThreshold != None :
+            obj['HighAlarmThreshold'] = HighAlarmThreshold
+
+        if LowWarnThreshold != None :
+            obj['LowWarnThreshold'] = LowWarnThreshold
+
+        reqUrl =  self.cfgUrlBase+'EthernetPM'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def updateEthernetPMById(self,
+                              objectId,
+                              PMClassBEnable = None,
+                              PMClassCEnable = None,
+                              HighWarnThreshold = None,
+                              LowAlarmThreshold = None,
+                              PMClassAEnable = None,
+                              HighAlarmThreshold = None,
+                              LowWarnThreshold = None):
+        obj =  {}
+        if PMClassBEnable !=  None:
+            obj['PMClassBEnable'] = PMClassBEnable
+
+        if PMClassCEnable !=  None:
+            obj['PMClassCEnable'] = PMClassCEnable
+
+        if HighWarnThreshold !=  None:
+            obj['HighWarnThreshold'] = HighWarnThreshold
+
+        if LowAlarmThreshold !=  None:
+            obj['LowAlarmThreshold'] = LowAlarmThreshold
+
+        if PMClassAEnable !=  None:
+            obj['PMClassAEnable'] = PMClassAEnable
+
+        if HighAlarmThreshold !=  None:
+            obj['HighAlarmThreshold'] = HighAlarmThreshold
+
+        if LowWarnThreshold !=  None:
+            obj['LowWarnThreshold'] = LowWarnThreshold
+
+        reqUrl =  self.cfgUrlBase+'EthernetPM'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
+        return r
+
+    def deleteEthernetPM(self,
+                         Resource,
+                         IntfRef):
+        obj =  { 
+                'Resource' : Resource,
+                'IntfRef' : IntfRef,
+                }
+        reqUrl =  self.cfgUrlBase+'EthernetPM'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def deleteEthernetPMById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'EthernetPM'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
+        return r
+
+    def getEthernetPM(self,
+                      Resource,
+                      IntfRef):
+        obj =  { 
+                'Resource' : Resource,
+                'IntfRef' : IntfRef,
+                }
+        reqUrl =  self.cfgUrlBase + 'EthernetPM'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getEthernetPMById(self, objectId ):
+        reqUrl =  self.cfgUrlBase + 'EthernetPM'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllEthernetPMs(self):
+        return self.getObjects( 'EthernetPM', self.cfgUrlBase)
 
 
     def getOspfVirtNbrEntryState(self,
@@ -3584,12 +4622,12 @@ class FlexSwitch( object):
                 'VirtNbrArea' : VirtNbrArea,
                 }
         reqUrl =  self.stateUrlBase + 'OspfVirtNbrEntry'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getOspfVirtNbrEntryStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'OspfVirtNbrEntry'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'OspfVirtNbrEntry'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllOspfVirtNbrEntryStates(self):
@@ -3604,12 +4642,12 @@ class FlexSwitch( object):
                 'ModuleId' : int(ModuleId),
                 }
         reqUrl =  self.stateUrlBase + 'DWDMModuleClntIntf'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getDWDMModuleClntIntfStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'DWDMModuleClntIntf'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'DWDMModuleClntIntf'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllDWDMModuleClntIntfStates(self):
@@ -3622,12 +4660,12 @@ class FlexSwitch( object):
                 'Vrf' : Vrf,
                 }
         reqUrl =  self.stateUrlBase + 'RouteStat'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getRouteStatStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'RouteStat'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'RouteStat'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllRouteStatStates(self):
@@ -3640,12 +4678,12 @@ class FlexSwitch( object):
                 'Protocol' : Protocol,
                 }
         reqUrl =  self.stateUrlBase + 'RouteDistance'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getRouteDistanceStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'RouteDistance'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'RouteDistance'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllRouteDistanceStates(self):
@@ -3666,7 +4704,7 @@ class FlexSwitch( object):
                 'Type' : Type,
                 }
         reqUrl =  self.cfgUrlBase+'LogicalIntf'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateLogicalIntf(self,
@@ -3680,18 +4718,18 @@ class FlexSwitch( object):
             obj['Type'] = Type
 
         reqUrl =  self.cfgUrlBase+'LogicalIntf'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateLogicalIntfById(self,
                                objectId,
                                Type = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if Type !=  None:
             obj['Type'] = Type
 
-        reqUrl =  self.cfgUrlBase+'LogicalIntf'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'LogicalIntf'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteLogicalIntf(self,
@@ -3700,12 +4738,12 @@ class FlexSwitch( object):
                 'Name' : Name,
                 }
         reqUrl =  self.cfgUrlBase+'LogicalIntf'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteLogicalIntfById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'LogicalIntf'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getLogicalIntf(self,
@@ -3714,12 +4752,12 @@ class FlexSwitch( object):
                 'Name' : Name,
                 }
         reqUrl =  self.cfgUrlBase + 'LogicalIntf'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getLogicalIntfById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'LogicalIntf'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'LogicalIntf'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllLogicalIntfs(self):
@@ -3734,17 +4772,101 @@ class FlexSwitch( object):
                 'NeighborAddress' : NeighborAddress,
                 }
         reqUrl =  self.stateUrlBase + 'BGPv6Neighbor'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getBGPv6NeighborStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BGPv6Neighbor'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'BGPv6Neighbor'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllBGPv6NeighborStates(self):
         return self.getObjects( 'BGPv6Neighbor', self.stateUrlBase)
 
+
+    """
+    .. automethod :: createLacpGlobal(self,
+        :param string Vrf : global system object defining the global state of LACPD. global system object defining the global state of LACPD.
+        :param string AdminState : Administrative state of LACPD Administrative state of LACPD
+
+	"""
+    def createLacpGlobal(self,
+                         AdminState='DOWN'):
+        obj =  { 
+                'Vrf' : 'default',
+                'AdminState' : AdminState,
+                }
+        reqUrl =  self.cfgUrlBase+'LacpGlobal'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def updateLacpGlobal(self,
+                         Vrf,
+                         AdminState = None):
+        obj =  {}
+        if Vrf != None :
+            obj['Vrf'] = Vrf
+
+        if AdminState != None :
+            obj['AdminState'] = AdminState
+
+        reqUrl =  self.cfgUrlBase+'LacpGlobal'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def updateLacpGlobalById(self,
+                              objectId,
+                              AdminState = None):
+        obj =  {}
+        if AdminState !=  None:
+            obj['AdminState'] = AdminState
+
+        reqUrl =  self.cfgUrlBase+'LacpGlobal'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
+        return r
+
+    def deleteLacpGlobal(self,
+                         Vrf):
+        obj =  { 
+                'Vrf' : Vrf,
+                }
+        reqUrl =  self.cfgUrlBase+'LacpGlobal'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def deleteLacpGlobalById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'LacpGlobal'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
+        return r
+
+    def getLacpGlobal(self,
+                      Vrf):
+        obj =  { 
+                'Vrf' : Vrf,
+                }
+        reqUrl =  self.cfgUrlBase + 'LacpGlobal'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getLacpGlobalById(self, objectId ):
+        reqUrl =  self.cfgUrlBase + 'LacpGlobal'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllLacpGlobals(self):
+        return self.getObjects( 'LacpGlobal', self.cfgUrlBase)
+
+
+    """
+    .. automethod :: executeForceApplyConfig(self,
+
+	"""
+    def executeForceApplyConfig(self):
+        obj =  { 
+                }
+        reqUrl =  self.actionUrlBase+'ForceApplyConfig'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
 
     def getMacTableEntryState(self,
                               MacAddr):
@@ -3752,16 +4874,36 @@ class FlexSwitch( object):
                 'MacAddr' : MacAddr,
                 }
         reqUrl =  self.stateUrlBase + 'MacTableEntry'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getMacTableEntryStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'MacTableEntry'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'MacTableEntry'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllMacTableEntryStates(self):
         return self.getObjects( 'MacTableEntry', self.stateUrlBase)
+
+
+    def getFanSensorPMDataState(self,
+                                Class,
+                                Name):
+        obj =  { 
+                'Class' : Class,
+                'Name' : Name,
+                }
+        reqUrl =  self.stateUrlBase + 'FanSensorPMData'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getFanSensorPMDataStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase + 'FanSensorPMData'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllFanSensorPMDataStates(self):
+        return self.getObjects( 'FanSensorPMData', self.stateUrlBase)
 
 
     def getOspfNbrEntryState(self,
@@ -3772,12 +4914,12 @@ class FlexSwitch( object):
                 'NbrAddressLessIndex' : int(NbrAddressLessIndex),
                 }
         reqUrl =  self.stateUrlBase + 'OspfNbrEntry'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getOspfNbrEntryStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'OspfNbrEntry'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'OspfNbrEntry'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllOspfNbrEntryStates(self):
@@ -3789,35 +4931,35 @@ class FlexSwitch( object):
         :param string Vrf : System Vrf System Vrf
         :param string MgmtIp : Management Ip of System Management Ip of System
         :param string Hostname : System Host Name System Host Name
-        :param string Version : System Version Information System Version Information
         :param string SwitchMac : Switch Mac Address Switch Mac Address
+        :param string SwVersion : FlexSwitch Version Information FlexSwitch Version Information
         :param string Description : System Description System Description
 
 	"""
     def createSystemParam(self,
                           MgmtIp,
                           Hostname,
-                          Version,
                           SwitchMac,
+                          SwVersion,
                           Description):
         obj =  { 
                 'Vrf' : 'default',
                 'MgmtIp' : MgmtIp,
                 'Hostname' : Hostname,
-                'Version' : Version,
                 'SwitchMac' : SwitchMac,
+                'SwVersion' : SwVersion,
                 'Description' : Description,
                 }
         reqUrl =  self.cfgUrlBase+'SystemParam'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateSystemParam(self,
                           Vrf,
                           MgmtIp = None,
                           Hostname = None,
-                          Version = None,
                           SwitchMac = None,
+                          SwVersion = None,
                           Description = None):
         obj =  {}
         if Vrf != None :
@@ -3829,44 +4971,44 @@ class FlexSwitch( object):
         if Hostname != None :
             obj['Hostname'] = Hostname
 
-        if Version != None :
-            obj['Version'] = Version
-
         if SwitchMac != None :
             obj['SwitchMac'] = SwitchMac
+
+        if SwVersion != None :
+            obj['SwVersion'] = SwVersion
 
         if Description != None :
             obj['Description'] = Description
 
         reqUrl =  self.cfgUrlBase+'SystemParam'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateSystemParamById(self,
                                objectId,
                                MgmtIp = None,
                                Hostname = None,
-                               Version = None,
                                SwitchMac = None,
+                               SwVersion = None,
                                Description = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if MgmtIp !=  None:
             obj['MgmtIp'] = MgmtIp
 
         if Hostname !=  None:
             obj['Hostname'] = Hostname
 
-        if Version !=  None:
-            obj['Version'] = Version
-
         if SwitchMac !=  None:
             obj['SwitchMac'] = SwitchMac
+
+        if SwVersion !=  None:
+            obj['SwVersion'] = SwVersion
 
         if Description !=  None:
             obj['Description'] = Description
 
-        reqUrl =  self.cfgUrlBase+'SystemParam'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'SystemParam'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteSystemParam(self,
@@ -3875,12 +5017,12 @@ class FlexSwitch( object):
                 'Vrf' : Vrf,
                 }
         reqUrl =  self.cfgUrlBase+'SystemParam'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteSystemParamById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'SystemParam'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getSystemParam(self,
@@ -3889,12 +5031,12 @@ class FlexSwitch( object):
                 'Vrf' : Vrf,
                 }
         reqUrl =  self.cfgUrlBase + 'SystemParam'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getSystemParamById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'SystemParam'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'SystemParam'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllSystemParams(self):
@@ -3914,7 +5056,7 @@ class FlexSwitch( object):
                 'Enable' : True if Enable else False,
                 }
         reqUrl =  self.cfgUrlBase+'BfdGlobal'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateBfdGlobal(self,
@@ -3928,18 +5070,18 @@ class FlexSwitch( object):
             obj['Enable'] = True if Enable else False
 
         reqUrl =  self.cfgUrlBase+'BfdGlobal'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateBfdGlobalById(self,
                              objectId,
                              Enable = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if Enable !=  None:
             obj['Enable'] = Enable
 
-        reqUrl =  self.cfgUrlBase+'BfdGlobal'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'BfdGlobal'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteBfdGlobal(self,
@@ -3948,12 +5090,12 @@ class FlexSwitch( object):
                 'Vrf' : Vrf,
                 }
         reqUrl =  self.cfgUrlBase+'BfdGlobal'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteBfdGlobalById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'BfdGlobal'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getBfdGlobal(self,
@@ -3962,16 +5104,181 @@ class FlexSwitch( object):
                 'Vrf' : Vrf,
                 }
         reqUrl =  self.cfgUrlBase + 'BfdGlobal'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getBfdGlobalById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BfdGlobal'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'BfdGlobal'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllBfdGlobals(self):
         return self.getObjects( 'BfdGlobal', self.cfgUrlBase)
+
+
+    """
+    .. automethod :: executeResetBGPv6NeighborByInterface(self,
+        :param string IntfRef : Interface of the BGP IPv6 neighbor to restart Interface of the BGP IPv6 neighbor to restart
+
+	"""
+    def executeResetBGPv6NeighborByInterface(self,
+                                             IntfRef):
+        obj =  { 
+                'IntfRef' : IntfRef,
+                }
+        reqUrl =  self.actionUrlBase+'ResetBGPv6NeighborByInterface'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    """
+    .. automethod :: createVoltageSensor(self,
+        :param string Name : Voltage Sensor Name Voltage Sensor Name
+        :param float64 HigherAlarmThreshold : Higher Alarm Threshold for TCA Higher Alarm Threshold for TCA
+        :param float64 HigherWarningThreshold : Higher Warning Threshold for TCA Higher Warning Threshold for TCA
+        :param float64 LowerWarningThreshold : Lower Warning Threshold for TCA Lower Warning Threshold for TCA
+        :param float64 LowerAlarmThreshold : Lower Alarm Threshold for TCA Lower Alarm Threshold for TCA
+        :param string PMClassCAdminState : PM Class-C Admin State PM Class-C Admin State
+        :param string PMClassAAdminState : PM Class-A Admin State PM Class-A Admin State
+        :param string AdminState : Enable/Disable Enable/Disable
+        :param string PMClassBAdminState : PM Class-B Admin State PM Class-B Admin State
+
+	"""
+    def createVoltageSensor(self,
+                            Name,
+                            HigherAlarmThreshold,
+                            HigherWarningThreshold,
+                            LowerWarningThreshold,
+                            LowerAlarmThreshold,
+                            PMClassCAdminState='Enable',
+                            PMClassAAdminState='Enable',
+                            AdminState='Enable',
+                            PMClassBAdminState='Enable'):
+        obj =  { 
+                'Name' : Name,
+                'HigherAlarmThreshold' : HigherAlarmThreshold,
+                'HigherWarningThreshold' : HigherWarningThreshold,
+                'LowerWarningThreshold' : LowerWarningThreshold,
+                'LowerAlarmThreshold' : LowerAlarmThreshold,
+                'PMClassCAdminState' : PMClassCAdminState,
+                'PMClassAAdminState' : PMClassAAdminState,
+                'AdminState' : AdminState,
+                'PMClassBAdminState' : PMClassBAdminState,
+                }
+        reqUrl =  self.cfgUrlBase+'VoltageSensor'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def updateVoltageSensor(self,
+                            Name,
+                            HigherAlarmThreshold = None,
+                            HigherWarningThreshold = None,
+                            LowerWarningThreshold = None,
+                            LowerAlarmThreshold = None,
+                            PMClassCAdminState = None,
+                            PMClassAAdminState = None,
+                            AdminState = None,
+                            PMClassBAdminState = None):
+        obj =  {}
+        if Name != None :
+            obj['Name'] = Name
+
+        if HigherAlarmThreshold != None :
+            obj['HigherAlarmThreshold'] = HigherAlarmThreshold
+
+        if HigherWarningThreshold != None :
+            obj['HigherWarningThreshold'] = HigherWarningThreshold
+
+        if LowerWarningThreshold != None :
+            obj['LowerWarningThreshold'] = LowerWarningThreshold
+
+        if LowerAlarmThreshold != None :
+            obj['LowerAlarmThreshold'] = LowerAlarmThreshold
+
+        if PMClassCAdminState != None :
+            obj['PMClassCAdminState'] = PMClassCAdminState
+
+        if PMClassAAdminState != None :
+            obj['PMClassAAdminState'] = PMClassAAdminState
+
+        if AdminState != None :
+            obj['AdminState'] = AdminState
+
+        if PMClassBAdminState != None :
+            obj['PMClassBAdminState'] = PMClassBAdminState
+
+        reqUrl =  self.cfgUrlBase+'VoltageSensor'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def updateVoltageSensorById(self,
+                                 objectId,
+                                 HigherAlarmThreshold = None,
+                                 HigherWarningThreshold = None,
+                                 LowerWarningThreshold = None,
+                                 LowerAlarmThreshold = None,
+                                 PMClassCAdminState = None,
+                                 PMClassAAdminState = None,
+                                 AdminState = None,
+                                 PMClassBAdminState = None):
+        obj =  {}
+        if HigherAlarmThreshold !=  None:
+            obj['HigherAlarmThreshold'] = HigherAlarmThreshold
+
+        if HigherWarningThreshold !=  None:
+            obj['HigherWarningThreshold'] = HigherWarningThreshold
+
+        if LowerWarningThreshold !=  None:
+            obj['LowerWarningThreshold'] = LowerWarningThreshold
+
+        if LowerAlarmThreshold !=  None:
+            obj['LowerAlarmThreshold'] = LowerAlarmThreshold
+
+        if PMClassCAdminState !=  None:
+            obj['PMClassCAdminState'] = PMClassCAdminState
+
+        if PMClassAAdminState !=  None:
+            obj['PMClassAAdminState'] = PMClassAAdminState
+
+        if AdminState !=  None:
+            obj['AdminState'] = AdminState
+
+        if PMClassBAdminState !=  None:
+            obj['PMClassBAdminState'] = PMClassBAdminState
+
+        reqUrl =  self.cfgUrlBase+'VoltageSensor'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
+        return r
+
+    def deleteVoltageSensor(self,
+                            Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.cfgUrlBase+'VoltageSensor'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def deleteVoltageSensorById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'VoltageSensor'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
+        return r
+
+    def getVoltageSensor(self,
+                         Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.cfgUrlBase + 'VoltageSensor'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getVoltageSensorById(self, objectId ):
+        reqUrl =  self.cfgUrlBase + 'VoltageSensor'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllVoltageSensors(self):
+        return self.getObjects( 'VoltageSensor', self.cfgUrlBase)
 
 
     def getAlarmState(self,
@@ -3988,16 +5295,38 @@ class FlexSwitch( object):
                 'OwnerId' : int(OwnerId),
                 }
         reqUrl =  self.stateUrlBase + 'Alarm'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getAlarmStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'Alarm'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'Alarm'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllAlarmStates(self):
         return self.getObjects( 'Alarm', self.stateUrlBase)
+
+
+    def getQsfpPMDataState(self,
+                           Resource,
+                           Class,
+                           QsfpId):
+        obj =  { 
+                'Resource' : Resource,
+                'Class' : Class,
+                'QsfpId' : int(QsfpId),
+                }
+        reqUrl =  self.stateUrlBase + 'QsfpPMData'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getQsfpPMDataStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase + 'QsfpPMData'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllQsfpPMDataStates(self):
+        return self.getObjects( 'QsfpPMData', self.stateUrlBase)
 
 
     def getAclRuleState(self,
@@ -4006,12 +5335,12 @@ class FlexSwitch( object):
                 'RuleName' : RuleName,
                 }
         reqUrl =  self.stateUrlBase + 'AclRule'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getAclRuleStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'AclRule'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'AclRule'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllAclRuleStates(self):
@@ -4038,7 +5367,7 @@ class FlexSwitch( object):
                 'Actions' : Actions,
                 }
         reqUrl =  self.cfgUrlBase+'BGPPolicyStmt'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateBGPPolicyStmt(self,
@@ -4060,7 +5389,7 @@ class FlexSwitch( object):
             obj['Actions'] = Actions
 
         reqUrl =  self.cfgUrlBase+'BGPPolicyStmt'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateBGPPolicyStmtById(self,
@@ -4068,7 +5397,7 @@ class FlexSwitch( object):
                                  MatchConditions = None,
                                  Conditions = None,
                                  Actions = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if MatchConditions !=  None:
             obj['MatchConditions'] = MatchConditions
 
@@ -4078,8 +5407,8 @@ class FlexSwitch( object):
         if Actions !=  None:
             obj['Actions'] = Actions
 
-        reqUrl =  self.cfgUrlBase+'BGPPolicyStmt'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'BGPPolicyStmt'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteBGPPolicyStmt(self,
@@ -4088,12 +5417,12 @@ class FlexSwitch( object):
                 'Name' : Name,
                 }
         reqUrl =  self.cfgUrlBase+'BGPPolicyStmt'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteBGPPolicyStmtById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'BGPPolicyStmt'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getBGPPolicyStmt(self,
@@ -4102,16 +5431,185 @@ class FlexSwitch( object):
                 'Name' : Name,
                 }
         reqUrl =  self.cfgUrlBase + 'BGPPolicyStmt'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getBGPPolicyStmtById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BGPPolicyStmt'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'BGPPolicyStmt'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllBGPPolicyStmts(self):
         return self.getObjects( 'BGPPolicyStmt', self.cfgUrlBase)
+
+
+    """
+    .. automethod :: createAsicGlobalPM(self,
+        :param string Resource : Resource identifier Resource identifier
+        :param uint8 ModuleId : Module identifier Module identifier
+        :param bool PMClassBEnable : Enable/Disable control for CLASS-B PM Enable/Disable control for CLASS-B PM
+        :param float64 HighWarnThreshold : High warning threshold value for this PM High warning threshold value for this PM
+        :param float64 LowAlarmThreshold : Low alarm threshold value for this PM Low alarm threshold value for this PM
+        :param bool PMClassCEnable : Enable/Disable control for CLASS-C PM Enable/Disable control for CLASS-C PM
+        :param bool PMClassAEnable : Enable/Disable control for CLASS-A PM Enable/Disable control for CLASS-A PM
+        :param float64 LowWarnThreshold : Low warning threshold value for this PM Low warning threshold value for this PM
+        :param float64 HighAlarmThreshold : High alarm threshold value for this PM High alarm threshold value for this PM
+
+	"""
+    def createAsicGlobalPM(self,
+                           Resource,
+                           ModuleId,
+                           PMClassBEnable=True,
+                           HighWarnThreshold='100000',
+                           LowAlarmThreshold='-100000',
+                           PMClassCEnable=True,
+                           PMClassAEnable=True,
+                           LowWarnThreshold='-100000',
+                           HighAlarmThreshold='100000'):
+        obj =  { 
+                'Resource' : Resource,
+                'ModuleId' : int(ModuleId),
+                'PMClassBEnable' : True if PMClassBEnable else False,
+                'HighWarnThreshold' : HighWarnThreshold,
+                'LowAlarmThreshold' : LowAlarmThreshold,
+                'PMClassCEnable' : True if PMClassCEnable else False,
+                'PMClassAEnable' : True if PMClassAEnable else False,
+                'LowWarnThreshold' : LowWarnThreshold,
+                'HighAlarmThreshold' : HighAlarmThreshold,
+                }
+        reqUrl =  self.cfgUrlBase+'AsicGlobalPM'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def updateAsicGlobalPM(self,
+                           Resource,
+                           ModuleId,
+                           PMClassBEnable = None,
+                           HighWarnThreshold = None,
+                           LowAlarmThreshold = None,
+                           PMClassCEnable = None,
+                           PMClassAEnable = None,
+                           LowWarnThreshold = None,
+                           HighAlarmThreshold = None):
+        obj =  {}
+        if Resource != None :
+            obj['Resource'] = Resource
+
+        if ModuleId != None :
+            obj['ModuleId'] = int(ModuleId)
+
+        if PMClassBEnable != None :
+            obj['PMClassBEnable'] = True if PMClassBEnable else False
+
+        if HighWarnThreshold != None :
+            obj['HighWarnThreshold'] = HighWarnThreshold
+
+        if LowAlarmThreshold != None :
+            obj['LowAlarmThreshold'] = LowAlarmThreshold
+
+        if PMClassCEnable != None :
+            obj['PMClassCEnable'] = True if PMClassCEnable else False
+
+        if PMClassAEnable != None :
+            obj['PMClassAEnable'] = True if PMClassAEnable else False
+
+        if LowWarnThreshold != None :
+            obj['LowWarnThreshold'] = LowWarnThreshold
+
+        if HighAlarmThreshold != None :
+            obj['HighAlarmThreshold'] = HighAlarmThreshold
+
+        reqUrl =  self.cfgUrlBase+'AsicGlobalPM'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def updateAsicGlobalPMById(self,
+                                objectId,
+                                PMClassBEnable = None,
+                                HighWarnThreshold = None,
+                                LowAlarmThreshold = None,
+                                PMClassCEnable = None,
+                                PMClassAEnable = None,
+                                LowWarnThreshold = None,
+                                HighAlarmThreshold = None):
+        obj =  {}
+        if PMClassBEnable !=  None:
+            obj['PMClassBEnable'] = PMClassBEnable
+
+        if HighWarnThreshold !=  None:
+            obj['HighWarnThreshold'] = HighWarnThreshold
+
+        if LowAlarmThreshold !=  None:
+            obj['LowAlarmThreshold'] = LowAlarmThreshold
+
+        if PMClassCEnable !=  None:
+            obj['PMClassCEnable'] = PMClassCEnable
+
+        if PMClassAEnable !=  None:
+            obj['PMClassAEnable'] = PMClassAEnable
+
+        if LowWarnThreshold !=  None:
+            obj['LowWarnThreshold'] = LowWarnThreshold
+
+        if HighAlarmThreshold !=  None:
+            obj['HighAlarmThreshold'] = HighAlarmThreshold
+
+        reqUrl =  self.cfgUrlBase+'AsicGlobalPM'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
+        return r
+
+    def deleteAsicGlobalPM(self,
+                           Resource,
+                           ModuleId):
+        obj =  { 
+                'Resource' : Resource,
+                'ModuleId' : ModuleId,
+                }
+        reqUrl =  self.cfgUrlBase+'AsicGlobalPM'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def deleteAsicGlobalPMById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'AsicGlobalPM'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
+        return r
+
+    def getAsicGlobalPM(self,
+                        Resource,
+                        ModuleId):
+        obj =  { 
+                'Resource' : Resource,
+                'ModuleId' : int(ModuleId),
+                }
+        reqUrl =  self.cfgUrlBase + 'AsicGlobalPM'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAsicGlobalPMById(self, objectId ):
+        reqUrl =  self.cfgUrlBase + 'AsicGlobalPM'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllAsicGlobalPMs(self):
+        return self.getObjects( 'AsicGlobalPM', self.cfgUrlBase)
+
+
+    def getIPv4RouteHwState(self,
+                            DestinationNw):
+        obj =  { 
+                'DestinationNw' : DestinationNw,
+                }
+        reqUrl =  self.stateUrlBase + 'IPv4RouteHw'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getIPv4RouteHwStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase + 'IPv4RouteHw'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllIPv4RouteHwStates(self):
+        return self.getObjects( 'IPv4RouteHw', self.stateUrlBase)
 
 
     """
@@ -4127,7 +5625,7 @@ class FlexSwitch( object):
                 'Timeout' : int(Timeout),
                 }
         reqUrl =  self.cfgUrlBase+'ArpGlobal'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateArpGlobal(self,
@@ -4141,18 +5639,18 @@ class FlexSwitch( object):
             obj['Timeout'] = int(Timeout)
 
         reqUrl =  self.cfgUrlBase+'ArpGlobal'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateArpGlobalById(self,
                              objectId,
                              Timeout = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if Timeout !=  None:
             obj['Timeout'] = Timeout
 
-        reqUrl =  self.cfgUrlBase+'ArpGlobal'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'ArpGlobal'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteArpGlobal(self,
@@ -4161,12 +5659,12 @@ class FlexSwitch( object):
                 'Vrf' : Vrf,
                 }
         reqUrl =  self.cfgUrlBase+'ArpGlobal'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteArpGlobalById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'ArpGlobal'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getArpGlobal(self,
@@ -4175,12 +5673,12 @@ class FlexSwitch( object):
                 'Vrf' : Vrf,
                 }
         reqUrl =  self.cfgUrlBase + 'ArpGlobal'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getArpGlobalById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'ArpGlobal'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'ArpGlobal'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllArpGlobals(self):
@@ -4190,6 +5688,8 @@ class FlexSwitch( object):
     """
     .. automethod :: createBGPv4PeerGroup(self,
         :param string Name : Name of the BGP peer group Name of the BGP peer group
+        :param string PeerAS : Peer AS of the BGP neighbor Peer AS of the BGP neighbor
+        :param string LocalAS : Local AS of the BGP neighbor Local AS of the BGP neighbor
         :param string UpdateSource : Source IP to connect to the BGP neighbor Source IP to connect to the BGP neighbor
         :param string AuthPassword : Password to connect to the BGP neighbor Password to connect to the BGP neighbor
         :param string Description : Description of the BGP neighbor Description of the BGP neighbor
@@ -4198,7 +5698,6 @@ class FlexSwitch( object):
         :param uint8 MaxPrefixesRestartTimer : Time to wait before we start BGP peer session when we receive max prefixes Time to wait before we start BGP peer session when we receive max prefixes
         :param bool MultiHopEnable : Enable/Disable multi hop for BGP neighbor Enable/Disable multi hop for BGP neighbor
         :param bool MaxPrefixesDisconnect : Disconnect the BGP peer session when we receive the max prefixes from the neighbor Disconnect the BGP peer session when we receive the max prefixes from the neighbor
-        :param uint32 LocalAS : Local AS of the BGP neighbor Local AS of the BGP neighbor
         :param uint8 MultiHopTTL : TTL for multi hop BGP neighbor TTL for multi hop BGP neighbor
         :param uint32 KeepaliveTime : Keep alive time for the BGP neighbor Keep alive time for the BGP neighbor
         :param uint32 RouteReflectorClusterId : Cluster Id of the internal BGP neighbor route reflector client Cluster Id of the internal BGP neighbor route reflector client
@@ -4208,12 +5707,13 @@ class FlexSwitch( object):
         :param bool RouteReflectorClient : Set/Clear BGP neighbor as a route reflector client Set/Clear BGP neighbor as a route reflector client
         :param uint8 MaxPrefixesThresholdPct : The percentage of maximum prefixes before we start logging The percentage of maximum prefixes before we start logging
         :param uint32 HoldTime : Hold time for the BGP neighbor Hold time for the BGP neighbor
-        :param uint32 PeerAS : Peer AS of the BGP neighbor Peer AS of the BGP neighbor
         :param uint32 ConnectRetryTime : Connect retry time to connect to BGP neighbor after disconnect Connect retry time to connect to BGP neighbor after disconnect
 
 	"""
     def createBGPv4PeerGroup(self,
                              Name,
+                             PeerAS='',
+                             LocalAS='',
                              UpdateSource='',
                              AuthPassword='',
                              Description='',
@@ -4222,20 +5722,20 @@ class FlexSwitch( object):
                              MaxPrefixesRestartTimer=0,
                              MultiHopEnable=False,
                              MaxPrefixesDisconnect=False,
-                             LocalAS=0,
                              MultiHopTTL=0,
-                             KeepaliveTime=60,
+                             KeepaliveTime=0,
                              RouteReflectorClusterId=0,
                              MaxPrefixes=0,
                              AddPathsMaxTx=0,
                              AddPathsRx=False,
                              RouteReflectorClient=False,
-                             MaxPrefixesThresholdPct=0,
-                             HoldTime=180,
-                             PeerAS=0,
-                             ConnectRetryTime=60):
+                             MaxPrefixesThresholdPct=80,
+                             HoldTime=0,
+                             ConnectRetryTime=0):
         obj =  { 
                 'Name' : Name,
+                'PeerAS' : PeerAS,
+                'LocalAS' : LocalAS,
                 'UpdateSource' : UpdateSource,
                 'AuthPassword' : AuthPassword,
                 'Description' : Description,
@@ -4244,7 +5744,6 @@ class FlexSwitch( object):
                 'MaxPrefixesRestartTimer' : int(MaxPrefixesRestartTimer),
                 'MultiHopEnable' : True if MultiHopEnable else False,
                 'MaxPrefixesDisconnect' : True if MaxPrefixesDisconnect else False,
-                'LocalAS' : int(LocalAS),
                 'MultiHopTTL' : int(MultiHopTTL),
                 'KeepaliveTime' : int(KeepaliveTime),
                 'RouteReflectorClusterId' : int(RouteReflectorClusterId),
@@ -4254,15 +5753,16 @@ class FlexSwitch( object):
                 'RouteReflectorClient' : True if RouteReflectorClient else False,
                 'MaxPrefixesThresholdPct' : int(MaxPrefixesThresholdPct),
                 'HoldTime' : int(HoldTime),
-                'PeerAS' : int(PeerAS),
                 'ConnectRetryTime' : int(ConnectRetryTime),
                 }
         reqUrl =  self.cfgUrlBase+'BGPv4PeerGroup'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateBGPv4PeerGroup(self,
                              Name,
+                             PeerAS = None,
+                             LocalAS = None,
                              UpdateSource = None,
                              AuthPassword = None,
                              Description = None,
@@ -4271,7 +5771,6 @@ class FlexSwitch( object):
                              MaxPrefixesRestartTimer = None,
                              MultiHopEnable = None,
                              MaxPrefixesDisconnect = None,
-                             LocalAS = None,
                              MultiHopTTL = None,
                              KeepaliveTime = None,
                              RouteReflectorClusterId = None,
@@ -4281,11 +5780,16 @@ class FlexSwitch( object):
                              RouteReflectorClient = None,
                              MaxPrefixesThresholdPct = None,
                              HoldTime = None,
-                             PeerAS = None,
                              ConnectRetryTime = None):
         obj =  {}
         if Name != None :
             obj['Name'] = Name
+
+        if PeerAS != None :
+            obj['PeerAS'] = PeerAS
+
+        if LocalAS != None :
+            obj['LocalAS'] = LocalAS
 
         if UpdateSource != None :
             obj['UpdateSource'] = UpdateSource
@@ -4310,9 +5814,6 @@ class FlexSwitch( object):
 
         if MaxPrefixesDisconnect != None :
             obj['MaxPrefixesDisconnect'] = True if MaxPrefixesDisconnect else False
-
-        if LocalAS != None :
-            obj['LocalAS'] = int(LocalAS)
 
         if MultiHopTTL != None :
             obj['MultiHopTTL'] = int(MultiHopTTL)
@@ -4341,18 +5842,17 @@ class FlexSwitch( object):
         if HoldTime != None :
             obj['HoldTime'] = int(HoldTime)
 
-        if PeerAS != None :
-            obj['PeerAS'] = int(PeerAS)
-
         if ConnectRetryTime != None :
             obj['ConnectRetryTime'] = int(ConnectRetryTime)
 
         reqUrl =  self.cfgUrlBase+'BGPv4PeerGroup'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateBGPv4PeerGroupById(self,
                                   objectId,
+                                  PeerAS = None,
+                                  LocalAS = None,
                                   UpdateSource = None,
                                   AuthPassword = None,
                                   Description = None,
@@ -4361,7 +5861,6 @@ class FlexSwitch( object):
                                   MaxPrefixesRestartTimer = None,
                                   MultiHopEnable = None,
                                   MaxPrefixesDisconnect = None,
-                                  LocalAS = None,
                                   MultiHopTTL = None,
                                   KeepaliveTime = None,
                                   RouteReflectorClusterId = None,
@@ -4371,9 +5870,14 @@ class FlexSwitch( object):
                                   RouteReflectorClient = None,
                                   MaxPrefixesThresholdPct = None,
                                   HoldTime = None,
-                                  PeerAS = None,
                                   ConnectRetryTime = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
+        if PeerAS !=  None:
+            obj['PeerAS'] = PeerAS
+
+        if LocalAS !=  None:
+            obj['LocalAS'] = LocalAS
+
         if UpdateSource !=  None:
             obj['UpdateSource'] = UpdateSource
 
@@ -4397,9 +5901,6 @@ class FlexSwitch( object):
 
         if MaxPrefixesDisconnect !=  None:
             obj['MaxPrefixesDisconnect'] = MaxPrefixesDisconnect
-
-        if LocalAS !=  None:
-            obj['LocalAS'] = LocalAS
 
         if MultiHopTTL !=  None:
             obj['MultiHopTTL'] = MultiHopTTL
@@ -4428,14 +5929,11 @@ class FlexSwitch( object):
         if HoldTime !=  None:
             obj['HoldTime'] = HoldTime
 
-        if PeerAS !=  None:
-            obj['PeerAS'] = PeerAS
-
         if ConnectRetryTime !=  None:
             obj['ConnectRetryTime'] = ConnectRetryTime
 
-        reqUrl =  self.cfgUrlBase+'BGPv4PeerGroup'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'BGPv4PeerGroup'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteBGPv4PeerGroup(self,
@@ -4444,12 +5942,12 @@ class FlexSwitch( object):
                 'Name' : Name,
                 }
         reqUrl =  self.cfgUrlBase+'BGPv4PeerGroup'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteBGPv4PeerGroupById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'BGPv4PeerGroup'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getBGPv4PeerGroup(self,
@@ -4458,12 +5956,12 @@ class FlexSwitch( object):
                 'Name' : Name,
                 }
         reqUrl =  self.cfgUrlBase + 'BGPv4PeerGroup'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getBGPv4PeerGroupById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BGPv4PeerGroup'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'BGPv4PeerGroup'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllBGPv4PeerGroups(self):
@@ -4476,16 +5974,52 @@ class FlexSwitch( object):
                 'DestinationNw' : DestinationNw,
                 }
         reqUrl =  self.stateUrlBase + 'IPv4Route'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getIPv4RouteStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'IPv4Route'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'IPv4Route'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllIPv4RouteStates(self):
         return self.getObjects( 'IPv4Route', self.stateUrlBase)
+
+
+    def getPowerConverterSensorState(self,
+                                     Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.stateUrlBase + 'PowerConverterSensor'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getPowerConverterSensorStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase + 'PowerConverterSensor'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllPowerConverterSensorStates(self):
+        return self.getObjects( 'PowerConverterSensor', self.stateUrlBase)
+
+
+    def getQsfpState(self,
+                     QsfpId):
+        obj =  { 
+                'QsfpId' : int(QsfpId),
+                }
+        reqUrl =  self.stateUrlBase + 'Qsfp'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getQsfpStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase + 'Qsfp'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllQsfpStates(self):
+        return self.getObjects( 'Qsfp', self.stateUrlBase)
 
 
     def getBfdGlobalState(self,
@@ -4494,16 +6028,36 @@ class FlexSwitch( object):
                 'Vrf' : Vrf,
                 }
         reqUrl =  self.stateUrlBase + 'BfdGlobal'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getBfdGlobalStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BfdGlobal'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'BfdGlobal'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllBfdGlobalStates(self):
         return self.getObjects( 'BfdGlobal', self.stateUrlBase)
+
+
+    def getQsfpChannelState(self,
+                            ChannelNum,
+                            QsfpId):
+        obj =  { 
+                'ChannelNum' : int(ChannelNum),
+                'QsfpId' : int(QsfpId),
+                }
+        reqUrl =  self.stateUrlBase + 'QsfpChannel'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getQsfpChannelStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase + 'QsfpChannel'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllQsfpChannelStates(self):
+        return self.getObjects( 'QsfpChannel', self.stateUrlBase)
 
 
     def getFanState(self,
@@ -4512,17 +6066,48 @@ class FlexSwitch( object):
                 'FanId' : int(FanId),
                 }
         reqUrl =  self.stateUrlBase + 'Fan'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getFanStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'Fan'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'Fan'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllFanStates(self):
         return self.getObjects( 'Fan', self.stateUrlBase)
 
+
+    """
+    .. automethod :: executeFaultClear(self,
+        :param string OwnerName : Fault owner name Fault owner name
+        :param string EventName : Fault event name Fault event name
+        :param string SrcObjUUID : Source object Key UUID Source object Key UUID
+
+	"""
+    def executeFaultClear(self,
+                          OwnerName,
+                          EventName,
+                          SrcObjUUID):
+        obj =  { 
+                'OwnerName' : OwnerName,
+                'EventName' : EventName,
+                'SrcObjUUID' : SrcObjUUID,
+                }
+        reqUrl =  self.actionUrlBase+'FaultClear'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    """
+    .. automethod :: executeResetConfig(self,
+
+	"""
+    def executeResetConfig(self):
+        obj =  { 
+                }
+        reqUrl =  self.actionUrlBase+'ResetConfig'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
 
     def getBGPGlobalState(self,
                           RouterId):
@@ -4530,12 +6115,12 @@ class FlexSwitch( object):
                 'RouterId' : RouterId,
                 }
         reqUrl =  self.stateUrlBase + 'BGPGlobal'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getBGPGlobalStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BGPGlobal'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'BGPGlobal'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllBGPGlobalStates(self):
@@ -4548,12 +6133,12 @@ class FlexSwitch( object):
                 'IpAddr' : IpAddr,
                 }
         reqUrl =  self.stateUrlBase + 'BfdSession'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getBfdSessionStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BfdSession'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'BfdSession'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllBfdSessionStates(self):
@@ -4566,12 +6151,12 @@ class FlexSwitch( object):
                 'Index' : int(Index),
                 }
         reqUrl =  self.stateUrlBase + 'OspfEvent'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getOspfEventStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'OspfEvent'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'OspfEvent'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllOspfEventStates(self):
@@ -4580,72 +6165,71 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createLLDPIntf(self,
-        :param int32 IfIndex : IfIndex where lldp needs is enabled/disabled IfIndex where lldp needs is enabled/disabled
+        :param string IntfRef : IfIndex where lldp needs is enabled/disabled IfIndex where lldp needs is enabled/disabled
         :param bool Enable : Enable/Disable lldp config Per Port Enable/Disable lldp config Per Port
 
 	"""
     def createLLDPIntf(self,
-                       IfIndex,
                        Enable=True):
         obj =  { 
-                'IfIndex' : int(IfIndex),
+                'IntfRef' : 'None',
                 'Enable' : True if Enable else False,
                 }
         reqUrl =  self.cfgUrlBase+'LLDPIntf'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateLLDPIntf(self,
-                       IfIndex,
+                       IntfRef,
                        Enable = None):
         obj =  {}
-        if IfIndex != None :
-            obj['IfIndex'] = int(IfIndex)
+        if IntfRef != None :
+            obj['IntfRef'] = IntfRef
 
         if Enable != None :
             obj['Enable'] = True if Enable else False
 
         reqUrl =  self.cfgUrlBase+'LLDPIntf'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateLLDPIntfById(self,
                             objectId,
                             Enable = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if Enable !=  None:
             obj['Enable'] = Enable
 
-        reqUrl =  self.cfgUrlBase+'LLDPIntf'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'LLDPIntf'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteLLDPIntf(self,
-                       IfIndex):
+                       IntfRef):
         obj =  { 
-                'IfIndex' : IfIndex,
+                'IntfRef' : IntfRef,
                 }
         reqUrl =  self.cfgUrlBase+'LLDPIntf'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteLLDPIntfById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'LLDPIntf'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getLLDPIntf(self,
-                    IfIndex):
+                    IntfRef):
         obj =  { 
-                'IfIndex' : int(IfIndex),
+                'IntfRef' : IntfRef,
                 }
         reqUrl =  self.cfgUrlBase + 'LLDPIntf'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getLLDPIntfById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'LLDPIntf'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'LLDPIntf'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllLLDPIntfs(self):
@@ -4658,12 +6242,12 @@ class FlexSwitch( object):
                 'DeviceId' : int(DeviceId),
                 }
         reqUrl =  self.stateUrlBase + 'BufferGlobalStat'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getBufferGlobalStatStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BufferGlobalStat'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'BufferGlobalStat'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllBufferGlobalStatStates(self):
@@ -4676,12 +6260,12 @@ class FlexSwitch( object):
                 'IntfRef' : IntfRef,
                 }
         reqUrl =  self.stateUrlBase + 'IPv6Intf'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getIPv6IntfStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'IPv6Intf'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'IPv6Intf'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllIPv6IntfStates(self):
@@ -4702,7 +6286,7 @@ class FlexSwitch( object):
                 'IpAddr' : IpAddr,
                 }
         reqUrl =  self.cfgUrlBase+'IPv4Intf'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateIPv4Intf(self,
@@ -4716,18 +6300,18 @@ class FlexSwitch( object):
             obj['IpAddr'] = IpAddr
 
         reqUrl =  self.cfgUrlBase+'IPv4Intf'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateIPv4IntfById(self,
                             objectId,
                             IpAddr = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if IpAddr !=  None:
             obj['IpAddr'] = IpAddr
 
-        reqUrl =  self.cfgUrlBase+'IPv4Intf'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'IPv4Intf'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteIPv4Intf(self,
@@ -4736,12 +6320,12 @@ class FlexSwitch( object):
                 'IntfRef' : IntfRef,
                 }
         reqUrl =  self.cfgUrlBase+'IPv4Intf'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteIPv4IntfById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'IPv4Intf'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getIPv4Intf(self,
@@ -4750,12 +6334,12 @@ class FlexSwitch( object):
                 'IntfRef' : IntfRef,
                 }
         reqUrl =  self.cfgUrlBase + 'IPv4Intf'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getIPv4IntfById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'IPv4Intf'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'IPv4Intf'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllIPv4Intfs(self):
@@ -4768,16 +6352,36 @@ class FlexSwitch( object):
                 'Name' : Name,
                 }
         reqUrl =  self.stateUrlBase + 'PolicyStmt'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getPolicyStmtStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'PolicyStmt'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'PolicyStmt'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllPolicyStmtStates(self):
         return self.getObjects( 'PolicyStmt', self.stateUrlBase)
+
+
+    def getPowerConverterSensorPMDataState(self,
+                                           Class,
+                                           Name):
+        obj =  { 
+                'Class' : Class,
+                'Name' : Name,
+                }
+        reqUrl =  self.stateUrlBase + 'PowerConverterSensorPMData'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getPowerConverterSensorPMDataStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase + 'PowerConverterSensorPMData'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllPowerConverterSensorPMDataStates(self):
+        return self.getObjects( 'PowerConverterSensorPMData', self.stateUrlBase)
 
 
     """
@@ -4806,7 +6410,7 @@ class FlexSwitch( object):
                 'Cost' : int(Cost),
                 }
         reqUrl =  self.cfgUrlBase+'IPv6Route'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateIPv6Route(self,
@@ -4836,7 +6440,7 @@ class FlexSwitch( object):
             obj['Cost'] = int(Cost)
 
         reqUrl =  self.cfgUrlBase+'IPv6Route'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateIPv6RouteById(self,
@@ -4845,7 +6449,7 @@ class FlexSwitch( object):
                              Protocol = None,
                              NullRoute = None,
                              Cost = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if NextHop !=  None:
             obj['NextHop'] = NextHop
 
@@ -4858,8 +6462,8 @@ class FlexSwitch( object):
         if Cost !=  None:
             obj['Cost'] = Cost
 
-        reqUrl =  self.cfgUrlBase+'IPv6Route'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'IPv6Route'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteIPv6Route(self,
@@ -4870,12 +6474,12 @@ class FlexSwitch( object):
                 'NetworkMask' : NetworkMask,
                 }
         reqUrl =  self.cfgUrlBase+'IPv6Route'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteIPv6RouteById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'IPv6Route'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getIPv6Route(self,
@@ -4886,34 +6490,34 @@ class FlexSwitch( object):
                 'NetworkMask' : NetworkMask,
                 }
         reqUrl =  self.cfgUrlBase + 'IPv6Route'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getIPv6RouteById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'IPv6Route'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'IPv6Route'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllIPv6Routes(self):
         return self.getObjects( 'IPv6Route', self.cfgUrlBase)
 
 
-    def getStpBridgeState(self,
-                          Vlan):
+    def getNDPEntryState(self,
+                         IpAddr):
         obj =  { 
-                'Vlan' : int(Vlan),
+                'IpAddr' : IpAddr,
                 }
-        reqUrl =  self.stateUrlBase + 'StpBridge'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.stateUrlBase + 'NDPEntry'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
-    def getStpBridgeStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'StpBridge'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+    def getNDPEntryStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase + 'NDPEntry'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
-    def getAllStpBridgeStates(self):
-        return self.getObjects( 'StpBridge', self.stateUrlBase)
+    def getAllNDPEntryStates(self):
+        return self.getObjects( 'NDPEntry', self.stateUrlBase)
 
 
     """
@@ -4984,7 +6588,7 @@ class FlexSwitch( object):
                 'EnableIntSerdesNWLoopback' : True if EnableIntSerdesNWLoopback else False,
                 }
         reqUrl =  self.cfgUrlBase+'DWDMModuleClntIntf'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateDWDMModuleClntIntf(self,
@@ -5070,7 +6674,7 @@ class FlexSwitch( object):
             obj['EnableIntSerdesNWLoopback'] = True if EnableIntSerdesNWLoopback else False
 
         reqUrl =  self.cfgUrlBase+'DWDMModuleClntIntf'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateDWDMModuleClntIntfById(self,
@@ -5093,7 +6697,7 @@ class FlexSwitch( object):
                                       TXFECDecDisable = None,
                                       EnableRxPRBS = None,
                                       EnableIntSerdesNWLoopback = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if NwLaneTributaryToClntIntfMap !=  None:
             obj['NwLaneTributaryToClntIntfMap'] = NwLaneTributaryToClntIntfMap
 
@@ -5148,8 +6752,8 @@ class FlexSwitch( object):
         if EnableIntSerdesNWLoopback !=  None:
             obj['EnableIntSerdesNWLoopback'] = EnableIntSerdesNWLoopback
 
-        reqUrl =  self.cfgUrlBase+'DWDMModuleClntIntf'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'DWDMModuleClntIntf'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteDWDMModuleClntIntf(self,
@@ -5160,12 +6764,12 @@ class FlexSwitch( object):
                 'ModuleId' : ModuleId,
                 }
         reqUrl =  self.cfgUrlBase+'DWDMModuleClntIntf'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteDWDMModuleClntIntfById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'DWDMModuleClntIntf'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getDWDMModuleClntIntf(self,
@@ -5176,16 +6780,34 @@ class FlexSwitch( object):
                 'ModuleId' : int(ModuleId),
                 }
         reqUrl =  self.cfgUrlBase + 'DWDMModuleClntIntf'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getDWDMModuleClntIntfById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'DWDMModuleClntIntf'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'DWDMModuleClntIntf'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllDWDMModuleClntIntfs(self):
         return self.getObjects( 'DWDMModuleClntIntf', self.cfgUrlBase)
+
+
+    def getTemperatureSensorState(self,
+                                  Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.stateUrlBase + 'TemperatureSensor'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getTemperatureSensorStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase + 'TemperatureSensor'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllTemperatureSensorStates(self):
+        return self.getObjects( 'TemperatureSensor', self.stateUrlBase)
 
 
     def getRouteStatsPerInterfaceState(self,
@@ -5194,16 +6816,267 @@ class FlexSwitch( object):
                 'Intfref' : Intfref,
                 }
         reqUrl =  self.stateUrlBase + 'RouteStatsPerInterface'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getRouteStatsPerInterfaceStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'RouteStatsPerInterface'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'RouteStatsPerInterface'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllRouteStatsPerInterfaceStates(self):
         return self.getObjects( 'RouteStatsPerInterface', self.stateUrlBase)
+
+
+    def getNDPGlobalState(self,
+                          Vrf):
+        obj =  { 
+                'Vrf' : Vrf,
+                }
+        reqUrl =  self.stateUrlBase + 'NDPGlobal'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getNDPGlobalStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase + 'NDPGlobal'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllNDPGlobalStates(self):
+        return self.getObjects( 'NDPGlobal', self.stateUrlBase)
+
+
+    def getLacpGlobalState(self,
+                           Vrf):
+        obj =  { 
+                'Vrf' : Vrf,
+                }
+        reqUrl =  self.stateUrlBase + 'LacpGlobal'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getLacpGlobalStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase + 'LacpGlobal'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllLacpGlobalStates(self):
+        return self.getObjects( 'LacpGlobal', self.stateUrlBase)
+
+
+    """
+    .. automethod :: createQsfp(self,
+        :param int32 QsfpId : Qsfp Id Qsfp Id
+        :param float64 HigherAlarmTemperature : Higher Alarm temperature threshold for TCA Higher Alarm temperature threshold for TCA
+        :param float64 HigherAlarmVoltage : Higher Alarm Voltage threshold for TCA Higher Alarm Voltage threshold for TCA
+        :param float64 HigherWarningTemperature : Higher Warning temperature threshold for TCA Higher Warning temperature threshold for TCA
+        :param float64 HigherWarningVoltage : Higher Warning Voltage threshold for TCA Higher Warning Voltage threshold for TCA
+        :param float64 LowerAlarmTemperature : Lower Alarm temperature threshold for TCA Lower Alarm temperature threshold for TCA
+        :param float64 LowerAlarmVoltage : Lower Alarm Voltage threshold for TCA Lower Alarm Voltage threshold for TCA
+        :param float64 LowerWarningTemperature : Lower Warning temperature threshold for TCA Lower Warning temperature threshold for TCA
+        :param float64 LowerWarningVoltage : Lower Warning Voltage threshold for TCA Lower Warning Voltage threshold for TCA
+        :param string PMClassBAdminState : PM Class-B Admin State PM Class-B Admin State
+        :param string PMClassCAdminState : PM Class-C Admin State PM Class-C Admin State
+        :param string PMClassAAdminState : PM Class-A Admin State PM Class-A Admin State
+        :param string AdminState : Enable/Disable Enable/Disable
+
+	"""
+    def createQsfp(self,
+                   QsfpId,
+                   HigherAlarmTemperature,
+                   HigherAlarmVoltage,
+                   HigherWarningTemperature,
+                   HigherWarningVoltage,
+                   LowerAlarmTemperature,
+                   LowerAlarmVoltage,
+                   LowerWarningTemperature,
+                   LowerWarningVoltage,
+                   PMClassBAdminState='Disable',
+                   PMClassCAdminState='Disable',
+                   PMClassAAdminState='Disable',
+                   AdminState='Disable'):
+        obj =  { 
+                'QsfpId' : int(QsfpId),
+                'HigherAlarmTemperature' : HigherAlarmTemperature,
+                'HigherAlarmVoltage' : HigherAlarmVoltage,
+                'HigherWarningTemperature' : HigherWarningTemperature,
+                'HigherWarningVoltage' : HigherWarningVoltage,
+                'LowerAlarmTemperature' : LowerAlarmTemperature,
+                'LowerAlarmVoltage' : LowerAlarmVoltage,
+                'LowerWarningTemperature' : LowerWarningTemperature,
+                'LowerWarningVoltage' : LowerWarningVoltage,
+                'PMClassBAdminState' : PMClassBAdminState,
+                'PMClassCAdminState' : PMClassCAdminState,
+                'PMClassAAdminState' : PMClassAAdminState,
+                'AdminState' : AdminState,
+                }
+        reqUrl =  self.cfgUrlBase+'Qsfp'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def updateQsfp(self,
+                   QsfpId,
+                   HigherAlarmTemperature = None,
+                   HigherAlarmVoltage = None,
+                   HigherWarningTemperature = None,
+                   HigherWarningVoltage = None,
+                   LowerAlarmTemperature = None,
+                   LowerAlarmVoltage = None,
+                   LowerWarningTemperature = None,
+                   LowerWarningVoltage = None,
+                   PMClassBAdminState = None,
+                   PMClassCAdminState = None,
+                   PMClassAAdminState = None,
+                   AdminState = None):
+        obj =  {}
+        if QsfpId != None :
+            obj['QsfpId'] = int(QsfpId)
+
+        if HigherAlarmTemperature != None :
+            obj['HigherAlarmTemperature'] = HigherAlarmTemperature
+
+        if HigherAlarmVoltage != None :
+            obj['HigherAlarmVoltage'] = HigherAlarmVoltage
+
+        if HigherWarningTemperature != None :
+            obj['HigherWarningTemperature'] = HigherWarningTemperature
+
+        if HigherWarningVoltage != None :
+            obj['HigherWarningVoltage'] = HigherWarningVoltage
+
+        if LowerAlarmTemperature != None :
+            obj['LowerAlarmTemperature'] = LowerAlarmTemperature
+
+        if LowerAlarmVoltage != None :
+            obj['LowerAlarmVoltage'] = LowerAlarmVoltage
+
+        if LowerWarningTemperature != None :
+            obj['LowerWarningTemperature'] = LowerWarningTemperature
+
+        if LowerWarningVoltage != None :
+            obj['LowerWarningVoltage'] = LowerWarningVoltage
+
+        if PMClassBAdminState != None :
+            obj['PMClassBAdminState'] = PMClassBAdminState
+
+        if PMClassCAdminState != None :
+            obj['PMClassCAdminState'] = PMClassCAdminState
+
+        if PMClassAAdminState != None :
+            obj['PMClassAAdminState'] = PMClassAAdminState
+
+        if AdminState != None :
+            obj['AdminState'] = AdminState
+
+        reqUrl =  self.cfgUrlBase+'Qsfp'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def updateQsfpById(self,
+                        objectId,
+                        HigherAlarmTemperature = None,
+                        HigherAlarmVoltage = None,
+                        HigherWarningTemperature = None,
+                        HigherWarningVoltage = None,
+                        LowerAlarmTemperature = None,
+                        LowerAlarmVoltage = None,
+                        LowerWarningTemperature = None,
+                        LowerWarningVoltage = None,
+                        PMClassBAdminState = None,
+                        PMClassCAdminState = None,
+                        PMClassAAdminState = None,
+                        AdminState = None):
+        obj =  {}
+        if HigherAlarmTemperature !=  None:
+            obj['HigherAlarmTemperature'] = HigherAlarmTemperature
+
+        if HigherAlarmVoltage !=  None:
+            obj['HigherAlarmVoltage'] = HigherAlarmVoltage
+
+        if HigherWarningTemperature !=  None:
+            obj['HigherWarningTemperature'] = HigherWarningTemperature
+
+        if HigherWarningVoltage !=  None:
+            obj['HigherWarningVoltage'] = HigherWarningVoltage
+
+        if LowerAlarmTemperature !=  None:
+            obj['LowerAlarmTemperature'] = LowerAlarmTemperature
+
+        if LowerAlarmVoltage !=  None:
+            obj['LowerAlarmVoltage'] = LowerAlarmVoltage
+
+        if LowerWarningTemperature !=  None:
+            obj['LowerWarningTemperature'] = LowerWarningTemperature
+
+        if LowerWarningVoltage !=  None:
+            obj['LowerWarningVoltage'] = LowerWarningVoltage
+
+        if PMClassBAdminState !=  None:
+            obj['PMClassBAdminState'] = PMClassBAdminState
+
+        if PMClassCAdminState !=  None:
+            obj['PMClassCAdminState'] = PMClassCAdminState
+
+        if PMClassAAdminState !=  None:
+            obj['PMClassAAdminState'] = PMClassAAdminState
+
+        if AdminState !=  None:
+            obj['AdminState'] = AdminState
+
+        reqUrl =  self.cfgUrlBase+'Qsfp'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
+        return r
+
+    def deleteQsfp(self,
+                   QsfpId):
+        obj =  { 
+                'QsfpId' : QsfpId,
+                }
+        reqUrl =  self.cfgUrlBase+'Qsfp'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def deleteQsfpById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'Qsfp'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
+        return r
+
+    def getQsfp(self,
+                QsfpId):
+        obj =  { 
+                'QsfpId' : int(QsfpId),
+                }
+        reqUrl =  self.cfgUrlBase + 'Qsfp'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getQsfpById(self, objectId ):
+        reqUrl =  self.cfgUrlBase + 'Qsfp'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllQsfps(self):
+        return self.getObjects( 'Qsfp', self.cfgUrlBase)
+
+
+    def getVoltageSensorPMDataState(self,
+                                    Class,
+                                    Name):
+        obj =  { 
+                'Class' : Class,
+                'Name' : Name,
+                }
+        reqUrl =  self.stateUrlBase + 'VoltageSensorPMData'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getVoltageSensorPMDataStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase + 'VoltageSensorPMData'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllVoltageSensorPMDataStates(self):
+        return self.getObjects( 'VoltageSensorPMData', self.stateUrlBase)
 
 
     """
@@ -5241,7 +7114,7 @@ class FlexSwitch( object):
                 'Enable' : True if Enable else False,
                 }
         reqUrl =  self.cfgUrlBase+'DhcpIntfConfig'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateDhcpIntfConfig(self,
@@ -5283,7 +7156,7 @@ class FlexSwitch( object):
             obj['Enable'] = True if Enable else False
 
         reqUrl =  self.cfgUrlBase+'DhcpIntfConfig'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateDhcpIntfConfigById(self,
@@ -5296,7 +7169,7 @@ class FlexSwitch( object):
                                   DNSServerAddr = None,
                                   DomainName = None,
                                   Enable = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if Subnet !=  None:
             obj['Subnet'] = Subnet
 
@@ -5321,8 +7194,8 @@ class FlexSwitch( object):
         if Enable !=  None:
             obj['Enable'] = Enable
 
-        reqUrl =  self.cfgUrlBase+'DhcpIntfConfig'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'DhcpIntfConfig'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteDhcpIntfConfig(self,
@@ -5331,12 +7204,12 @@ class FlexSwitch( object):
                 'IntfRef' : IntfRef,
                 }
         reqUrl =  self.cfgUrlBase+'DhcpIntfConfig'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteDhcpIntfConfigById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'DhcpIntfConfig'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getDhcpIntfConfig(self,
@@ -5345,16 +7218,40 @@ class FlexSwitch( object):
                 'IntfRef' : IntfRef,
                 }
         reqUrl =  self.cfgUrlBase + 'DhcpIntfConfig'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getDhcpIntfConfigById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'DhcpIntfConfig'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'DhcpIntfConfig'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllDhcpIntfConfigs(self):
         return self.getObjects( 'DhcpIntfConfig', self.cfgUrlBase)
+
+
+    def getQsfpChannelPMDataState(self,
+                                  ChannelNum,
+                                  Class,
+                                  Resource,
+                                  QsfpId):
+        obj =  { 
+                'ChannelNum' : int(ChannelNum),
+                'Class' : Class,
+                'Resource' : Resource,
+                'QsfpId' : int(QsfpId),
+                }
+        reqUrl =  self.stateUrlBase + 'QsfpChannelPMData'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getQsfpChannelPMDataStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase + 'QsfpChannelPMData'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllQsfpChannelPMDataStates(self):
+        return self.getObjects( 'QsfpChannelPMData', self.stateUrlBase)
 
 
     def getVrrpIntfState(self,
@@ -5365,12 +7262,12 @@ class FlexSwitch( object):
                 'IfIndex' : int(IfIndex),
                 }
         reqUrl =  self.stateUrlBase + 'VrrpIntf'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getVrrpIntfStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'VrrpIntf'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'VrrpIntf'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllVrrpIntfStates(self):
@@ -5383,16 +7280,181 @@ class FlexSwitch( object):
                 'Name' : Name,
                 }
         reqUrl =  self.stateUrlBase + 'SystemStatus'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getSystemStatusStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'SystemStatus'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'SystemStatus'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllSystemStatusStates(self):
         return self.getObjects( 'SystemStatus', self.stateUrlBase)
+
+
+    """
+    .. automethod :: executeArpDeleteByIPv4Addr(self,
+        :param string IpAddr : End Host IP Address for which corresponding Arp entry needed to be deleted End Host IP Address for which corresponding Arp entry needed to be deleted
+
+	"""
+    def executeArpDeleteByIPv4Addr(self,
+                                   IpAddr):
+        obj =  { 
+                'IpAddr' : IpAddr,
+                }
+        reqUrl =  self.actionUrlBase+'ArpDeleteByIPv4Addr'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    """
+    .. automethod :: createFanSensor(self,
+        :param string Name : Fan Sensor Name Fan Sensor Name
+        :param int32 HigherAlarmThreshold : Higher Alarm Threshold for TCA Higher Alarm Threshold for TCA
+        :param int32 HigherWarningThreshold : Higher Warning Threshold for TCA Higher Warning Threshold for TCA
+        :param int32 LowerWarningThreshold : Lower Warning Threshold for TCA Lower Warning Threshold for TCA
+        :param int32 LowerAlarmThreshold : Lower Alarm Threshold for TCA Lower Alarm Threshold for TCA
+        :param string PMClassCAdminState : PM Class-C Admin State PM Class-C Admin State
+        :param string PMClassAAdminState : PM Class-A Admin State PM Class-A Admin State
+        :param string AdminState : Enable/Disable Enable/Disable
+        :param string PMClassBAdminState : PM Class-B Admin State PM Class-B Admin State
+
+	"""
+    def createFanSensor(self,
+                        Name,
+                        HigherAlarmThreshold,
+                        HigherWarningThreshold,
+                        LowerWarningThreshold,
+                        LowerAlarmThreshold,
+                        PMClassCAdminState='Enable',
+                        PMClassAAdminState='Enable',
+                        AdminState='Enable',
+                        PMClassBAdminState='Enable'):
+        obj =  { 
+                'Name' : Name,
+                'HigherAlarmThreshold' : int(HigherAlarmThreshold),
+                'HigherWarningThreshold' : int(HigherWarningThreshold),
+                'LowerWarningThreshold' : int(LowerWarningThreshold),
+                'LowerAlarmThreshold' : int(LowerAlarmThreshold),
+                'PMClassCAdminState' : PMClassCAdminState,
+                'PMClassAAdminState' : PMClassAAdminState,
+                'AdminState' : AdminState,
+                'PMClassBAdminState' : PMClassBAdminState,
+                }
+        reqUrl =  self.cfgUrlBase+'FanSensor'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def updateFanSensor(self,
+                        Name,
+                        HigherAlarmThreshold = None,
+                        HigherWarningThreshold = None,
+                        LowerWarningThreshold = None,
+                        LowerAlarmThreshold = None,
+                        PMClassCAdminState = None,
+                        PMClassAAdminState = None,
+                        AdminState = None,
+                        PMClassBAdminState = None):
+        obj =  {}
+        if Name != None :
+            obj['Name'] = Name
+
+        if HigherAlarmThreshold != None :
+            obj['HigherAlarmThreshold'] = int(HigherAlarmThreshold)
+
+        if HigherWarningThreshold != None :
+            obj['HigherWarningThreshold'] = int(HigherWarningThreshold)
+
+        if LowerWarningThreshold != None :
+            obj['LowerWarningThreshold'] = int(LowerWarningThreshold)
+
+        if LowerAlarmThreshold != None :
+            obj['LowerAlarmThreshold'] = int(LowerAlarmThreshold)
+
+        if PMClassCAdminState != None :
+            obj['PMClassCAdminState'] = PMClassCAdminState
+
+        if PMClassAAdminState != None :
+            obj['PMClassAAdminState'] = PMClassAAdminState
+
+        if AdminState != None :
+            obj['AdminState'] = AdminState
+
+        if PMClassBAdminState != None :
+            obj['PMClassBAdminState'] = PMClassBAdminState
+
+        reqUrl =  self.cfgUrlBase+'FanSensor'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def updateFanSensorById(self,
+                             objectId,
+                             HigherAlarmThreshold = None,
+                             HigherWarningThreshold = None,
+                             LowerWarningThreshold = None,
+                             LowerAlarmThreshold = None,
+                             PMClassCAdminState = None,
+                             PMClassAAdminState = None,
+                             AdminState = None,
+                             PMClassBAdminState = None):
+        obj =  {}
+        if HigherAlarmThreshold !=  None:
+            obj['HigherAlarmThreshold'] = HigherAlarmThreshold
+
+        if HigherWarningThreshold !=  None:
+            obj['HigherWarningThreshold'] = HigherWarningThreshold
+
+        if LowerWarningThreshold !=  None:
+            obj['LowerWarningThreshold'] = LowerWarningThreshold
+
+        if LowerAlarmThreshold !=  None:
+            obj['LowerAlarmThreshold'] = LowerAlarmThreshold
+
+        if PMClassCAdminState !=  None:
+            obj['PMClassCAdminState'] = PMClassCAdminState
+
+        if PMClassAAdminState !=  None:
+            obj['PMClassAAdminState'] = PMClassAAdminState
+
+        if AdminState !=  None:
+            obj['AdminState'] = AdminState
+
+        if PMClassBAdminState !=  None:
+            obj['PMClassBAdminState'] = PMClassBAdminState
+
+        reqUrl =  self.cfgUrlBase+'FanSensor'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
+        return r
+
+    def deleteFanSensor(self,
+                        Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.cfgUrlBase+'FanSensor'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def deleteFanSensorById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'FanSensor'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
+        return r
+
+    def getFanSensor(self,
+                     Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.cfgUrlBase + 'FanSensor'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getFanSensorById(self, objectId ):
+        reqUrl =  self.cfgUrlBase + 'FanSensor'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllFanSensors(self):
+        return self.getObjects( 'FanSensor', self.cfgUrlBase)
 
 
     """
@@ -5421,7 +7483,7 @@ class FlexSwitch( object):
                 'PhysicalPort' : PhysicalPort,
                 }
         reqUrl =  self.cfgUrlBase+'IpTableAcl'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateIpTableAcl(self,
@@ -5451,7 +7513,7 @@ class FlexSwitch( object):
             obj['PhysicalPort'] = PhysicalPort
 
         reqUrl =  self.cfgUrlBase+'IpTableAcl'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateIpTableAclById(self,
@@ -5461,7 +7523,7 @@ class FlexSwitch( object):
                               Protocol = None,
                               Port = None,
                               PhysicalPort = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if Action !=  None:
             obj['Action'] = Action
 
@@ -5477,8 +7539,8 @@ class FlexSwitch( object):
         if PhysicalPort !=  None:
             obj['PhysicalPort'] = PhysicalPort
 
-        reqUrl =  self.cfgUrlBase+'IpTableAcl'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'IpTableAcl'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteIpTableAcl(self,
@@ -5487,12 +7549,12 @@ class FlexSwitch( object):
                 'Name' : Name,
                 }
         reqUrl =  self.cfgUrlBase+'IpTableAcl'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteIpTableAclById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'IpTableAcl'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getIpTableAcl(self,
@@ -5501,12 +7563,12 @@ class FlexSwitch( object):
                 'Name' : Name,
                 }
         reqUrl =  self.cfgUrlBase + 'IpTableAcl'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getIpTableAclById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'IpTableAcl'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'IpTableAcl'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllIpTableAcls(self):
@@ -5521,12 +7583,12 @@ class FlexSwitch( object):
                 'DrNameRef' : DrNameRef,
                 }
         reqUrl =  self.stateUrlBase + 'IppLink'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getIppLinkStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'IppLink'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'IppLink'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllIppLinkStates(self):
@@ -5541,12 +7603,12 @@ class FlexSwitch( object):
                 'ModuleId' : int(ModuleId),
                 }
         reqUrl =  self.stateUrlBase + 'DWDMModuleNwIntf'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getDWDMModuleNwIntfStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'DWDMModuleNwIntf'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'DWDMModuleNwIntf'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllDWDMModuleNwIntfStates(self):
@@ -5600,7 +7662,7 @@ class FlexSwitch( object):
                 'IfRtrDeadInterval' : int(IfRtrDeadInterval),
                 }
         reqUrl =  self.cfgUrlBase+'OspfIfEntry'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateOspfIfEntry(self,
@@ -5658,7 +7720,7 @@ class FlexSwitch( object):
             obj['IfRtrDeadInterval'] = int(IfRtrDeadInterval)
 
         reqUrl =  self.cfgUrlBase+'OspfIfEntry'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateOspfIfEntryById(self,
@@ -5674,7 +7736,7 @@ class FlexSwitch( object):
                                IfAuthType = None,
                                IfHelloInterval = None,
                                IfRtrDeadInterval = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if IfAdminStat !=  None:
             obj['IfAdminStat'] = IfAdminStat
 
@@ -5708,8 +7770,8 @@ class FlexSwitch( object):
         if IfRtrDeadInterval !=  None:
             obj['IfRtrDeadInterval'] = IfRtrDeadInterval
 
-        reqUrl =  self.cfgUrlBase+'OspfIfEntry'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'OspfIfEntry'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteOspfIfEntry(self,
@@ -5720,12 +7782,12 @@ class FlexSwitch( object):
                 'AddressLessIf' : AddressLessIf,
                 }
         reqUrl =  self.cfgUrlBase+'OspfIfEntry'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteOspfIfEntryById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'OspfIfEntry'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getOspfIfEntry(self,
@@ -5736,12 +7798,12 @@ class FlexSwitch( object):
                 'AddressLessIf' : int(AddressLessIf),
                 }
         reqUrl =  self.cfgUrlBase + 'OspfIfEntry'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getOspfIfEntryById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'OspfIfEntry'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'OspfIfEntry'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllOspfIfEntrys(self):
@@ -5754,12 +7816,12 @@ class FlexSwitch( object):
                 'IntfRef' : IntfRef,
                 }
         reqUrl =  self.stateUrlBase + 'BufferPortStat'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getBufferPortStatStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BufferPortStat'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'BufferPortStat'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllBufferPortStatStates(self):
@@ -5769,44 +7831,44 @@ class FlexSwitch( object):
     """
     .. automethod :: createBGPGlobal(self,
         :param string Vrf : VRF id for BGP global config VRF id for BGP global config
-        :param uint32 ASNum : Local AS for BGP global config Local AS for BGP global config
-        :param string RouterId : Router id for BGP global config Router id for BGP global config
+        :param string ASNum : Local AS for BGP global config. Both AsPlain and AsDot formats are supported. Local AS for BGP global config. Both AsPlain and AsDot formats are supported.
         :param bool UseMultiplePaths : Enable/disable ECMP for BGP Enable/disable ECMP for BGP
         :param uint32 EBGPMaxPaths : Max ECMP paths from External BGP neighbors Max ECMP paths from External BGP neighbors
         :param bool EBGPAllowMultipleAS : Enable/diable ECMP paths from multiple ASes Enable/diable ECMP paths from multiple ASes
+        :param string RouterId : Router id for BGP global config Router id for BGP global config
         :param uint32 IBGPMaxPaths : Max ECMP paths from Internal BGP neighbors Max ECMP paths from Internal BGP neighbors
         :param SourcePolicyList Redistribution : Provide redistribution policies for BGP from different sources Provide redistribution policies for BGP from different sources
 
 	"""
     def createBGPGlobal(self,
-                        ASNum,
-                        RouterId,
+                        ASNum='',
                         UseMultiplePaths=False,
                         EBGPMaxPaths=0,
                         EBGPAllowMultipleAS=False,
+                        RouterId='0.0.0.0',
                         IBGPMaxPaths=0,
                         Redistribution=[]):
         obj =  { 
                 'Vrf' : 'default',
-                'ASNum' : int(ASNum),
-                'RouterId' : RouterId,
+                'ASNum' : ASNum,
                 'UseMultiplePaths' : True if UseMultiplePaths else False,
                 'EBGPMaxPaths' : int(EBGPMaxPaths),
                 'EBGPAllowMultipleAS' : True if EBGPAllowMultipleAS else False,
+                'RouterId' : RouterId,
                 'IBGPMaxPaths' : int(IBGPMaxPaths),
                 'Redistribution' : Redistribution,
                 }
         reqUrl =  self.cfgUrlBase+'BGPGlobal'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateBGPGlobal(self,
                         Vrf,
                         ASNum = None,
-                        RouterId = None,
                         UseMultiplePaths = None,
                         EBGPMaxPaths = None,
                         EBGPAllowMultipleAS = None,
+                        RouterId = None,
                         IBGPMaxPaths = None,
                         Redistribution = None):
         obj =  {}
@@ -5814,10 +7876,7 @@ class FlexSwitch( object):
             obj['Vrf'] = Vrf
 
         if ASNum != None :
-            obj['ASNum'] = int(ASNum)
-
-        if RouterId != None :
-            obj['RouterId'] = RouterId
+            obj['ASNum'] = ASNum
 
         if UseMultiplePaths != None :
             obj['UseMultiplePaths'] = True if UseMultiplePaths else False
@@ -5828,6 +7887,9 @@ class FlexSwitch( object):
         if EBGPAllowMultipleAS != None :
             obj['EBGPAllowMultipleAS'] = True if EBGPAllowMultipleAS else False
 
+        if RouterId != None :
+            obj['RouterId'] = RouterId
+
         if IBGPMaxPaths != None :
             obj['IBGPMaxPaths'] = int(IBGPMaxPaths)
 
@@ -5835,24 +7897,21 @@ class FlexSwitch( object):
             obj['Redistribution'] = Redistribution
 
         reqUrl =  self.cfgUrlBase+'BGPGlobal'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateBGPGlobalById(self,
                              objectId,
                              ASNum = None,
-                             RouterId = None,
                              UseMultiplePaths = None,
                              EBGPMaxPaths = None,
                              EBGPAllowMultipleAS = None,
+                             RouterId = None,
                              IBGPMaxPaths = None,
                              Redistribution = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if ASNum !=  None:
             obj['ASNum'] = ASNum
-
-        if RouterId !=  None:
-            obj['RouterId'] = RouterId
 
         if UseMultiplePaths !=  None:
             obj['UseMultiplePaths'] = UseMultiplePaths
@@ -5863,14 +7922,17 @@ class FlexSwitch( object):
         if EBGPAllowMultipleAS !=  None:
             obj['EBGPAllowMultipleAS'] = EBGPAllowMultipleAS
 
+        if RouterId !=  None:
+            obj['RouterId'] = RouterId
+
         if IBGPMaxPaths !=  None:
             obj['IBGPMaxPaths'] = IBGPMaxPaths
 
         if Redistribution !=  None:
             obj['Redistribution'] = Redistribution
 
-        reqUrl =  self.cfgUrlBase+'BGPGlobal'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'BGPGlobal'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteBGPGlobal(self,
@@ -5879,12 +7941,12 @@ class FlexSwitch( object):
                 'Vrf' : Vrf,
                 }
         reqUrl =  self.cfgUrlBase+'BGPGlobal'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteBGPGlobalById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'BGPGlobal'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getBGPGlobal(self,
@@ -5893,16 +7955,36 @@ class FlexSwitch( object):
                 'Vrf' : Vrf,
                 }
         reqUrl =  self.cfgUrlBase + 'BGPGlobal'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getBGPGlobalById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BGPGlobal'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'BGPGlobal'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllBGPGlobals(self):
         return self.getObjects( 'BGPGlobal', self.cfgUrlBase)
+
+
+    def getTemperatureSensorPMDataState(self,
+                                        Class,
+                                        Name):
+        obj =  { 
+                'Class' : Class,
+                'Name' : Name,
+                }
+        reqUrl =  self.stateUrlBase + 'TemperatureSensorPMData'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getTemperatureSensorPMDataStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase + 'TemperatureSensorPMData'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllTemperatureSensorPMDataStates(self):
+        return self.getObjects( 'TemperatureSensorPMData', self.stateUrlBase)
 
 
     def getOspfAreaEntryState(self,
@@ -5911,57 +7993,117 @@ class FlexSwitch( object):
                 'AreaId' : AreaId,
                 }
         reqUrl =  self.stateUrlBase + 'OspfAreaEntry'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getOspfAreaEntryStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'OspfAreaEntry'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'OspfAreaEntry'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllOspfAreaEntryStates(self):
         return self.getObjects( 'OspfAreaEntry', self.stateUrlBase)
 
 
+    def getLLDPGlobalState(self,
+                           Vrf):
+        obj =  { 
+                'Vrf' : Vrf,
+                }
+        reqUrl =  self.stateUrlBase + 'LLDPGlobal'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getLLDPGlobalStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase + 'LLDPGlobal'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllLLDPGlobalStates(self):
+        return self.getObjects( 'LLDPGlobal', self.stateUrlBase)
+
+
+    def getEthernetPMState(self,
+                           IntfRef,
+                           Resource):
+        obj =  { 
+                'IntfRef' : IntfRef,
+                'Resource' : Resource,
+                }
+        reqUrl =  self.stateUrlBase + 'EthernetPM'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getEthernetPMStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase + 'EthernetPM'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllEthernetPMStates(self):
+        return self.getObjects( 'EthernetPM', self.stateUrlBase)
+
+
     """
     .. automethod :: createNDPGlobal(self,
         :param string Vrf : System Vrf System Vrf
-        :param string Enable : Enable/Diable Neighbor Discovery Globally Enable/Diable Neighbor Discovery Globally
+        :param int32 RetransmitInterval : The time between retransmissions of Neighbor Solicitation messages to a neighbor when resolving the address or when probing the reachability of a neighbor in ms The time between retransmissions of Neighbor Solicitation messages to a neighbor when resolving the address or when probing the reachability of a neighbor in ms
+        :param int32 RouterAdvertisementInterval : Delay between each router advertisements in seconds Delay between each router advertisements in seconds
+        :param int32 ReachableTime : The time a neighbor is considered reachable after receiving a reachability confirmation in ms The time a neighbor is considered reachable after receiving a reachability confirmation in ms
 
 	"""
     def createNDPGlobal(self,
-                        Enable='true'):
+                        RetransmitInterval=1,
+                        RouterAdvertisementInterval=5,
+                        ReachableTime=30000):
         obj =  { 
                 'Vrf' : 'default',
-                'Enable' : Enable,
+                'RetransmitInterval' : int(RetransmitInterval),
+                'RouterAdvertisementInterval' : int(RouterAdvertisementInterval),
+                'ReachableTime' : int(ReachableTime),
                 }
         reqUrl =  self.cfgUrlBase+'NDPGlobal'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateNDPGlobal(self,
                         Vrf,
-                        Enable = None):
+                        RetransmitInterval = None,
+                        RouterAdvertisementInterval = None,
+                        ReachableTime = None):
         obj =  {}
         if Vrf != None :
             obj['Vrf'] = Vrf
 
-        if Enable != None :
-            obj['Enable'] = Enable
+        if RetransmitInterval != None :
+            obj['RetransmitInterval'] = int(RetransmitInterval)
+
+        if RouterAdvertisementInterval != None :
+            obj['RouterAdvertisementInterval'] = int(RouterAdvertisementInterval)
+
+        if ReachableTime != None :
+            obj['ReachableTime'] = int(ReachableTime)
 
         reqUrl =  self.cfgUrlBase+'NDPGlobal'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateNDPGlobalById(self,
                              objectId,
-                             Enable = None):
-        obj =  {'objectId': objectId }
-        if Enable !=  None:
-            obj['Enable'] = Enable
+                             RetransmitInterval = None,
+                             RouterAdvertisementInterval = None,
+                             ReachableTime = None):
+        obj =  {}
+        if RetransmitInterval !=  None:
+            obj['RetransmitInterval'] = RetransmitInterval
 
-        reqUrl =  self.cfgUrlBase+'NDPGlobal'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        if RouterAdvertisementInterval !=  None:
+            obj['RouterAdvertisementInterval'] = RouterAdvertisementInterval
+
+        if ReachableTime !=  None:
+            obj['ReachableTime'] = ReachableTime
+
+        reqUrl =  self.cfgUrlBase+'NDPGlobal'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteNDPGlobal(self,
@@ -5970,12 +8112,12 @@ class FlexSwitch( object):
                 'Vrf' : Vrf,
                 }
         reqUrl =  self.cfgUrlBase+'NDPGlobal'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteNDPGlobalById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'NDPGlobal'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getNDPGlobal(self,
@@ -5984,12 +8126,12 @@ class FlexSwitch( object):
                 'Vrf' : Vrf,
                 }
         reqUrl =  self.cfgUrlBase + 'NDPGlobal'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getNDPGlobalById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'NDPGlobal'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'NDPGlobal'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllNDPGlobals(self):
@@ -6002,12 +8144,12 @@ class FlexSwitch( object):
                 'PsuId' : int(PsuId),
                 }
         reqUrl =  self.stateUrlBase + 'Psu'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getPsuStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'Psu'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'Psu'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllPsuStates(self):
@@ -6037,7 +8179,7 @@ class FlexSwitch( object):
                 'ParamName' : ParamName,
                 }
         reqUrl =  self.cfgUrlBase+'BfdSession'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateBfdSession(self,
@@ -6063,7 +8205,7 @@ class FlexSwitch( object):
             obj['ParamName'] = ParamName
 
         reqUrl =  self.cfgUrlBase+'BfdSession'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateBfdSessionById(self,
@@ -6072,7 +8214,7 @@ class FlexSwitch( object):
                               Owner = None,
                               PerLink = None,
                               ParamName = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if Interface !=  None:
             obj['Interface'] = Interface
 
@@ -6085,8 +8227,8 @@ class FlexSwitch( object):
         if ParamName !=  None:
             obj['ParamName'] = ParamName
 
-        reqUrl =  self.cfgUrlBase+'BfdSession'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'BfdSession'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteBfdSession(self,
@@ -6095,12 +8237,12 @@ class FlexSwitch( object):
                 'IpAddr' : IpAddr,
                 }
         reqUrl =  self.cfgUrlBase+'BfdSession'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteBfdSessionById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'BfdSession'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getBfdSession(self,
@@ -6109,12 +8251,12 @@ class FlexSwitch( object):
                 'IpAddr' : IpAddr,
                 }
         reqUrl =  self.cfgUrlBase + 'BfdSession'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getBfdSessionById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BfdSession'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'BfdSession'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllBfdSessions(self):
@@ -6127,12 +8269,12 @@ class FlexSwitch( object):
                 'Name' : Name,
                 }
         reqUrl =  self.stateUrlBase + 'PolicyCondition'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getPolicyConditionStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'PolicyCondition'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'PolicyCondition'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllPolicyConditionStates(self):
@@ -6168,7 +8310,7 @@ class FlexSwitch( object):
                 'AcceptMode' : True if AcceptMode else False,
                 }
         reqUrl =  self.cfgUrlBase+'VrrpIntf'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateVrrpIntf(self,
@@ -6202,7 +8344,7 @@ class FlexSwitch( object):
             obj['AcceptMode'] = True if AcceptMode else False
 
         reqUrl =  self.cfgUrlBase+'VrrpIntf'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateVrrpIntfById(self,
@@ -6212,7 +8354,7 @@ class FlexSwitch( object):
                             Priority = None,
                             AdvertisementInterval = None,
                             AcceptMode = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if VirtualIPv4Addr !=  None:
             obj['VirtualIPv4Addr'] = VirtualIPv4Addr
 
@@ -6228,8 +8370,8 @@ class FlexSwitch( object):
         if AcceptMode !=  None:
             obj['AcceptMode'] = AcceptMode
 
-        reqUrl =  self.cfgUrlBase+'VrrpIntf'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'VrrpIntf'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteVrrpIntf(self,
@@ -6240,12 +8382,12 @@ class FlexSwitch( object):
                 'IfIndex' : IfIndex,
                 }
         reqUrl =  self.cfgUrlBase+'VrrpIntf'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteVrrpIntfById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'VrrpIntf'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getVrrpIntf(self,
@@ -6256,37 +8398,59 @@ class FlexSwitch( object):
                 'IfIndex' : int(IfIndex),
                 }
         reqUrl =  self.cfgUrlBase + 'VrrpIntf'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getVrrpIntfById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'VrrpIntf'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'VrrpIntf'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllVrrpIntfs(self):
         return self.getObjects( 'VrrpIntf', self.cfgUrlBase)
 
 
+    def getXponderGlobalState(self,
+                              XponderId):
+        obj =  { 
+                'XponderId' : int(XponderId),
+                }
+        reqUrl =  self.stateUrlBase + 'XponderGlobal'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getXponderGlobalStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase + 'XponderGlobal'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllXponderGlobalStates(self):
+        return self.getObjects( 'XponderGlobal', self.stateUrlBase)
+
+
     """
     .. automethod :: createLLDPGlobal(self,
         :param string Vrf : LLDP Global Config For Default VRF LLDP Global Config For Default VRF
         :param bool Enable : Enable/Disable LLDP Globally Enable/Disable LLDP Globally
+        :param int32 TranmitInterval : LLDP Re-Transmit Interval in seconds LLDP Re-Transmit Interval in seconds
 
 	"""
     def createLLDPGlobal(self,
-                         Enable=False):
+                         Enable=False,
+                         TranmitInterval=30):
         obj =  { 
                 'Vrf' : 'default',
                 'Enable' : True if Enable else False,
+                'TranmitInterval' : int(TranmitInterval),
                 }
         reqUrl =  self.cfgUrlBase+'LLDPGlobal'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateLLDPGlobal(self,
                          Vrf,
-                         Enable = None):
+                         Enable = None,
+                         TranmitInterval = None):
         obj =  {}
         if Vrf != None :
             obj['Vrf'] = Vrf
@@ -6294,19 +8458,26 @@ class FlexSwitch( object):
         if Enable != None :
             obj['Enable'] = True if Enable else False
 
+        if TranmitInterval != None :
+            obj['TranmitInterval'] = int(TranmitInterval)
+
         reqUrl =  self.cfgUrlBase+'LLDPGlobal'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateLLDPGlobalById(self,
                               objectId,
-                              Enable = None):
-        obj =  {'objectId': objectId }
+                              Enable = None,
+                              TranmitInterval = None):
+        obj =  {}
         if Enable !=  None:
             obj['Enable'] = Enable
 
-        reqUrl =  self.cfgUrlBase+'LLDPGlobal'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        if TranmitInterval !=  None:
+            obj['TranmitInterval'] = TranmitInterval
+
+        reqUrl =  self.cfgUrlBase+'LLDPGlobal'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteLLDPGlobal(self,
@@ -6315,12 +8486,12 @@ class FlexSwitch( object):
                 'Vrf' : Vrf,
                 }
         reqUrl =  self.cfgUrlBase+'LLDPGlobal'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteLLDPGlobalById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'LLDPGlobal'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getLLDPGlobal(self,
@@ -6329,16 +8500,34 @@ class FlexSwitch( object):
                 'Vrf' : Vrf,
                 }
         reqUrl =  self.cfgUrlBase + 'LLDPGlobal'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getLLDPGlobalById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'LLDPGlobal'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'LLDPGlobal'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllLLDPGlobals(self):
         return self.getObjects( 'LLDPGlobal', self.cfgUrlBase)
+
+
+    def getIPv6RouteHwState(self,
+                            DestinationNw):
+        obj =  { 
+                'DestinationNw' : DestinationNw,
+                }
+        reqUrl =  self.stateUrlBase + 'IPv6RouteHw'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getIPv6RouteHwStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase + 'IPv6RouteHw'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllIPv6RouteHwStates(self):
+        return self.getObjects( 'IPv6RouteHw', self.stateUrlBase)
 
 
     """
@@ -6364,7 +8553,7 @@ class FlexSwitch( object):
                 'Enable' : True if Enable else False,
                 }
         reqUrl =  self.cfgUrlBase+'SubIPv4Intf'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateSubIPv4Intf(self,
@@ -6390,7 +8579,7 @@ class FlexSwitch( object):
             obj['Enable'] = True if Enable else False
 
         reqUrl =  self.cfgUrlBase+'SubIPv4Intf'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateSubIPv4IntfById(self,
@@ -6398,7 +8587,7 @@ class FlexSwitch( object):
                                Type = None,
                                MacAddr = None,
                                Enable = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if Type !=  None:
             obj['Type'] = Type
 
@@ -6408,8 +8597,8 @@ class FlexSwitch( object):
         if Enable !=  None:
             obj['Enable'] = Enable
 
-        reqUrl =  self.cfgUrlBase+'SubIPv4Intf'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'SubIPv4Intf'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteSubIPv4Intf(self,
@@ -6420,12 +8609,12 @@ class FlexSwitch( object):
                 'IpAddr' : IpAddr,
                 }
         reqUrl =  self.cfgUrlBase+'SubIPv4Intf'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteSubIPv4IntfById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'SubIPv4Intf'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getSubIPv4Intf(self,
@@ -6436,12 +8625,12 @@ class FlexSwitch( object):
                 'IpAddr' : IpAddr,
                 }
         reqUrl =  self.cfgUrlBase + 'SubIPv4Intf'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getSubIPv4IntfById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'SubIPv4Intf'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'SubIPv4Intf'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllSubIPv4Intfs(self):
@@ -6454,12 +8643,12 @@ class FlexSwitch( object):
                 'SfpId' : int(SfpId),
                 }
         reqUrl =  self.stateUrlBase + 'Sfp'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getSfpStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'Sfp'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'Sfp'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllSfpStates(self):
@@ -6472,12 +8661,12 @@ class FlexSwitch( object):
                 'Name' : Name,
                 }
         reqUrl =  self.stateUrlBase + 'PolicyDefinition'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getPolicyDefinitionStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'PolicyDefinition'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'PolicyDefinition'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllPolicyDefinitionStates(self):
@@ -6490,12 +8679,12 @@ class FlexSwitch( object):
                 'VlanId' : int(VlanId),
                 }
         reqUrl =  self.stateUrlBase + 'Vlan'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getVlanStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'Vlan'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'Vlan'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllVlanStates(self):
@@ -6508,12 +8697,12 @@ class FlexSwitch( object):
                 'Vrf' : Vrf,
                 }
         reqUrl =  self.stateUrlBase + 'IsisGlobal'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getIsisGlobalStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'IsisGlobal'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'IsisGlobal'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllIsisGlobalStates(self):
@@ -6526,12 +8715,12 @@ class FlexSwitch( object):
                 'Name' : Name,
                 }
         reqUrl =  self.stateUrlBase + 'LogicalIntf'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getLogicalIntfStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'LogicalIntf'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'LogicalIntf'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllLogicalIntfStates(self):
@@ -6555,7 +8744,7 @@ class FlexSwitch( object):
                 'GenerateASSet' : True if GenerateASSet else False,
                 }
         reqUrl =  self.cfgUrlBase+'BGPv6Aggregate'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateBGPv6Aggregate(self,
@@ -6573,22 +8762,22 @@ class FlexSwitch( object):
             obj['GenerateASSet'] = True if GenerateASSet else False
 
         reqUrl =  self.cfgUrlBase+'BGPv6Aggregate'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateBGPv6AggregateById(self,
                                   objectId,
                                   SendSummaryOnly = None,
                                   GenerateASSet = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if SendSummaryOnly !=  None:
             obj['SendSummaryOnly'] = SendSummaryOnly
 
         if GenerateASSet !=  None:
             obj['GenerateASSet'] = GenerateASSet
 
-        reqUrl =  self.cfgUrlBase+'BGPv6Aggregate'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'BGPv6Aggregate'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteBGPv6Aggregate(self,
@@ -6597,12 +8786,12 @@ class FlexSwitch( object):
                 'IpPrefix' : IpPrefix,
                 }
         reqUrl =  self.cfgUrlBase+'BGPv6Aggregate'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteBGPv6AggregateById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'BGPv6Aggregate'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getBGPv6Aggregate(self,
@@ -6611,12 +8800,12 @@ class FlexSwitch( object):
                 'IpPrefix' : IpPrefix,
                 }
         reqUrl =  self.cfgUrlBase + 'BGPv6Aggregate'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getBGPv6AggregateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BGPv6Aggregate'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'BGPv6Aggregate'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllBGPv6Aggregates(self):
@@ -6629,12 +8818,12 @@ class FlexSwitch( object):
                 'ThermalId' : int(ThermalId),
                 }
         reqUrl =  self.stateUrlBase + 'Thermal'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getThermalStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'Thermal'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'Thermal'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllThermalStates(self):
@@ -6642,15 +8831,121 @@ class FlexSwitch( object):
 
 
     """
+    .. automethod :: createPolicyPrefixSet(self,
+        :param string Name : Policy Prefix set name. Policy Prefix set name.
+        :param PolicyPrefix PrefixList : List of policy prefixes part of this prefix set. List of policy prefixes part of this prefix set.
+
+	"""
+    def createPolicyPrefixSet(self,
+                              Name,
+                              PrefixList):
+        obj =  { 
+                'Name' : Name,
+                'PrefixList' : PrefixList,
+                }
+        reqUrl =  self.cfgUrlBase+'PolicyPrefixSet'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def updatePolicyPrefixSet(self,
+                              Name,
+                              PrefixList = None):
+        obj =  {}
+        if Name != None :
+            obj['Name'] = Name
+
+        if PrefixList != None :
+            obj['PrefixList'] = PrefixList
+
+        reqUrl =  self.cfgUrlBase+'PolicyPrefixSet'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def updatePolicyPrefixSetById(self,
+                                   objectId,
+                                   PrefixList = None):
+        obj =  {}
+        if PrefixList !=  None:
+            obj['PrefixList'] = PrefixList
+
+        reqUrl =  self.cfgUrlBase+'PolicyPrefixSet'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
+        return r
+
+    def deletePolicyPrefixSet(self,
+                              Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.cfgUrlBase+'PolicyPrefixSet'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def deletePolicyPrefixSetById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'PolicyPrefixSet'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
+        return r
+
+    def getPolicyPrefixSet(self,
+                           Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.cfgUrlBase + 'PolicyPrefixSet'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getPolicyPrefixSetById(self, objectId ):
+        reqUrl =  self.cfgUrlBase + 'PolicyPrefixSet'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllPolicyPrefixSets(self):
+        return self.getObjects( 'PolicyPrefixSet', self.cfgUrlBase)
+
+
+    def getLinkScopeIpState(self,
+                            LinkScopeIp):
+        obj =  { 
+                'LinkScopeIp' : LinkScopeIp,
+                }
+        reqUrl =  self.stateUrlBase + 'LinkScopeIp'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getLinkScopeIpStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase + 'LinkScopeIp'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllLinkScopeIpStates(self):
+        return self.getObjects( 'LinkScopeIp', self.stateUrlBase)
+
+
+    """
+    .. automethod :: executeArpDeleteByIfName(self,
+        :param string IfName : All the Arp learned for end host on given L3 interface will be deleted All the Arp learned for end host on given L3 interface will be deleted
+
+	"""
+    def executeArpDeleteByIfName(self,
+                                 IfName):
+        obj =  { 
+                'IfName' : IfName,
+                }
+        reqUrl =  self.actionUrlBase+'ArpDeleteByIfName'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    """
     .. automethod :: createStpBridgeInstance(self,
-        :param uint16 Vlan : Each bridge is associated with a domain.  Typically this domain is represented as the vlan; The default domain is typically 1 Each bridge is associated with a domain.  Typically this domain is represented as the vlan; The default domain is typically 1
+        :param uint16 Vlan : Each bridge is associated with a domain.  Typically this domain is represented as the vlan; The default domain is 4095 Each bridge is associated with a domain.  Typically this domain is represented as the vlan; The default domain is 4095
         :param int32 HelloTime : The value that all bridges use for HelloTime when this bridge is acting as the root.  The granularity of this timer is specified by 802.1D-1998 to be 1 second.  An agent may return a badValue error if a set is attempted    to a value that is not a whole number of seconds. The value that all bridges use for HelloTime when this bridge is acting as the root.  The granularity of this timer is specified by 802.1D-1998 to be 1 second.  An agent may return a badValue error if a set is attempted    to a value that is not a whole number of seconds.
         :param int32 ForwardDelay : The value that all bridges use for ForwardDelay when this bridge is acting as the root.  Note that 802.1D-1998 specifies that the range for this parameter is related to the value of MaxAge.  The granularity of this timer is specified by 802.1D-1998 to be 1 second.  An agent may return a badValue error if a set is attempted to a value that is not a whole number of seconds. The value that all bridges use for ForwardDelay when this bridge is acting as the root.  Note that 802.1D-1998 specifies that the range for this parameter is related to the value of MaxAge.  The granularity of this timer is specified by 802.1D-1998 to be 1 second.  An agent may return a badValue error if a set is attempted to a value that is not a whole number of seconds.
         :param int32 MaxAge : The value that all bridges use for MaxAge when this bridge is acting as the root.  Note that 802.1D-1998 specifies that the range for this parameter is related to the value of HelloTime.  The granularity of this timer is specified by 802.1D-1998 to be 1 second.  An agent may return a badValue error if a set is attempted to a value that is not a whole number of seconds. The value that all bridges use for MaxAge when this bridge is acting as the root.  Note that 802.1D-1998 specifies that the range for this parameter is related to the value of HelloTime.  The granularity of this timer is specified by 802.1D-1998 to be 1 second.  An agent may return a badValue error if a set is attempted to a value that is not a whole number of seconds.
         :param int32 TxHoldCount : Configures the number of BPDUs that can be sent before pausing for 1 second. Configures the number of BPDUs that can be sent before pausing for 1 second.
-        :param int32 Priority : The value of the write-able portion of the Bridge ID i.e. The value of the write-able portion of the Bridge ID i.e.
+        :param int32 Priority : The value of the write-able portion of the Bridge ID i.e. the first two octets of the 8 octet long Bridge ID.  The other last 6 octets of the Bridge ID are given by the value of Address. On bridges supporting IEEE 802.1t or IEEE 802.1w permissible values are 0-61440 in steps of 4096.  Extended Priority is enabled when the lower 12 bits are set using the Bridges VLAN id The value of the write-able portion of the Bridge ID i.e. the first two octets of the 8 octet long Bridge ID.  The other last 6 octets of the Bridge ID are given by the value of Address. On bridges supporting IEEE 802.1t or IEEE 802.1w permissible values are 0-61440 in steps of 4096.  Extended Priority is enabled when the lower 12 bits are set using the Bridges VLAN id
         :param int32 ForceVersion : Stp Version Stp Version
-        :param string Address : The bridge identifier of the root of the spanning tree The bridge identifier of the root of the spanning tree
+        :param string Address : The bridge identifier of the root of the spanning tree as determined by the Spanning Tree Protocol as executed by this node.  This value is used as the Root Identifier parameter in all Configuration Bridge PDUs originated by this node. The bridge identifier of the root of the spanning tree as determined by the Spanning Tree Protocol as executed by this node.  This value is used as the Root Identifier parameter in all Configuration Bridge PDUs originated by this node.
 
 	"""
     def createStpBridgeInstance(self,
@@ -6661,7 +8956,7 @@ class FlexSwitch( object):
                                 TxHoldCount=6,
                                 Priority=32768,
                                 ForceVersion=2,
-                                Address='00'):
+                                Address='00-00-00-00-00-00'):
         obj =  { 
                 'Vlan' : int(Vlan),
                 'HelloTime' : int(HelloTime),
@@ -6673,7 +8968,7 @@ class FlexSwitch( object):
                 'Address' : Address,
                 }
         reqUrl =  self.cfgUrlBase+'StpBridgeInstance'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateStpBridgeInstance(self,
@@ -6711,7 +9006,7 @@ class FlexSwitch( object):
             obj['Address'] = Address
 
         reqUrl =  self.cfgUrlBase+'StpBridgeInstance'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateStpBridgeInstanceById(self,
@@ -6723,7 +9018,7 @@ class FlexSwitch( object):
                                      Priority = None,
                                      ForceVersion = None,
                                      Address = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if HelloTime !=  None:
             obj['HelloTime'] = HelloTime
 
@@ -6745,8 +9040,8 @@ class FlexSwitch( object):
         if Address !=  None:
             obj['Address'] = Address
 
-        reqUrl =  self.cfgUrlBase+'StpBridgeInstance'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'StpBridgeInstance'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteStpBridgeInstance(self,
@@ -6755,12 +9050,12 @@ class FlexSwitch( object):
                 'Vlan' : Vlan,
                 }
         reqUrl =  self.cfgUrlBase+'StpBridgeInstance'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteStpBridgeInstanceById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'StpBridgeInstance'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getStpBridgeInstance(self,
@@ -6769,12 +9064,12 @@ class FlexSwitch( object):
                 'Vlan' : int(Vlan),
                 }
         reqUrl =  self.cfgUrlBase + 'StpBridgeInstance'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getStpBridgeInstanceById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'StpBridgeInstance'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'StpBridgeInstance'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllStpBridgeInstances(self):
@@ -6813,7 +9108,7 @@ class FlexSwitch( object):
                 'VirtIfAuthType' : int(VirtIfAuthType),
                 }
         reqUrl =  self.cfgUrlBase+'OspfVirtIfEntry'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateOspfVirtIfEntry(self,
@@ -6851,7 +9146,7 @@ class FlexSwitch( object):
             obj['VirtIfAuthType'] = int(VirtIfAuthType)
 
         reqUrl =  self.cfgUrlBase+'OspfVirtIfEntry'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateOspfVirtIfEntryById(self,
@@ -6862,7 +9157,7 @@ class FlexSwitch( object):
                                    VirtIfRtrDeadInterval = None,
                                    VirtIfAuthKey = None,
                                    VirtIfAuthType = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if VirtIfTransitDelay !=  None:
             obj['VirtIfTransitDelay'] = VirtIfTransitDelay
 
@@ -6881,8 +9176,8 @@ class FlexSwitch( object):
         if VirtIfAuthType !=  None:
             obj['VirtIfAuthType'] = VirtIfAuthType
 
-        reqUrl =  self.cfgUrlBase+'OspfVirtIfEntry'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'OspfVirtIfEntry'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteOspfVirtIfEntry(self,
@@ -6893,12 +9188,12 @@ class FlexSwitch( object):
                 'VirtIfAreaId' : VirtIfAreaId,
                 }
         reqUrl =  self.cfgUrlBase+'OspfVirtIfEntry'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteOspfVirtIfEntryById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'OspfVirtIfEntry'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getOspfVirtIfEntry(self,
@@ -6909,16 +9204,34 @@ class FlexSwitch( object):
                 'VirtIfAreaId' : VirtIfAreaId,
                 }
         reqUrl =  self.cfgUrlBase + 'OspfVirtIfEntry'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getOspfVirtIfEntryById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'OspfVirtIfEntry'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'OspfVirtIfEntry'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllOspfVirtIfEntrys(self):
         return self.getObjects( 'OspfVirtIfEntry', self.cfgUrlBase)
+
+
+    def getStpBridgeInstanceState(self,
+                                  Vlan):
+        obj =  { 
+                'Vlan' : int(Vlan),
+                }
+        reqUrl =  self.stateUrlBase + 'StpBridgeInstance'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getStpBridgeInstanceStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase + 'StpBridgeInstance'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllStpBridgeInstanceStates(self):
+        return self.getObjects( 'StpBridgeInstance', self.stateUrlBase)
 
 
     """
@@ -6934,7 +9247,7 @@ class FlexSwitch( object):
                 'Logging' : Logging,
                 }
         reqUrl =  self.cfgUrlBase+'SystemLogging'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateSystemLogging(self,
@@ -6948,18 +9261,18 @@ class FlexSwitch( object):
             obj['Logging'] = Logging
 
         reqUrl =  self.cfgUrlBase+'SystemLogging'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateSystemLoggingById(self,
                                  objectId,
                                  Logging = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if Logging !=  None:
             obj['Logging'] = Logging
 
-        reqUrl =  self.cfgUrlBase+'SystemLogging'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'SystemLogging'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteSystemLogging(self,
@@ -6968,12 +9281,12 @@ class FlexSwitch( object):
                 'Vrf' : Vrf,
                 }
         reqUrl =  self.cfgUrlBase+'SystemLogging'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteSystemLoggingById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'SystemLogging'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getSystemLogging(self,
@@ -6982,17 +9295,31 @@ class FlexSwitch( object):
                 'Vrf' : Vrf,
                 }
         reqUrl =  self.cfgUrlBase + 'SystemLogging'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getSystemLoggingById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'SystemLogging'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'SystemLogging'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllSystemLoggings(self):
         return self.getObjects( 'SystemLogging', self.cfgUrlBase)
 
+
+    """
+    .. automethod :: executeResetBGPv4NeighborByIPAddr(self,
+        :param string IPAddr : IP address of the BGP IPv4 neighbor to restart IP address of the BGP IPv4 neighbor to restart
+
+	"""
+    def executeResetBGPv4NeighborByIPAddr(self,
+                                          IPAddr):
+        obj =  { 
+                'IPAddr' : IPAddr,
+                }
+        reqUrl =  self.actionUrlBase+'ResetBGPv4NeighborByIPAddr'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
 
     def getBGPPolicyActionState(self,
                                 Name):
@@ -7000,12 +9327,12 @@ class FlexSwitch( object):
                 'Name' : Name,
                 }
         reqUrl =  self.stateUrlBase + 'BGPPolicyAction'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getBGPPolicyActionStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BGPPolicyAction'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'BGPPolicyAction'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllBGPPolicyActionStates(self):
@@ -7026,7 +9353,7 @@ class FlexSwitch( object):
                 'VlanId' : int(VlanId),
                 }
         reqUrl =  self.cfgUrlBase+'VxlanInstance'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateVxlanInstance(self,
@@ -7040,18 +9367,18 @@ class FlexSwitch( object):
             obj['VlanId'] = int(VlanId)
 
         reqUrl =  self.cfgUrlBase+'VxlanInstance'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateVxlanInstanceById(self,
                                  objectId,
                                  VlanId = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if VlanId !=  None:
             obj['VlanId'] = VlanId
 
-        reqUrl =  self.cfgUrlBase+'VxlanInstance'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'VxlanInstance'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteVxlanInstance(self,
@@ -7060,12 +9387,12 @@ class FlexSwitch( object):
                 'Vni' : Vni,
                 }
         reqUrl =  self.cfgUrlBase+'VxlanInstance'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteVxlanInstanceById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'VxlanInstance'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getVxlanInstance(self,
@@ -7074,12 +9401,12 @@ class FlexSwitch( object):
                 'Vni' : int(Vni),
                 }
         reqUrl =  self.cfgUrlBase + 'VxlanInstance'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getVxlanInstanceById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'VxlanInstance'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'VxlanInstance'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllVxlanInstances(self):
@@ -7092,12 +9419,12 @@ class FlexSwitch( object):
                 'Name' : Name,
                 }
         reqUrl =  self.stateUrlBase + 'BGPPolicyDefinition'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getBGPPolicyDefinitionStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BGPPolicyDefinition'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'BGPPolicyDefinition'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllBGPPolicyDefinitionStates(self):
@@ -7110,12 +9437,12 @@ class FlexSwitch( object):
                 'LedId' : int(LedId),
                 }
         reqUrl =  self.stateUrlBase + 'Led'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getLedStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'Led'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'Led'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllLedStates(self):
@@ -7128,12 +9455,12 @@ class FlexSwitch( object):
                 'IntfRef' : IntfRef,
                 }
         reqUrl =  self.stateUrlBase + 'IPv4Intf'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getIPv4IntfStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'IPv4Intf'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'IPv4Intf'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllIPv4IntfStates(self):
@@ -7146,12 +9473,12 @@ class FlexSwitch( object):
                 'IntfRef' : IntfRef,
                 }
         reqUrl =  self.stateUrlBase + 'Port'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getPortStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'Port'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'Port'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllPortStates(self):
@@ -7171,7 +9498,7 @@ class FlexSwitch( object):
                 'AdminState' : AdminState,
                 }
         reqUrl =  self.cfgUrlBase+'Sfp'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateSfp(self,
@@ -7185,18 +9512,18 @@ class FlexSwitch( object):
             obj['AdminState'] = AdminState
 
         reqUrl =  self.cfgUrlBase+'Sfp'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateSfpById(self,
                        objectId,
                        AdminState = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if AdminState !=  None:
             obj['AdminState'] = AdminState
 
-        reqUrl =  self.cfgUrlBase+'Sfp'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'Sfp'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteSfp(self,
@@ -7205,12 +9532,12 @@ class FlexSwitch( object):
                 'SfpId' : SfpId,
                 }
         reqUrl =  self.cfgUrlBase+'Sfp'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteSfpById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'Sfp'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getSfp(self,
@@ -7219,12 +9546,12 @@ class FlexSwitch( object):
                 'SfpId' : int(SfpId),
                 }
         reqUrl =  self.cfgUrlBase + 'Sfp'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getSfpById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'Sfp'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'Sfp'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllSfps(self):
@@ -7251,7 +9578,7 @@ class FlexSwitch( object):
                 'SendSummaryOnly' : True if SendSummaryOnly else False,
                 }
         reqUrl =  self.cfgUrlBase+'BGPPolicyAction'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateBGPPolicyAction(self,
@@ -7273,7 +9600,7 @@ class FlexSwitch( object):
             obj['SendSummaryOnly'] = True if SendSummaryOnly else False
 
         reqUrl =  self.cfgUrlBase+'BGPPolicyAction'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateBGPPolicyActionById(self,
@@ -7281,7 +9608,7 @@ class FlexSwitch( object):
                                    ActionType = None,
                                    GenerateASSet = None,
                                    SendSummaryOnly = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if ActionType !=  None:
             obj['ActionType'] = ActionType
 
@@ -7291,8 +9618,8 @@ class FlexSwitch( object):
         if SendSummaryOnly !=  None:
             obj['SendSummaryOnly'] = SendSummaryOnly
 
-        reqUrl =  self.cfgUrlBase+'BGPPolicyAction'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'BGPPolicyAction'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteBGPPolicyAction(self,
@@ -7301,12 +9628,12 @@ class FlexSwitch( object):
                 'Name' : Name,
                 }
         reqUrl =  self.cfgUrlBase+'BGPPolicyAction'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteBGPPolicyActionById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'BGPPolicyAction'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getBGPPolicyAction(self,
@@ -7315,17 +9642,48 @@ class FlexSwitch( object):
                 'Name' : Name,
                 }
         reqUrl =  self.cfgUrlBase + 'BGPPolicyAction'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getBGPPolicyActionById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BGPPolicyAction'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'BGPPolicyAction'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllBGPPolicyActions(self):
         return self.getObjects( 'BGPPolicyAction', self.cfgUrlBase)
 
+
+    """
+    .. automethod :: executeAsicdClearCounters(self,
+        :param string IntfRef : Clear counters on given interface Clear counters on given interface
+        :param string Type : Clear counter for specific type like port Clear counter for specific type like port
+
+	"""
+    def executeAsicdClearCounters(self,
+                                  IntfRef='All',
+                                  Type='Port'):
+        obj =  { 
+                'IntfRef' : IntfRef,
+                'Type' : Type,
+                }
+        reqUrl =  self.actionUrlBase+'AsicdClearCounters'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    """
+    .. automethod :: executeResetBGPv6NeighborByIPAddr(self,
+        :param string IPAddr : IP address of the BGP IPv6 neighbor to restart IP address of the BGP IPv6 neighbor to restart
+
+	"""
+    def executeResetBGPv6NeighborByIPAddr(self,
+                                          IPAddr):
+        obj =  { 
+                'IPAddr' : IPAddr,
+                }
+        reqUrl =  self.actionUrlBase+'ResetBGPv6NeighborByIPAddr'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
 
     def getSystemSwVersionState(self,
                                 FlexswitchVersion):
@@ -7333,12 +9691,12 @@ class FlexSwitch( object):
                 'FlexswitchVersion' : FlexswitchVersion,
                 }
         reqUrl =  self.stateUrlBase + 'SystemSwVersion'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getSystemSwVersionStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'SystemSwVersion'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'SystemSwVersion'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllSystemSwVersionStates(self):
@@ -7351,12 +9709,12 @@ class FlexSwitch( object):
                 'Name' : Name,
                 }
         reqUrl =  self.stateUrlBase + 'Daemon'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getDaemonStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'Daemon'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'Daemon'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllDaemonStates(self):
@@ -7369,16 +9727,54 @@ class FlexSwitch( object):
                 'Vrf' : Vrf,
                 }
         reqUrl =  self.stateUrlBase + 'SystemParam'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getSystemParamStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'SystemParam'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'SystemParam'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllSystemParamStates(self):
         return self.getObjects( 'SystemParam', self.stateUrlBase)
+
+
+    """
+    .. automethod :: executeDaemon(self,
+        :param string Name : Daemon name Daemon name
+        :param bool Enable : Enable the flexswitch daemon Enable the flexswitch daemon
+        :param bool WatchDog : Enable watchdog for daemon Enable watchdog for daemon
+
+	"""
+    def executeDaemon(self,
+                      Name,
+                      Enable,
+                      WatchDog):
+        obj =  { 
+                'Name' : Name,
+                'Enable' : True if Enable else False,
+                'WatchDog' : True if WatchDog else False,
+                }
+        reqUrl =  self.actionUrlBase+'Daemon'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    def getVoltageSensorState(self,
+                              Name):
+        obj =  { 
+                'Name' : Name,
+                }
+        reqUrl =  self.stateUrlBase + 'VoltageSensor'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getVoltageSensorStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase + 'VoltageSensor'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllVoltageSensorStates(self):
+        return self.getObjects( 'VoltageSensor', self.stateUrlBase)
 
 
     def getDWDMModuleNwIntfPMState(self,
@@ -7395,12 +9791,12 @@ class FlexSwitch( object):
                 'ModuleId' : int(ModuleId),
                 }
         reqUrl =  self.stateUrlBase + 'DWDMModuleNwIntfPM'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getDWDMModuleNwIntfPMStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'DWDMModuleNwIntfPM'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'DWDMModuleNwIntfPM'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllDWDMModuleNwIntfPMStates(self):
@@ -7430,7 +9826,7 @@ class FlexSwitch( object):
                 'IndependentLaneMode' : True if IndependentLaneMode else False,
                 }
         reqUrl =  self.cfgUrlBase+'DWDMModule'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateDWDMModule(self,
@@ -7456,7 +9852,7 @@ class FlexSwitch( object):
             obj['IndependentLaneMode'] = True if IndependentLaneMode else False
 
         reqUrl =  self.cfgUrlBase+'DWDMModule'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateDWDMModuleById(self,
@@ -7465,7 +9861,7 @@ class FlexSwitch( object):
                               PMInterval = None,
                               AdminState = None,
                               IndependentLaneMode = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if EnableExtPMTickSrc !=  None:
             obj['EnableExtPMTickSrc'] = EnableExtPMTickSrc
 
@@ -7478,8 +9874,8 @@ class FlexSwitch( object):
         if IndependentLaneMode !=  None:
             obj['IndependentLaneMode'] = IndependentLaneMode
 
-        reqUrl =  self.cfgUrlBase+'DWDMModule'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'DWDMModule'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteDWDMModule(self,
@@ -7488,12 +9884,12 @@ class FlexSwitch( object):
                 'ModuleId' : ModuleId,
                 }
         reqUrl =  self.cfgUrlBase+'DWDMModule'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteDWDMModuleById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'DWDMModule'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getDWDMModule(self,
@@ -7502,12 +9898,12 @@ class FlexSwitch( object):
                 'ModuleId' : int(ModuleId),
                 }
         reqUrl =  self.cfgUrlBase + 'DWDMModule'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getDWDMModuleById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'DWDMModule'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'DWDMModule'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllDWDMModules(self):
@@ -7515,9 +9911,21 @@ class FlexSwitch( object):
 
 
     """
+    .. automethod :: executeApplyConfig(self,
+
+	"""
+    def executeApplyConfig(self):
+        obj =  { 
+                }
+        reqUrl =  self.actionUrlBase+'ApplyConfig'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
+    """
     .. automethod :: createAcl(self,
         :param string AclName : Acl name to be used to refer to this ACL Acl name to be used to refer to this ACL
         :param string Direction :  
+        :param string AclType : Type can be IP/MAC/SVI Type can be IP/MAC/SVI
         :param string IntfList : list of IntfRef can be port/lag object list of IntfRef can be port/lag object
         :param string RuleNameList : List of rules to be applied to this ACL. This should match with AclRule RuleName List of rules to be applied to this ACL. This should match with AclRule RuleName
 
@@ -7525,21 +9933,24 @@ class FlexSwitch( object):
     def createAcl(self,
                   AclName,
                   Direction,
+                  AclType,
                   IntfList,
                   RuleNameList):
         obj =  { 
                 'AclName' : AclName,
                 'Direction' : Direction,
+                'AclType' : AclType,
                 'IntfList' : IntfList,
                 'RuleNameList' : RuleNameList,
                 }
         reqUrl =  self.cfgUrlBase+'Acl'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateAcl(self,
                   AclName,
                   Direction,
+                  AclType = None,
                   IntfList = None,
                   RuleNameList = None):
         obj =  {}
@@ -7549,6 +9960,9 @@ class FlexSwitch( object):
         if Direction != None :
             obj['Direction'] = Direction
 
+        if AclType != None :
+            obj['AclType'] = AclType
+
         if IntfList != None :
             obj['IntfList'] = IntfList
 
@@ -7556,22 +9970,26 @@ class FlexSwitch( object):
             obj['RuleNameList'] = RuleNameList
 
         reqUrl =  self.cfgUrlBase+'Acl'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateAclById(self,
                        objectId,
+                       AclType = None,
                        IntfList = None,
                        RuleNameList = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
+        if AclType !=  None:
+            obj['AclType'] = AclType
+
         if IntfList !=  None:
             obj['IntfList'] = IntfList
 
         if RuleNameList !=  None:
             obj['RuleNameList'] = RuleNameList
 
-        reqUrl =  self.cfgUrlBase+'Acl'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'Acl'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteAcl(self,
@@ -7582,12 +10000,12 @@ class FlexSwitch( object):
                 'Direction' : Direction,
                 }
         reqUrl =  self.cfgUrlBase+'Acl'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteAclById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'Acl'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getAcl(self,
@@ -7598,12 +10016,12 @@ class FlexSwitch( object):
                 'Direction' : Direction,
                 }
         reqUrl =  self.cfgUrlBase + 'Acl'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getAclById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'Acl'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'Acl'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllAcls(self):
@@ -7616,12 +10034,13 @@ class FlexSwitch( object):
         :param string NeighborAddress : Address of the BGP neighbor Address of the BGP neighbor
         :param string Description : Description of the BGP neighbor Description of the BGP neighbor
         :param string PeerGroup : Peer group of the BGP neighbor Peer group of the BGP neighbor
+        :param string PeerAS : Peer AS of the BGP neighbor Peer AS of the BGP neighbor
+        :param string LocalAS : Local AS of the BGP neighbor Local AS of the BGP neighbor
         :param string UpdateSource : Source IP to connect to the BGP neighbor Source IP to connect to the BGP neighbor
         :param string AdjRIBInFilter : Policy that is applied for Adj-RIB-In prefix filtering Policy that is applied for Adj-RIB-In prefix filtering
         :param string AdjRIBOutFilter : Policy that is applied for Adj-RIB-Out prefix filtering Policy that is applied for Adj-RIB-Out prefix filtering
         :param bool BfdEnable : Enable/Disable BFD for the BGP neighbor Enable/Disable BFD for the BGP neighbor
         :param uint8 MultiHopTTL : TTL for multi hop BGP neighbor TTL for multi hop BGP neighbor
-        :param uint32 LocalAS : Local AS of the BGP neighbor Local AS of the BGP neighbor
         :param uint32 KeepaliveTime : Keep alive time for the BGP neighbor Keep alive time for the BGP neighbor
         :param bool AddPathsRx : Receive additional paths from BGP neighbor Receive additional paths from BGP neighbor
         :param bool RouteReflectorClient : Set/Clear BGP neighbor as a route reflector client Set/Clear BGP neighbor as a route reflector client
@@ -7629,11 +10048,11 @@ class FlexSwitch( object):
         :param bool MultiHopEnable : Enable/Disable multi hop for BGP neighbor Enable/Disable multi hop for BGP neighbor
         :param uint32 RouteReflectorClusterId : Cluster Id of the internal BGP neighbor route reflector client Cluster Id of the internal BGP neighbor route reflector client
         :param bool MaxPrefixesDisconnect : Disconnect the BGP peer session when we receive the max prefixes from the neighbor Disconnect the BGP peer session when we receive the max prefixes from the neighbor
-        :param uint32 PeerAS : Peer AS of the BGP neighbor Peer AS of the BGP neighbor
         :param uint8 AddPathsMaxTx : Max number of additional paths that can be transmitted to BGP neighbor Max number of additional paths that can be transmitted to BGP neighbor
         :param uint32 MaxPrefixes : Maximum number of prefixes that can be received from the BGP neighbor Maximum number of prefixes that can be received from the BGP neighbor
         :param uint8 MaxPrefixesThresholdPct : The percentage of maximum prefixes before we start logging The percentage of maximum prefixes before we start logging
         :param string BfdSessionParam : Bfd session param name to be applied Bfd session param name to be applied
+        :param bool Disabled : Enable/Disable the BGP neighbor Enable/Disable the BGP neighbor
         :param uint32 HoldTime : Hold time for the BGP neighbor Hold time for the BGP neighbor
         :param uint32 ConnectRetryTime : Connect retry time to connect to BGP neighbor after disconnect Connect retry time to connect to BGP neighbor after disconnect
 
@@ -7643,37 +10062,39 @@ class FlexSwitch( object):
                             NeighborAddress,
                             Description='',
                             PeerGroup='',
+                            PeerAS='',
+                            LocalAS='',
                             UpdateSource='',
                             AdjRIBInFilter='',
                             AdjRIBOutFilter='',
                             BfdEnable=False,
                             MultiHopTTL=0,
-                            LocalAS=0,
-                            KeepaliveTime=60,
+                            KeepaliveTime=0,
                             AddPathsRx=False,
                             RouteReflectorClient=False,
                             MaxPrefixesRestartTimer=0,
                             MultiHopEnable=False,
                             RouteReflectorClusterId=0,
                             MaxPrefixesDisconnect=False,
-                            PeerAS=0,
                             AddPathsMaxTx=0,
                             MaxPrefixes=0,
                             MaxPrefixesThresholdPct=80,
                             BfdSessionParam='default',
-                            HoldTime=180,
-                            ConnectRetryTime=60):
+                            Disabled=False,
+                            HoldTime=0,
+                            ConnectRetryTime=0):
         obj =  { 
                 'IntfRef' : IntfRef,
                 'NeighborAddress' : NeighborAddress,
                 'Description' : Description,
                 'PeerGroup' : PeerGroup,
+                'PeerAS' : PeerAS,
+                'LocalAS' : LocalAS,
                 'UpdateSource' : UpdateSource,
                 'AdjRIBInFilter' : AdjRIBInFilter,
                 'AdjRIBOutFilter' : AdjRIBOutFilter,
                 'BfdEnable' : True if BfdEnable else False,
                 'MultiHopTTL' : int(MultiHopTTL),
-                'LocalAS' : int(LocalAS),
                 'KeepaliveTime' : int(KeepaliveTime),
                 'AddPathsRx' : True if AddPathsRx else False,
                 'RouteReflectorClient' : True if RouteReflectorClient else False,
@@ -7681,16 +10102,16 @@ class FlexSwitch( object):
                 'MultiHopEnable' : True if MultiHopEnable else False,
                 'RouteReflectorClusterId' : int(RouteReflectorClusterId),
                 'MaxPrefixesDisconnect' : True if MaxPrefixesDisconnect else False,
-                'PeerAS' : int(PeerAS),
                 'AddPathsMaxTx' : int(AddPathsMaxTx),
                 'MaxPrefixes' : int(MaxPrefixes),
                 'MaxPrefixesThresholdPct' : int(MaxPrefixesThresholdPct),
                 'BfdSessionParam' : BfdSessionParam,
+                'Disabled' : True if Disabled else False,
                 'HoldTime' : int(HoldTime),
                 'ConnectRetryTime' : int(ConnectRetryTime),
                 }
         reqUrl =  self.cfgUrlBase+'BGPv6Neighbor'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateBGPv6Neighbor(self,
@@ -7698,12 +10119,13 @@ class FlexSwitch( object):
                             NeighborAddress,
                             Description = None,
                             PeerGroup = None,
+                            PeerAS = None,
+                            LocalAS = None,
                             UpdateSource = None,
                             AdjRIBInFilter = None,
                             AdjRIBOutFilter = None,
                             BfdEnable = None,
                             MultiHopTTL = None,
-                            LocalAS = None,
                             KeepaliveTime = None,
                             AddPathsRx = None,
                             RouteReflectorClient = None,
@@ -7711,11 +10133,11 @@ class FlexSwitch( object):
                             MultiHopEnable = None,
                             RouteReflectorClusterId = None,
                             MaxPrefixesDisconnect = None,
-                            PeerAS = None,
                             AddPathsMaxTx = None,
                             MaxPrefixes = None,
                             MaxPrefixesThresholdPct = None,
                             BfdSessionParam = None,
+                            Disabled = None,
                             HoldTime = None,
                             ConnectRetryTime = None):
         obj =  {}
@@ -7731,6 +10153,12 @@ class FlexSwitch( object):
         if PeerGroup != None :
             obj['PeerGroup'] = PeerGroup
 
+        if PeerAS != None :
+            obj['PeerAS'] = PeerAS
+
+        if LocalAS != None :
+            obj['LocalAS'] = LocalAS
+
         if UpdateSource != None :
             obj['UpdateSource'] = UpdateSource
 
@@ -7745,9 +10173,6 @@ class FlexSwitch( object):
 
         if MultiHopTTL != None :
             obj['MultiHopTTL'] = int(MultiHopTTL)
-
-        if LocalAS != None :
-            obj['LocalAS'] = int(LocalAS)
 
         if KeepaliveTime != None :
             obj['KeepaliveTime'] = int(KeepaliveTime)
@@ -7770,9 +10195,6 @@ class FlexSwitch( object):
         if MaxPrefixesDisconnect != None :
             obj['MaxPrefixesDisconnect'] = True if MaxPrefixesDisconnect else False
 
-        if PeerAS != None :
-            obj['PeerAS'] = int(PeerAS)
-
         if AddPathsMaxTx != None :
             obj['AddPathsMaxTx'] = int(AddPathsMaxTx)
 
@@ -7785,6 +10207,9 @@ class FlexSwitch( object):
         if BfdSessionParam != None :
             obj['BfdSessionParam'] = BfdSessionParam
 
+        if Disabled != None :
+            obj['Disabled'] = True if Disabled else False
+
         if HoldTime != None :
             obj['HoldTime'] = int(HoldTime)
 
@@ -7792,19 +10217,20 @@ class FlexSwitch( object):
             obj['ConnectRetryTime'] = int(ConnectRetryTime)
 
         reqUrl =  self.cfgUrlBase+'BGPv6Neighbor'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateBGPv6NeighborById(self,
                                  objectId,
                                  Description = None,
                                  PeerGroup = None,
+                                 PeerAS = None,
+                                 LocalAS = None,
                                  UpdateSource = None,
                                  AdjRIBInFilter = None,
                                  AdjRIBOutFilter = None,
                                  BfdEnable = None,
                                  MultiHopTTL = None,
-                                 LocalAS = None,
                                  KeepaliveTime = None,
                                  AddPathsRx = None,
                                  RouteReflectorClient = None,
@@ -7812,19 +10238,25 @@ class FlexSwitch( object):
                                  MultiHopEnable = None,
                                  RouteReflectorClusterId = None,
                                  MaxPrefixesDisconnect = None,
-                                 PeerAS = None,
                                  AddPathsMaxTx = None,
                                  MaxPrefixes = None,
                                  MaxPrefixesThresholdPct = None,
                                  BfdSessionParam = None,
+                                 Disabled = None,
                                  HoldTime = None,
                                  ConnectRetryTime = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if Description !=  None:
             obj['Description'] = Description
 
         if PeerGroup !=  None:
             obj['PeerGroup'] = PeerGroup
+
+        if PeerAS !=  None:
+            obj['PeerAS'] = PeerAS
+
+        if LocalAS !=  None:
+            obj['LocalAS'] = LocalAS
 
         if UpdateSource !=  None:
             obj['UpdateSource'] = UpdateSource
@@ -7840,9 +10272,6 @@ class FlexSwitch( object):
 
         if MultiHopTTL !=  None:
             obj['MultiHopTTL'] = MultiHopTTL
-
-        if LocalAS !=  None:
-            obj['LocalAS'] = LocalAS
 
         if KeepaliveTime !=  None:
             obj['KeepaliveTime'] = KeepaliveTime
@@ -7865,9 +10294,6 @@ class FlexSwitch( object):
         if MaxPrefixesDisconnect !=  None:
             obj['MaxPrefixesDisconnect'] = MaxPrefixesDisconnect
 
-        if PeerAS !=  None:
-            obj['PeerAS'] = PeerAS
-
         if AddPathsMaxTx !=  None:
             obj['AddPathsMaxTx'] = AddPathsMaxTx
 
@@ -7880,14 +10306,17 @@ class FlexSwitch( object):
         if BfdSessionParam !=  None:
             obj['BfdSessionParam'] = BfdSessionParam
 
+        if Disabled !=  None:
+            obj['Disabled'] = Disabled
+
         if HoldTime !=  None:
             obj['HoldTime'] = HoldTime
 
         if ConnectRetryTime !=  None:
             obj['ConnectRetryTime'] = ConnectRetryTime
 
-        reqUrl =  self.cfgUrlBase+'BGPv6Neighbor'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'BGPv6Neighbor'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteBGPv6Neighbor(self,
@@ -7898,12 +10327,12 @@ class FlexSwitch( object):
                 'NeighborAddress' : NeighborAddress,
                 }
         reqUrl =  self.cfgUrlBase+'BGPv6Neighbor'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteBGPv6NeighborById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'BGPv6Neighbor'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getBGPv6Neighbor(self,
@@ -7914,12 +10343,12 @@ class FlexSwitch( object):
                 'NeighborAddress' : NeighborAddress,
                 }
         reqUrl =  self.cfgUrlBase + 'BGPv6Neighbor'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getBGPv6NeighborById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BGPv6Neighbor'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'BGPv6Neighbor'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllBGPv6Neighbors(self):
@@ -7928,89 +10357,80 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createStpPort(self,
-        :param int32 BrgIfIndex : The value of the instance of the ifIndex object The value of the instance of the ifIndex object
-        :param int32 IfIndex : The port number of the port for which this entry contains Spanning Tree Protocol management information. The port number of the port for which this entry contains Spanning Tree Protocol management information.
-        :param int32 BpduGuardInterval : The interval time to which a port will try to recover from BPDU Guard err-disable state.  If no BPDU frames are detected after this timeout plus 3 Times Hello Time then the port will transition back to Up state.  If condition is cleared manually then this operation is ignored.  If set to zero then timer is inactive and recovery is based on manual intervention. The interval time to which a port will try to recover from BPDU Guard err-disable state.  If no BPDU frames are detected after this timeout plus 3 Times Hello Time then the port will transition back to Up state.  If condition is cleared manually then this operation is ignored.  If set to zero then timer is inactive and recovery is based on manual intervention.
-        :param int32 PathCost : The contribution of this port to the path cost of paths towards the spanning tree root which include this port.  802.1D-1998 recommends that the default value of this parameter be in inverse proportion to the speed of the attached LAN.  New implementations should support PathCost32. If the port path costs exceeds the maximum value of this object then this object should report the maximum value The contribution of this port to the path cost of paths towards the spanning tree root which include this port.  802.1D-1998 recommends that the default value of this parameter be in inverse proportion to the speed of the attached LAN.  New implementations should support PathCost32. If the port path costs exceeds the maximum value of this object then this object should report the maximum value
-        :param int32 Priority : The value of the priority field that is contained in the first in network byte order octet of the 2 octet long Port ID.  The other octet of the Port ID is given by the value of StpPort. On bridges supporting IEEE 802.1t or IEEE 802.1w The value of the priority field that is contained in the first in network byte order octet of the 2 octet long Port ID.  The other octet of the Port ID is given by the value of StpPort. On bridges supporting IEEE 802.1t or IEEE 802.1w
-        :param int32 AdminEdgePort : The administrative value of the Edge Port parameter.  A value of true(1) indicates that this port should be assumed as an edge-port The administrative value of the Edge Port parameter.  A value of true(1) indicates that this port should be assumed as an edge-port
-        :param int32 Enable : The enabled/disabled status of the port. The enabled/disabled status of the port.
-        :param int32 ProtocolMigration : When operating in RSTP (version 2) mode When operating in RSTP (version 2) mode
+        :param int32 Vlan : The value of instance of the vlan object The value of instance of the vlan object
+        :param string IntfRef : The port number of the port for which this entry contains Spanning Tree Protocol management information. The port number of the port for which this entry contains Spanning Tree Protocol management information.
+        :param int32 PathCost : The contribution of this port to the path cost of paths towards the spanning tree root which include this port.  802.1D-1998 recommends that the default value of this parameter be in inverse proportion to the speed of the attached LAN.  New implementations should support PathCost32. If the port path costs exceeds the maximum value of this object then this object should report the maximum value; namely 65535.  Applications should try to read the PathCost32 object if this object reports the maximum value.  Value of 1 will force node to auto discover the value        based on the ports capabilities. The contribution of this port to the path cost of paths towards the spanning tree root which include this port.  802.1D-1998 recommends that the default value of this parameter be in inverse proportion to the speed of the attached LAN.  New implementations should support PathCost32. If the port path costs exceeds the maximum value of this object then this object should report the maximum value; namely 65535.  Applications should try to read the PathCost32 object if this object reports the maximum value.  Value of 1 will force node to auto discover the value        based on the ports capabilities.
+        :param int32 AdminEdgePort : The administrative value of the Edge Port parameter.  A value of true(1) indicates that this port should be assumed as an edge-port and a value of false(2) indicates that this port should be assumed as a non-edge-port.  Setting this object will also cause the corresponding instance of OperEdgePort to change to the same value.  Note that even when this object's value is true the value of the corresponding instance of OperEdgePort can be false if a BPDU has been received.  The value of this object MUST be retained across reinitializations of the management system. The administrative value of the Edge Port parameter.  A value of true(1) indicates that this port should be assumed as an edge-port and a value of false(2) indicates that this port should be assumed as a non-edge-port.  Setting this object will also cause the corresponding instance of OperEdgePort to change to the same value.  Note that even when this object's value is true the value of the corresponding instance of OperEdgePort can be false if a BPDU has been received.  The value of this object MUST be retained across reinitializations of the management system.
+        :param int32 ProtocolMigration : When operating in RSTP (version 2) mode writing true(1) to this object forces this port to transmit RSTP BPDUs. Any other operation on this object has no effect and it always returns false(2) when read. When operating in RSTP (version 2) mode writing true(1) to this object forces this port to transmit RSTP BPDUs. Any other operation on this object has no effect and it always returns false(2) when read.
         :param int32 BridgeAssurance : When enabled BPDUs will be transmitted out of all stp ports regardless of state.  When an stp port fails to receive a BPDU the port should  transition to a Blocked state.  Upon reception of BDPU after shutdown  should transition port into the bridge. When enabled BPDUs will be transmitted out of all stp ports regardless of state.  When an stp port fails to receive a BPDU the port should  transition to a Blocked state.  Upon reception of BDPU after shutdown  should transition port into the bridge.
+        :param int32 Priority : The value of the priority field that is contained in the first in network byte order octet of the 2 octet long Port ID.  The other octet of the Port ID is given by the value of StpPort. On bridges supporting IEEE 802.1t or IEEE 802.1w The value of the priority field that is contained in the first in network byte order octet of the 2 octet long Port ID.  The other octet of the Port ID is given by the value of StpPort. On bridges supporting IEEE 802.1t or IEEE 802.1w
+        :param string AdminState : The enabled/disabled status of the port. The enabled/disabled status of the port.
         :param int32 BpduGuard : A Port as OperEdge which receives BPDU with BpduGuard enabled will shut the port down. A Port as OperEdge which receives BPDU with BpduGuard enabled will shut the port down.
-        :param int32 AdminPointToPoint : The administrative point-to-point status of the LAN segment attached to this port The administrative point-to-point status of the LAN segment attached to this port
-        :param int32 AdminPathCost : The administratively assigned value for the contribution of this port to the path cost of paths toward the spanning tree root.  Writing a value of '0' assigns the automatically calculated default Path Cost value to the port.  If the default Path Cost is being used The administratively assigned value for the contribution of this port to the path cost of paths toward the spanning tree root.  Writing a value of '0' assigns the automatically calculated default Path Cost value to the port.  If the default Path Cost is being used
+        :param int32 AdminPointToPoint : The administrative point-to-point status of the LAN segment attached to this port using the enumeration values of the IEEE 802.1w clause.  A value of forceTrue(0) indicates that this port should always be treated as if it is connected to a point-to-point link.  A value of forceFalse(1) indicates that this port should be treated as having a shared media connection.  A value of auto(2) indicates that this port is considered to have a point-to-point link if it is an Aggregator and all of its    members are aggregatable or if the MAC entity is configured for full duplex operation The administrative point-to-point status of the LAN segment attached to this port using the enumeration values of the IEEE 802.1w clause.  A value of forceTrue(0) indicates that this port should always be treated as if it is connected to a point-to-point link.  A value of forceFalse(1) indicates that this port should be treated as having a shared media connection.  A value of auto(2) indicates that this port is considered to have a point-to-point link if it is an Aggregator and all of its    members are aggregatable or if the MAC entity is configured for full duplex operation
+        :param int32 BpduGuardInterval : The interval time to which a port will try to recover from BPDU Guard err-disable state.  If no BPDU frames are detected after this timeout plus 3 Times Hello Time then the port will transition back to Up state.  If condition is cleared manually then this operation is ignored.  If set to zero then timer is inactive and recovery is based on manual intervention. The interval time to which a port will try to recover from BPDU Guard err-disable state.  If no BPDU frames are detected after this timeout plus 3 Times Hello Time then the port will transition back to Up state.  If condition is cleared manually then this operation is ignored.  If set to zero then timer is inactive and recovery is based on manual intervention.
+        :param int32 AdminPathCost : The administratively assigned value for the contribution of this port to the path cost of paths toward the spanning tree root.  Writing a value of '0' assigns the automatically calculated default Path Cost value to the port.  If the default Path Cost is being used this object returns '0' when read.  This complements the object PathCost or PathCost32 which returns the operational value of the path cost.    The value of this object MUST be retained across reinitializations of the management system. The administratively assigned value for the contribution of this port to the path cost of paths toward the spanning tree root.  Writing a value of '0' assigns the automatically calculated default Path Cost value to the port.  If the default Path Cost is being used this object returns '0' when read.  This complements the object PathCost or PathCost32 which returns the operational value of the path cost.    The value of this object MUST be retained across reinitializations of the management system.
         :param int32 PathCost32 : The contribution of this port to the path cost of paths towards the spanning tree root which include this port.  802.1D-1998 recommends that the default value of this parameter be in inverse proportion to the speed of the attached LAN.  This object replaces PathCost to support IEEE 802.1t. Value of 1 will force node to auto discover the value        based on the ports capabilities. The contribution of this port to the path cost of paths towards the spanning tree root which include this port.  802.1D-1998 recommends that the default value of this parameter be in inverse proportion to the speed of the attached LAN.  This object replaces PathCost to support IEEE 802.1t. Value of 1 will force node to auto discover the value        based on the ports capabilities.
 
 	"""
     def createStpPort(self,
-                      BrgIfIndex,
-                      IfIndex,
-                      BpduGuardInterval,
+                      Vlan,
+                      IntfRef,
                       PathCost=1,
-                      Priority=128,
                       AdminEdgePort=2,
-                      Enable=2,
                       ProtocolMigration=1,
                       BridgeAssurance=2,
+                      Priority=128,
+                      AdminState='UP',
                       BpduGuard=2,
                       AdminPointToPoint=2,
+                      BpduGuardInterval=15,
                       AdminPathCost=200000,
                       PathCost32=1):
         obj =  { 
-                'BrgIfIndex' : int(BrgIfIndex),
-                'IfIndex' : int(IfIndex),
-                'BpduGuardInterval' : int(BpduGuardInterval),
+                'Vlan' : int(Vlan),
+                'IntfRef' : IntfRef,
                 'PathCost' : int(PathCost),
-                'Priority' : int(Priority),
                 'AdminEdgePort' : int(AdminEdgePort),
-                'Enable' : int(Enable),
                 'ProtocolMigration' : int(ProtocolMigration),
                 'BridgeAssurance' : int(BridgeAssurance),
+                'Priority' : int(Priority),
+                'AdminState' : AdminState,
                 'BpduGuard' : int(BpduGuard),
                 'AdminPointToPoint' : int(AdminPointToPoint),
+                'BpduGuardInterval' : int(BpduGuardInterval),
                 'AdminPathCost' : int(AdminPathCost),
                 'PathCost32' : int(PathCost32),
                 }
         reqUrl =  self.cfgUrlBase+'StpPort'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateStpPort(self,
-                      BrgIfIndex,
-                      IfIndex,
-                      BpduGuardInterval = None,
+                      Vlan,
+                      IntfRef,
                       PathCost = None,
-                      Priority = None,
                       AdminEdgePort = None,
-                      Enable = None,
                       ProtocolMigration = None,
                       BridgeAssurance = None,
+                      Priority = None,
+                      AdminState = None,
                       BpduGuard = None,
                       AdminPointToPoint = None,
+                      BpduGuardInterval = None,
                       AdminPathCost = None,
                       PathCost32 = None):
         obj =  {}
-        if BrgIfIndex != None :
-            obj['BrgIfIndex'] = int(BrgIfIndex)
+        if Vlan != None :
+            obj['Vlan'] = int(Vlan)
 
-        if IfIndex != None :
-            obj['IfIndex'] = int(IfIndex)
-
-        if BpduGuardInterval != None :
-            obj['BpduGuardInterval'] = int(BpduGuardInterval)
+        if IntfRef != None :
+            obj['IntfRef'] = IntfRef
 
         if PathCost != None :
             obj['PathCost'] = int(PathCost)
 
-        if Priority != None :
-            obj['Priority'] = int(Priority)
-
         if AdminEdgePort != None :
             obj['AdminEdgePort'] = int(AdminEdgePort)
-
-        if Enable != None :
-            obj['Enable'] = int(Enable)
 
         if ProtocolMigration != None :
             obj['ProtocolMigration'] = int(ProtocolMigration)
@@ -8018,11 +10438,20 @@ class FlexSwitch( object):
         if BridgeAssurance != None :
             obj['BridgeAssurance'] = int(BridgeAssurance)
 
+        if Priority != None :
+            obj['Priority'] = int(Priority)
+
+        if AdminState != None :
+            obj['AdminState'] = AdminState
+
         if BpduGuard != None :
             obj['BpduGuard'] = int(BpduGuard)
 
         if AdminPointToPoint != None :
             obj['AdminPointToPoint'] = int(AdminPointToPoint)
+
+        if BpduGuardInterval != None :
+            obj['BpduGuardInterval'] = int(BpduGuardInterval)
 
         if AdminPathCost != None :
             obj['AdminPathCost'] = int(AdminPathCost)
@@ -8031,37 +10460,28 @@ class FlexSwitch( object):
             obj['PathCost32'] = int(PathCost32)
 
         reqUrl =  self.cfgUrlBase+'StpPort'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateStpPortById(self,
                            objectId,
-                           BpduGuardInterval = None,
                            PathCost = None,
-                           Priority = None,
                            AdminEdgePort = None,
-                           Enable = None,
                            ProtocolMigration = None,
                            BridgeAssurance = None,
+                           Priority = None,
+                           AdminState = None,
                            BpduGuard = None,
                            AdminPointToPoint = None,
+                           BpduGuardInterval = None,
                            AdminPathCost = None,
                            PathCost32 = None):
-        obj =  {'objectId': objectId }
-        if BpduGuardInterval !=  None:
-            obj['BpduGuardInterval'] = BpduGuardInterval
-
+        obj =  {}
         if PathCost !=  None:
             obj['PathCost'] = PathCost
 
-        if Priority !=  None:
-            obj['Priority'] = Priority
-
         if AdminEdgePort !=  None:
             obj['AdminEdgePort'] = AdminEdgePort
-
-        if Enable !=  None:
-            obj['Enable'] = Enable
 
         if ProtocolMigration !=  None:
             obj['ProtocolMigration'] = ProtocolMigration
@@ -8069,11 +10489,20 @@ class FlexSwitch( object):
         if BridgeAssurance !=  None:
             obj['BridgeAssurance'] = BridgeAssurance
 
+        if Priority !=  None:
+            obj['Priority'] = Priority
+
+        if AdminState !=  None:
+            obj['AdminState'] = AdminState
+
         if BpduGuard !=  None:
             obj['BpduGuard'] = BpduGuard
 
         if AdminPointToPoint !=  None:
             obj['AdminPointToPoint'] = AdminPointToPoint
+
+        if BpduGuardInterval !=  None:
+            obj['BpduGuardInterval'] = BpduGuardInterval
 
         if AdminPathCost !=  None:
             obj['AdminPathCost'] = AdminPathCost
@@ -8081,64 +10510,44 @@ class FlexSwitch( object):
         if PathCost32 !=  None:
             obj['PathCost32'] = PathCost32
 
-        reqUrl =  self.cfgUrlBase+'StpPort'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'StpPort'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteStpPort(self,
-                      BrgIfIndex,
-                      IfIndex):
+                      Vlan,
+                      IntfRef):
         obj =  { 
-                'BrgIfIndex' : BrgIfIndex,
-                'IfIndex' : IfIndex,
+                'Vlan' : Vlan,
+                'IntfRef' : IntfRef,
                 }
         reqUrl =  self.cfgUrlBase+'StpPort'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteStpPortById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'StpPort'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getStpPort(self,
-                   BrgIfIndex,
-                   IfIndex):
+                   Vlan,
+                   IntfRef):
         obj =  { 
-                'BrgIfIndex' : int(BrgIfIndex),
-                'IfIndex' : int(IfIndex),
+                'Vlan' : int(Vlan),
+                'IntfRef' : IntfRef,
                 }
         reqUrl =  self.cfgUrlBase + 'StpPort'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getStpPortById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'StpPort'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'StpPort'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllStpPorts(self):
         return self.getObjects( 'StpPort', self.cfgUrlBase)
-
-
-    def getBGPRouteState(self,
-                         CIDRLen,
-                         Network):
-        obj =  { 
-                'CIDRLen' : int(CIDRLen),
-                'Network' : Network,
-                }
-        reqUrl =  self.stateUrlBase + 'BGPRoute'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
-        return r
-
-    def getBGPRouteStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BGPRoute'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
-        return r
-
-    def getAllBGPRouteStates(self):
-        return self.getObjects( 'BGPRoute', self.stateUrlBase)
 
 
     """
@@ -8167,7 +10576,7 @@ class FlexSwitch( object):
                 'Cost' : int(Cost),
                 }
         reqUrl =  self.cfgUrlBase+'IPv4Route'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateIPv4Route(self,
@@ -8197,7 +10606,7 @@ class FlexSwitch( object):
             obj['Cost'] = int(Cost)
 
         reqUrl =  self.cfgUrlBase+'IPv4Route'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateIPv4RouteById(self,
@@ -8206,7 +10615,7 @@ class FlexSwitch( object):
                              Protocol = None,
                              NullRoute = None,
                              Cost = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if NextHop !=  None:
             obj['NextHop'] = NextHop
 
@@ -8219,8 +10628,8 @@ class FlexSwitch( object):
         if Cost !=  None:
             obj['Cost'] = Cost
 
-        reqUrl =  self.cfgUrlBase+'IPv4Route'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'IPv4Route'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteIPv4Route(self,
@@ -8231,12 +10640,12 @@ class FlexSwitch( object):
                 'NetworkMask' : NetworkMask,
                 }
         reqUrl =  self.cfgUrlBase+'IPv4Route'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteIPv4RouteById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'IPv4Route'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getIPv4Route(self,
@@ -8247,12 +10656,12 @@ class FlexSwitch( object):
                 'NetworkMask' : NetworkMask,
                 }
         reqUrl =  self.cfgUrlBase + 'IPv4Route'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getIPv4RouteById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'IPv4Route'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'IPv4Route'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllIPv4Routes(self):
@@ -8262,6 +10671,8 @@ class FlexSwitch( object):
     """
     .. automethod :: createBGPv6PeerGroup(self,
         :param string Name : Name of the BGP peer group Name of the BGP peer group
+        :param string PeerAS : Peer AS of the BGP neighbor Peer AS of the BGP neighbor
+        :param string LocalAS : Local AS of the BGP neighbor Local AS of the BGP neighbor
         :param string UpdateSource : Source IP to connect to the BGP neighbor Source IP to connect to the BGP neighbor
         :param string Description : Description of the BGP neighbor Description of the BGP neighbor
         :param string AdjRIBInFilter : Policy that is applied for Adj-RIB-In prefix filtering Policy that is applied for Adj-RIB-In prefix filtering
@@ -8269,7 +10680,6 @@ class FlexSwitch( object):
         :param uint8 MaxPrefixesRestartTimer : Time to wait before we start BGP peer session when we receive max prefixes Time to wait before we start BGP peer session when we receive max prefixes
         :param bool MultiHopEnable : Enable/Disable multi hop for BGP neighbor Enable/Disable multi hop for BGP neighbor
         :param bool MaxPrefixesDisconnect : Disconnect the BGP peer session when we receive the max prefixes from the neighbor Disconnect the BGP peer session when we receive the max prefixes from the neighbor
-        :param uint32 LocalAS : Local AS of the BGP neighbor Local AS of the BGP neighbor
         :param uint8 MultiHopTTL : TTL for multi hop BGP neighbor TTL for multi hop BGP neighbor
         :param uint32 KeepaliveTime : Keep alive time for the BGP neighbor Keep alive time for the BGP neighbor
         :param uint32 RouteReflectorClusterId : Cluster Id of the internal BGP neighbor route reflector client Cluster Id of the internal BGP neighbor route reflector client
@@ -8279,12 +10689,13 @@ class FlexSwitch( object):
         :param uint8 MaxPrefixesThresholdPct : The percentage of maximum prefixes before we start logging The percentage of maximum prefixes before we start logging
         :param uint32 HoldTime : Hold time for the BGP neighbor Hold time for the BGP neighbor
         :param uint32 MaxPrefixes : Maximum number of prefixes that can be received from the BGP neighbor Maximum number of prefixes that can be received from the BGP neighbor
-        :param uint32 PeerAS : Peer AS of the BGP neighbor Peer AS of the BGP neighbor
         :param uint32 ConnectRetryTime : Connect retry time to connect to BGP neighbor after disconnect Connect retry time to connect to BGP neighbor after disconnect
 
 	"""
     def createBGPv6PeerGroup(self,
                              Name,
+                             PeerAS='',
+                             LocalAS='',
                              UpdateSource='',
                              Description='',
                              AdjRIBInFilter='',
@@ -8292,20 +10703,20 @@ class FlexSwitch( object):
                              MaxPrefixesRestartTimer=0,
                              MultiHopEnable=False,
                              MaxPrefixesDisconnect=False,
-                             LocalAS=0,
                              MultiHopTTL=0,
-                             KeepaliveTime=60,
+                             KeepaliveTime=0,
                              RouteReflectorClusterId=0,
                              AddPathsMaxTx=0,
                              AddPathsRx=False,
                              RouteReflectorClient=False,
-                             MaxPrefixesThresholdPct=0,
-                             HoldTime=180,
+                             MaxPrefixesThresholdPct=80,
+                             HoldTime=0,
                              MaxPrefixes=0,
-                             PeerAS=0,
-                             ConnectRetryTime=60):
+                             ConnectRetryTime=0):
         obj =  { 
                 'Name' : Name,
+                'PeerAS' : PeerAS,
+                'LocalAS' : LocalAS,
                 'UpdateSource' : UpdateSource,
                 'Description' : Description,
                 'AdjRIBInFilter' : AdjRIBInFilter,
@@ -8313,7 +10724,6 @@ class FlexSwitch( object):
                 'MaxPrefixesRestartTimer' : int(MaxPrefixesRestartTimer),
                 'MultiHopEnable' : True if MultiHopEnable else False,
                 'MaxPrefixesDisconnect' : True if MaxPrefixesDisconnect else False,
-                'LocalAS' : int(LocalAS),
                 'MultiHopTTL' : int(MultiHopTTL),
                 'KeepaliveTime' : int(KeepaliveTime),
                 'RouteReflectorClusterId' : int(RouteReflectorClusterId),
@@ -8323,15 +10733,16 @@ class FlexSwitch( object):
                 'MaxPrefixesThresholdPct' : int(MaxPrefixesThresholdPct),
                 'HoldTime' : int(HoldTime),
                 'MaxPrefixes' : int(MaxPrefixes),
-                'PeerAS' : int(PeerAS),
                 'ConnectRetryTime' : int(ConnectRetryTime),
                 }
         reqUrl =  self.cfgUrlBase+'BGPv6PeerGroup'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateBGPv6PeerGroup(self,
                              Name,
+                             PeerAS = None,
+                             LocalAS = None,
                              UpdateSource = None,
                              Description = None,
                              AdjRIBInFilter = None,
@@ -8339,7 +10750,6 @@ class FlexSwitch( object):
                              MaxPrefixesRestartTimer = None,
                              MultiHopEnable = None,
                              MaxPrefixesDisconnect = None,
-                             LocalAS = None,
                              MultiHopTTL = None,
                              KeepaliveTime = None,
                              RouteReflectorClusterId = None,
@@ -8349,11 +10759,16 @@ class FlexSwitch( object):
                              MaxPrefixesThresholdPct = None,
                              HoldTime = None,
                              MaxPrefixes = None,
-                             PeerAS = None,
                              ConnectRetryTime = None):
         obj =  {}
         if Name != None :
             obj['Name'] = Name
+
+        if PeerAS != None :
+            obj['PeerAS'] = PeerAS
+
+        if LocalAS != None :
+            obj['LocalAS'] = LocalAS
 
         if UpdateSource != None :
             obj['UpdateSource'] = UpdateSource
@@ -8375,9 +10790,6 @@ class FlexSwitch( object):
 
         if MaxPrefixesDisconnect != None :
             obj['MaxPrefixesDisconnect'] = True if MaxPrefixesDisconnect else False
-
-        if LocalAS != None :
-            obj['LocalAS'] = int(LocalAS)
 
         if MultiHopTTL != None :
             obj['MultiHopTTL'] = int(MultiHopTTL)
@@ -8406,18 +10818,17 @@ class FlexSwitch( object):
         if MaxPrefixes != None :
             obj['MaxPrefixes'] = int(MaxPrefixes)
 
-        if PeerAS != None :
-            obj['PeerAS'] = int(PeerAS)
-
         if ConnectRetryTime != None :
             obj['ConnectRetryTime'] = int(ConnectRetryTime)
 
         reqUrl =  self.cfgUrlBase+'BGPv6PeerGroup'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateBGPv6PeerGroupById(self,
                                   objectId,
+                                  PeerAS = None,
+                                  LocalAS = None,
                                   UpdateSource = None,
                                   Description = None,
                                   AdjRIBInFilter = None,
@@ -8425,7 +10836,6 @@ class FlexSwitch( object):
                                   MaxPrefixesRestartTimer = None,
                                   MultiHopEnable = None,
                                   MaxPrefixesDisconnect = None,
-                                  LocalAS = None,
                                   MultiHopTTL = None,
                                   KeepaliveTime = None,
                                   RouteReflectorClusterId = None,
@@ -8435,9 +10845,14 @@ class FlexSwitch( object):
                                   MaxPrefixesThresholdPct = None,
                                   HoldTime = None,
                                   MaxPrefixes = None,
-                                  PeerAS = None,
                                   ConnectRetryTime = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
+        if PeerAS !=  None:
+            obj['PeerAS'] = PeerAS
+
+        if LocalAS !=  None:
+            obj['LocalAS'] = LocalAS
+
         if UpdateSource !=  None:
             obj['UpdateSource'] = UpdateSource
 
@@ -8458,9 +10873,6 @@ class FlexSwitch( object):
 
         if MaxPrefixesDisconnect !=  None:
             obj['MaxPrefixesDisconnect'] = MaxPrefixesDisconnect
-
-        if LocalAS !=  None:
-            obj['LocalAS'] = LocalAS
 
         if MultiHopTTL !=  None:
             obj['MultiHopTTL'] = MultiHopTTL
@@ -8489,14 +10901,11 @@ class FlexSwitch( object):
         if MaxPrefixes !=  None:
             obj['MaxPrefixes'] = MaxPrefixes
 
-        if PeerAS !=  None:
-            obj['PeerAS'] = PeerAS
-
         if ConnectRetryTime !=  None:
             obj['ConnectRetryTime'] = ConnectRetryTime
 
-        reqUrl =  self.cfgUrlBase+'BGPv6PeerGroup'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'BGPv6PeerGroup'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteBGPv6PeerGroup(self,
@@ -8505,12 +10914,12 @@ class FlexSwitch( object):
                 'Name' : Name,
                 }
         reqUrl =  self.cfgUrlBase+'BGPv6PeerGroup'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteBGPv6PeerGroupById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'BGPv6PeerGroup'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getBGPv6PeerGroup(self,
@@ -8519,12 +10928,12 @@ class FlexSwitch( object):
                 'Name' : Name,
                 }
         reqUrl =  self.cfgUrlBase + 'BGPv6PeerGroup'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getBGPv6PeerGroupById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BGPv6PeerGroup'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'BGPv6PeerGroup'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllBGPv6PeerGroups(self):
@@ -8537,12 +10946,12 @@ class FlexSwitch( object):
                 'IpAddr' : IpAddr,
                 }
         reqUrl =  self.stateUrlBase + 'ArpEntryHw'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getArpEntryHwStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'ArpEntryHw'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'ArpEntryHw'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllArpEntryHwStates(self):
@@ -8555,12 +10964,12 @@ class FlexSwitch( object):
                 'RouterId' : RouterId,
                 }
         reqUrl =  self.stateUrlBase + 'OspfGlobal'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getOspfGlobalStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'OspfGlobal'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'OspfGlobal'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllOspfGlobalStates(self):
@@ -8584,7 +10993,7 @@ class FlexSwitch( object):
                 'LinkIp' : True if LinkIp else False,
                 }
         reqUrl =  self.cfgUrlBase+'IPv6Intf'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateIPv6Intf(self,
@@ -8602,22 +11011,22 @@ class FlexSwitch( object):
             obj['LinkIp'] = True if LinkIp else False
 
         reqUrl =  self.cfgUrlBase+'IPv6Intf'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateIPv6IntfById(self,
                             objectId,
                             IpAddr = None,
                             LinkIp = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if IpAddr !=  None:
             obj['IpAddr'] = IpAddr
 
         if LinkIp !=  None:
             obj['LinkIp'] = LinkIp
 
-        reqUrl =  self.cfgUrlBase+'IPv6Intf'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'IPv6Intf'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteIPv6Intf(self,
@@ -8626,12 +11035,12 @@ class FlexSwitch( object):
                 'IntfRef' : IntfRef,
                 }
         reqUrl =  self.cfgUrlBase+'IPv6Intf'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteIPv6IntfById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'IPv6Intf'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getIPv6Intf(self,
@@ -8640,12 +11049,12 @@ class FlexSwitch( object):
                 'IntfRef' : IntfRef,
                 }
         reqUrl =  self.cfgUrlBase + 'IPv6Intf'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getIPv6IntfById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'IPv6Intf'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'IPv6Intf'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllIPv6Intfs(self):
@@ -8658,12 +11067,12 @@ class FlexSwitch( object):
                 'Protocol' : Protocol,
                 }
         reqUrl =  self.stateUrlBase + 'RouteStatsPerProtocol'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getRouteStatsPerProtocolStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'RouteStatsPerProtocol'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'RouteStatsPerProtocol'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllRouteStatsPerProtocolStates(self):
@@ -8683,7 +11092,7 @@ class FlexSwitch( object):
                 'Enable' : True if Enable else False,
                 }
         reqUrl =  self.cfgUrlBase+'IsisGlobal'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateIsisGlobal(self,
@@ -8697,18 +11106,18 @@ class FlexSwitch( object):
             obj['Enable'] = True if Enable else False
 
         reqUrl =  self.cfgUrlBase+'IsisGlobal'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateIsisGlobalById(self,
                               objectId,
                               Enable = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if Enable !=  None:
             obj['Enable'] = Enable
 
-        reqUrl =  self.cfgUrlBase+'IsisGlobal'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'IsisGlobal'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteIsisGlobal(self,
@@ -8717,12 +11126,12 @@ class FlexSwitch( object):
                 'Vrf' : Vrf,
                 }
         reqUrl =  self.cfgUrlBase+'IsisGlobal'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteIsisGlobalById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'IsisGlobal'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getIsisGlobal(self,
@@ -8731,16 +11140,56 @@ class FlexSwitch( object):
                 'Vrf' : Vrf,
                 }
         reqUrl =  self.cfgUrlBase + 'IsisGlobal'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getIsisGlobalById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'IsisGlobal'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'IsisGlobal'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllIsisGlobals(self):
         return self.getObjects( 'IsisGlobal', self.cfgUrlBase)
+
+
+    def getBGPv6RouteState(self,
+                           CIDRLen,
+                           Network):
+        obj =  { 
+                'CIDRLen' : int(CIDRLen),
+                'Network' : Network,
+                }
+        reqUrl =  self.stateUrlBase + 'BGPv6Route'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getBGPv6RouteStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase + 'BGPv6Route'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllBGPv6RouteStates(self):
+        return self.getObjects( 'BGPv6Route', self.stateUrlBase)
+
+
+    def getBGPv4RouteState(self,
+                           CIDRLen,
+                           Network):
+        obj =  { 
+                'CIDRLen' : int(CIDRLen),
+                'Network' : Network,
+                }
+        reqUrl =  self.stateUrlBase + 'BGPv4Route'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getBGPv4RouteStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase + 'BGPv4Route'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllBGPv4RouteStates(self):
+        return self.getObjects( 'BGPv4Route', self.stateUrlBase)
 
 
     def getVrrpVridState(self,
@@ -8751,16 +11200,36 @@ class FlexSwitch( object):
                 'IfIndex' : int(IfIndex),
                 }
         reqUrl =  self.stateUrlBase + 'VrrpVrid'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getVrrpVridStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'VrrpVrid'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'VrrpVrid'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllVrrpVridStates(self):
         return self.getObjects( 'VrrpVrid', self.stateUrlBase)
+
+
+    def getAsicGlobalPMState(self,
+                             Resource,
+                             ModuleId):
+        obj =  { 
+                'Resource' : Resource,
+                'ModuleId' : int(ModuleId),
+                }
+        reqUrl =  self.stateUrlBase + 'AsicGlobalPM'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAsicGlobalPMStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase + 'AsicGlobalPM'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllAsicGlobalPMStates(self):
+        return self.getObjects( 'AsicGlobalPM', self.stateUrlBase)
 
 
     def getFaultState(self,
@@ -8777,12 +11246,12 @@ class FlexSwitch( object):
                 'OwnerId' : int(OwnerId),
                 }
         reqUrl =  self.stateUrlBase + 'Fault'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getFaultStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'Fault'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'Fault'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllFaultStates(self):
@@ -8806,7 +11275,7 @@ class FlexSwitch( object):
                 'GenerateASSet' : True if GenerateASSet else False,
                 }
         reqUrl =  self.cfgUrlBase+'BGPv4Aggregate'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateBGPv4Aggregate(self,
@@ -8824,22 +11293,22 @@ class FlexSwitch( object):
             obj['GenerateASSet'] = True if GenerateASSet else False
 
         reqUrl =  self.cfgUrlBase+'BGPv4Aggregate'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateBGPv4AggregateById(self,
                                   objectId,
                                   SendSummaryOnly = None,
                                   GenerateASSet = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if SendSummaryOnly !=  None:
             obj['SendSummaryOnly'] = SendSummaryOnly
 
         if GenerateASSet !=  None:
             obj['GenerateASSet'] = GenerateASSet
 
-        reqUrl =  self.cfgUrlBase+'BGPv4Aggregate'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'BGPv4Aggregate'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteBGPv4Aggregate(self,
@@ -8848,12 +11317,12 @@ class FlexSwitch( object):
                 'IpPrefix' : IpPrefix,
                 }
         reqUrl =  self.cfgUrlBase+'BGPv4Aggregate'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteBGPv4AggregateById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'BGPv4Aggregate'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getBGPv4Aggregate(self,
@@ -8862,12 +11331,12 @@ class FlexSwitch( object):
                 'IpPrefix' : IpPrefix,
                 }
         reqUrl =  self.cfgUrlBase + 'BGPv4Aggregate'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getBGPv4AggregateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BGPv4Aggregate'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'BGPv4Aggregate'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllBGPv4Aggregates(self):
@@ -8894,7 +11363,7 @@ class FlexSwitch( object):
                 'StatementList' : StatementList,
                 }
         reqUrl =  self.cfgUrlBase+'BGPPolicyDefinition'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateBGPPolicyDefinition(self,
@@ -8916,7 +11385,7 @@ class FlexSwitch( object):
             obj['StatementList'] = StatementList
 
         reqUrl =  self.cfgUrlBase+'BGPPolicyDefinition'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updateBGPPolicyDefinitionById(self,
@@ -8924,7 +11393,7 @@ class FlexSwitch( object):
                                        Precedence = None,
                                        MatchType = None,
                                        StatementList = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if Precedence !=  None:
             obj['Precedence'] = Precedence
 
@@ -8934,8 +11403,8 @@ class FlexSwitch( object):
         if StatementList !=  None:
             obj['StatementList'] = StatementList
 
-        reqUrl =  self.cfgUrlBase+'BGPPolicyDefinition'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'BGPPolicyDefinition'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deleteBGPPolicyDefinition(self,
@@ -8944,12 +11413,12 @@ class FlexSwitch( object):
                 'Name' : Name,
                 }
         reqUrl =  self.cfgUrlBase+'BGPPolicyDefinition'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deleteBGPPolicyDefinitionById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'BGPPolicyDefinition'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getBGPPolicyDefinition(self,
@@ -8958,12 +11427,12 @@ class FlexSwitch( object):
                 'Name' : Name,
                 }
         reqUrl =  self.cfgUrlBase + 'BGPPolicyDefinition'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getBGPPolicyDefinitionById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'BGPPolicyDefinition'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'BGPPolicyDefinition'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllBGPPolicyDefinitions(self):
@@ -8977,6 +11446,7 @@ class FlexSwitch( object):
         :param string Protocol : Protocol to match on if the ConditionType is set to MatchProtocol Protocol to match on if the ConditionType is set to MatchProtocol
         :param string IpPrefix : Used in conjunction with MaskLengthRange to specify the IP Prefix to match on when the ConditionType is MatchDstIpPrefix/MatchSrcIpPrefix. Used in conjunction with MaskLengthRange to specify the IP Prefix to match on when the ConditionType is MatchDstIpPrefix/MatchSrcIpPrefix.
         :param string MaskLengthRange : Used in conjuction with IpPrefix to specify specify the IP Prefix to match on when the ConditionType is MatchDstIpPrefix/MatchSrcIpPrefix. Used in conjuction with IpPrefix to specify specify the IP Prefix to match on when the ConditionType is MatchDstIpPrefix/MatchSrcIpPrefix.
+        :param string PrefixSet : Name of a pre-defined prefix set to be used as a condition qualifier. Name of a pre-defined prefix set to be used as a condition qualifier.
 
 	"""
     def createPolicyCondition(self,
@@ -8984,16 +11454,18 @@ class FlexSwitch( object):
                               ConditionType,
                               Protocol,
                               IpPrefix,
-                              MaskLengthRange):
+                              MaskLengthRange,
+                              PrefixSet=''):
         obj =  { 
                 'Name' : Name,
                 'ConditionType' : ConditionType,
                 'Protocol' : Protocol,
                 'IpPrefix' : IpPrefix,
                 'MaskLengthRange' : MaskLengthRange,
+                'PrefixSet' : PrefixSet,
                 }
         reqUrl =  self.cfgUrlBase+'PolicyCondition'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updatePolicyCondition(self,
@@ -9001,7 +11473,8 @@ class FlexSwitch( object):
                               ConditionType = None,
                               Protocol = None,
                               IpPrefix = None,
-                              MaskLengthRange = None):
+                              MaskLengthRange = None,
+                              PrefixSet = None):
         obj =  {}
         if Name != None :
             obj['Name'] = Name
@@ -9018,8 +11491,11 @@ class FlexSwitch( object):
         if MaskLengthRange != None :
             obj['MaskLengthRange'] = MaskLengthRange
 
+        if PrefixSet != None :
+            obj['PrefixSet'] = PrefixSet
+
         reqUrl =  self.cfgUrlBase+'PolicyCondition'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updatePolicyConditionById(self,
@@ -9027,8 +11503,9 @@ class FlexSwitch( object):
                                    ConditionType = None,
                                    Protocol = None,
                                    IpPrefix = None,
-                                   MaskLengthRange = None):
-        obj =  {'objectId': objectId }
+                                   MaskLengthRange = None,
+                                   PrefixSet = None):
+        obj =  {}
         if ConditionType !=  None:
             obj['ConditionType'] = ConditionType
 
@@ -9041,8 +11518,11 @@ class FlexSwitch( object):
         if MaskLengthRange !=  None:
             obj['MaskLengthRange'] = MaskLengthRange
 
-        reqUrl =  self.cfgUrlBase+'PolicyCondition'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        if PrefixSet !=  None:
+            obj['PrefixSet'] = PrefixSet
+
+        reqUrl =  self.cfgUrlBase+'PolicyCondition'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deletePolicyCondition(self,
@@ -9051,12 +11531,12 @@ class FlexSwitch( object):
                 'Name' : Name,
                 }
         reqUrl =  self.cfgUrlBase+'PolicyCondition'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deletePolicyConditionById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'PolicyCondition'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getPolicyCondition(self,
@@ -9065,12 +11545,12 @@ class FlexSwitch( object):
                 'Name' : Name,
                 }
         reqUrl =  self.cfgUrlBase + 'PolicyCondition'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getPolicyConditionById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'PolicyCondition'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'PolicyCondition'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllPolicyConditions(self):
@@ -9084,11 +11564,13 @@ class FlexSwitch( object):
         :param string PhyIntfType : Type of internal phy interface Type of internal phy interface
         :param string MacAddr : Mac address associated with this port Mac address associated with this port
         :param int32 Speed : Port speed in Mbps Port speed in Mbps
-        :param string Duplex : Duplex setting for this port Duplex setting for this port
         :param string MediaType : Type of media inserted into this port Type of media inserted into this port
         :param int32 Mtu : Maximum transmission unit size for this port Maximum transmission unit size for this port
         :param string BreakOutMode : Break out mode for the port. Only applicable on ports that support breakout. Valid modes - 1x40 Break out mode for the port. Only applicable on ports that support breakout. Valid modes - 1x40
         :param string Description : User provided string description User provided string description
+        :param string Duplex : Duplex setting for this port Duplex setting for this port
+        :param string LoopbackMode : Desired loopback setting for this port Desired loopback setting for this port
+        :param bool EnableFEC : Enable/Disable 802.3bj FEC on this interface Enable/Disable 802.3bj FEC on this interface
         :param string AdminState : Administrative state of this port Administrative state of this port
         :param string Autoneg : Autonegotiation setting for this port Autonegotiation setting for this port
 
@@ -9099,11 +11581,13 @@ class FlexSwitch( object):
                    PhyIntfType,
                    MacAddr,
                    Speed,
-                   Duplex,
                    MediaType,
                    Mtu,
                    BreakOutMode,
                    Description='FP Port',
+                   Duplex='Full Duplex',
+                   LoopbackMode='NONE',
+                   EnableFEC=False,
                    AdminState='DOWN',
                    Autoneg='OFF'):
         obj =  { 
@@ -9112,16 +11596,18 @@ class FlexSwitch( object):
                 'PhyIntfType' : PhyIntfType,
                 'MacAddr' : MacAddr,
                 'Speed' : int(Speed),
-                'Duplex' : Duplex,
                 'MediaType' : MediaType,
                 'Mtu' : int(Mtu),
                 'BreakOutMode' : BreakOutMode,
                 'Description' : Description,
+                'Duplex' : Duplex,
+                'LoopbackMode' : LoopbackMode,
+                'EnableFEC' : True if EnableFEC else False,
                 'AdminState' : AdminState,
                 'Autoneg' : Autoneg,
                 }
         reqUrl =  self.cfgUrlBase+'Port'
-        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updatePort(self,
@@ -9130,11 +11616,13 @@ class FlexSwitch( object):
                    PhyIntfType = None,
                    MacAddr = None,
                    Speed = None,
-                   Duplex = None,
                    MediaType = None,
                    Mtu = None,
                    BreakOutMode = None,
                    Description = None,
+                   Duplex = None,
+                   LoopbackMode = None,
+                   EnableFEC = None,
                    AdminState = None,
                    Autoneg = None):
         obj =  {}
@@ -9153,9 +11641,6 @@ class FlexSwitch( object):
         if Speed != None :
             obj['Speed'] = int(Speed)
 
-        if Duplex != None :
-            obj['Duplex'] = Duplex
-
         if MediaType != None :
             obj['MediaType'] = MediaType
 
@@ -9168,6 +11653,15 @@ class FlexSwitch( object):
         if Description != None :
             obj['Description'] = Description
 
+        if Duplex != None :
+            obj['Duplex'] = Duplex
+
+        if LoopbackMode != None :
+            obj['LoopbackMode'] = LoopbackMode
+
+        if EnableFEC != None :
+            obj['EnableFEC'] = True if EnableFEC else False
+
         if AdminState != None :
             obj['AdminState'] = AdminState
 
@@ -9175,7 +11669,7 @@ class FlexSwitch( object):
             obj['Autoneg'] = Autoneg
 
         reqUrl =  self.cfgUrlBase+'Port'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def updatePortById(self,
@@ -9184,14 +11678,16 @@ class FlexSwitch( object):
                         PhyIntfType = None,
                         MacAddr = None,
                         Speed = None,
-                        Duplex = None,
                         MediaType = None,
                         Mtu = None,
                         BreakOutMode = None,
                         Description = None,
+                        Duplex = None,
+                        LoopbackMode = None,
+                        EnableFEC = None,
                         AdminState = None,
                         Autoneg = None):
-        obj =  {'objectId': objectId }
+        obj =  {}
         if IfIndex !=  None:
             obj['IfIndex'] = IfIndex
 
@@ -9203,9 +11699,6 @@ class FlexSwitch( object):
 
         if Speed !=  None:
             obj['Speed'] = Speed
-
-        if Duplex !=  None:
-            obj['Duplex'] = Duplex
 
         if MediaType !=  None:
             obj['MediaType'] = MediaType
@@ -9219,14 +11712,23 @@ class FlexSwitch( object):
         if Description !=  None:
             obj['Description'] = Description
 
+        if Duplex !=  None:
+            obj['Duplex'] = Duplex
+
+        if LoopbackMode !=  None:
+            obj['LoopbackMode'] = LoopbackMode
+
+        if EnableFEC !=  None:
+            obj['EnableFEC'] = EnableFEC
+
         if AdminState !=  None:
             obj['AdminState'] = AdminState
 
         if Autoneg !=  None:
             obj['Autoneg'] = Autoneg
 
-        reqUrl =  self.cfgUrlBase+'Port'
-        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers) 
+        reqUrl =  self.cfgUrlBase+'Port'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
     def deletePort(self,
@@ -9235,12 +11737,12 @@ class FlexSwitch( object):
                 'IntfRef' : IntfRef,
                 }
         reqUrl =  self.cfgUrlBase+'Port'
-        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def deletePortById(self, objectId ):
         reqUrl =  self.cfgUrlBase+'Port'+"/%s"%(objectId)
-        r = requests.delete(reqUrl, data=None, headers=headers) 
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
     def getPort(self,
@@ -9249,12 +11751,12 @@ class FlexSwitch( object):
                 'IntfRef' : IntfRef,
                 }
         reqUrl =  self.cfgUrlBase + 'Port'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getPortById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'Port'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.cfgUrlBase + 'Port'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllPorts(self):
@@ -9269,12 +11771,12 @@ class FlexSwitch( object):
                 'AddressLessIf' : int(AddressLessIf),
                 }
         reqUrl =  self.stateUrlBase + 'OspfIfEntry'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getOspfIfEntryStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'OspfIfEntry'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'OspfIfEntry'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllOspfIfEntryStates(self):
@@ -9287,12 +11789,12 @@ class FlexSwitch( object):
                 'Index' : int(Index),
                 }
         reqUrl =  self.stateUrlBase + 'RIBEvent'
-        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers) 
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
     def getRIBEventStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase+'RIBEvent'+"/%s"%(objectId)
-        r = requests.get(reqUrl, data=None, headers=headers) 
+        reqUrl =  self.stateUrlBase + 'RIBEvent'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
     def getAllRIBEventStates(self):
