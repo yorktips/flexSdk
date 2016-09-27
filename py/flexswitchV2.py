@@ -394,6 +394,256 @@ class FlexSwitch( object):
 
 
     """
+    .. automethod :: createQsfpChannel(self,
+        :param int32 ChannelNum : Qsfp Channel Number Qsfp Channel Number
+        :param int32 QsfpId : Qsfp Id Qsfp Id
+        :param float64 HigherAlarmRXPower : Higher Alarm Rx power Threshold for TCA Higher Alarm Rx power Threshold for TCA
+        :param float64 HigherAlarmTXPower : Higher Alarm Rx power for TCA Higher Alarm Rx power for TCA
+        :param float64 HigherAlarmTXBias : Higher Alarm Tx Current Bias for TCA Higher Alarm Tx Current Bias for TCA
+        :param float64 HigherWarningRXPower : Higher Warning Rx power Threshold for TCA Higher Warning Rx power Threshold for TCA
+        :param float64 HigherWarningTXPower : Higher Warning Rx power for TCA Higher Warning Rx power for TCA
+        :param float64 HigherWarningTXBias : Higher Warning Tx Current Bias for TCA Higher Warning Tx Current Bias for TCA
+        :param float64 LowerAlarmRXPower : Lower Alarm Rx power Threshold for TCA Lower Alarm Rx power Threshold for TCA
+        :param float64 LowerAlarmTXPower : Lower Alarm Rx power for TCA Lower Alarm Rx power for TCA
+        :param float64 LowerAlarmTXBias : Lower Alarm Tx Current Bias for TCA Lower Alarm Tx Current Bias for TCA
+        :param float64 LowerWarningRXPower : Lower Warning Rx power Threshold for TCA Lower Warning Rx power Threshold for TCA
+        :param float64 LowerWarningTXPower : Lower Warning Rx power for TCA Lower Warning Rx power for TCA
+        :param float64 LowerWarningTXBias : Lower Warning Tx Current Bias for TCA Lower Warning Tx Current Bias for TCA
+        :param string PMClassBAdminState : PM Class-B Admin State PM Class-B Admin State
+        :param string PMClassCAdminState : PM Class-C Admin State PM Class-C Admin State
+        :param string PMClassAAdminState : PM Class-A Admin State PM Class-A Admin State
+        :param string AdminState : Enable/Disable Enable/Disable
+
+	"""
+    def createQsfpChannel(self,
+                          ChannelNum,
+                          QsfpId,
+                          HigherAlarmRXPower,
+                          HigherAlarmTXPower,
+                          HigherAlarmTXBias,
+                          HigherWarningRXPower,
+                          HigherWarningTXPower,
+                          HigherWarningTXBias,
+                          LowerAlarmRXPower,
+                          LowerAlarmTXPower,
+                          LowerAlarmTXBias,
+                          LowerWarningRXPower,
+                          LowerWarningTXPower,
+                          LowerWarningTXBias,
+                          PMClassBAdminState='Disable',
+                          PMClassCAdminState='Disable',
+                          PMClassAAdminState='Disable',
+                          AdminState='Disable'):
+        obj =  { 
+                'ChannelNum' : int(ChannelNum),
+                'QsfpId' : int(QsfpId),
+                'HigherAlarmRXPower' : HigherAlarmRXPower,
+                'HigherAlarmTXPower' : HigherAlarmTXPower,
+                'HigherAlarmTXBias' : HigherAlarmTXBias,
+                'HigherWarningRXPower' : HigherWarningRXPower,
+                'HigherWarningTXPower' : HigherWarningTXPower,
+                'HigherWarningTXBias' : HigherWarningTXBias,
+                'LowerAlarmRXPower' : LowerAlarmRXPower,
+                'LowerAlarmTXPower' : LowerAlarmTXPower,
+                'LowerAlarmTXBias' : LowerAlarmTXBias,
+                'LowerWarningRXPower' : LowerWarningRXPower,
+                'LowerWarningTXPower' : LowerWarningTXPower,
+                'LowerWarningTXBias' : LowerWarningTXBias,
+                'PMClassBAdminState' : PMClassBAdminState,
+                'PMClassCAdminState' : PMClassCAdminState,
+                'PMClassAAdminState' : PMClassAAdminState,
+                'AdminState' : AdminState,
+                }
+        reqUrl =  self.cfgUrlBase+'QsfpChannel'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def updateQsfpChannel(self,
+                          ChannelNum,
+                          QsfpId,
+                          HigherAlarmRXPower = None,
+                          HigherAlarmTXPower = None,
+                          HigherAlarmTXBias = None,
+                          HigherWarningRXPower = None,
+                          HigherWarningTXPower = None,
+                          HigherWarningTXBias = None,
+                          LowerAlarmRXPower = None,
+                          LowerAlarmTXPower = None,
+                          LowerAlarmTXBias = None,
+                          LowerWarningRXPower = None,
+                          LowerWarningTXPower = None,
+                          LowerWarningTXBias = None,
+                          PMClassBAdminState = None,
+                          PMClassCAdminState = None,
+                          PMClassAAdminState = None,
+                          AdminState = None):
+        obj =  {}
+        if ChannelNum != None :
+            obj['ChannelNum'] = int(ChannelNum)
+
+        if QsfpId != None :
+            obj['QsfpId'] = int(QsfpId)
+
+        if HigherAlarmRXPower != None :
+            obj['HigherAlarmRXPower'] = HigherAlarmRXPower
+
+        if HigherAlarmTXPower != None :
+            obj['HigherAlarmTXPower'] = HigherAlarmTXPower
+
+        if HigherAlarmTXBias != None :
+            obj['HigherAlarmTXBias'] = HigherAlarmTXBias
+
+        if HigherWarningRXPower != None :
+            obj['HigherWarningRXPower'] = HigherWarningRXPower
+
+        if HigherWarningTXPower != None :
+            obj['HigherWarningTXPower'] = HigherWarningTXPower
+
+        if HigherWarningTXBias != None :
+            obj['HigherWarningTXBias'] = HigherWarningTXBias
+
+        if LowerAlarmRXPower != None :
+            obj['LowerAlarmRXPower'] = LowerAlarmRXPower
+
+        if LowerAlarmTXPower != None :
+            obj['LowerAlarmTXPower'] = LowerAlarmTXPower
+
+        if LowerAlarmTXBias != None :
+            obj['LowerAlarmTXBias'] = LowerAlarmTXBias
+
+        if LowerWarningRXPower != None :
+            obj['LowerWarningRXPower'] = LowerWarningRXPower
+
+        if LowerWarningTXPower != None :
+            obj['LowerWarningTXPower'] = LowerWarningTXPower
+
+        if LowerWarningTXBias != None :
+            obj['LowerWarningTXBias'] = LowerWarningTXBias
+
+        if PMClassBAdminState != None :
+            obj['PMClassBAdminState'] = PMClassBAdminState
+
+        if PMClassCAdminState != None :
+            obj['PMClassCAdminState'] = PMClassCAdminState
+
+        if PMClassAAdminState != None :
+            obj['PMClassAAdminState'] = PMClassAAdminState
+
+        if AdminState != None :
+            obj['AdminState'] = AdminState
+
+        reqUrl =  self.cfgUrlBase+'QsfpChannel'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def updateQsfpChannelById(self,
+                               objectId,
+                               HigherAlarmRXPower = None,
+                               HigherAlarmTXPower = None,
+                               HigherAlarmTXBias = None,
+                               HigherWarningRXPower = None,
+                               HigherWarningTXPower = None,
+                               HigherWarningTXBias = None,
+                               LowerAlarmRXPower = None,
+                               LowerAlarmTXPower = None,
+                               LowerAlarmTXBias = None,
+                               LowerWarningRXPower = None,
+                               LowerWarningTXPower = None,
+                               LowerWarningTXBias = None,
+                               PMClassBAdminState = None,
+                               PMClassCAdminState = None,
+                               PMClassAAdminState = None,
+                               AdminState = None):
+        obj =  {}
+        if HigherAlarmRXPower !=  None:
+            obj['HigherAlarmRXPower'] = HigherAlarmRXPower
+
+        if HigherAlarmTXPower !=  None:
+            obj['HigherAlarmTXPower'] = HigherAlarmTXPower
+
+        if HigherAlarmTXBias !=  None:
+            obj['HigherAlarmTXBias'] = HigherAlarmTXBias
+
+        if HigherWarningRXPower !=  None:
+            obj['HigherWarningRXPower'] = HigherWarningRXPower
+
+        if HigherWarningTXPower !=  None:
+            obj['HigherWarningTXPower'] = HigherWarningTXPower
+
+        if HigherWarningTXBias !=  None:
+            obj['HigherWarningTXBias'] = HigherWarningTXBias
+
+        if LowerAlarmRXPower !=  None:
+            obj['LowerAlarmRXPower'] = LowerAlarmRXPower
+
+        if LowerAlarmTXPower !=  None:
+            obj['LowerAlarmTXPower'] = LowerAlarmTXPower
+
+        if LowerAlarmTXBias !=  None:
+            obj['LowerAlarmTXBias'] = LowerAlarmTXBias
+
+        if LowerWarningRXPower !=  None:
+            obj['LowerWarningRXPower'] = LowerWarningRXPower
+
+        if LowerWarningTXPower !=  None:
+            obj['LowerWarningTXPower'] = LowerWarningTXPower
+
+        if LowerWarningTXBias !=  None:
+            obj['LowerWarningTXBias'] = LowerWarningTXBias
+
+        if PMClassBAdminState !=  None:
+            obj['PMClassBAdminState'] = PMClassBAdminState
+
+        if PMClassCAdminState !=  None:
+            obj['PMClassCAdminState'] = PMClassCAdminState
+
+        if PMClassAAdminState !=  None:
+            obj['PMClassAAdminState'] = PMClassAAdminState
+
+        if AdminState !=  None:
+            obj['AdminState'] = AdminState
+
+        reqUrl =  self.cfgUrlBase+'QsfpChannel'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
+        return r
+
+    def deleteQsfpChannel(self,
+                          ChannelNum,
+                          QsfpId):
+        obj =  { 
+                'ChannelNum' : ChannelNum,
+                'QsfpId' : QsfpId,
+                }
+        reqUrl =  self.cfgUrlBase+'QsfpChannel'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def deleteQsfpChannelById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'QsfpChannel'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
+        return r
+
+    def getQsfpChannel(self,
+                       ChannelNum,
+                       QsfpId):
+        obj =  { 
+                'ChannelNum' : int(ChannelNum),
+                'QsfpId' : int(QsfpId),
+                }
+        reqUrl =  self.cfgUrlBase + 'QsfpChannel'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getQsfpChannelById(self, objectId ):
+        reqUrl =  self.cfgUrlBase + 'QsfpChannel'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllQsfpChannels(self):
+        return self.getObjects( 'QsfpChannel', self.cfgUrlBase)
+
+
+    """
     .. automethod :: createPowerConverterSensor(self,
         :param string Name : Power Converter Sensor Name Power Converter Sensor Name
         :param float64 HigherAlarmThreshold : Higher Alarm Threshold for TCA Higher Alarm Threshold for TCA
@@ -1901,8 +2151,13 @@ class FlexSwitch( object):
         :param string DestMask : Network mark for dest IP Network mark for dest IP
         :param string Proto : Protocol type Protocol type
         :param int32 SrcPort : Source Port Source Port
-        :param int32 DstPort : Dest Port Dest Port
+        :param int32 L4DstPort : TCP/UDP destionation port TCP/UDP destionation port
+        :param int32 L4MinPort : Min port when l4 port is specified as range Min port when l4 port is specified as range
+        :param int32 L4SrcPort : TCP/UDP source port TCP/UDP source port
         :param string Action : Type of action (Allow/Deny) Type of action (Allow/Deny)
+        :param int32 L4MaxPort : Max port when l4 port is specified as range Max port when l4 port is specified as range
+        :param int32 DstPort : Dest Port Dest Port
+        :param string L4PortMatch : match condition can be EQ(equal) match condition can be EQ(equal)
 
 	"""
     def createAclRule(self,
@@ -1915,8 +2170,13 @@ class FlexSwitch( object):
                       DestMask,
                       Proto,
                       SrcPort,
-                      DstPort,
-                      Action='Allow'):
+                      L4DstPort,
+                      L4MinPort=0,
+                      L4SrcPort=0,
+                      Action='Allow',
+                      L4MaxPort=0,
+                      DstPort=0,
+                      L4PortMatch='NA'):
         obj =  { 
                 'RuleName' : RuleName,
                 'SourceMac' : SourceMac,
@@ -1927,8 +2187,13 @@ class FlexSwitch( object):
                 'DestMask' : DestMask,
                 'Proto' : Proto,
                 'SrcPort' : int(SrcPort),
-                'DstPort' : int(DstPort),
+                'L4DstPort' : int(L4DstPort),
+                'L4MinPort' : int(L4MinPort),
+                'L4SrcPort' : int(L4SrcPort),
                 'Action' : Action,
+                'L4MaxPort' : int(L4MaxPort),
+                'DstPort' : int(DstPort),
+                'L4PortMatch' : L4PortMatch,
                 }
         reqUrl =  self.cfgUrlBase+'AclRule'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
@@ -1944,8 +2209,13 @@ class FlexSwitch( object):
                       DestMask = None,
                       Proto = None,
                       SrcPort = None,
+                      L4DstPort = None,
+                      L4MinPort = None,
+                      L4SrcPort = None,
+                      Action = None,
+                      L4MaxPort = None,
                       DstPort = None,
-                      Action = None):
+                      L4PortMatch = None):
         obj =  {}
         if RuleName != None :
             obj['RuleName'] = RuleName
@@ -1974,11 +2244,26 @@ class FlexSwitch( object):
         if SrcPort != None :
             obj['SrcPort'] = int(SrcPort)
 
-        if DstPort != None :
-            obj['DstPort'] = int(DstPort)
+        if L4DstPort != None :
+            obj['L4DstPort'] = int(L4DstPort)
+
+        if L4MinPort != None :
+            obj['L4MinPort'] = int(L4MinPort)
+
+        if L4SrcPort != None :
+            obj['L4SrcPort'] = int(L4SrcPort)
 
         if Action != None :
             obj['Action'] = Action
+
+        if L4MaxPort != None :
+            obj['L4MaxPort'] = int(L4MaxPort)
+
+        if DstPort != None :
+            obj['DstPort'] = int(DstPort)
+
+        if L4PortMatch != None :
+            obj['L4PortMatch'] = L4PortMatch
 
         reqUrl =  self.cfgUrlBase+'AclRule'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
@@ -1994,8 +2279,13 @@ class FlexSwitch( object):
                            DestMask = None,
                            Proto = None,
                            SrcPort = None,
+                           L4DstPort = None,
+                           L4MinPort = None,
+                           L4SrcPort = None,
+                           Action = None,
+                           L4MaxPort = None,
                            DstPort = None,
-                           Action = None):
+                           L4PortMatch = None):
         obj =  {}
         if SourceMac !=  None:
             obj['SourceMac'] = SourceMac
@@ -2021,11 +2311,26 @@ class FlexSwitch( object):
         if SrcPort !=  None:
             obj['SrcPort'] = SrcPort
 
-        if DstPort !=  None:
-            obj['DstPort'] = DstPort
+        if L4DstPort !=  None:
+            obj['L4DstPort'] = L4DstPort
+
+        if L4MinPort !=  None:
+            obj['L4MinPort'] = L4MinPort
+
+        if L4SrcPort !=  None:
+            obj['L4SrcPort'] = L4SrcPort
 
         if Action !=  None:
             obj['Action'] = Action
+
+        if L4MaxPort !=  None:
+            obj['L4MaxPort'] = L4MaxPort
+
+        if DstPort !=  None:
+            obj['DstPort'] = DstPort
+
+        if L4PortMatch !=  None:
+            obj['L4PortMatch'] = L4PortMatch
 
         reqUrl =  self.cfgUrlBase+'AclRule'+"/%s"%(objectId)
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
@@ -4158,6 +4463,157 @@ class FlexSwitch( object):
         return self.getObjects( 'Acl', self.stateUrlBase)
 
 
+    """
+    .. automethod :: createEthernetPM(self,
+        :param string Resource : Resource identifier Resource identifier
+        :param string IntfRef : Interface name of port Interface name of port
+        :param bool PMClassBEnable : Enable/Disable control for CLASS-B PM Enable/Disable control for CLASS-B PM
+        :param bool PMClassCEnable : Enable/Disable control for CLASS-C PM Enable/Disable control for CLASS-C PM
+        :param float64 HighWarnThreshold : High warning threshold value for this PM High warning threshold value for this PM
+        :param float64 LowAlarmThreshold : Low alarm threshold value for this PM Low alarm threshold value for this PM
+        :param bool PMClassAEnable : Enable/Disable control for CLASS-A PM Enable/Disable control for CLASS-A PM
+        :param float64 HighAlarmThreshold : High alarm threshold value for this PM High alarm threshold value for this PM
+        :param float64 LowWarnThreshold : Low warning threshold value for this PM Low warning threshold value for this PM
+
+	"""
+    def createEthernetPM(self,
+                         Resource,
+                         IntfRef,
+                         PMClassBEnable=True,
+                         PMClassCEnable=True,
+                         HighWarnThreshold='100000',
+                         LowAlarmThreshold='-100000',
+                         PMClassAEnable=True,
+                         HighAlarmThreshold='100000',
+                         LowWarnThreshold='-100000'):
+        obj =  { 
+                'Resource' : Resource,
+                'IntfRef' : IntfRef,
+                'PMClassBEnable' : True if PMClassBEnable else False,
+                'PMClassCEnable' : True if PMClassCEnable else False,
+                'HighWarnThreshold' : HighWarnThreshold,
+                'LowAlarmThreshold' : LowAlarmThreshold,
+                'PMClassAEnable' : True if PMClassAEnable else False,
+                'HighAlarmThreshold' : HighAlarmThreshold,
+                'LowWarnThreshold' : LowWarnThreshold,
+                }
+        reqUrl =  self.cfgUrlBase+'EthernetPM'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def updateEthernetPM(self,
+                         Resource,
+                         IntfRef,
+                         PMClassBEnable = None,
+                         PMClassCEnable = None,
+                         HighWarnThreshold = None,
+                         LowAlarmThreshold = None,
+                         PMClassAEnable = None,
+                         HighAlarmThreshold = None,
+                         LowWarnThreshold = None):
+        obj =  {}
+        if Resource != None :
+            obj['Resource'] = Resource
+
+        if IntfRef != None :
+            obj['IntfRef'] = IntfRef
+
+        if PMClassBEnable != None :
+            obj['PMClassBEnable'] = True if PMClassBEnable else False
+
+        if PMClassCEnable != None :
+            obj['PMClassCEnable'] = True if PMClassCEnable else False
+
+        if HighWarnThreshold != None :
+            obj['HighWarnThreshold'] = HighWarnThreshold
+
+        if LowAlarmThreshold != None :
+            obj['LowAlarmThreshold'] = LowAlarmThreshold
+
+        if PMClassAEnable != None :
+            obj['PMClassAEnable'] = True if PMClassAEnable else False
+
+        if HighAlarmThreshold != None :
+            obj['HighAlarmThreshold'] = HighAlarmThreshold
+
+        if LowWarnThreshold != None :
+            obj['LowWarnThreshold'] = LowWarnThreshold
+
+        reqUrl =  self.cfgUrlBase+'EthernetPM'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def updateEthernetPMById(self,
+                              objectId,
+                              PMClassBEnable = None,
+                              PMClassCEnable = None,
+                              HighWarnThreshold = None,
+                              LowAlarmThreshold = None,
+                              PMClassAEnable = None,
+                              HighAlarmThreshold = None,
+                              LowWarnThreshold = None):
+        obj =  {}
+        if PMClassBEnable !=  None:
+            obj['PMClassBEnable'] = PMClassBEnable
+
+        if PMClassCEnable !=  None:
+            obj['PMClassCEnable'] = PMClassCEnable
+
+        if HighWarnThreshold !=  None:
+            obj['HighWarnThreshold'] = HighWarnThreshold
+
+        if LowAlarmThreshold !=  None:
+            obj['LowAlarmThreshold'] = LowAlarmThreshold
+
+        if PMClassAEnable !=  None:
+            obj['PMClassAEnable'] = PMClassAEnable
+
+        if HighAlarmThreshold !=  None:
+            obj['HighAlarmThreshold'] = HighAlarmThreshold
+
+        if LowWarnThreshold !=  None:
+            obj['LowWarnThreshold'] = LowWarnThreshold
+
+        reqUrl =  self.cfgUrlBase+'EthernetPM'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
+        return r
+
+    def deleteEthernetPM(self,
+                         Resource,
+                         IntfRef):
+        obj =  { 
+                'Resource' : Resource,
+                'IntfRef' : IntfRef,
+                }
+        reqUrl =  self.cfgUrlBase+'EthernetPM'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def deleteEthernetPMById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'EthernetPM'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
+        return r
+
+    def getEthernetPM(self,
+                      Resource,
+                      IntfRef):
+        obj =  { 
+                'Resource' : Resource,
+                'IntfRef' : IntfRef,
+                }
+        reqUrl =  self.cfgUrlBase + 'EthernetPM'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getEthernetPMById(self, objectId ):
+        reqUrl =  self.cfgUrlBase + 'EthernetPM'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllEthernetPMs(self):
+        return self.getObjects( 'EthernetPM', self.cfgUrlBase)
+
+
     def getOspfVirtNbrEntryState(self,
                                  VirtNbrRtrId,
                                  VirtNbrArea):
@@ -4987,6 +5443,157 @@ class FlexSwitch( object):
         return self.getObjects( 'BGPPolicyStmt', self.cfgUrlBase)
 
 
+    """
+    .. automethod :: createAsicGlobalPM(self,
+        :param string Resource : Resource identifier Resource identifier
+        :param uint8 ModuleId : Module identifier Module identifier
+        :param bool PMClassBEnable : Enable/Disable control for CLASS-B PM Enable/Disable control for CLASS-B PM
+        :param float64 HighWarnThreshold : High warning threshold value for this PM High warning threshold value for this PM
+        :param float64 LowAlarmThreshold : Low alarm threshold value for this PM Low alarm threshold value for this PM
+        :param bool PMClassCEnable : Enable/Disable control for CLASS-C PM Enable/Disable control for CLASS-C PM
+        :param bool PMClassAEnable : Enable/Disable control for CLASS-A PM Enable/Disable control for CLASS-A PM
+        :param float64 LowWarnThreshold : Low warning threshold value for this PM Low warning threshold value for this PM
+        :param float64 HighAlarmThreshold : High alarm threshold value for this PM High alarm threshold value for this PM
+
+	"""
+    def createAsicGlobalPM(self,
+                           Resource,
+                           ModuleId,
+                           PMClassBEnable=True,
+                           HighWarnThreshold='100000',
+                           LowAlarmThreshold='-100000',
+                           PMClassCEnable=True,
+                           PMClassAEnable=True,
+                           LowWarnThreshold='-100000',
+                           HighAlarmThreshold='100000'):
+        obj =  { 
+                'Resource' : Resource,
+                'ModuleId' : int(ModuleId),
+                'PMClassBEnable' : True if PMClassBEnable else False,
+                'HighWarnThreshold' : HighWarnThreshold,
+                'LowAlarmThreshold' : LowAlarmThreshold,
+                'PMClassCEnable' : True if PMClassCEnable else False,
+                'PMClassAEnable' : True if PMClassAEnable else False,
+                'LowWarnThreshold' : LowWarnThreshold,
+                'HighAlarmThreshold' : HighAlarmThreshold,
+                }
+        reqUrl =  self.cfgUrlBase+'AsicGlobalPM'
+        r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def updateAsicGlobalPM(self,
+                           Resource,
+                           ModuleId,
+                           PMClassBEnable = None,
+                           HighWarnThreshold = None,
+                           LowAlarmThreshold = None,
+                           PMClassCEnable = None,
+                           PMClassAEnable = None,
+                           LowWarnThreshold = None,
+                           HighAlarmThreshold = None):
+        obj =  {}
+        if Resource != None :
+            obj['Resource'] = Resource
+
+        if ModuleId != None :
+            obj['ModuleId'] = int(ModuleId)
+
+        if PMClassBEnable != None :
+            obj['PMClassBEnable'] = True if PMClassBEnable else False
+
+        if HighWarnThreshold != None :
+            obj['HighWarnThreshold'] = HighWarnThreshold
+
+        if LowAlarmThreshold != None :
+            obj['LowAlarmThreshold'] = LowAlarmThreshold
+
+        if PMClassCEnable != None :
+            obj['PMClassCEnable'] = True if PMClassCEnable else False
+
+        if PMClassAEnable != None :
+            obj['PMClassAEnable'] = True if PMClassAEnable else False
+
+        if LowWarnThreshold != None :
+            obj['LowWarnThreshold'] = LowWarnThreshold
+
+        if HighAlarmThreshold != None :
+            obj['HighAlarmThreshold'] = HighAlarmThreshold
+
+        reqUrl =  self.cfgUrlBase+'AsicGlobalPM'
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def updateAsicGlobalPMById(self,
+                                objectId,
+                                PMClassBEnable = None,
+                                HighWarnThreshold = None,
+                                LowAlarmThreshold = None,
+                                PMClassCEnable = None,
+                                PMClassAEnable = None,
+                                LowWarnThreshold = None,
+                                HighAlarmThreshold = None):
+        obj =  {}
+        if PMClassBEnable !=  None:
+            obj['PMClassBEnable'] = PMClassBEnable
+
+        if HighWarnThreshold !=  None:
+            obj['HighWarnThreshold'] = HighWarnThreshold
+
+        if LowAlarmThreshold !=  None:
+            obj['LowAlarmThreshold'] = LowAlarmThreshold
+
+        if PMClassCEnable !=  None:
+            obj['PMClassCEnable'] = PMClassCEnable
+
+        if PMClassAEnable !=  None:
+            obj['PMClassAEnable'] = PMClassAEnable
+
+        if LowWarnThreshold !=  None:
+            obj['LowWarnThreshold'] = LowWarnThreshold
+
+        if HighAlarmThreshold !=  None:
+            obj['HighAlarmThreshold'] = HighAlarmThreshold
+
+        reqUrl =  self.cfgUrlBase+'AsicGlobalPM'+"/%s"%(objectId)
+        r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
+        return r
+
+    def deleteAsicGlobalPM(self,
+                           Resource,
+                           ModuleId):
+        obj =  { 
+                'Resource' : Resource,
+                'ModuleId' : ModuleId,
+                }
+        reqUrl =  self.cfgUrlBase+'AsicGlobalPM'
+        r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def deleteAsicGlobalPMById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'AsicGlobalPM'+"/%s"%(objectId)
+        r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
+        return r
+
+    def getAsicGlobalPM(self,
+                        Resource,
+                        ModuleId):
+        obj =  { 
+                'Resource' : Resource,
+                'ModuleId' : int(ModuleId),
+                }
+        reqUrl =  self.cfgUrlBase + 'AsicGlobalPM'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAsicGlobalPMById(self, objectId ):
+        reqUrl =  self.cfgUrlBase + 'AsicGlobalPM'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllAsicGlobalPMs(self):
+        return self.getObjects( 'AsicGlobalPM', self.cfgUrlBase)
+
+
     def getIPv4RouteHwState(self,
                             DestinationNw):
         obj =  { 
@@ -5431,6 +6038,26 @@ class FlexSwitch( object):
 
     def getAllBfdGlobalStates(self):
         return self.getObjects( 'BfdGlobal', self.stateUrlBase)
+
+
+    def getQsfpChannelState(self,
+                            ChannelNum,
+                            QsfpId):
+        obj =  { 
+                'ChannelNum' : int(ChannelNum),
+                'QsfpId' : int(QsfpId),
+                }
+        reqUrl =  self.stateUrlBase + 'QsfpChannel'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getQsfpChannelStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase + 'QsfpChannel'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllQsfpChannelStates(self):
+        return self.getObjects( 'QsfpChannel', self.stateUrlBase)
 
 
     def getFanState(self,
@@ -6242,82 +6869,46 @@ class FlexSwitch( object):
         :param int32 QsfpId : Qsfp Id Qsfp Id
         :param float64 HigherAlarmTemperature : Higher Alarm temperature threshold for TCA Higher Alarm temperature threshold for TCA
         :param float64 HigherAlarmVoltage : Higher Alarm Voltage threshold for TCA Higher Alarm Voltage threshold for TCA
-        :param float64 HigherAlarmRXPower : Higher Alarm Rx power Threshold for TCA Higher Alarm Rx power Threshold for TCA
-        :param float64 HigherAlarmTXPower : Higher Alarm Rx power for TCA Higher Alarm Rx power for TCA
-        :param float64 HigherAlarmTXBias : Higher Alarm Tx Current Bias for TCA Higher Alarm Tx Current Bias for TCA
         :param float64 HigherWarningTemperature : Higher Warning temperature threshold for TCA Higher Warning temperature threshold for TCA
         :param float64 HigherWarningVoltage : Higher Warning Voltage threshold for TCA Higher Warning Voltage threshold for TCA
-        :param float64 HigherWarningRXPower : Higher Warning Rx power Threshold for TCA Higher Warning Rx power Threshold for TCA
-        :param float64 HigherWarningTXPower : Higher Warning Rx power for TCA Higher Warning Rx power for TCA
-        :param float64 HigherWarningTXBias : Higher Warning Tx Current Bias for TCA Higher Warning Tx Current Bias for TCA
         :param float64 LowerAlarmTemperature : Lower Alarm temperature threshold for TCA Lower Alarm temperature threshold for TCA
         :param float64 LowerAlarmVoltage : Lower Alarm Voltage threshold for TCA Lower Alarm Voltage threshold for TCA
-        :param float64 LowerAlarmRXPower : Lower Alarm Rx power Threshold for TCA Lower Alarm Rx power Threshold for TCA
-        :param float64 LowerAlarmTXPower : Lower Alarm Rx power for TCA Lower Alarm Rx power for TCA
-        :param float64 LowerAlarmTXBias : Lower Alarm Tx Current Bias for TCA Lower Alarm Tx Current Bias for TCA
         :param float64 LowerWarningTemperature : Lower Warning temperature threshold for TCA Lower Warning temperature threshold for TCA
         :param float64 LowerWarningVoltage : Lower Warning Voltage threshold for TCA Lower Warning Voltage threshold for TCA
-        :param float64 LowerWarningRXPower : Lower Warning Rx power Threshold for TCA Lower Warning Rx power Threshold for TCA
-        :param float64 LowerWarningTXPower : Lower Warning Rx power for TCA Lower Warning Rx power for TCA
-        :param float64 LowerWarningTXBias : Lower Warning Tx Current Bias for TCA Lower Warning Tx Current Bias for TCA
-        :param string PMClassAAdminState : PM Class-A Admin State PM Class-A Admin State
         :param string PMClassBAdminState : PM Class-B Admin State PM Class-B Admin State
-        :param string AdminState : Enable/Disable Enable/Disable
         :param string PMClassCAdminState : PM Class-C Admin State PM Class-C Admin State
+        :param string PMClassAAdminState : PM Class-A Admin State PM Class-A Admin State
+        :param string AdminState : Enable/Disable Enable/Disable
 
 	"""
     def createQsfp(self,
                    QsfpId,
                    HigherAlarmTemperature,
                    HigherAlarmVoltage,
-                   HigherAlarmRXPower,
-                   HigherAlarmTXPower,
-                   HigherAlarmTXBias,
                    HigherWarningTemperature,
                    HigherWarningVoltage,
-                   HigherWarningRXPower,
-                   HigherWarningTXPower,
-                   HigherWarningTXBias,
                    LowerAlarmTemperature,
                    LowerAlarmVoltage,
-                   LowerAlarmRXPower,
-                   LowerAlarmTXPower,
-                   LowerAlarmTXBias,
                    LowerWarningTemperature,
                    LowerWarningVoltage,
-                   LowerWarningRXPower,
-                   LowerWarningTXPower,
-                   LowerWarningTXBias,
-                   PMClassAAdminState='Disable',
                    PMClassBAdminState='Disable',
-                   AdminState='Disable',
-                   PMClassCAdminState='Disable'):
+                   PMClassCAdminState='Disable',
+                   PMClassAAdminState='Disable',
+                   AdminState='Disable'):
         obj =  { 
                 'QsfpId' : int(QsfpId),
                 'HigherAlarmTemperature' : HigherAlarmTemperature,
                 'HigherAlarmVoltage' : HigherAlarmVoltage,
-                'HigherAlarmRXPower' : HigherAlarmRXPower,
-                'HigherAlarmTXPower' : HigherAlarmTXPower,
-                'HigherAlarmTXBias' : HigherAlarmTXBias,
                 'HigherWarningTemperature' : HigherWarningTemperature,
                 'HigherWarningVoltage' : HigherWarningVoltage,
-                'HigherWarningRXPower' : HigherWarningRXPower,
-                'HigherWarningTXPower' : HigherWarningTXPower,
-                'HigherWarningTXBias' : HigherWarningTXBias,
                 'LowerAlarmTemperature' : LowerAlarmTemperature,
                 'LowerAlarmVoltage' : LowerAlarmVoltage,
-                'LowerAlarmRXPower' : LowerAlarmRXPower,
-                'LowerAlarmTXPower' : LowerAlarmTXPower,
-                'LowerAlarmTXBias' : LowerAlarmTXBias,
                 'LowerWarningTemperature' : LowerWarningTemperature,
                 'LowerWarningVoltage' : LowerWarningVoltage,
-                'LowerWarningRXPower' : LowerWarningRXPower,
-                'LowerWarningTXPower' : LowerWarningTXPower,
-                'LowerWarningTXBias' : LowerWarningTXBias,
-                'PMClassAAdminState' : PMClassAAdminState,
                 'PMClassBAdminState' : PMClassBAdminState,
-                'AdminState' : AdminState,
                 'PMClassCAdminState' : PMClassCAdminState,
+                'PMClassAAdminState' : PMClassAAdminState,
+                'AdminState' : AdminState,
                 }
         reqUrl =  self.cfgUrlBase+'Qsfp'
         r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
@@ -6327,28 +6918,16 @@ class FlexSwitch( object):
                    QsfpId,
                    HigherAlarmTemperature = None,
                    HigherAlarmVoltage = None,
-                   HigherAlarmRXPower = None,
-                   HigherAlarmTXPower = None,
-                   HigherAlarmTXBias = None,
                    HigherWarningTemperature = None,
                    HigherWarningVoltage = None,
-                   HigherWarningRXPower = None,
-                   HigherWarningTXPower = None,
-                   HigherWarningTXBias = None,
                    LowerAlarmTemperature = None,
                    LowerAlarmVoltage = None,
-                   LowerAlarmRXPower = None,
-                   LowerAlarmTXPower = None,
-                   LowerAlarmTXBias = None,
                    LowerWarningTemperature = None,
                    LowerWarningVoltage = None,
-                   LowerWarningRXPower = None,
-                   LowerWarningTXPower = None,
-                   LowerWarningTXBias = None,
-                   PMClassAAdminState = None,
                    PMClassBAdminState = None,
-                   AdminState = None,
-                   PMClassCAdminState = None):
+                   PMClassCAdminState = None,
+                   PMClassAAdminState = None,
+                   AdminState = None):
         obj =  {}
         if QsfpId != None :
             obj['QsfpId'] = int(QsfpId)
@@ -6359,29 +6938,11 @@ class FlexSwitch( object):
         if HigherAlarmVoltage != None :
             obj['HigherAlarmVoltage'] = HigherAlarmVoltage
 
-        if HigherAlarmRXPower != None :
-            obj['HigherAlarmRXPower'] = HigherAlarmRXPower
-
-        if HigherAlarmTXPower != None :
-            obj['HigherAlarmTXPower'] = HigherAlarmTXPower
-
-        if HigherAlarmTXBias != None :
-            obj['HigherAlarmTXBias'] = HigherAlarmTXBias
-
         if HigherWarningTemperature != None :
             obj['HigherWarningTemperature'] = HigherWarningTemperature
 
         if HigherWarningVoltage != None :
             obj['HigherWarningVoltage'] = HigherWarningVoltage
-
-        if HigherWarningRXPower != None :
-            obj['HigherWarningRXPower'] = HigherWarningRXPower
-
-        if HigherWarningTXPower != None :
-            obj['HigherWarningTXPower'] = HigherWarningTXPower
-
-        if HigherWarningTXBias != None :
-            obj['HigherWarningTXBias'] = HigherWarningTXBias
 
         if LowerAlarmTemperature != None :
             obj['LowerAlarmTemperature'] = LowerAlarmTemperature
@@ -6389,41 +6950,23 @@ class FlexSwitch( object):
         if LowerAlarmVoltage != None :
             obj['LowerAlarmVoltage'] = LowerAlarmVoltage
 
-        if LowerAlarmRXPower != None :
-            obj['LowerAlarmRXPower'] = LowerAlarmRXPower
-
-        if LowerAlarmTXPower != None :
-            obj['LowerAlarmTXPower'] = LowerAlarmTXPower
-
-        if LowerAlarmTXBias != None :
-            obj['LowerAlarmTXBias'] = LowerAlarmTXBias
-
         if LowerWarningTemperature != None :
             obj['LowerWarningTemperature'] = LowerWarningTemperature
 
         if LowerWarningVoltage != None :
             obj['LowerWarningVoltage'] = LowerWarningVoltage
 
-        if LowerWarningRXPower != None :
-            obj['LowerWarningRXPower'] = LowerWarningRXPower
+        if PMClassBAdminState != None :
+            obj['PMClassBAdminState'] = PMClassBAdminState
 
-        if LowerWarningTXPower != None :
-            obj['LowerWarningTXPower'] = LowerWarningTXPower
-
-        if LowerWarningTXBias != None :
-            obj['LowerWarningTXBias'] = LowerWarningTXBias
+        if PMClassCAdminState != None :
+            obj['PMClassCAdminState'] = PMClassCAdminState
 
         if PMClassAAdminState != None :
             obj['PMClassAAdminState'] = PMClassAAdminState
 
-        if PMClassBAdminState != None :
-            obj['PMClassBAdminState'] = PMClassBAdminState
-
         if AdminState != None :
             obj['AdminState'] = AdminState
-
-        if PMClassCAdminState != None :
-            obj['PMClassCAdminState'] = PMClassCAdminState
 
         reqUrl =  self.cfgUrlBase+'Qsfp'
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
@@ -6433,28 +6976,16 @@ class FlexSwitch( object):
                         objectId,
                         HigherAlarmTemperature = None,
                         HigherAlarmVoltage = None,
-                        HigherAlarmRXPower = None,
-                        HigherAlarmTXPower = None,
-                        HigherAlarmTXBias = None,
                         HigherWarningTemperature = None,
                         HigherWarningVoltage = None,
-                        HigherWarningRXPower = None,
-                        HigherWarningTXPower = None,
-                        HigherWarningTXBias = None,
                         LowerAlarmTemperature = None,
                         LowerAlarmVoltage = None,
-                        LowerAlarmRXPower = None,
-                        LowerAlarmTXPower = None,
-                        LowerAlarmTXBias = None,
                         LowerWarningTemperature = None,
                         LowerWarningVoltage = None,
-                        LowerWarningRXPower = None,
-                        LowerWarningTXPower = None,
-                        LowerWarningTXBias = None,
-                        PMClassAAdminState = None,
                         PMClassBAdminState = None,
-                        AdminState = None,
-                        PMClassCAdminState = None):
+                        PMClassCAdminState = None,
+                        PMClassAAdminState = None,
+                        AdminState = None):
         obj =  {}
         if HigherAlarmTemperature !=  None:
             obj['HigherAlarmTemperature'] = HigherAlarmTemperature
@@ -6462,29 +6993,11 @@ class FlexSwitch( object):
         if HigherAlarmVoltage !=  None:
             obj['HigherAlarmVoltage'] = HigherAlarmVoltage
 
-        if HigherAlarmRXPower !=  None:
-            obj['HigherAlarmRXPower'] = HigherAlarmRXPower
-
-        if HigherAlarmTXPower !=  None:
-            obj['HigherAlarmTXPower'] = HigherAlarmTXPower
-
-        if HigherAlarmTXBias !=  None:
-            obj['HigherAlarmTXBias'] = HigherAlarmTXBias
-
         if HigherWarningTemperature !=  None:
             obj['HigherWarningTemperature'] = HigherWarningTemperature
 
         if HigherWarningVoltage !=  None:
             obj['HigherWarningVoltage'] = HigherWarningVoltage
-
-        if HigherWarningRXPower !=  None:
-            obj['HigherWarningRXPower'] = HigherWarningRXPower
-
-        if HigherWarningTXPower !=  None:
-            obj['HigherWarningTXPower'] = HigherWarningTXPower
-
-        if HigherWarningTXBias !=  None:
-            obj['HigherWarningTXBias'] = HigherWarningTXBias
 
         if LowerAlarmTemperature !=  None:
             obj['LowerAlarmTemperature'] = LowerAlarmTemperature
@@ -6492,41 +7005,23 @@ class FlexSwitch( object):
         if LowerAlarmVoltage !=  None:
             obj['LowerAlarmVoltage'] = LowerAlarmVoltage
 
-        if LowerAlarmRXPower !=  None:
-            obj['LowerAlarmRXPower'] = LowerAlarmRXPower
-
-        if LowerAlarmTXPower !=  None:
-            obj['LowerAlarmTXPower'] = LowerAlarmTXPower
-
-        if LowerAlarmTXBias !=  None:
-            obj['LowerAlarmTXBias'] = LowerAlarmTXBias
-
         if LowerWarningTemperature !=  None:
             obj['LowerWarningTemperature'] = LowerWarningTemperature
 
         if LowerWarningVoltage !=  None:
             obj['LowerWarningVoltage'] = LowerWarningVoltage
 
-        if LowerWarningRXPower !=  None:
-            obj['LowerWarningRXPower'] = LowerWarningRXPower
+        if PMClassBAdminState !=  None:
+            obj['PMClassBAdminState'] = PMClassBAdminState
 
-        if LowerWarningTXPower !=  None:
-            obj['LowerWarningTXPower'] = LowerWarningTXPower
-
-        if LowerWarningTXBias !=  None:
-            obj['LowerWarningTXBias'] = LowerWarningTXBias
+        if PMClassCAdminState !=  None:
+            obj['PMClassCAdminState'] = PMClassCAdminState
 
         if PMClassAAdminState !=  None:
             obj['PMClassAAdminState'] = PMClassAAdminState
 
-        if PMClassBAdminState !=  None:
-            obj['PMClassBAdminState'] = PMClassBAdminState
-
         if AdminState !=  None:
             obj['AdminState'] = AdminState
-
-        if PMClassCAdminState !=  None:
-            obj['PMClassCAdminState'] = PMClassCAdminState
 
         reqUrl =  self.cfgUrlBase+'Qsfp'+"/%s"%(objectId)
         r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
@@ -6733,6 +7228,30 @@ class FlexSwitch( object):
 
     def getAllDhcpIntfConfigs(self):
         return self.getObjects( 'DhcpIntfConfig', self.cfgUrlBase)
+
+
+    def getQsfpChannelPMDataState(self,
+                                  ChannelNum,
+                                  Class,
+                                  Resource,
+                                  QsfpId):
+        obj =  { 
+                'ChannelNum' : int(ChannelNum),
+                'Class' : Class,
+                'Resource' : Resource,
+                'QsfpId' : int(QsfpId),
+                }
+        reqUrl =  self.stateUrlBase + 'QsfpChannelPMData'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getQsfpChannelPMDataStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase + 'QsfpChannelPMData'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllQsfpChannelPMDataStates(self):
+        return self.getObjects( 'QsfpChannelPMData', self.stateUrlBase)
 
 
     def getVrrpIntfState(self,
@@ -7502,6 +8021,26 @@ class FlexSwitch( object):
 
     def getAllLLDPGlobalStates(self):
         return self.getObjects( 'LLDPGlobal', self.stateUrlBase)
+
+
+    def getEthernetPMState(self,
+                           IntfRef,
+                           Resource):
+        obj =  { 
+                'IntfRef' : IntfRef,
+                'Resource' : Resource,
+                }
+        reqUrl =  self.stateUrlBase + 'EthernetPM'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getEthernetPMStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase + 'EthernetPM'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllEthernetPMStates(self):
+        return self.getObjects( 'EthernetPM', self.stateUrlBase)
 
 
     """
@@ -8417,7 +8956,7 @@ class FlexSwitch( object):
                                 TxHoldCount=6,
                                 Priority=32768,
                                 ForceVersion=2,
-                                Address='00'):
+                                Address='00-00-00-00-00-00'):
         obj =  { 
                 'Vlan' : int(Vlan),
                 'HelloTime' : int(HelloTime),
@@ -9386,6 +9925,7 @@ class FlexSwitch( object):
     .. automethod :: createAcl(self,
         :param string AclName : Acl name to be used to refer to this ACL Acl name to be used to refer to this ACL
         :param string Direction :  
+        :param string AclType : Type can be IP/MAC/SVI Type can be IP/MAC/SVI
         :param string IntfList : list of IntfRef can be port/lag object list of IntfRef can be port/lag object
         :param string RuleNameList : List of rules to be applied to this ACL. This should match with AclRule RuleName List of rules to be applied to this ACL. This should match with AclRule RuleName
 
@@ -9393,11 +9933,13 @@ class FlexSwitch( object):
     def createAcl(self,
                   AclName,
                   Direction,
+                  AclType,
                   IntfList,
                   RuleNameList):
         obj =  { 
                 'AclName' : AclName,
                 'Direction' : Direction,
+                'AclType' : AclType,
                 'IntfList' : IntfList,
                 'RuleNameList' : RuleNameList,
                 }
@@ -9408,6 +9950,7 @@ class FlexSwitch( object):
     def updateAcl(self,
                   AclName,
                   Direction,
+                  AclType = None,
                   IntfList = None,
                   RuleNameList = None):
         obj =  {}
@@ -9416,6 +9959,9 @@ class FlexSwitch( object):
 
         if Direction != None :
             obj['Direction'] = Direction
+
+        if AclType != None :
+            obj['AclType'] = AclType
 
         if IntfList != None :
             obj['IntfList'] = IntfList
@@ -9429,9 +9975,13 @@ class FlexSwitch( object):
 
     def updateAclById(self,
                        objectId,
+                       AclType = None,
                        IntfList = None,
                        RuleNameList = None):
         obj =  {}
+        if AclType !=  None:
+            obj['AclType'] = AclType
+
         if IntfList !=  None:
             obj['IntfList'] = IntfList
 
@@ -10660,6 +11210,26 @@ class FlexSwitch( object):
 
     def getAllVrrpVridStates(self):
         return self.getObjects( 'VrrpVrid', self.stateUrlBase)
+
+
+    def getAsicGlobalPMState(self,
+                             Resource,
+                             ModuleId):
+        obj =  { 
+                'Resource' : Resource,
+                'ModuleId' : int(ModuleId),
+                }
+        reqUrl =  self.stateUrlBase + 'AsicGlobalPM'
+        r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAsicGlobalPMStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase + 'AsicGlobalPM'+"/%s"%(objectId)
+        r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllAsicGlobalPMStates(self):
+        return self.getObjects( 'AsicGlobalPM', self.stateUrlBase)
 
 
     def getFaultState(self,

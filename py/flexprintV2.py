@@ -317,6 +317,54 @@ class FlexSwitchShow( object):
         self.tblPrintObject('PolicyStmt', header, rows)
 
 
+    def printQsfpChannels(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('ChannelNum')
+            header.append('QsfpId')
+            header.append('HigherAlarmRXPower')
+            header.append('HigherAlarmTXPower')
+            header.append('HigherAlarmTXBias')
+            header.append('HigherWarningRXPower')
+            header.append('HigherWarningTXPower')
+            header.append('HigherWarningTXBias')
+            header.append('LowerAlarmRXPower')
+            header.append('LowerAlarmTXPower')
+            header.append('LowerAlarmTXBias')
+            header.append('LowerWarningRXPower')
+            header.append('LowerWarningTXPower')
+            header.append('LowerWarningTXBias')
+            header.append('PMClassBAdminState')
+            header.append('PMClassCAdminState')
+            header.append('PMClassAAdminState')
+            header.append('AdminState')
+
+        objs = self.swtch.getAllQsfpChannels()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['ChannelNum'])
+            values.append('%s' % o['QsfpId'])
+            values.append('%s' % o['HigherAlarmRXPower'])
+            values.append('%s' % o['HigherAlarmTXPower'])
+            values.append('%s' % o['HigherAlarmTXBias'])
+            values.append('%s' % o['HigherWarningRXPower'])
+            values.append('%s' % o['HigherWarningTXPower'])
+            values.append('%s' % o['HigherWarningTXBias'])
+            values.append('%s' % o['LowerAlarmRXPower'])
+            values.append('%s' % o['LowerAlarmTXPower'])
+            values.append('%s' % o['LowerAlarmTXBias'])
+            values.append('%s' % o['LowerWarningRXPower'])
+            values.append('%s' % o['LowerWarningTXPower'])
+            values.append('%s' % o['LowerWarningTXBias'])
+            values.append('%s' % o['PMClassBAdminState'])
+            values.append('%s' % o['PMClassCAdminState'])
+            values.append('%s' % o['PMClassAAdminState'])
+            values.append('%s' % o['AdminState'])
+            rows.append(values)
+        self.tblPrintObject('QsfpChannel', header, rows)
+
+
     def printPowerConverterSensors(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
@@ -1305,8 +1353,13 @@ class FlexSwitchShow( object):
             header.append('DestMask')
             header.append('Proto')
             header.append('SrcPort')
-            header.append('DstPort')
+            header.append('L4DstPort')
+            header.append('L4MinPort')
+            header.append('L4SrcPort')
             header.append('Action')
+            header.append('L4MaxPort')
+            header.append('DstPort')
+            header.append('L4PortMatch')
 
         objs = self.swtch.getAllAclRules()
         for obj in objs:
@@ -1321,8 +1374,13 @@ class FlexSwitchShow( object):
             values.append('%s' % o['DestMask'])
             values.append('%s' % o['Proto'])
             values.append('%s' % o['SrcPort'])
-            values.append('%s' % o['DstPort'])
+            values.append('%s' % o['L4DstPort'])
+            values.append('%s' % o['L4MinPort'])
+            values.append('%s' % o['L4SrcPort'])
             values.append('%s' % o['Action'])
+            values.append('%s' % o['L4MaxPort'])
+            values.append('%s' % o['DstPort'])
+            values.append('%s' % o['L4PortMatch'])
             rows.append(values)
         self.tblPrintObject('AclRule', header, rows)
 
@@ -3487,6 +3545,7 @@ class FlexSwitchShow( object):
             header.append('Direction')
             header.append('RuleNameList')
             header.append('IntfList')
+            header.append('AclType')
 
         objs = self.swtch.getAllAclStates()
         for obj in objs:
@@ -3499,8 +3558,39 @@ class FlexSwitchShow( object):
             r = self.swtch.getAcl(o['AclName'], o['Direction'])
             if r.status_code in self.httpSuccessCodes:
                 o = r.json()['Object']
+                values.append('%s' % o['AclType'])
             rows.append(values)
         self.tblPrintObject('AclState', header, rows)
+
+
+    def printEthernetPMs(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('Resource')
+            header.append('IntfRef')
+            header.append('PMClassBEnable')
+            header.append('PMClassCEnable')
+            header.append('HighWarnThreshold')
+            header.append('LowAlarmThreshold')
+            header.append('PMClassAEnable')
+            header.append('HighAlarmThreshold')
+            header.append('LowWarnThreshold')
+
+        objs = self.swtch.getAllEthernetPMs()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['Resource'])
+            values.append('%s' % o['IntfRef'])
+            values.append('%s' % o['PMClassBEnable'])
+            values.append('%s' % o['PMClassCEnable'])
+            values.append('%s' % o['HighWarnThreshold'])
+            values.append('%s' % o['LowAlarmThreshold'])
+            values.append('%s' % o['PMClassAEnable'])
+            values.append('%s' % o['HighAlarmThreshold'])
+            values.append('%s' % o['LowWarnThreshold'])
+            rows.append(values)
+        self.tblPrintObject('EthernetPM', header, rows)
 
 
     def printOspfVirtNbrEntryStates(self, addHeader=True, brief=None):
@@ -4444,6 +4534,11 @@ class FlexSwitchShow( object):
             header.append('SrcPort')
             header.append('DstPort')
             header.append('Action')
+            header.append('L4DstPort')
+            header.append('L4MinPort')
+            header.append('L4SrcPort')
+            header.append('L4MaxPort')
+            header.append('L4PortMatch')
 
         objs = self.swtch.getAllAclRuleStates()
         for obj in objs:
@@ -4463,6 +4558,11 @@ class FlexSwitchShow( object):
             r = self.swtch.getAclRule(o['RuleName'])
             if r.status_code in self.httpSuccessCodes:
                 o = r.json()['Object']
+                values.append('%s' % o['L4DstPort'])
+                values.append('%s' % o['L4MinPort'])
+                values.append('%s' % o['L4SrcPort'])
+                values.append('%s' % o['L4MaxPort'])
+                values.append('%s' % o['L4PortMatch'])
             rows.append(values)
         self.tblPrintObject('AclRuleState', header, rows)
 
@@ -4485,6 +4585,36 @@ class FlexSwitchShow( object):
             values.append('%s' % o['Actions'])
             rows.append(values)
         self.tblPrintObject('BGPPolicyStmt', header, rows)
+
+
+    def printAsicGlobalPMs(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('Resource')
+            header.append('ModuleId')
+            header.append('PMClassBEnable')
+            header.append('HighWarnThreshold')
+            header.append('LowAlarmThreshold')
+            header.append('PMClassCEnable')
+            header.append('PMClassAEnable')
+            header.append('LowWarnThreshold')
+            header.append('HighAlarmThreshold')
+
+        objs = self.swtch.getAllAsicGlobalPMs()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['Resource'])
+            values.append('%s' % o['ModuleId'])
+            values.append('%s' % o['PMClassBEnable'])
+            values.append('%s' % o['HighWarnThreshold'])
+            values.append('%s' % o['LowAlarmThreshold'])
+            values.append('%s' % o['PMClassCEnable'])
+            values.append('%s' % o['PMClassAEnable'])
+            values.append('%s' % o['LowWarnThreshold'])
+            values.append('%s' % o['HighAlarmThreshold'])
+            rows.append(values)
+        self.tblPrintObject('AsicGlobalPM', header, rows)
 
 
     def printIPv4RouteHwStates(self, addHeader=True, brief=None):
@@ -4784,18 +4914,6 @@ class FlexSwitchShow( object):
             header.append('DataCode')
             header.append('Temperature')
             header.append('Voltage')
-            header.append('RX1Power')
-            header.append('RX2Power')
-            header.append('RX3Power')
-            header.append('RX4Power')
-            header.append('TX1Power')
-            header.append('TX2Power')
-            header.append('TX3Power')
-            header.append('TX4Power')
-            header.append('TX1Bias')
-            header.append('TX2Bias')
-            header.append('TX3Bias')
-            header.append('TX4Bias')
 
         objs = self.swtch.getAllQsfpStates()
         for obj in objs:
@@ -4811,18 +4929,6 @@ class FlexSwitchShow( object):
             values.append('%s' % o['DataCode'])
             values.append('%s' % o['Temperature'])
             values.append('%s' % o['Voltage'])
-            values.append('%s' % o['RX1Power'])
-            values.append('%s' % o['RX2Power'])
-            values.append('%s' % o['RX3Power'])
-            values.append('%s' % o['RX4Power'])
-            values.append('%s' % o['TX1Power'])
-            values.append('%s' % o['TX2Power'])
-            values.append('%s' % o['TX3Power'])
-            values.append('%s' % o['TX4Power'])
-            values.append('%s' % o['TX1Bias'])
-            values.append('%s' % o['TX2Bias'])
-            values.append('%s' % o['TX3Bias'])
-            values.append('%s' % o['TX4Bias'])
             rows.append(values)
         self.tblPrintObject('QsfpState', header, rows)
 
@@ -4840,18 +4946,6 @@ class FlexSwitchShow( object):
             header.append('DataCode')
             header.append('Temperature')
             header.append('Voltage')
-            header.append('RX1Power')
-            header.append('RX2Power')
-            header.append('RX3Power')
-            header.append('RX4Power')
-            header.append('TX1Power')
-            header.append('TX2Power')
-            header.append('TX3Power')
-            header.append('TX4Power')
-            header.append('TX1Bias')
-            header.append('TX2Bias')
-            header.append('TX3Bias')
-            header.append('TX4Bias')
 
         objs = self.swtch.getQsfpState(
                                        QsfpId)
@@ -4869,18 +4963,6 @@ class FlexSwitchShow( object):
                 values.append('%s' % o['DataCode'])
                 values.append('%s' % o['Temperature'])
                 values.append('%s' % o['Voltage'])
-                values.append('%s' % o['RX1Power'])
-                values.append('%s' % o['RX2Power'])
-                values.append('%s' % o['RX3Power'])
-                values.append('%s' % o['RX4Power'])
-                values.append('%s' % o['TX1Power'])
-                values.append('%s' % o['TX2Power'])
-                values.append('%s' % o['TX3Power'])
-                values.append('%s' % o['TX4Power'])
-                values.append('%s' % o['TX1Bias'])
-                values.append('%s' % o['TX2Bias'])
-                values.append('%s' % o['TX3Bias'])
-                values.append('%s' % o['TX4Bias'])
                 rows.append(values)
             self.tblPrintObject('QsfpState', header, rows)
 
@@ -4900,42 +4982,18 @@ class FlexSwitchShow( object):
             header.append('DataCode')
             header.append('Temperature')
             header.append('Voltage')
-            header.append('RX1Power')
-            header.append('RX2Power')
-            header.append('RX3Power')
-            header.append('RX4Power')
-            header.append('TX1Power')
-            header.append('TX2Power')
-            header.append('TX3Power')
-            header.append('TX4Power')
-            header.append('TX1Bias')
-            header.append('TX2Bias')
-            header.append('TX3Bias')
-            header.append('TX4Bias')
             header.append('HigherAlarmTemperature')
             header.append('HigherAlarmVoltage')
-            header.append('HigherAlarmRXPower')
-            header.append('HigherAlarmTXPower')
-            header.append('HigherAlarmTXBias')
             header.append('HigherWarningTemperature')
             header.append('HigherWarningVoltage')
-            header.append('HigherWarningRXPower')
-            header.append('HigherWarningTXPower')
-            header.append('HigherWarningTXBias')
             header.append('LowerAlarmTemperature')
             header.append('LowerAlarmVoltage')
-            header.append('LowerAlarmRXPower')
-            header.append('LowerAlarmTXPower')
-            header.append('LowerAlarmTXBias')
             header.append('LowerWarningTemperature')
             header.append('LowerWarningVoltage')
-            header.append('LowerWarningRXPower')
-            header.append('LowerWarningTXPower')
-            header.append('LowerWarningTXBias')
-            header.append('PMClassAAdminState')
             header.append('PMClassBAdminState')
-            header.append('AdminState')
             header.append('PMClassCAdminState')
+            header.append('PMClassAAdminState')
+            header.append('AdminState')
 
         objs = self.swtch.getAllQsfpStates()
         for obj in objs:
@@ -4951,45 +5009,21 @@ class FlexSwitchShow( object):
             values.append('%s' % o['DataCode'])
             values.append('%s' % o['Temperature'])
             values.append('%s' % o['Voltage'])
-            values.append('%s' % o['RX1Power'])
-            values.append('%s' % o['RX2Power'])
-            values.append('%s' % o['RX3Power'])
-            values.append('%s' % o['RX4Power'])
-            values.append('%s' % o['TX1Power'])
-            values.append('%s' % o['TX2Power'])
-            values.append('%s' % o['TX3Power'])
-            values.append('%s' % o['TX4Power'])
-            values.append('%s' % o['TX1Bias'])
-            values.append('%s' % o['TX2Bias'])
-            values.append('%s' % o['TX3Bias'])
-            values.append('%s' % o['TX4Bias'])
             r = self.swtch.getQsfp(o['QsfpId'])
             if r.status_code in self.httpSuccessCodes:
                 o = r.json()['Object']
                 values.append('%s' % o['HigherAlarmTemperature'])
                 values.append('%s' % o['HigherAlarmVoltage'])
-                values.append('%s' % o['HigherAlarmRXPower'])
-                values.append('%s' % o['HigherAlarmTXPower'])
-                values.append('%s' % o['HigherAlarmTXBias'])
                 values.append('%s' % o['HigherWarningTemperature'])
                 values.append('%s' % o['HigherWarningVoltage'])
-                values.append('%s' % o['HigherWarningRXPower'])
-                values.append('%s' % o['HigherWarningTXPower'])
-                values.append('%s' % o['HigherWarningTXBias'])
                 values.append('%s' % o['LowerAlarmTemperature'])
                 values.append('%s' % o['LowerAlarmVoltage'])
-                values.append('%s' % o['LowerAlarmRXPower'])
-                values.append('%s' % o['LowerAlarmTXPower'])
-                values.append('%s' % o['LowerAlarmTXBias'])
                 values.append('%s' % o['LowerWarningTemperature'])
                 values.append('%s' % o['LowerWarningVoltage'])
-                values.append('%s' % o['LowerWarningRXPower'])
-                values.append('%s' % o['LowerWarningTXPower'])
-                values.append('%s' % o['LowerWarningTXBias'])
-                values.append('%s' % o['PMClassAAdminState'])
                 values.append('%s' % o['PMClassBAdminState'])
-                values.append('%s' % o['AdminState'])
                 values.append('%s' % o['PMClassCAdminState'])
+                values.append('%s' % o['PMClassAAdminState'])
+                values.append('%s' % o['AdminState'])
             rows.append(values)
         self.tblPrintObject('QsfpState', header, rows)
 
@@ -5071,6 +5105,118 @@ class FlexSwitchShow( object):
                 o = r.json()['Object']
             rows.append(values)
         self.tblPrintObject('BfdGlobalState', header, rows)
+
+
+    def printQsfpChannelStates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('ChannelNum')
+            header.append('QsfpId')
+            header.append('Present')
+            header.append('RXPower')
+            header.append('TXPower')
+            header.append('TXBias')
+
+        objs = self.swtch.getAllQsfpChannelStates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['ChannelNum'])
+            values.append('%s' % o['QsfpId'])
+            values.append('%s' % o['Present'])
+            values.append('%s' % o['RXPower'])
+            values.append('%s' % o['TXPower'])
+            values.append('%s' % o['TXBias'])
+            rows.append(values)
+        self.tblPrintObject('QsfpChannelState', header, rows)
+
+
+    def printQsfpChannelState(self, ChannelNum,QsfpId, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('ChannelNum')
+            header.append('QsfpId')
+            header.append('Present')
+            header.append('RXPower')
+            header.append('TXPower')
+            header.append('TXBias')
+
+        objs = self.swtch.getQsfpChannelState(
+                                              ChannelNum,
+                                              QsfpId)
+        if objs.status_code in self.httpSuccessCodes:
+            for obj in objs:
+                o = obj['Object']
+                values = []
+                values.append('%s' % o['ChannelNum'])
+                values.append('%s' % o['QsfpId'])
+                values.append('%s' % o['Present'])
+                values.append('%s' % o['RXPower'])
+                values.append('%s' % o['TXPower'])
+                values.append('%s' % o['TXBias'])
+                rows.append(values)
+            self.tblPrintObject('QsfpChannelState', header, rows)
+
+        else:
+            print objs.content
+
+    def printCombinedQsfpChannelStates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('ChannelNum')
+            header.append('QsfpId')
+            header.append('Present')
+            header.append('RXPower')
+            header.append('TXPower')
+            header.append('TXBias')
+            header.append('HigherAlarmRXPower')
+            header.append('HigherAlarmTXPower')
+            header.append('HigherAlarmTXBias')
+            header.append('HigherWarningRXPower')
+            header.append('HigherWarningTXPower')
+            header.append('HigherWarningTXBias')
+            header.append('LowerAlarmRXPower')
+            header.append('LowerAlarmTXPower')
+            header.append('LowerAlarmTXBias')
+            header.append('LowerWarningRXPower')
+            header.append('LowerWarningTXPower')
+            header.append('LowerWarningTXBias')
+            header.append('PMClassBAdminState')
+            header.append('PMClassCAdminState')
+            header.append('PMClassAAdminState')
+            header.append('AdminState')
+
+        objs = self.swtch.getAllQsfpChannelStates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['ChannelNum'])
+            values.append('%s' % o['QsfpId'])
+            values.append('%s' % o['Present'])
+            values.append('%s' % o['RXPower'])
+            values.append('%s' % o['TXPower'])
+            values.append('%s' % o['TXBias'])
+            r = self.swtch.getQsfpChannel(o['ChannelNum'], o['QsfpId'])
+            if r.status_code in self.httpSuccessCodes:
+                o = r.json()['Object']
+                values.append('%s' % o['HigherAlarmRXPower'])
+                values.append('%s' % o['HigherAlarmTXPower'])
+                values.append('%s' % o['HigherAlarmTXBias'])
+                values.append('%s' % o['HigherWarningRXPower'])
+                values.append('%s' % o['HigherWarningTXPower'])
+                values.append('%s' % o['HigherWarningTXBias'])
+                values.append('%s' % o['LowerAlarmRXPower'])
+                values.append('%s' % o['LowerAlarmTXPower'])
+                values.append('%s' % o['LowerAlarmTXBias'])
+                values.append('%s' % o['LowerWarningRXPower'])
+                values.append('%s' % o['LowerWarningTXPower'])
+                values.append('%s' % o['LowerWarningTXBias'])
+                values.append('%s' % o['PMClassBAdminState'])
+                values.append('%s' % o['PMClassCAdminState'])
+                values.append('%s' % o['PMClassAAdminState'])
+                values.append('%s' % o['AdminState'])
+            rows.append(values)
+        self.tblPrintObject('QsfpChannelState', header, rows)
 
 
     def printFanStates(self, addHeader=True, brief=None):
@@ -6280,28 +6426,16 @@ class FlexSwitchShow( object):
             header.append('QsfpId')
             header.append('HigherAlarmTemperature')
             header.append('HigherAlarmVoltage')
-            header.append('HigherAlarmRXPower')
-            header.append('HigherAlarmTXPower')
-            header.append('HigherAlarmTXBias')
             header.append('HigherWarningTemperature')
             header.append('HigherWarningVoltage')
-            header.append('HigherWarningRXPower')
-            header.append('HigherWarningTXPower')
-            header.append('HigherWarningTXBias')
             header.append('LowerAlarmTemperature')
             header.append('LowerAlarmVoltage')
-            header.append('LowerAlarmRXPower')
-            header.append('LowerAlarmTXPower')
-            header.append('LowerAlarmTXBias')
             header.append('LowerWarningTemperature')
             header.append('LowerWarningVoltage')
-            header.append('LowerWarningRXPower')
-            header.append('LowerWarningTXPower')
-            header.append('LowerWarningTXBias')
-            header.append('PMClassAAdminState')
             header.append('PMClassBAdminState')
-            header.append('AdminState')
             header.append('PMClassCAdminState')
+            header.append('PMClassAAdminState')
+            header.append('AdminState')
 
         objs = self.swtch.getAllQsfps()
         for obj in objs:
@@ -6310,28 +6444,16 @@ class FlexSwitchShow( object):
             values.append('%s' % o['QsfpId'])
             values.append('%s' % o['HigherAlarmTemperature'])
             values.append('%s' % o['HigherAlarmVoltage'])
-            values.append('%s' % o['HigherAlarmRXPower'])
-            values.append('%s' % o['HigherAlarmTXPower'])
-            values.append('%s' % o['HigherAlarmTXBias'])
             values.append('%s' % o['HigherWarningTemperature'])
             values.append('%s' % o['HigherWarningVoltage'])
-            values.append('%s' % o['HigherWarningRXPower'])
-            values.append('%s' % o['HigherWarningTXPower'])
-            values.append('%s' % o['HigherWarningTXBias'])
             values.append('%s' % o['LowerAlarmTemperature'])
             values.append('%s' % o['LowerAlarmVoltage'])
-            values.append('%s' % o['LowerAlarmRXPower'])
-            values.append('%s' % o['LowerAlarmTXPower'])
-            values.append('%s' % o['LowerAlarmTXBias'])
             values.append('%s' % o['LowerWarningTemperature'])
             values.append('%s' % o['LowerWarningVoltage'])
-            values.append('%s' % o['LowerWarningRXPower'])
-            values.append('%s' % o['LowerWarningTXPower'])
-            values.append('%s' % o['LowerWarningTXBias'])
-            values.append('%s' % o['PMClassAAdminState'])
             values.append('%s' % o['PMClassBAdminState'])
-            values.append('%s' % o['AdminState'])
             values.append('%s' % o['PMClassCAdminState'])
+            values.append('%s' % o['PMClassAAdminState'])
+            values.append('%s' % o['AdminState'])
             rows.append(values)
         self.tblPrintObject('Qsfp', header, rows)
 
@@ -6406,6 +6528,57 @@ class FlexSwitchShow( object):
             rows.append(values)
         self.tblPrintObject('DhcpIntfConfig', header, rows)
 
+
+    def printQsfpChannelPMDataStates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('ChannelNum')
+            header.append('Class')
+            header.append('Resource')
+            header.append('QsfpId')
+            header.append('Data')
+
+        objs = self.swtch.getAllQsfpChannelPMDataStates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['ChannelNum'])
+            values.append('%s' % o['Class'])
+            values.append('%s' % o['Resource'])
+            values.append('%s' % o['QsfpId'])
+            values.append('%s' % o['Data'])
+            rows.append(values)
+        self.tblPrintObject('QsfpChannelPMDataState', header, rows)
+
+
+    def printQsfpChannelPMDataState(self, ChannelNum,Class,Resource,QsfpId, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('ChannelNum')
+            header.append('Class')
+            header.append('Resource')
+            header.append('QsfpId')
+            header.append('Data')
+
+        objs = self.swtch.getQsfpChannelPMDataState(
+                                                    ChannelNum,
+                                                    Class,
+                                                    Resource,
+                                                    QsfpId)
+        if objs.status_code in self.httpSuccessCodes:
+            for obj in objs:
+                o = obj['Object']
+                values = []
+                values.append('%s' % o['ChannelNum'])
+                values.append('%s' % o['Class'])
+                values.append('%s' % o['Resource'])
+                values.append('%s' % o['QsfpId'])
+                values.append('%s' % o['Data'])
+                rows.append(values)
+            self.tblPrintObject('QsfpChannelPMDataState', header, rows)
+
+        else:
+            print objs.content
 
     def printVrrpIntfStates(self, addHeader=True, brief=None):
         header = []; rows = []
@@ -7199,6 +7372,94 @@ class FlexSwitchShow( object):
                 o = r.json()['Object']
             rows.append(values)
         self.tblPrintObject('LLDPGlobalState', header, rows)
+
+
+    def printEthernetPMStates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('IntfRef')
+            header.append('Resource')
+            header.append('ClassAPMData')
+            header.append('ClassBPMData')
+            header.append('ClassCPMData')
+
+        objs = self.swtch.getAllEthernetPMStates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['IntfRef'])
+            values.append('%s' % o['Resource'])
+            values.append('%s' % o['ClassAPMData'])
+            values.append('%s' % o['ClassBPMData'])
+            values.append('%s' % o['ClassCPMData'])
+            rows.append(values)
+        self.tblPrintObject('EthernetPMState', header, rows)
+
+
+    def printEthernetPMState(self, IntfRef,Resource, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('IntfRef')
+            header.append('Resource')
+            header.append('ClassAPMData')
+            header.append('ClassBPMData')
+            header.append('ClassCPMData')
+
+        objs = self.swtch.getEthernetPMState(
+                                             IntfRef,
+                                             Resource)
+        if objs.status_code in self.httpSuccessCodes:
+            for obj in objs:
+                o = obj['Object']
+                values = []
+                values.append('%s' % o['IntfRef'])
+                values.append('%s' % o['Resource'])
+                values.append('%s' % o['ClassAPMData'])
+                values.append('%s' % o['ClassBPMData'])
+                values.append('%s' % o['ClassCPMData'])
+                rows.append(values)
+            self.tblPrintObject('EthernetPMState', header, rows)
+
+        else:
+            print objs.content
+
+    def printCombinedEthernetPMStates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('IntfRef')
+            header.append('Resource')
+            header.append('ClassAPMData')
+            header.append('ClassBPMData')
+            header.append('ClassCPMData')
+            header.append('PMClassBEnable')
+            header.append('PMClassCEnable')
+            header.append('HighWarnThreshold')
+            header.append('LowAlarmThreshold')
+            header.append('PMClassAEnable')
+            header.append('HighAlarmThreshold')
+            header.append('LowWarnThreshold')
+
+        objs = self.swtch.getAllEthernetPMStates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['IntfRef'])
+            values.append('%s' % o['Resource'])
+            values.append('%s' % o['ClassAPMData'])
+            values.append('%s' % o['ClassBPMData'])
+            values.append('%s' % o['ClassCPMData'])
+            r = self.swtch.getEthernetPM(o['IntfRef'], o['Resource'])
+            if r.status_code in self.httpSuccessCodes:
+                o = r.json()['Object']
+                values.append('%s' % o['PMClassBEnable'])
+                values.append('%s' % o['PMClassCEnable'])
+                values.append('%s' % o['HighWarnThreshold'])
+                values.append('%s' % o['LowAlarmThreshold'])
+                values.append('%s' % o['PMClassAEnable'])
+                values.append('%s' % o['HighAlarmThreshold'])
+                values.append('%s' % o['LowWarnThreshold'])
+            rows.append(values)
+        self.tblPrintObject('EthernetPMState', header, rows)
 
 
     def printNDPGlobals(self, addHeader=True, brief=None):
@@ -8711,6 +8972,20 @@ class FlexSwitchShow( object):
             header.append('IfOutUcastPkts')
             header.append('IfOutDiscards')
             header.append('IfOutErrors')
+            header.append('IfEtherUnderSizePktCnt')
+            header.append('IfEtherOverSizePktCnt')
+            header.append('IfEtherFragments')
+            header.append('IfEtherCRCAlignError')
+            header.append('IfEtherJabber')
+            header.append('IfEtherPkts')
+            header.append('IfEtherMCPkts')
+            header.append('IfEtherBcastPkts')
+            header.append('IfEtherPkts64OrLessOctets')
+            header.append('IfEtherPkts65To127Octets')
+            header.append('IfEtherPkts128To255Octets')
+            header.append('IfEtherPkts256To511Octets')
+            header.append('IfEtherPkts512To1023Octets')
+            header.append('IfEtherPkts1024To1518Octets')
             header.append('ErrDisableReason')
             header.append('PresentInHW')
             header.append('ConfigMode')
@@ -8737,6 +9012,20 @@ class FlexSwitchShow( object):
             values.append('%s' % o['IfOutUcastPkts'])
             values.append('%s' % o['IfOutDiscards'])
             values.append('%s' % o['IfOutErrors'])
+            values.append('%s' % o['IfEtherUnderSizePktCnt'])
+            values.append('%s' % o['IfEtherOverSizePktCnt'])
+            values.append('%s' % o['IfEtherFragments'])
+            values.append('%s' % o['IfEtherCRCAlignError'])
+            values.append('%s' % o['IfEtherJabber'])
+            values.append('%s' % o['IfEtherPkts'])
+            values.append('%s' % o['IfEtherMCPkts'])
+            values.append('%s' % o['IfEtherBcastPkts'])
+            values.append('%s' % o['IfEtherPkts64OrLessOctets'])
+            values.append('%s' % o['IfEtherPkts65To127Octets'])
+            values.append('%s' % o['IfEtherPkts128To255Octets'])
+            values.append('%s' % o['IfEtherPkts256To511Octets'])
+            values.append('%s' % o['IfEtherPkts512To1023Octets'])
+            values.append('%s' % o['IfEtherPkts1024To1518Octets'])
             values.append('%s' % o['ErrDisableReason'])
             values.append('%s' % o['PresentInHW'])
             values.append('%s' % o['ConfigMode'])
@@ -8765,6 +9054,20 @@ class FlexSwitchShow( object):
             header.append('IfOutUcastPkts')
             header.append('IfOutDiscards')
             header.append('IfOutErrors')
+            header.append('IfEtherUnderSizePktCnt')
+            header.append('IfEtherOverSizePktCnt')
+            header.append('IfEtherFragments')
+            header.append('IfEtherCRCAlignError')
+            header.append('IfEtherJabber')
+            header.append('IfEtherPkts')
+            header.append('IfEtherMCPkts')
+            header.append('IfEtherBcastPkts')
+            header.append('IfEtherPkts64OrLessOctets')
+            header.append('IfEtherPkts65To127Octets')
+            header.append('IfEtherPkts128To255Octets')
+            header.append('IfEtherPkts256To511Octets')
+            header.append('IfEtherPkts512To1023Octets')
+            header.append('IfEtherPkts1024To1518Octets')
             header.append('ErrDisableReason')
             header.append('PresentInHW')
             header.append('ConfigMode')
@@ -8793,6 +9096,20 @@ class FlexSwitchShow( object):
                 values.append('%s' % o['IfOutUcastPkts'])
                 values.append('%s' % o['IfOutDiscards'])
                 values.append('%s' % o['IfOutErrors'])
+                values.append('%s' % o['IfEtherUnderSizePktCnt'])
+                values.append('%s' % o['IfEtherOverSizePktCnt'])
+                values.append('%s' % o['IfEtherFragments'])
+                values.append('%s' % o['IfEtherCRCAlignError'])
+                values.append('%s' % o['IfEtherJabber'])
+                values.append('%s' % o['IfEtherPkts'])
+                values.append('%s' % o['IfEtherMCPkts'])
+                values.append('%s' % o['IfEtherBcastPkts'])
+                values.append('%s' % o['IfEtherPkts64OrLessOctets'])
+                values.append('%s' % o['IfEtherPkts65To127Octets'])
+                values.append('%s' % o['IfEtherPkts128To255Octets'])
+                values.append('%s' % o['IfEtherPkts256To511Octets'])
+                values.append('%s' % o['IfEtherPkts512To1023Octets'])
+                values.append('%s' % o['IfEtherPkts1024To1518Octets'])
                 values.append('%s' % o['ErrDisableReason'])
                 values.append('%s' % o['PresentInHW'])
                 values.append('%s' % o['ConfigMode'])
@@ -8823,6 +9140,20 @@ class FlexSwitchShow( object):
             header.append('IfOutUcastPkts')
             header.append('IfOutDiscards')
             header.append('IfOutErrors')
+            header.append('IfEtherUnderSizePktCnt')
+            header.append('IfEtherOverSizePktCnt')
+            header.append('IfEtherFragments')
+            header.append('IfEtherCRCAlignError')
+            header.append('IfEtherJabber')
+            header.append('IfEtherPkts')
+            header.append('IfEtherMCPkts')
+            header.append('IfEtherBcastPkts')
+            header.append('IfEtherPkts64OrLessOctets')
+            header.append('IfEtherPkts65To127Octets')
+            header.append('IfEtherPkts128To255Octets')
+            header.append('IfEtherPkts256To511Octets')
+            header.append('IfEtherPkts512To1023Octets')
+            header.append('IfEtherPkts1024To1518Octets')
             header.append('ErrDisableReason')
             header.append('PresentInHW')
             header.append('ConfigMode')
@@ -8861,6 +9192,20 @@ class FlexSwitchShow( object):
             values.append('%s' % o['IfOutUcastPkts'])
             values.append('%s' % o['IfOutDiscards'])
             values.append('%s' % o['IfOutErrors'])
+            values.append('%s' % o['IfEtherUnderSizePktCnt'])
+            values.append('%s' % o['IfEtherOverSizePktCnt'])
+            values.append('%s' % o['IfEtherFragments'])
+            values.append('%s' % o['IfEtherCRCAlignError'])
+            values.append('%s' % o['IfEtherJabber'])
+            values.append('%s' % o['IfEtherPkts'])
+            values.append('%s' % o['IfEtherMCPkts'])
+            values.append('%s' % o['IfEtherBcastPkts'])
+            values.append('%s' % o['IfEtherPkts64OrLessOctets'])
+            values.append('%s' % o['IfEtherPkts65To127Octets'])
+            values.append('%s' % o['IfEtherPkts128To255Octets'])
+            values.append('%s' % o['IfEtherPkts256To511Octets'])
+            values.append('%s' % o['IfEtherPkts512To1023Octets'])
+            values.append('%s' % o['IfEtherPkts1024To1518Octets'])
             values.append('%s' % o['ErrDisableReason'])
             values.append('%s' % o['PresentInHW'])
             values.append('%s' % o['ConfigMode'])
@@ -9299,6 +9644,7 @@ class FlexSwitchShow( object):
         if addHeader:
             header.append('AclName')
             header.append('Direction')
+            header.append('AclType')
             header.append('IntfList')
             header.append('RuleNameList')
 
@@ -9308,6 +9654,7 @@ class FlexSwitchShow( object):
             values = []
             values.append('%s' % o['AclName'])
             values.append('%s' % o['Direction'])
+            values.append('%s' % o['AclType'])
             values.append('%s' % o['IntfList'])
             values.append('%s' % o['RuleNameList'])
             rows.append(values)
@@ -9849,6 +10196,94 @@ class FlexSwitchShow( object):
 
         else:
             print objs.content
+
+    def printAsicGlobalPMStates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('Resource')
+            header.append('ModuleId')
+            header.append('ClassAPMData')
+            header.append('ClassBPMData')
+            header.append('ClassCPMData')
+
+        objs = self.swtch.getAllAsicGlobalPMStates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['Resource'])
+            values.append('%s' % o['ModuleId'])
+            values.append('%s' % o['ClassAPMData'])
+            values.append('%s' % o['ClassBPMData'])
+            values.append('%s' % o['ClassCPMData'])
+            rows.append(values)
+        self.tblPrintObject('AsicGlobalPMState', header, rows)
+
+
+    def printAsicGlobalPMState(self, Resource,ModuleId, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('Resource')
+            header.append('ModuleId')
+            header.append('ClassAPMData')
+            header.append('ClassBPMData')
+            header.append('ClassCPMData')
+
+        objs = self.swtch.getAsicGlobalPMState(
+                                               Resource,
+                                               ModuleId)
+        if objs.status_code in self.httpSuccessCodes:
+            for obj in objs:
+                o = obj['Object']
+                values = []
+                values.append('%s' % o['Resource'])
+                values.append('%s' % o['ModuleId'])
+                values.append('%s' % o['ClassAPMData'])
+                values.append('%s' % o['ClassBPMData'])
+                values.append('%s' % o['ClassCPMData'])
+                rows.append(values)
+            self.tblPrintObject('AsicGlobalPMState', header, rows)
+
+        else:
+            print objs.content
+
+    def printCombinedAsicGlobalPMStates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('Resource')
+            header.append('ModuleId')
+            header.append('ClassAPMData')
+            header.append('ClassBPMData')
+            header.append('ClassCPMData')
+            header.append('PMClassBEnable')
+            header.append('HighWarnThreshold')
+            header.append('LowAlarmThreshold')
+            header.append('PMClassCEnable')
+            header.append('PMClassAEnable')
+            header.append('LowWarnThreshold')
+            header.append('HighAlarmThreshold')
+
+        objs = self.swtch.getAllAsicGlobalPMStates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['Resource'])
+            values.append('%s' % o['ModuleId'])
+            values.append('%s' % o['ClassAPMData'])
+            values.append('%s' % o['ClassBPMData'])
+            values.append('%s' % o['ClassCPMData'])
+            r = self.swtch.getAsicGlobalPM(o['Resource'], o['ModuleId'])
+            if r.status_code in self.httpSuccessCodes:
+                o = r.json()['Object']
+                values.append('%s' % o['PMClassBEnable'])
+                values.append('%s' % o['HighWarnThreshold'])
+                values.append('%s' % o['LowAlarmThreshold'])
+                values.append('%s' % o['PMClassCEnable'])
+                values.append('%s' % o['PMClassAEnable'])
+                values.append('%s' % o['LowWarnThreshold'])
+                values.append('%s' % o['HighAlarmThreshold'])
+            rows.append(values)
+        self.tblPrintObject('AsicGlobalPMState', header, rows)
+
 
     def printFaultStates(self, addHeader=True, brief=None):
         header = []; rows = []
