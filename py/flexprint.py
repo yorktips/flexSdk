@@ -135,7 +135,6 @@ class FlexPrint( FlexSwitchShow):
 
     def printIPv4RouteStates(self):
         routes = self.swtch.getAllIPv4RouteStates()
-        import ipdb; ipdb.set_trace()
         print "IP Route Table"
         print "'[x/y]' denotes [preference/metric]"
         print "\n"  
