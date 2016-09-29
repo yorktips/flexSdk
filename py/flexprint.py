@@ -1026,7 +1026,7 @@ class FlexPrint( FlexSwitchShow):
                pr = p['Object']
                RXmsg = (pr['Messages']['Received']['Notification']) + (pr['Messages']['Received']['Update'])
                TXmsg = (pr['Messages']['Sent']['Notification']) + (pr['Messages']['Sent']['Update'])
-               StartTime = pr['SessionStateUpdatedTime']
+               StartTime = pr.get('SessionStateUpdatedTime',  pr.get('SessionStateDuration', 0))
                #"2016-09-20 11:42:01.290081007 -0700 PDT"
                #start = datetime.strptime(StartTime, '%Y-%m-%d %I:%M:%S.%f %z %Z')
                #UpTime = datetime.datetime.now() - start 
