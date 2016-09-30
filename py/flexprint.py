@@ -135,7 +135,6 @@ class FlexPrint( FlexSwitchShow):
 
     def printIPv4RouteStates(self):
         routes = self.swtch.getAllIPv4RouteStates()
-        import ipdb; ipdb.set_trace()
         print "IP Route Table"
         print "'[x/y]' denotes [preference/metric]"
         print "\n"  
@@ -491,15 +490,15 @@ class FlexPrint( FlexSwitchShow):
             bainconsistant = "(inconsistant)" if obj["BridgeAssuranceInconsistant"] else ""
             print "IntfRef %s of Vlan %s is %s %s" %(obj["IntfRef"], obj["Vlan"], stateDict[obj["State"]], bainconsistant)
             #print "Enabled %s, Protocol Migration %s" %(obj["Enable"], obj["ProtocolMigration"])
-            print "Enabled %s" %(obj["Enable"],)
+            print "Enabled %s" %(obj["Enable"] == 1,)
             print "Port path cost %s, Port priority %s, Port Identifier %s" %(obj["PathCost32"], obj["Priority"], obj["IntfRef"])
             print "Designated root has bridge id %s" %(obj["DesignatedRoot"])
             print "Designated bridge has bridge id %s" %(obj["DesignatedBridge"])
             print "Designated port id %s, designated path cost %s admin path cost %s" %(obj["DesignatedPort"], obj["DesignatedCost"], obj["AdminPathCost"])
             print "Root Timers: max age %s, forward delay %s, hello %s" %(obj["MaxAge"],obj["ForwardDelay"],obj["HelloTime"],)
             print "Number of transitions to forwarding state: %s" %(obj["ForwardTransitions"],)
-            print "AdminEdge %s OperEdge %s" %(obj["AdminEdgePort"], obj["OperEdgePort"])
-            print "Bridge Assurance %s Bpdu Guard %s" %(obj["BridgeAssurance"], obj["BpduGuard"])
+            print "AdminEdge %s OperEdge %s" %(obj["AdminEdgePort"] == 1, obj["OperEdgePort"] == 1)
+            print "Bridge Assurance %s Bpdu Guard %s" %(obj["BridgeAssurance"] == 1, obj["BpduGuard"] == 1)
             print "Link Type %s" %("UNSUPPORTED",)
             print "\nPort Timers: (current tick(seconds) count)"
             print "EdgeDelayWhile:\t", obj["EdgeDelayWhile"]
@@ -554,7 +553,7 @@ class FlexPrint( FlexSwitchShow):
             print '\n\n---- STP PORT DB----'
             for data in ports:
                 obj = data['Object']
-                bainconsistant = "(inconsistant)" if obj["BridgeAssuranceInconsistant"] else ""
+                bainconsistant = "(inconsistant)" if obj["BridgeAssuranceInconsistant"] == 1 else ""
                 print "IntfRef %s of Vlan %s is %s %s" %(obj["IntfRef"], obj["Vlan"], stateDict[obj["State"]], bainconsistant)
                 #print "Enabled %s, Protocol Migration %s" %(obj["Enable"], obj["ProtocolMigration"])
                 print "Enabled %s" %(obj["Enable"],)
@@ -1027,7 +1026,7 @@ class FlexPrint( FlexSwitchShow):
                pr = p['Object']
                RXmsg = (pr['Messages']['Received']['Notification']) + (pr['Messages']['Received']['Update'])
                TXmsg = (pr['Messages']['Sent']['Notification']) + (pr['Messages']['Sent']['Update'])
-               StartTime = pr['SessionStateUpdatedTime']
+               StartTime = pr.get('SessionStateUpdatedTime',  pr.get('SessionStateDuration', 0))
                #"2016-09-20 11:42:01.290081007 -0700 PDT"
                #start = datetime.strptime(StartTime, '%Y-%m-%d %I:%M:%S.%f %z %Z')
                #UpTime = datetime.datetime.now() - start 
