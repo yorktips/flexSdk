@@ -91,7 +91,7 @@ class FlexPrint( FlexSwitchShow):
     def printInterfaces(self):
         self.printPortStates()
 
-    def printPortStates(self, brief=False):
+    def printPortStates(self):
         ports = self.swtch.getAllPortStates()
         lines = sorted(ports, key=lambda k: k['Object'].get('IntfRef', 0))
         for port in lines:
