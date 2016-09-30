@@ -85,10 +85,13 @@ class FlexPrint( FlexSwitchShow):
         print "   ",p['IfOutDiscards'],"output discards", p['IfOutErrors'], "output errors"
         print '------------------------------------------------------------------------------'
 
+    def printInterfaceStatuss(self):
+        print "Please Add necessary logic to print Interface Status"
+
     def printInterfaces(self):
         self.printPortStates()
 
-    def printPortStates(self):
+    def printPortStates(self, brief=False):
         ports = self.swtch.getAllPortStates()
         lines = sorted(ports, key=lambda k: k['Object'].get('IntfRef', 0))
         for port in lines:
