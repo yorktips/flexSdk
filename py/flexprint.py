@@ -85,6 +85,9 @@ class FlexPrint( FlexSwitchShow):
         print "   ",p['IfOutDiscards'],"output discards", p['IfOutErrors'], "output errors"
         print '------------------------------------------------------------------------------'
 
+    def printInterfaceStatuss(self):
+        print "Please Add necessary logic to print Interface Status"
+
     def printInterfaces(self):
         self.printPortStates()
 
