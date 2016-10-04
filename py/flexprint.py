@@ -147,14 +147,16 @@ class FlexPrint( FlexSwitchShow):
             rt_spec = self.swtch.getIPv4RouteState(rt['DestinationNw']).json()
             rt_next=rt_spec['Object']
             if rt_next['NextHopList'] is None:
-            	rt_count = 0
+                rt_count = 0
             else:
-            	rt_count = len(rt_next['NextHopList'])
+                rt_count = len(rt_next['NextHopList'])
             route_distance = self.swtch.getRouteDistanceState(rt['Protocol']).json()
-            if len(route_distance):
-            	rd = route_distance['Object']    
-            if len(rt['PolicyList']) == 0: 
-#            if rt['PolicyList'] is None :
+            rd = {"Distance": ""}
+            if route_distance is not None and len(route_distance):
+                rd = route_distance['Object']
+            if rt['PolicyList'] is None:
+                policy=rt['PolicyList']
+            elif type(rt['PolicyList']) is list and len(rt['PolicyList']) == 0:
                 policy=rt['PolicyList']
             else:
                 policy = str(rt['PolicyList']).split("[")[1].split()[1]
@@ -179,14 +181,14 @@ class FlexPrint( FlexSwitchShow):
             rt_spec = self.swtch.getIPv6RouteState(rt['DestinationNw']).json()
             rt_next=rt_spec['Object']    
             if rt_next['NextHopList'] is None:
-            	rt_count = 0
+                rt_count = 0
             else:
-            	rt_count = len(rt_next['NextHopList'])
+                rt_count = len(rt_next['NextHopList'])
             route_distance = self.swtch.getRouteDistanceState(rt['Protocol']).json()
-            rd = ''
-            if len(route_distance):
-            	rd = route_distance['Object']   
-            if len(rt['PolicyList']) == 0 :
+            rd = {"Distance": ""}
+            if route_distance is not None and len(route_distance):
+                rd = route_distance['Object']
+            if rt['PolicyList'] is None or len(rt['PolicyList']) == 0 :
                 policy=rt['PolicyList']
             else:
                 policy = str(rt['PolicyList']).split("[")[1].split()[1]
@@ -238,9 +240,6 @@ class FlexPrint( FlexSwitchShow):
                         prefix=' ', postfix=' ', headerChar= '-', delim='    ',
                         wrapfunc=lambda x: wrap_onspace_strict(x,width))
 
-
-     
-     
     def printPolicyDefinitionStates(self) :
         policies = self.swtch.getAllPolicyDefinitions()
         if len(policies) :
