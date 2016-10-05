@@ -1,6 +1,7 @@
 import requests
 import json
 import urllib2
+#from datetime import datetime
 from flexswitchV2 import FlexSwitch
 from flexprintV2 import FlexSwitchShow
 from tablePrint import *
@@ -84,6 +85,9 @@ class FlexPrint( FlexSwitchShow):
         print "   ",p['IfOutDiscards'],"output discards", p['IfOutErrors'], "output errors"
         print '------------------------------------------------------------------------------'
 
+    def printInterfaceStatuss(self):
+        print "Please Add necessary logic to print Interface Status"
+
     def printInterfaces(self):
         self.printPortStates()
 
@@ -133,7 +137,7 @@ class FlexPrint( FlexSwitchShow):
             print '------------------------------------------------------------------------------'
 
     def printIPv4RouteStates(self):
-        routes = self.swtch.getAllIPv4RouteStates()     
+        routes = self.swtch.getAllIPv4RouteStates()
         print "IP Route Table"
         print "'[x/y]' denotes [preference/metric]"
         print "\n"  
@@ -142,12 +146,17 @@ class FlexPrint( FlexSwitchShow):
             rt = r['Object']
             rt_spec = self.swtch.getIPv4RouteState(rt['DestinationNw']).json()
             rt_next=rt_spec['Object']
-            rt_count = len(rt_next['NextHopList'])  
+            if rt_next['NextHopList'] is None:
+                rt_count = 0
+            else:
+                rt_count = len(rt_next['NextHopList'])
             route_distance = self.swtch.getRouteDistanceState(rt['Protocol']).json()
-            rd = ''
-            if len(route_distance):
-            	rd = route_distance['Object']    
+            rd = {"Distance": ""}
+            if route_distance is not None and len(route_distance):
+                rd = route_distance['Object']
             if rt['PolicyList'] is None:
+                policy=rt['PolicyList']
+            elif type(rt['PolicyList']) is list and len(rt['PolicyList']) == 0:
                 policy=rt['PolicyList']
             else:
                 policy = str(rt['PolicyList']).split("[")[1].split()[1]
@@ -171,12 +180,15 @@ class FlexPrint( FlexSwitchShow):
             rt = r['Object']
             rt_spec = self.swtch.getIPv6RouteState(rt['DestinationNw']).json()
             rt_next=rt_spec['Object']    
-            rt_count = len(rt_next['NextHopList'])  
+            if rt_next['NextHopList'] is None:
+                rt_count = 0
+            else:
+                rt_count = len(rt_next['NextHopList'])
             route_distance = self.swtch.getRouteDistanceState(rt['Protocol']).json()
-            rd = ''
-            if len(route_distance):
-            	rd = route_distance['Object']     
-            if rt['PolicyList'] is None:
+            rd = {"Distance": ""}
+            if route_distance is not None and len(route_distance):
+                rd = route_distance['Object']
+            if rt['PolicyList'] is None or len(rt['PolicyList']) == 0 :
                 policy=rt['PolicyList']
             else:
                 policy = str(rt['PolicyList']).split("[")[1].split()[1]
@@ -228,9 +240,6 @@ class FlexPrint( FlexSwitchShow):
                         prefix=' ', postfix=' ', headerChar= '-', delim='    ',
                         wrapfunc=lambda x: wrap_onspace_strict(x,width))
 
-
-     
-     
     def printPolicyDefinitionStates(self) :
         policies = self.swtch.getAllPolicyDefinitions()
         if len(policies) :
@@ -400,9 +409,34 @@ class FlexPrint( FlexSwitchShow):
                     
             print ''
 
-    def printStpBridgeStates(self):
+    def printStpBridgeInstanceState(self, Vlan, addHeader=True, brief=None):
 
-        brgs = self.swtch.getAllStpBridgeStates()
+        rawobj = self.swtch.getStpBridgeInstanceState(Vlan)
+        if rawobj.status_code in self.httpSuccessCodes:
+            dataobj = rawobj.json()
+            obj = dataobj['Object']
+            print "BrgIfIndex: ", obj["IfIndex"]
+            print "Bridge Id: ", obj["Address"]
+            print "Bridge Hello time: ", obj["BridgeHelloTime"]
+            print "Bridge TxHold: ", obj["TxHoldCount"]
+            print "Bridge Forwarding Delay: ", obj["BridgeForwardDelay"]
+            print "Bridge Max Age: ", obj["BridgeMaxAge"]
+            print "Bridge Priority: ", obj["Priority"]
+            print "Time Since Topology Change: UNSUPPORTED" #nextStpBridgeState.Dot1dStpTimeSinceTopologyChange uint32 //The time (in hundredths of a second) since the last time a topology change was detected by the bridge entity. For RSTP, this reports the time since the tcWhile timer for any port on this Bridge was nonzero.
+            print "Topology Changes: UNSUPPORTED" #nextStpBridgeState.Dot1dStpTopChanges              uint32 //The total number of topology changes detected by this bridge since the management entity was last reset or initialized.
+            print "Root Bridge Id: ", obj["DesignatedRoot"]
+            print "Root Cost: ", obj["RootCost"]
+            print "Root Port: ", obj["RootPort"]
+            print "Max Age: ", obj["MaxAge"]
+            print "Hello Time: ", obj["HelloTime"]
+            print "Hold Time: UNSUPPORTED" #Dot1dStpHoldTime = int32(b.TxHoldCount)
+            print "Forwarding Delay: ", obj["ForwardDelay"]
+            print "Bridge Vlan: ", obj["Vlan"] if obj["Vlan"] not in (0, 4095) else "rstp"
+
+
+    def printStpBridgeInstanceStates(self):
+
+        brgs = self.swtch.getAllStpBridgeInstanceStates()
 
         print '\n\n---- STP Bridge DB----'
         if len(brgs):
@@ -427,10 +461,79 @@ class FlexPrint( FlexSwitchShow):
                 print "Hello Time: ", obj["HelloTime"]
                 print "Hold Time: UNSUPPORTED" #Dot1dStpHoldTime = int32(b.TxHoldCount)
                 print "Forwarding Delay: ", obj["ForwardDelay"]
-                print "Bridge Vlan: ", obj["Vlan"] if obj["Vlan"] != 0 else "DEFAULT"
+                print "Bridge Vlan: ", obj["Vlan"] if obj["Vlan"] not in (0, 4095) else "rstp"
                 print "=====================================================================================\n\n"
+
+
+
+
         else:
             print 'No Spanning Tree Instances provisioned\n'
+
+    def printStpPortState(self, IntfRef, Vlan, addHeader=True, brief=None):
+        stateDict = {
+            1 : "Disabled",
+            2 : "Blocked",
+            3 : "Listening",
+            4 : "Learning",
+            5 : "Forwarding",
+            6 : "Broken",
+        }
+        linkTypeDict = {
+            0 : "LAN",
+            1 : "P2P",
+        }
+
+
+        rawobj = self.swtch.getStpPortState(IntfRef, Vlan)
+        if rawobj.status_code in self.httpSuccessCodes:
+            dataobj = rawobj.json()
+            obj = dataobj['Object']
+            bainconsistant = "(inconsistant)" if obj["BridgeAssuranceInconsistant"] else ""
+            print "IntfRef %s of Vlan %s is %s %s" %(obj["IntfRef"], obj["Vlan"], stateDict[obj["State"]], bainconsistant)
+            #print "Enabled %s, Protocol Migration %s" %(obj["Enable"], obj["ProtocolMigration"])
+            print "Enabled %s" %(obj["Enable"] == 1,)
+            print "Port path cost %s, Port priority %s, Port Identifier %s" %(obj["PathCost32"], obj["Priority"], obj["IntfRef"])
+            print "Designated root has bridge id %s" %(obj["DesignatedRoot"])
+            print "Designated bridge has bridge id %s" %(obj["DesignatedBridge"])
+            print "Designated port id %s, designated path cost %s admin path cost %s" %(obj["DesignatedPort"], obj["DesignatedCost"], obj["AdminPathCost"])
+            print "Root Timers: max age %s, forward delay %s, hello %s" %(obj["MaxAge"],obj["ForwardDelay"],obj["HelloTime"],)
+            print "Number of transitions to forwarding state: %s" %(obj["ForwardTransitions"],)
+            print "AdminEdge %s OperEdge %s" %(obj["AdminEdgePort"] == 1, obj["OperEdgePort"] == 1)
+            print "Bridge Assurance %s Bpdu Guard %s" %(obj["BridgeAssurance"] == 1, obj["BpduGuard"] == 1)
+            print "Link Type %s" %("UNSUPPORTED",)
+            print "\nPort Timers: (current tick(seconds) count)"
+            print "EdgeDelayWhile:\t", obj["EdgeDelayWhile"]
+            print "FdWhile:       \t", obj["FdWhile"]
+            print "HelloWhen:     \t", obj["HelloWhen"]
+            print "MdelayWhile:   \t", obj["MdelayWhile"]
+            print "RbWhile:       \t", obj["RbWhile"]
+            print "RcvdInfoWhile  \t", obj["RcvdInfoWhile"]
+            print "RrWhile:       \t", obj["RrWhile"]
+            print "TcWhile:       \t", obj["TcWhile"]
+            print "\nCounters:"
+            print "        %13s%13s" %("RX", "TX")
+            print "BPDU    %13s%13s" %(obj["BpduInPkts"], obj["BpduOutPkts"])
+            print "STP     %13s%13s" %(obj["StpInPkts"], obj["StpOutPkts"])
+            print "TC      %13s%13s" %(obj["TcInPkts"], obj["TcOutPkts"])
+            print "TC ACK  %13s%13s" %(obj["TcAckInPkts"], obj["TcAckOutPkts"])
+            print "RSTP    %13s%13s" %(obj["RstpInPkts"], obj["RstpOutPkts"])
+            print "PVST    %13s%13s" %(obj["PvstInPkts"], obj["PvstOutPkts"])
+            print "\nFSM States:"
+            print "PIM - Port Information, PRTM - Port Role Transition, PRXM - Port Receive"
+            print "PSTM - Port State Transition, PPM - Port Protocol Migration, PTXM - Port Transmit"
+            print "PTIM - Port Timer, BDM - Bridge Detection, TCM - Topology Change"
+            print "MACHINE       %20s%20s" %("CURRENT", "PREVIOUS")
+            print "PIM           %20s%20s" %(obj["PimCurrState"], obj["PimPrevState"])
+            print "PRTM          %20s%20s" %(obj["PrtmCurrState"], obj["PrtmPrevState"])
+            print "PRXM          %20s%20s" %(obj["PrxmCurrState"], obj["PrxmPrevState"])
+            print "PSTM          %20s%20s" %(obj["PstmCurrState"], obj["PstmPrevState"])
+            print "PPM           %20s%20s" %(obj["PpmCurrState"], obj["PpmPrevState"])
+            print "PTXM          %20s%20s" %(obj["PtxmCurrState"], obj["PtxmPrevState"])
+            print "PTIM          %20s%20s" %(obj["PtimCurrState"], obj["PtimPrevState"])
+            print "BDM           %20s%20s" %(obj["BdmCurrState"], obj["BdmPrevState"])
+            print "TCM           %20s%20s" %(obj["TcmCurrState"], obj["TcmPrevState"])
+
 
     def printStpPortStates(self):
         stateDict = {
@@ -452,11 +555,11 @@ class FlexPrint( FlexSwitchShow):
             print '\n\n---- STP PORT DB----'
             for data in ports:
                 obj = data['Object']
-                bainconsistant = "(inconsistant)" if obj["BridgeAssuranceInconsistant"] else ""
-                print "IfIndex %s of BrgIfIndex %s is %s %s" %(obj["IfIndex"], obj["BrgIfIndex"], stateDict[obj["State"]], bainconsistant)
+                bainconsistant = "(inconsistant)" if obj["BridgeAssuranceInconsistant"] == 1 else ""
+                print "IntfRef %s of Vlan %s is %s %s" %(obj["IntfRef"], obj["Vlan"], stateDict[obj["State"]], bainconsistant)
                 #print "Enabled %s, Protocol Migration %s" %(obj["Enable"], obj["ProtocolMigration"])
                 print "Enabled %s" %(obj["Enable"],)
-                print "Port path cost %s, Port priority %s, Port Identifier %s" %(obj["PathCost32"], obj["Priority"], obj["IfIndex"])
+                print "Port path cost %s, Port priority %s, Port Identifier %s" %(obj["PathCost32"], obj["Priority"], obj["IntfRef"])
                 print "Designated root has bridge id %s" %(obj["DesignatedRoot"])
                 print "Designated bridge has bridge id %s" %(obj["DesignatedBridge"])
                 print "Designated port id %s, designated path cost %s admin path cost %s" %(obj["DesignatedPort"], obj["DesignatedCost"], obj["AdminPathCost"])
@@ -918,13 +1021,17 @@ class FlexPrint( FlexSwitchShow):
  	
        if len(peers)>=0:
            print '\n'
-           labels = ('Neighbor','LocalAS','PeerAS','State','RxMsg','TxMsg','Description','Prefixes_Rcvd')
+           labels = ('Neighbor','LocalAS','PeerAS','State','RxMsg','TxMsg','Description','Prefixes_Rcvd', 'ElapsedTime')
            rows=[]
            lines = sorted(peers, key=lambda k: k['Object'].get('NeighborAddress', 0)) 
            for p in lines:
                pr = p['Object']
                RXmsg = (pr['Messages']['Received']['Notification']) + (pr['Messages']['Received']['Update'])
                TXmsg = (pr['Messages']['Sent']['Notification']) + (pr['Messages']['Sent']['Update'])
+               StartTime = pr.get('SessionStateUpdatedTime',  pr.get('SessionStateDuration', 0))
+               #"2016-09-20 11:42:01.290081007 -0700 PDT"
+               #start = datetime.strptime(StartTime, '%Y-%m-%d %I:%M:%S.%f %z %Z')
+               #UpTime = datetime.datetime.now() - start 
                rows.append( (pr['NeighborAddress'],
                      "%s" %(pr['LocalAS']),
                      "%s" %(pr['PeerAS']),
@@ -932,7 +1039,8 @@ class FlexPrint( FlexSwitchShow):
                      "%s" %(RXmsg),
                      "%s" %(TXmsg),
                      "%s" %(pr['Description']),
-                     "%s" %(pr['TotalPrefixes'])))
+                     "%s" %(pr['TotalPrefixes']), 
+                     "%s" %(StartTime) ))
 
 
            self.tblPrintObject('BGPNeighborStates',

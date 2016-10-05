@@ -6,6 +6,7 @@ RSYNC=rsync -rupE
 COMP_NAME=sdk
 SRCS=flexswitchV2.py\
 	  flexprint.py\
+	  flexprintV2.py
 
 all: install 
 install:
