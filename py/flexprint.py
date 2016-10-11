@@ -1,5 +1,6 @@
 import requests
 import json
+import re
 import urllib2
 #from datetime import datetime
 from flexswitchV2 import FlexSwitch
@@ -86,14 +87,37 @@ class FlexPrint( FlexSwitchShow):
         print '------------------------------------------------------------------------------'
 
     def printInterfaceStatuss(self):
-        print "Please Add necessary logic to print Interface Status"
-
+        ports = self.swtch.getAllPortStates()
+        r = re.compile("([a-zA-Z]+)([0-9]+)")
+        lines = sorted(ports, key=lambda k: int(r.match(k['Object'].get('IntfRef', 0)).group(2)) )
+        labels = ('Port','Name','Status','Mtu','Duplex','Speed','AutoNeg', 'Type')
+        rows = []
+        for port in lines:
+            p = port['Object']
+            if 'NO' in p['PresentInHW']:
+                continue
+            port_config = self.swtch.getPort(p['IntfRef']).json()
+            pc = port_config['Object']
+            rows.append(("%s" %(p['IntfRef']),
+                         "--",
+                         "%s" %(p['OperState']),
+                         "%s" %(pc['Duplex']),
+                         "%s" %(pc['Mtu']),
+                         "%s" %(pc['Speed']),
+                         "%s" %(pc['Autoneg']),
+                         "%s" %(pc['PhyIntfType'])))
+        width = 30
+        print indent([labels]+rows, hasHeader=True, separateRows=False,
+                     prefix=' ', postfix=' ', headerChar= '-', delim='    ',
+                     wrapfunc=lambda x: wrap_onspace_strict(x,width))
+                     
     def printInterfaces(self):
         self.printPortStates()
 
     def printPortStates(self):
         ports = self.swtch.getAllPortStates()
-        lines = sorted(ports, key=lambda k: k['Object'].get('IntfRef', 0))
+        r = re.compile("([a-zA-Z]+)([0-9]+)")
+        lines = sorted(ports, key=lambda k: int(r.match(k['Object'].get('IntfRef', 0)).group(2)) )
         for port in lines:
             p = port['Object']
             if 'NO' in p['PresentInHW']:
