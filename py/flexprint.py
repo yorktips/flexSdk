@@ -69,6 +69,7 @@ class FlexPrint( FlexSwitchShow):
         if ipv4 is not None:
             print "  IPv4 Address is", ipv4['IpAddr']
         print "  PresentInHW:", p['PresentInHW']
+        print "  Config Mode:", p['ConfigMode']
         print "  PhyType:", pc['PhyIntfType'],",","Media Type:",pc['MediaType'],"," , "Address:", pc['MacAddr']
         print "  MTU",  pc['Mtu'],"Bytes"
         print " ",pc['Duplex'],",",pc['Speed'],"Mb/s"
@@ -80,7 +81,8 @@ class FlexPrint( FlexSwitchShow):
         print "  RX"
         print "   ",p['IfInUcastPkts'],"unicast packets",p['IfInOctets'],"unicast octets"
         print "   ",p['IfInDiscards'],"input discards", p['IfInErrors'], "input errors"
-        print "   ",p['IfInUnknownProtos'],"unknown protocol"
+        print "   ",p['IfInUnknownProtos'],"unknown protocol", p['IfEtherUnderSizePktCnt'], "runts",p['IfEtherOverSizePktCnt'], "giants"
+        print "   ",p['IfEtherFragments'],"Fragments",p['IfEtherCRCAlignError'],"CRC",p['IfEtherJabber'], "jabber"
         print "  TX"
         print "   ",p['IfOutUcastPkts'],"unicast packets",p['IfOutOctets'],"unicast octets"
         print "   ",p['IfOutDiscards'],"output discards", p['IfOutErrors'], "output errors"
@@ -143,6 +145,7 @@ class FlexPrint( FlexSwitchShow):
             if ipv4 is not None:
                 print "  IPv4 Address is", ipv4['IpAddr']
             print "  PresentInHW:", p['PresentInHW']
+            print "  Config Mode:", p['ConfigMode']
             print "  PhyType:", pc['PhyIntfType'],",","Media Type:",pc['MediaType'],"," , "Address:", pc['MacAddr']
             print "  MTU",  pc['Mtu'],"Bytes"
             print " ",pc['Duplex'],",",pc['Speed'],"Mb/s"
@@ -154,7 +157,8 @@ class FlexPrint( FlexSwitchShow):
             print "  RX"
             print "   ",p['IfInUcastPkts'],"unicast packets",p['IfInOctets'],"unicast octets"
             print "   ",p['IfInDiscards'],"input discards", p['IfInErrors'], "input errors"
-            print "   ",p['IfInUnknownProtos'],"unknown protocol"
+            print "   ",p['IfInUnknownProtos'],"unknown protocol", p['IfEtherUnderSizePktCnt'], "runts",p['IfEtherOverSizePktCnt'], "giants"
+            print "   ",p['IfEtherFragments'],"Fragments",p['IfEtherCRCAlignError'],"CRC",p['IfEtherJabber'], "jabber"
             print "  TX"
             print "   ",p['IfOutUcastPkts'],"unicast packets",p['IfOutOctets'],"unicast octets"
             print "   ",p['IfOutDiscards'],"output discards", p['IfOutErrors'], "output errors"
