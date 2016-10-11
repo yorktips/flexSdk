@@ -90,7 +90,7 @@ class FlexPrint( FlexSwitchShow):
         ports = self.swtch.getAllPortStates()
         r = re.compile("([a-zA-Z]+)([0-9]+)")
         lines = sorted(ports, key=lambda k: int(r.match(k['Object'].get('IntfRef', 0)).group(2)) )
-        labels = ('Port','Name','Status','Mtu','Duplex','Speed','AutoNeg', 'Type')
+        labels = ('Port','Description','Status','Mtu','Duplex','Speed','AutoNeg', 'Type')
         rows = []
         for port in lines:
             p = port['Object']
@@ -99,7 +99,7 @@ class FlexPrint( FlexSwitchShow):
             port_config = self.swtch.getPort(p['IntfRef']).json()
             pc = port_config['Object']
             rows.append(("%s" %(p['IntfRef']),
-                         "--",
+                         "%s" %(pc['Description']),
                          "%s" %(p['OperState']),
                          "%s" %(pc['Duplex']),
                          "%s" %(pc['Mtu']),
