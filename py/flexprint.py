@@ -859,7 +859,7 @@ class FlexPrint( FlexSwitchShow):
 
     def printIPv4IntfStates(self,):
     	ipintfs = self.swtch.getAllIPv4IntfStates()
-		lines = sorted(ipintfs, key=lambda k: int(r.match(k['Object'].get('IntfRef', 0)).group(2)))
+    	lines = sorted(ipintfs, key=lambda k: int(r.match(k['Object'].get('IntfRef', 0)).group(2)))
     	print '\n'
     	labels = ('Interface', 'IP Address', 'OperState', 'DownEvents','Last Flap')
     	rows =[]
@@ -877,7 +877,7 @@ class FlexPrint( FlexSwitchShow):
 
     def printEthIPv4IntfStates(self,):
         ipintfs = self.swtch.getAllIPv4IntfStates()
-		lines = sorted(ipintfs, key=lambda k: int(r.match(k['Object'].get('IntfRef', 0)).group(2)))
+        lines = sorted(ipintfs, key=lambda k: int(r.match(k['Object'].get('IntfRef', 0)).group(2)))
         print '\n'
         labels = ('Interface', 'IP Address', 'OperState', 'DownEvents','Last Flap')
         rows = []
@@ -896,7 +896,7 @@ class FlexPrint( FlexSwitchShow):
 
     def printSviIPv4IntfStates(self,):
         ipintfs = self.swtch.getAllIPv4IntfStates()
-		lines = sorted(ipintfs, key=lambda k: int(r.match(k['Object'].get('IntfRef', 0)).group(2)))
+        lines = sorted(ipintfs, key=lambda k: int(r.match(k['Object'].get('IntfRef', 0)).group(2)))
         print '\n'
         labels = ('Interface', 'IP Address', 'OperState', 'DownEvents','Last Flap')
         rows = []
@@ -915,7 +915,7 @@ class FlexPrint( FlexSwitchShow):
 
     def printLagIPv4IntfStates(self,):
         ipintfs = self.swtch.getAllIPv4IntfStates()
-		lines = sorted(ipintfs, key=lambda k: int(r.match(k['Object'].get('IntfRef', 0)).group(2)))
+        lines = sorted(ipintfs, key=lambda k: int(r.match(k['Object'].get('IntfRef', 0)).group(2)))
         print '\n'
         labels = ('Interface', 'IP Address', 'OperState', 'DownEvents','Last Flap')
         rows = []
@@ -972,7 +972,7 @@ class FlexPrint( FlexSwitchShow):
         
     def printEthIPv6IntfStates(self,):
         ipintfs = self.swtch.getAllIPv6IntfStates()
-		lines = sorted(ipintfs, key=lambda k: int(r.match(k['Object'].get('IntfRef', 0)).group(2)))
+        lines = sorted(ipintfs, key=lambda k: int(r.match(k['Object'].get('IntfRef', 0)).group(2)))
         print '\n'
         labels = ('Interface', 'IP Address', 'OperState', 'DownEvents','Last Flap')
         rows = []
@@ -991,7 +991,7 @@ class FlexPrint( FlexSwitchShow):
 
     def printSviIPv6IntfStates(self,):
         ipintfs = self.swtch.getAllIPv6IntfStates()
-		lines = sorted(ipintfs, key=lambda k: int(r.match(k['Object'].get('IntfRef', 0)).group(2)))
+        lines = sorted(ipintfs, key=lambda k: int(r.match(k['Object'].get('IntfRef', 0)).group(2)))
         print '\n'
         labels = ('Interface', 'IP Address', 'OperState', 'DownEvents','Last Flap')
         rows = []
@@ -1010,7 +1010,7 @@ class FlexPrint( FlexSwitchShow):
 
     def printLagIPv6IntfStates(self,):
         ipintfs = self.swtch.getAllIPv6IntfStates()
-		lines = sorted(ipintfs, key=lambda k: int(r.match(k['Object'].get('IntfRef', 0)).group(2)))
+        lines = sorted(ipintfs, key=lambda k: int(r.match(k['Object'].get('IntfRef', 0)).group(2)))
         print '\n'
         labels = ('Interface', 'IP Address', 'OperState', 'DownEvents','Last Flap')
         rows = []
@@ -1029,7 +1029,7 @@ class FlexPrint( FlexSwitchShow):
 
     def printLoIPv6IntfStates(self,):
         ipintfs = self.swtch.getAllLogicalIntfStates()
-		lines = sorted(ipintfs, key=lambda k: int(r.match(k['Object'].get('IntfRef', 0)).group(2)))
+        lines = sorted(ipintfs, key=lambda k: int(r.match(k['Object'].get('IntfRef', 0)).group(2)))
         print '\n'
         labels = ('Interface', 'IP Address', 'OperState', 'DownEvents','Last Flap')
         rows = []
