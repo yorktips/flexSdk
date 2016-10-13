@@ -1,5 +1,6 @@
 import requests
 import json
+import re
 import urllib2
 #from datetime import datetime
 from flexswitchV2 import FlexSwitch
@@ -68,6 +69,7 @@ class FlexPrint( FlexSwitchShow):
         if ipv4 is not None:
             print "  IPv4 Address is", ipv4['IpAddr']
         print "  PresentInHW:", p['PresentInHW']
+        print "  Config Mode:", p['ConfigMode']
         print "  PhyType:", pc['PhyIntfType'],",","Media Type:",pc['MediaType'],"," , "Address:", pc['MacAddr']
         print "  MTU",  pc['Mtu'],"Bytes"
         print " ",pc['Duplex'],",",pc['Speed'],"Mb/s"
@@ -79,21 +81,45 @@ class FlexPrint( FlexSwitchShow):
         print "  RX"
         print "   ",p['IfInUcastPkts'],"unicast packets",p['IfInOctets'],"unicast octets"
         print "   ",p['IfInDiscards'],"input discards", p['IfInErrors'], "input errors"
-        print "   ",p['IfInUnknownProtos'],"unknown protocol"
+        print "   ",p['IfInUnknownProtos'],"unknown protocol", p['IfEtherUnderSizePktCnt'], "runts",p['IfEtherOverSizePktCnt'], "giants"
+        print "   ",p['IfEtherFragments'],"Fragments",p['IfEtherCRCAlignError'],"CRC",p['IfEtherJabber'], "jabber"
         print "  TX"
         print "   ",p['IfOutUcastPkts'],"unicast packets",p['IfOutOctets'],"unicast octets"
         print "   ",p['IfOutDiscards'],"output discards", p['IfOutErrors'], "output errors"
         print '------------------------------------------------------------------------------'
 
     def printInterfaceStatuss(self):
-        print "Please Add necessary logic to print Interface Status"
-
+        ports = self.swtch.getAllPortStates()
+        r = re.compile("([a-zA-Z]+)([0-9]+)")
+        lines = sorted(ports, key=lambda k: int(r.match(k['Object'].get('IntfRef', 0)).group(2)) )
+        labels = ('Port','Description','Status','Mtu','Duplex','Speed','AutoNeg', 'Type')
+        rows = []
+        for port in lines:
+            p = port['Object']
+            if 'NO' in p['PresentInHW']:
+                continue
+            port_config = self.swtch.getPort(p['IntfRef']).json()
+            pc = port_config['Object']
+            rows.append(("%s" %(p['IntfRef']),
+                         "%s" %(pc['Description']),
+                         "%s" %(p['OperState']),
+                         "%s" %(pc['Duplex']),
+                         "%s" %(pc['Mtu']),
+                         "%s" %(pc['Speed']),
+                         "%s" %(pc['Autoneg']),
+                         "%s" %(pc['PhyIntfType'])))
+        width = 30
+        print indent([labels]+rows, hasHeader=True, separateRows=False,
+                     prefix=' ', postfix=' ', headerChar= '-', delim='    ',
+                     wrapfunc=lambda x: wrap_onspace_strict(x,width))
+                     
     def printInterfaces(self):
         self.printPortStates()
 
     def printPortStates(self):
         ports = self.swtch.getAllPortStates()
-        lines = sorted(ports, key=lambda k: k['Object'].get('IntfRef', 0))
+        r = re.compile("([a-zA-Z]+)([0-9]+)")
+        lines = sorted(ports, key=lambda k: int(r.match(k['Object'].get('IntfRef', 0)).group(2)) )
         for port in lines:
             p = port['Object']
             if 'NO' in p['PresentInHW']:
@@ -119,6 +145,7 @@ class FlexPrint( FlexSwitchShow):
             if ipv4 is not None:
                 print "  IPv4 Address is", ipv4['IpAddr']
             print "  PresentInHW:", p['PresentInHW']
+            print "  Config Mode:", p['ConfigMode']
             print "  PhyType:", pc['PhyIntfType'],",","Media Type:",pc['MediaType'],"," , "Address:", pc['MacAddr']
             print "  MTU",  pc['Mtu'],"Bytes"
             print " ",pc['Duplex'],",",pc['Speed'],"Mb/s"
@@ -130,7 +157,8 @@ class FlexPrint( FlexSwitchShow):
             print "  RX"
             print "   ",p['IfInUcastPkts'],"unicast packets",p['IfInOctets'],"unicast octets"
             print "   ",p['IfInDiscards'],"input discards", p['IfInErrors'], "input errors"
-            print "   ",p['IfInUnknownProtos'],"unknown protocol"
+            print "   ",p['IfInUnknownProtos'],"unknown protocol", p['IfEtherUnderSizePktCnt'], "runts",p['IfEtherOverSizePktCnt'], "giants"
+            print "   ",p['IfEtherFragments'],"Fragments",p['IfEtherCRCAlignError'],"CRC",p['IfEtherJabber'], "jabber"
             print "  TX"
             print "   ",p['IfOutUcastPkts'],"unicast packets",p['IfOutOctets'],"unicast octets"
             print "   ",p['IfOutDiscards'],"output discards", p['IfOutErrors'], "output errors"
@@ -831,10 +859,12 @@ class FlexPrint( FlexSwitchShow):
 
     def printIPv4IntfStates(self,):
     	ipintfs = self.swtch.getAllIPv4IntfStates()
+    	r = re.compile("([a-zA-Z]+)([0-9]+)")
+        lines = sorted(ipintfs, key=lambda k: int(r.match(k['Object'].get('IntfRef', 0)).group(2)))
     	print '\n'
     	labels = ('Interface', 'IP Address', 'OperState', 'DownEvents','Last Flap')
     	rows =[]
-    	for i in ipintfs:
+    	for i in lines:
             ip = i['Object']    
             rows.append((ip['IntfRef'],
                         "%s" %(ip['IpAddr']),
@@ -848,10 +878,12 @@ class FlexPrint( FlexSwitchShow):
 
     def printEthIPv4IntfStates(self,):
         ipintfs = self.swtch.getAllIPv4IntfStates()
+        r = re.compile("([a-zA-Z]+)([0-9]+)")
+        lines = sorted(ipintfs, key=lambda k: int(r.match(k['Object'].get('IntfRef', 0)).group(2)))
         print '\n'
         labels = ('Interface', 'IP Address', 'OperState', 'DownEvents','Last Flap')
         rows = []
-        for i in ipintfs:
+        for i in lines:
             ip = i['Object']
             if ip['L2IntfType'] == 'Port':
                 rows.append((ip['IntfRef'],
@@ -866,10 +898,12 @@ class FlexPrint( FlexSwitchShow):
 
     def printSviIPv4IntfStates(self,):
         ipintfs = self.swtch.getAllIPv4IntfStates()
+        r = re.compile("([a-zA-Z]+)([0-9]+)")
+        lines = sorted(ipintfs, key=lambda k: int(r.match(k['Object'].get('IntfRef', 0)).group(2)))
         print '\n'
         labels = ('Interface', 'IP Address', 'OperState', 'DownEvents','Last Flap')
         rows = []
-        for i in ipintfs:
+        for i in lines:
             ip = i['Object']
             if ip['L2IntfType'] == 'Vlan':
                 rows.append((ip['IntfRef'],
@@ -884,10 +918,12 @@ class FlexPrint( FlexSwitchShow):
 
     def printLagIPv4IntfStates(self,):
         ipintfs = self.swtch.getAllIPv4IntfStates()
+        r = re.compile("([a-zA-Z]+)([0-9]+)")
+        lines = sorted(ipintfs, key=lambda k: int(r.match(k['Object'].get('IntfRef', 0)).group(2)))
         print '\n'
         labels = ('Interface', 'IP Address', 'OperState', 'DownEvents','Last Flap')
         rows = []
-        for i in ipintfs:
+        for i in lines:
             ip = i['Object']
             if ip['L2IntfType'] == 'Lag':
                 rows.append((ip['IntfRef'],
@@ -902,10 +938,12 @@ class FlexPrint( FlexSwitchShow):
 
     def printLoIPv4IntfStates(self,):
     	ipintfs = self.swtch.getAllLogicalIntfStates()
+    	r = re.compile("([a-zA-Z]+)([0-9]+)")
+        lines = sorted(ipintfs, key=lambda k: int(r.match(k['Object'].get('IntfRef', 0)).group(2)))
     	print '\n'
     	labels = ('Interface', 'IP Address', 'OperState', 'DownEvents','Last Flap')
         rows = []
-        for i in ipintfs:
+        for i in lines:
             ip = i['Object']
             if ip['L2IntfType'] == 'Loopback':
                 rows.append((ip['IntfRef'],
@@ -920,10 +958,12 @@ class FlexPrint( FlexSwitchShow):
                             
     def printIPv6IntfStates(self,):
 		ipintfs = self.swtch.getAllIPv6IntfStates()
+		r = re.compile("([a-zA-Z]+)([0-9]+)")
+		lines = sorted(ipintfs, key=lambda k: int(r.match(k['Object'].get('IntfRef', 0)).group(2)))
 		print '\n'
 		labels = ('Interface', 'IP Address', 'OperState', 'DownEvents','Last Flap')
 		rows=[]
-		for i in ipintfs:
+		for i in lines:
 			ip = i['Object']    
 			rows.append((ip['IntfRef'],
                         "%s" %(ip['IpAddr']),
@@ -938,10 +978,12 @@ class FlexPrint( FlexSwitchShow):
         
     def printEthIPv6IntfStates(self,):
         ipintfs = self.swtch.getAllIPv6IntfStates()
+        r = re.compile("([a-zA-Z]+)([0-9]+)")
+        lines = sorted(ipintfs, key=lambda k: int(r.match(k['Object'].get('IntfRef', 0)).group(2)))
         print '\n'
         labels = ('Interface', 'IP Address', 'OperState', 'DownEvents','Last Flap')
         rows = []
-        for i in ipintfs:
+        for i in lines:
             ip = i['Object']
             if ip['L2IntfType'] == 'Port':
                 rows.append((ip['IntfRef'],
@@ -956,10 +998,12 @@ class FlexPrint( FlexSwitchShow):
 
     def printSviIPv6IntfStates(self,):
         ipintfs = self.swtch.getAllIPv6IntfStates()
+        r = re.compile("([a-zA-Z]+)([0-9]+)")
+        lines = sorted(ipintfs, key=lambda k: int(r.match(k['Object'].get('IntfRef', 0)).group(2)))
         print '\n'
         labels = ('Interface', 'IP Address', 'OperState', 'DownEvents','Last Flap')
         rows = []
-        for i in ipintfs:
+        for i in lines:
             ip = i['Object']
             if ip['L2IntfType'] == 'Vlan':
                 rows.append((ip['IntfRef'],
@@ -974,10 +1018,12 @@ class FlexPrint( FlexSwitchShow):
 
     def printLagIPv6IntfStates(self,):
         ipintfs = self.swtch.getAllIPv6IntfStates()
+        r = re.compile("([a-zA-Z]+)([0-9]+)")
+        lines = sorted(ipintfs, key=lambda k: int(r.match(k['Object'].get('IntfRef', 0)).group(2)))
         print '\n'
         labels = ('Interface', 'IP Address', 'OperState', 'DownEvents','Last Flap')
         rows = []
-        for i in ipintfs:
+        for i in lines:
             ip = i['Object']
             if ip['L2IntfType'] == 'Lag':
                 rows.append((ip['IntfRef'],
@@ -992,10 +1038,13 @@ class FlexPrint( FlexSwitchShow):
 
     def printLoIPv6IntfStates(self,):
         ipintfs = self.swtch.getAllLogicalIntfStates()
+        r = re.compile("([a-zA-Z]+)([0-9]+)")
+        r = re.compile("([a-zA-Z]+)([0-9]+)")
+        lines = sorted(ipintfs, key=lambda k: int(r.match(k['Object'].get('IntfRef', 0)).group(2)))
         print '\n'
         labels = ('Interface', 'IP Address', 'OperState', 'DownEvents','Last Flap')
         rows = []
-        for i in ipintfs:
+        for i in lines:
             ip = i['Object']
             if ip['L2IntfType'] == 'Loopback':
                 rows.append((ip['IntfRef'],
@@ -1088,7 +1137,8 @@ class FlexPrint( FlexSwitchShow):
             print '\n'
             labels = ('NeighAddr','LD/RD','Protocols','Multi','TxInt','RxInt','State','Int','TxPkts','RxPkts','Uptime')
             rows=[]
-            for p in peers:
+            lines = sorted(peers, key=lambda k: k['Object'].get('IpAddr', 0))
+            for p in lines:
                 pr = p['Object']
                 desc = str(pr['LocalDiscriminator'])+"/"+str(pr['RemoteDiscriminator'])
                 multi = pr['DetectionMultiplier']
