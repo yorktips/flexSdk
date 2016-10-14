@@ -1,0 +1,6 @@
+# For Testing, but no unit tests yet!
+flake8
+mccabe
+nose
+nose-cov
+xmlrunner
